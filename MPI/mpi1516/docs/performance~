@@ -1,0 +1,42 @@
+100000 interactions
+
+64 bodies + SEQ	-> 27.681 seconds	
+64 bodies + 2 machines	-> 16.845 seconds	=> speedup=1.64
+64 bodies + 3 machines	-> 12.514 seconds	=> speedup=2.22
+64 bodies + 4 machines	-> 9.835 seconds	=> speedup=2.81
+64 bodies + 5 machines	-> 8.572 seconds	=> speedup=3.22
+64 bodies + 6 machines	-> 7.795 seconds	=> speedup=3.55
+64 bodies + 7 machines	-> 7.428 seconds	=> speedup=3.72
+64 bodies + 8 machines	-> 6.548 seconds	=> speedup=4.22
+64 bodies + 9 machines	-> 6.923 seconds	=> speedup=3.99
+64 bodies + 10 machines	-> 6.237 seconds	=> speedup=4.43
+
+100000 interactions
+
+128 bodies + SEQ	-> 110.202 seconds	
+128 bodies + 2 machines	-> 63.836 seconds	=> speedup=1.72
+128 bodies + 3 machines	-> 44.132 seconds	=> speedup=2.49
+128 bodies + 4 machines	-> 34.183 seconds	=> speedup=3.22
+128 bodies + 5 machines	-> 28.694 seconds	=> speedup=3.84
+128 bodies + 6 machines	-> 25.031 seconds	=> speedup=4.40
+128 bodies + 7 machines	-> 22.474 seconds	=> speedup=4.90
+128 bodies + 8 machines	-> 19.749 seconds	=> speedup=5.58
+128 bodies + 9 machines	-> 18.513 seconds	=> speedup=5.96
+128 bodies + 10 machines-> 17.159 seconds	=> speedup=6.42
+
+
+100000 interactions
+
+130 bodies + SEQ	-> 115.008 seconds
+130 bodies + 2 machines	-> 65.936 seconds	=> speedup=1.74
+130 bodies + 4 machines	-> 35.277 seconds	=> speedup=3.26
+130 bodies + 8 machines	-> 20.371 seconds	=> speedup=5.64
+130 bodies + 10 machines-> 17.784 seconds	=> speedup=6.46
+
+200000 interactions
+
+130 bodies + SEQ	-> 275.575 seconds
+130 bodies + 2 machines	-> 131.746 seconds	=> speedup=2.09
+130 bodies + 4 machines	-> 70.476 seconds	=> speedup=3.91
+130 bodies + 8 machines	-> 40.720 seconds	=> speedup=6.76
+130 bodies + 10 machines-> 35.579 seconds	=> speedup=7.74
