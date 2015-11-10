@@ -600,7 +600,7 @@ main(int argc, char **argv) {
 
     int bufSize = bodyCt % numprocs == 0 ? bodyCt / numprocs : (bodyCt / numprocs + 1);
     // Create a buffer that will hold a subset of the bodies
-    //fprintf(stderr, "bufsize: %d\n", bufSize);
+    fprintf(stderr, "bufsize: %d\n", bufSize);
 
 
     rec_bodies = malloc(sizeof(bodyType) * bufSize);
@@ -627,7 +627,10 @@ main(int argc, char **argv) {
 
     // divide the data among processes as described by bodies_per_proc and displs
     //MPI_Scatterv(bodies, bodies_per_proc, displs, mpi_body_type, rec_bodies, bufSize, mpi_body_type, 0, MPI_COMM_WORLD);
-
+    printf("__ID__NEW: %d: ", myid);
+    for (i = 0; i < bodies_per_proc[myid]; i++) {
+        printf("\nbody: %d, mass: %d, pos: (%d,%d)", i, (int)(new_bodies[i].mass), (int)new_bodies[i].x[old], (int)new_bodies[i].y[old]);
+    }
 
     MPI_Scatterv(new_bodies, bodies_per_proc, displs, mpi_force_type, rec_bodies, bufSize, mpi_force_type, 0, MPI_COMM_WORLD);
     //MPI_Bcast(new_bodies, bodyCt, mpi_body_type, 0, MPI_COMM_WORLD);
