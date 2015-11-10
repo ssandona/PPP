@@ -629,7 +629,7 @@ main(int argc, char **argv) {
     //MPI_Scatterv(bodies, bodies_per_proc, displs, mpi_body_type, rec_bodies, bufSize, mpi_body_type, 0, MPI_COMM_WORLD);
 
 
-    MPI_Scatterv(bodies, bodies_per_proc, displs, mpi_force_type, rec_bodies, bufSize, mpi_force_type, 0, MPI_COMM_WORLD);
+    MPI_Scatterv(new_bodies, bodies_per_proc, displs, mpi_force_type, rec_bodies, bufSize, mpi_force_type, 0, MPI_COMM_WORLD);
     //MPI_Bcast(new_bodies, bodyCt, mpi_body_type, 0, MPI_COMM_WORLD);
 
     //fprintf(stderr, "h\n");
