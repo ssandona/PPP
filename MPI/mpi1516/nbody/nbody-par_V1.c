@@ -577,11 +577,11 @@ main(int argc, char **argv) {
         /* Flip old & new coordinates */
         old ^= 1;
 
-
-        for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
+        rec_bodies=new_bodies+displs[myid];
+        /*for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
             rec_bodies[cont] = new_bodies[b];
             cont++;
-        }
+        }*/
 
         /*if(printed <= 1) {
             printf("__ID__2: %d:\n", myid);
