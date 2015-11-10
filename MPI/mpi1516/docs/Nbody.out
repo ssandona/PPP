@@ -1,0 +1,5 @@
+\BOOKMARK [1][-]{section.1}{The N-body problem}{}% 1
+\BOOKMARK [1][-]{section.2}{The sequential algorithm}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Force computation}{section.2}% 3
+\BOOKMARK [1][-]{section.3}{Parallel N-body algorithm}{}% 4
+\BOOKMARK [2][-]{subsection.3.1}{Bodies distribution}{section.3}% 5
