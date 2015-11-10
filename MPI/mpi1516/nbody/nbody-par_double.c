@@ -700,13 +700,13 @@ main(int argc, char **argv) {
         free(new_forces);
         new_forces = new_forces2;
 
-        if(printed <= 1) {
+        /*if(printed <= 1) {
             printf("C -> %d\n", myid);
             for (i = 0; i < bodyCt; i++) {
                 printf("\nbody: %d, mass: %d, pos: (%d,%d), forceX: %10.3f, forceY: %10.3f", i, (int)(new_bodies[i].mass), (int)new_bodies[i].x[old], (int)new_bodies[i].y[old], _XF(i), _YF(i));
             }
             printed++;
-        }
+        }*/
         compute_velocities();
         compute_positions();
         rec_bodies=new_bodies+displs[myid];
