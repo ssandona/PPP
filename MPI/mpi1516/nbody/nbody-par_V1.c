@@ -15,7 +15,7 @@ extern double   atan2(double, double);
 
 #define GRAVITY     1.1
 #define FRICTION    0.01
-#define MAXBODIES   1024
+#define MAXBODIES   10000
 #define DELTA_T     (0.025/5000)
 #define BOUNCE      -0.9
 #define SEED        27102015
@@ -296,22 +296,22 @@ compute_forces(void) {
                force of b on c is negative of c on b;
             */
 
-           /* if(printed <= 1) {
-                printf("id: %d, body: %d, from: %d, INCREMENT FORCE (BEFORE): (XF:%10.3f,YF:%10.3f)\n", myid, b, c, _XF(b), _YF(b));
-                if(c == 4) {
-                    printf("val-> dx:%10.3f, dy:%10.3f, angle:%10.3f, dsqr:%10.3f, mindist:%10.3f\n", dx, dy, angle, dsqr, mindist);
-                    printf("mindsqr:%10.3f, forced:%10.3f, force:%10.3f, xf:%10.3f, yf:%10.3f\n", mindsqr, forced, force, xf, yf);
-                }
-            }*/
+            /* if(printed <= 1) {
+                 printf("id: %d, body: %d, from: %d, INCREMENT FORCE (BEFORE): (XF:%10.3f,YF:%10.3f)\n", myid, b, c, _XF(b), _YF(b));
+                 if(c == 4) {
+                     printf("val-> dx:%10.3f, dy:%10.3f, angle:%10.3f, dsqr:%10.3f, mindist:%10.3f\n", dx, dy, angle, dsqr, mindist);
+                     printf("mindsqr:%10.3f, forced:%10.3f, force:%10.3f, xf:%10.3f, yf:%10.3f\n", mindsqr, forced, force, xf, yf);
+                 }
+             }*/
 
             _XF(b) += xf;
             _YF(b) += yf;
 
-/*
-            if(printed <= 1) {
-                printf("id: %d, body: %d, from: %d, INCREMENT FORCE (AFTER): (XF:%10.3f,YF:%10.3f)\n", myid, b, c, _XF(b), _YF(b));
-            }
-*/
+            /*
+                        if(printed <= 1) {
+                            printf("id: %d, body: %d, from: %d, INCREMENT FORCE (AFTER): (XF:%10.3f,YF:%10.3f)\n", myid, b, c, _XF(b), _YF(b));
+                        }
+            */
 
             _XF(c) -= xf;
             _YF(c) -= yf;
@@ -433,7 +433,7 @@ main(int argc, char **argv) {
     for (b = 0; b < bodyCt; ++b) {
         X(b) = (rand() % xdim);
         Y(b) = (rand() % ydim);
-        R(b) = ((b * b + 1.0) * sqrt(1.0 * ((xdim * xdim) + (ydim * ydim)))) /
+        R(b) = 1 + ((b * b + 1.0) * sqrt(1.0 * ((xdim * xdim) + (ydim * ydim)))) /
                (25.0 * (bodyCt * bodyCt + 1.0));
         M(b) = R(b) * R(b) * R(b);
         XV(b) = ((rand() % 20000) - 10000) / 2000.0;
@@ -494,7 +494,7 @@ main(int argc, char **argv) {
         sum += bodies_per_proc[i];
     }
     //fprintf(stderr, "e\n");
-    
+
     //printf("bodies_per_proc[%d] = %d\tdispls[%d] = %d\n", 0, bodies_per_proc[0], 0, displs[0]);
 
     int bufSize = bodyCt % numprocs == 0 ? bodyCt / numprocs : (bodyCt / numprocs + 1);
