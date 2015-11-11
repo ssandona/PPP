@@ -725,7 +725,7 @@ main(int argc, char **argv) {
             cont++;
         }*/
 
-        rec_bodies=new_bodies+displs[i];
+        rec_bodies=new_bodies+displs[myid];
 
         /*if(printed <= 1) {
             printf("__ID__2: %d:\n", myid);
