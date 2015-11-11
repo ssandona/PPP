@@ -17,6 +17,7 @@
 \usepackage[margin=2.5cm]{geometry}
 \usepackage{subcaption}
 \usepackage[affil-it]{authblk}
+\usepackage{color}
 
 \begin{document}
 \title{MPI Assignment: N-body Simulations}
@@ -83,10 +84,110 @@ for (i = 0; i < numprocs; i++) {
 \subsection{The Work repartition}
 \label{sec:work_rep}
 
-This is the most critic part of the implementation, from this part depends the efficiency of the algorithm. 
-Using a naive approach for every step we could simply using the MPI_Allgatherv operation, to send to all other nodes our updated chunck of bodies and receive all the other chuncks from other nodes.
+\subsubsection{Naive repartition}
+\label{sec:naive_rep}
+
+This is the most critical part of the implementation, from this depends the efficiency of the whole algorithm. 
+Using a naive approach for every step we could simply use the MPI\_Allgatherv operation, to send to all other nodes our updated chunk of bodies and receive all the other chunks from other nodes. Than compute the forces that all other bodies exert on the actual chunk and update the actual chunk bodies positions and speeds. For each iteration so we would send O(N/P) bodies and we would receive O(N-N/P) bodies, that means an O(N) communication and an O(N\textsuperscript{2}/P) compute time per timestamp. A problem of this approach is the big amount of data transferred in each iteration (N bodiesType structures) and that we are doing the same work for some bodies in more than one machine. In fact, computing the force that the body A exert on the body B, implicitly we are computing also the force that the body B exert on the body A (force of B on A is negative of A on B). 
+
+\begin{figure}[ht]
+  \centering\includegraphics[width=0.6\linewidth]{array_procs_3}
+  \caption{12 bodies and 3 computational nodes}
+  \label{fig:3nodes_}
+\end{figure}
+\FloatBarrier
+
+\begin{table}[]
+\centering
+\caption{Node 0 - Calculated forces}
+\label{table:t1}
+\begin{tabular}{l|lllllllllll}
+bodies{[}0{]} & 0-1 & 0-2 & 0-3 & \textcolor{red}{0-4} & \textcolor{red}{0-5} & \textcolor{red}{0-6} & \textcolor{red}{0-7}  & 0-8  & 0-9  & 0-10 & 0-11 \\ \hline
+bodies{[}1{]} & 1-2 & 1-3 & \textcolor{red}{1-4} & \textcolor{red}{1-5} & \textcolor{red}{1-6} & \textcolor{red}{1-7} & 1-8  & 1-9  & 1-10 & 1-11 &      \\ \hline
+bodies{[}2{]} & 2-3 & \textcolor{red}{2-4} & \textcolor{red}{2-5} & \textcolor{red}{2-6} & \textcolor{red}{2-7} & 2-8 & 2-9  & 2-10 & 2-11 &      &      \\ \hline
+bodies{[}3{]} & \textcolor{red}{3-4} & \textcolor{red}{3-5} & \textcolor{red}{3-6} & \textcolor{red}{3-7} & 3-8 & 3-9 & 3-10 & 3-11 &      &      &   
+\end{tabular}
+\end{table}
+
+\begin{table}[]
+\centering
+\caption{Node 1 - Calculated forces}
+\label{table:t2}
+\begin{tabular}{l|lllllllllll}
+bodies{[}4{]} & \textcolor{red}{4-0} & \textcolor{red}{4-1} & \textcolor{red}{4-2} & \textcolor{red}{4-3} & 4-5 & 4-6 & 4-7  & 4-8  & 4-9  & 4-10 & 4-11 \\ \hline
+bodies{[}5{]} & \textcolor{red}{5-0} & \textcolor{red}{5-1} & \textcolor{red}{5-2} & \textcolor{red}{5-3} & 5-6 & 5-7 & 5-8  & 5-9  & 5-10 & 5-11 &      \\ \hline
+bodies{[}6{]} & \textcolor{red}{6-0} & \textcolor{red}{6-1} & \textcolor{red}{6-2} & \textcolor{red}{6-3} & 6-7 & 6-8 & 6-9  & 6-10 & 6-11 &      &      \\ \hline
+bodies{[}7{]} & \textcolor{red}{7-0} & \textcolor{red}{7-1} & \textcolor{red}{7-2} & \textcolor{red}{7-3} & 7-8 & 7-9 & 7-10 & 7-11 &      &      &     
+\end{tabular}
+\end{table}
+
+As we can notice from Tables \ref{table:t1} and \ref{table:t2}, forces between the pairs highlighted in red are calculated by both Node 0 and Node 1. For each node we calculate the forces for 38 pairs, that means 114 pairs (38 x 3) in total. The number of possible pairs is 66, so we are doing about 1.7 times the needed work.
+
+\subsubsection{Optimized repartition}
+\label{sec:opt_rep}
+The aim of a good repartition is to not repeat the same work on different nodes. Following this objective the idea is, given a pair of chuncks, half of the forces that two bodies from different chunks exert on each other are calculated by one node, and half by the other. The ripartition is clarify on the Figures \ref{fig:pr1}, \ref{fig:pr2} and \ref{fig:pr3}.
 
 
+\begin{figure}[ht]
+\centering
+\begin{subfigure}{.45\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{array_proc_0_b_0}
+\end{subfigure}%
+\begin{subfigure}{.45\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{array_proc_0_b_1}
+\end{subfigure}\\ %
+\begin{subfigure}{.45\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{array_proc_0_b_2}
+\end{subfigure}
+  \caption{Forces computed by Node 0 (6+8+8=22)}
+  \label{fig:pr1}
+\end{figure}
+\FloatBarrier
+
+
+\begin{figure}[ht]
+\centering
+\begin{subfigure}{.45\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{array_proc_1_b_0}
+\end{subfigure}%
+\begin{subfigure}{.45\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{array_proc_1_b_1}
+\end{subfigure}\\ %
+\begin{subfigure}{.45\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{array_proc_1_b_2}
+\end{subfigure}
+  \caption{Forces computed by Node 1 (8+6+8=22)}
+  \label{fig:pr2}
+\end{figure}
+\FloatBarrier
+
+
+\begin{figure}[ht]
+\centering
+\begin{subfigure}{.45\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{array_proc_2_b_0}
+\end{subfigure}%
+\begin{subfigure}{.45\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{array_proc_2_b_1}
+\end{subfigure}\\ %
+\begin{subfigure}{.45\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{array_proc_2_b_2}
+\end{subfigure}
+  \caption{Forces computed by Node 2 (8+8+6=22)}
+  \label{fig:pr3}
+\end{figure}
+\FloatBarrier
+
+Proceeding in this way, the forces between pairs of bodies are calculated only one time per step. Each node computes the forces of 22 pairs. We have 3 nodes, so 3 times 22 is 66 that correspond to the number of possible pairs. No useful work is done.
 
 
 \begin{figure}[ht]
@@ -94,6 +195,7 @@ Using a naive approach for every step we could simply using the MPI_Allgatherv o
   \caption{12 bodies and 3 computational nodes}
   \label{fig:3nodes}
 \end{figure}
+\FloatBarrier
 
 \begin{table}[]
 \centering
