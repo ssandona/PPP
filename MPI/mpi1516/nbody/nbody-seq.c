@@ -359,9 +359,12 @@ main(int argc, char **argv)
 	for (b=0; b<bodyCt; ++b) {
 		X(b) = (rand() % xdim);
 		Y(b) = (rand() % ydim);
-		R(b) = ((b*b + 1.0) * sqrt(1.0 * ((xdim * xdim) + (ydim * ydim)))) /
-			(25.0 * (bodyCt*bodyCt + 1.0));
-		M(b) = R(b) * R(b) * R(b);
+		/*R(b) = ((b*b + 1.0) * sqrt(1.0 * ((xdim * xdim) + (ydim * ydim)))) /
+			(25.0 * (bodyCt*bodyCt + 1.0));*/
+		R(b) = ((b + b + 1.0) * sqrt(1.0 * ((xdim * xdim) + (ydim * ydim)))) /
+                (25.0 * (bodyCt * bodyCt + 1.0));
+		/*M(b) = R(b) * R(b) * R(b);*/
+        M(b) = R(b) * R(b);
 		XV(b) = ((rand() % 20000) - 10000) / 2000.0;
 		YV(b) = ((rand() % 20000) - 10000) / 2000.0;
 	}
