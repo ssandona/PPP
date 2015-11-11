@@ -665,7 +665,7 @@ main(int argc, char **argv) {
         new_forces[i].xf = 0;
         new_forces[i].yf = 0;
     }
-    MPI_Allgatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
+    //MPI_Allgatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
 
     if(gettimeofday(&start, 0) != 0) {
         fprintf(stderr, "could not do timing\n");
