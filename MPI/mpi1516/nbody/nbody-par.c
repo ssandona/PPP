@@ -284,7 +284,7 @@ void compute(int b, int c) {
         printf("body: %d, from: %d, INCREMENT FORCE (BEFORE): (XF:%10.3f,YF:%10.3f)\n", b, c, _XF(b), _YF(b));
          printf("val-> dx:%10.3f, dy:%10.3f, angle:%10.3f, dsqr:%10.3f, mindist:%10.3f\n", dx, dy, angle, dsqr, mindist);
          printf("mindsqr:%10.3f, forced:%10.3f, force:%10.3f, xf:%10.3f, yf:%10.3f\n", mindsqr, forced, force, xf, yf);
-
+         
     }*/
 
     _XF(b) += xf;
@@ -382,8 +382,8 @@ void
 compute_velocities(void) {
     int b;
 
-    //for (b = 0; b < bodyCt; ++b) {
-        for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
+    for (b = 0; b < bodyCt; ++b) {
+        //for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
         double xv = _XV(b);
         double yv = _YV(b);
         double force = sqrt(xv * xv + yv * yv) * FRICTION;
@@ -399,8 +399,8 @@ compute_velocities(void) {
 void
 compute_positions(void) {
     int b;
-    //for (b = 0; b < bodyCt; ++b) {
-        for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
+    for (b = 0; b < bodyCt; ++b) {
+        //for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
         double xn = _X(b) + (_XV(b) * DELTA_T);
         double yn = _Y(b) + (_YV(b) * DELTA_T);
 
@@ -512,12 +512,9 @@ main(int argc, char **argv) {
     for (b = 0; b < bodyCt; ++b) {
         _X(b) = (rand() % xdim);
         _Y(b) = (rand() % ydim);
-        /*_R(b) = ((b * b + 1.0) * sqrt(1.0 * ((xdim * xdim) + (ydim * ydim)))) /
-                (25.0 * (bodyCt * bodyCt + 1.0));*/
-        _R(b) = ((b + b + 1.0) * sqrt(1.0 * ((xdim * xdim) + (ydim * ydim)))) /
+        _R(b) = ((b * b + 1.0) * sqrt(1.0 * ((xdim * xdim) + (ydim * ydim)))) /
                 (25.0 * (bodyCt * bodyCt + 1.0));
-        /*_M(b) = _R(b) * _R(b) * _R(b);*/
-        _M(b) = _R(b) * _R(b);
+        _M(b) = _R(b) * _R(b) * _R(b);
         _XV(b) = ((rand() % 20000) - 10000) / 2000.0;
         _YV(b) = ((rand() % 20000) - 10000) / 2000.0;
     }
@@ -676,7 +673,7 @@ main(int argc, char **argv) {
     // printf("b\n");
 
     /* Main Loop */
-
+    
     while (steps--) {
         cont = 0;
         clear_forces();
@@ -738,7 +735,7 @@ main(int argc, char **argv) {
         rtime = (end.tv_sec + (end.tv_usec / 1000000.0)) -
                 (start.tv_sec + (start.tv_usec / 1000000.0));
 
-        
+        fprintf(stderr, "N-body took %10.3f seconds\n", rtime);
     }
 
 
@@ -751,7 +748,6 @@ main(int argc, char **argv) {
     */
     if(0 == myid) {
         print();
-        fprintf(stderr, "N-body took %10.3f seconds\n", rtime);
         fprintf(stderr, "fine\n");
     }
 
