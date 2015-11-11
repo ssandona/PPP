@@ -178,10 +178,8 @@ ppm_exit:
     return(p + 1);
 
     /* Notice that we never clean-up after this:
-
        close(fd);
        munmap(map, fsize);
-
        However, this is relatively harmless;
        they will go away when this process dies.
     */
@@ -298,22 +296,22 @@ compute_forces(void) {
                force of b on c is negative of c on b;
             */
 
-            /* if(printed <= 1) {
-                 printf("id: %d, body: %d, from: %d, INCREMENT FORCE (BEFORE): (XF:%10.3f,YF:%10.3f)\n", myid, b, c, _XF(b), _YF(b));
-                 if(c == 4) {
-                     printf("val-> dx:%10.3f, dy:%10.3f, angle:%10.3f, dsqr:%10.3f, mindist:%10.3f\n", dx, dy, angle, dsqr, mindist);
-                     printf("mindsqr:%10.3f, forced:%10.3f, force:%10.3f, xf:%10.3f, yf:%10.3f\n", mindsqr, forced, force, xf, yf);
-                 }
-             }*/
+           /* if(printed <= 1) {
+                printf("id: %d, body: %d, from: %d, INCREMENT FORCE (BEFORE): (XF:%10.3f,YF:%10.3f)\n", myid, b, c, _XF(b), _YF(b));
+                if(c == 4) {
+                    printf("val-> dx:%10.3f, dy:%10.3f, angle:%10.3f, dsqr:%10.3f, mindist:%10.3f\n", dx, dy, angle, dsqr, mindist);
+                    printf("mindsqr:%10.3f, forced:%10.3f, force:%10.3f, xf:%10.3f, yf:%10.3f\n", mindsqr, forced, force, xf, yf);
+                }
+            }*/
 
             _XF(b) += xf;
             _YF(b) += yf;
 
-            /*
-                        if(printed <= 1) {
-                            printf("id: %d, body: %d, from: %d, INCREMENT FORCE (AFTER): (XF:%10.3f,YF:%10.3f)\n", myid, b, c, _XF(b), _YF(b));
-                        }
-            */
+/*
+            if(printed <= 1) {
+                printf("id: %d, body: %d, from: %d, INCREMENT FORCE (AFTER): (XF:%10.3f,YF:%10.3f)\n", myid, b, c, _XF(b), _YF(b));
+            }
+*/
 
             _XF(c) -= xf;
             _YF(c) -= yf;
@@ -400,7 +398,6 @@ main(int argc, char **argv) {
      MPI_Comm_size(MPI_COMM_WORLD, &numprocs);
      MPI_Comm_rank(MPI_COMM_WORLD, &myid);
      MPI_Get_processor_name(processor_name, &namelen);
-
      fprintf(stderr, "Process %d on %s\n", myid, processor_name);*/
 
     if (argc != 5) {
@@ -438,10 +435,7 @@ main(int argc, char **argv) {
         Y(b) = (rand() % ydim);
         R(b) = ((b * b + 1.0) * sqrt(1.0 * ((xdim * xdim) + (ydim * ydim)))) /
                (25.0 * (bodyCt * bodyCt + 1.0));
-        /*R(b) = ((b + b + 1.0) * sqrt(1.0 * ((xdim * xdim) + (ydim * ydim)))) /
-               (25.0 * (bodyCt * bodyCt + 1.0));*/
         M(b) = R(b) * R(b) * R(b);
-        //M(b) = R(b) * R(b) * R(b);
         XV(b) = ((rand() % 20000) - 10000) / 2000.0;
         YV(b) = ((rand() % 20000) - 10000) / 2000.0;
     }
@@ -500,19 +494,18 @@ main(int argc, char **argv) {
         sum += bodies_per_proc[i];
     }
     //fprintf(stderr, "e\n");
-
+    
     //printf("bodies_per_proc[%d] = %d\tdispls[%d] = %d\n", 0, bodies_per_proc[0], 0, displs[0]);
 
     int bufSize = bodyCt % numprocs == 0 ? bodyCt / numprocs : (bodyCt / numprocs + 1);
     // Create a buffer that will hold a subset of the bodies
-    fprintf(stderr, "bufsize: %d\n", bufSize);
+    //fprintf(stderr, "bufsize: %d\n", bufSize);
     rec_bodies = malloc(sizeof(bodyType) * bufSize);
     //fprintf(stderr, "f\n");
 
     // Scatter the bodies to all processes
     /*MPI_Scatter(bodies, bodies_per_proc, mpi_body_type, sub_bodies,
                 bodies_per_proc, mpi_body_type, 0, MPI_COMM_WORLD);
-
     MPI_Scatterv(bodies, bodies_per_proc, bodyCt, sub_bodies,
                  avarage_bodies_per_proc, mpi_body_type, 0, MPI_COMM_WORLD);*/
 
@@ -532,17 +525,15 @@ main(int argc, char **argv) {
     //fprintf(stderr, "h\n");
 
     // print what each process received
-    printf("__ID__: %d: ", myid);
+    /*printf("__ID__: %d: ", myid);
     for (i = 0; i < bodies_per_proc[myid]; i++) {
         printf("\nbody: %d, mass: %d, pos: (%d,%d)", i, (int)(rec_bodies[i].mass), (int)rec_bodies[i].x[old], (int)rec_bodies[i].y[old]);
-    }
+    }*/
     //fprintf(stderr, "i\n");
     //printf("\n");
 
     /*new_bodies = malloc(sizeof(bodyType) * bodyCt);
-
     MPI_Allgatherv(rec_bodies, bodies_per_proc[myid],mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
-
     printf("__ID__: %d: ", myid);
     printf("__DIM__: %d: ", bodyCt);
     for (i = 0; i < bodyCt; i++) {
@@ -580,11 +571,11 @@ main(int argc, char **argv) {
         /* Flip old & new coordinates */
         old ^= 1;
 
-        rec_bodies = new_bodies + displs[myid];
-        /*for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
+
+        for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
             rec_bodies[cont] = new_bodies[b];
             cont++;
-        }*/
+        }
 
         /*if(printed <= 1) {
             printf("__ID__2: %d:\n", myid);
@@ -599,6 +590,9 @@ main(int argc, char **argv) {
             lastup = time(0);
         }*/
     }
+    new_bodies = malloc(sizeof(bodyType) * bodyCt);
+    MPI_Gatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, 0, MPI_COMM_WORLD);
+
     if(0 == myid) {
         if(gettimeofday(&end, 0) != 0) {
             fprintf(stderr, "could not do timing\n");
@@ -609,13 +603,10 @@ main(int argc, char **argv) {
 
         fprintf(stderr, "N-body took %10.3f seconds\n", rtime);
 
-        fprintf(stderr, "fine\n");
-    }
-    new_bodies = malloc(sizeof(bodyType) * bodyCt);
-    MPI_Gatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, 0, MPI_COMM_WORLD);
-
-    if(0 == myid) {
         print();
+
+
+        fprintf(stderr, "fine\n");
     }
 
 
@@ -624,18 +615,16 @@ main(int argc, char **argv) {
 
     MPI_Finalize();
 
-    fprintf(stderr, "MYID: %d fine\n", myid);
-    /*free(bodies_per_proc);
+    free(bodies_per_proc);
     free(displs);
     free(new_bodies);
-    free(rec_bodies);*/
+    free(rec_bodies);
 
     return 0;
 }
 
 
 /*
-
 if(gettimeofday(&start, 0) != 0) {
         fprintf(stderr, "could not do timing\n");
         exit(1);
@@ -645,28 +634,21 @@ if(gettimeofday(&start, 0) != 0) {
         compute_forces();
         compute_velocities();
         compute_positions();
-
         old ^= 1;
-
         if (secsup > 0 && (time(0) - lastup) > secsup) {
             display();
             msync(map, fsize, MS_SYNC);
             lastup = time(0);
         }
     }
-
     if(gettimeofday(&end, 0) != 0) {
         fprintf(stderr, "could not do timing\n");
         exit(1);
     }
-
     rtime = (end.tv_sec + (end.tv_usec / 1000000.0)) -
             (start.tv_sec + (start.tv_usec / 1000000.0));
-
     fprintf(stderr, "N-body took %10.3f seconds\n", rtime);
-
     print();
-
     return 0;
 }
 */
