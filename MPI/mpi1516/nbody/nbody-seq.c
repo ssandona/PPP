@@ -400,9 +400,11 @@ main(int argc, char **argv)
 	rtime = (end.tv_sec + (end.tv_usec / 1000000.0)) - 
 		(start.tv_sec + (start.tv_usec / 1000000.0));
 
-	fprintf(stderr, "N-body took %10.3f seconds\n", rtime);
 
 	print();
+
+	fprintf(stderr, "N-body took %10.3f seconds\n", rtime);
+
 
 	return 0;
 }
