@@ -735,7 +735,7 @@ main(int argc, char **argv) {
         rtime = (end.tv_sec + (end.tv_usec / 1000000.0)) -
                 (start.tv_sec + (start.tv_usec / 1000000.0));
 
-        fprintf(stderr, "N-body took %10.3f seconds\n", rtime);
+        
     }
 
 
@@ -749,6 +749,7 @@ main(int argc, char **argv) {
     if(0 == myid) {
         print();
         fprintf(stderr, "fine\n");
+        fprintf(stderr, "N-body took %10.3f seconds\n", rtime);
     }
 
 
