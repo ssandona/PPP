@@ -774,8 +774,8 @@ main(int argc, char **argv) {
 
     free(bodies_per_proc);
     free(displs);
-    free(new_bodies);
-    free(rec_bodies);
+    //free(new_bodies);
+    //free(rec_bodies);
 
     return 0;
 }
