@@ -382,8 +382,8 @@ void
 compute_velocities(void) {
     int b;
 
-    for (b = 0; b < bodyCt; ++b) {
-        //for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
+    //for (b = 0; b < bodyCt; ++b) {
+        for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
         double xv = _XV(b);
         double yv = _YV(b);
         double force = sqrt(xv * xv + yv * yv) * FRICTION;
@@ -399,8 +399,8 @@ compute_velocities(void) {
 void
 compute_positions(void) {
     int b;
-    for (b = 0; b < bodyCt; ++b) {
-        //for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
+    //for (b = 0; b < bodyCt; ++b) {
+        for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
         double xn = _X(b) + (_XV(b) * DELTA_T);
         double yn = _Y(b) + (_YV(b) * DELTA_T);
 
