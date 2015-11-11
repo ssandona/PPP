@@ -1,5 +1,5 @@
 /*
-	N-Body simulation code.
+    N-Body simulation code.
 */
 
 #include <stdio.h>
@@ -10,31 +10,31 @@
 #include <sys/time.h>
 #include <mpi.h>
 
-extern double	sqrt(double);
-extern double	atan2(double, double);
+extern double   sqrt(double);
+extern double   atan2(double, double);
 
-#define GRAVITY		1.1
-#define FRICTION	0.01
-#define MAXBODIES	1024
-#define DELTA_T		(0.025/5000)
-#define	BOUNCE		-0.9
-#define	SEED		27102015
+#define GRAVITY     1.1
+#define FRICTION    0.01
+#define MAXBODIES   1024
+#define DELTA_T     (0.025/5000)
+#define BOUNCE      -0.9
+#define SEED        27102015
 
 typedef struct {
-    double x[2];		/* Old and new X-axis coordinates */
-    double y[2];		/* Old and new Y-axis coordinates */
-    double xf;			/* force along X-axis */
-    double yf;			/* force along Y-axis */
-    double xv;			/* velocity along X-axis */
-    double yv;			/* velocity along Y-axis */
-    double mass;		/* Mass of the body */
-    double radius;		/* width (derived from mass) */
+    double x[2];        /* Old and new X-axis coordinates */
+    double y[2];        /* Old and new Y-axis coordinates */
+    double xf;          /* force along X-axis */
+    double yf;          /* force along Y-axis */
+    double xv;          /* velocity along X-axis */
+    double yv;          /* velocity along Y-axis */
+    double mass;        /* Mass of the body */
+    double radius;      /* width (derived from mass) */
 } bodyType;
 
 
 bodyType bodies[MAXBODIES];
-int	bodyCt;
-int	old = 0;	/* Flips between 0 and 1 */
+int bodyCt;
+int old = 0;    /* Flips between 0 and 1 */
 bodyType *new_bodies;
 bodyType *rec_bodies;
 int *displs;
@@ -43,48 +43,48 @@ int myid;
 int printed = 0;
 
 
-/*	Macros to hide memory layout
+/*  Macros to hide memory layout
 */
-#define	X(B)		bodies[B].x[old]
-#define	XN(B)		bodies[B].x[old^1]
-#define	Y(B)		bodies[B].y[old]
-#define	YN(B)		bodies[B].y[old^1]
-#define	XF(B)		bodies[B].xf
-#define	YF(B)		bodies[B].yf
-#define	XV(B)		bodies[B].xv
-#define	YV(B)		bodies[B].yv
-#define	R(B)		bodies[B].radius
-#define	M(B)		bodies[B].mass
+#define X(B)        bodies[B].x[old]
+#define XN(B)       bodies[B].x[old^1]
+#define Y(B)        bodies[B].y[old]
+#define YN(B)       bodies[B].y[old^1]
+#define XF(B)       bodies[B].xf
+#define YF(B)       bodies[B].yf
+#define XV(B)       bodies[B].xv
+#define YV(B)       bodies[B].yv
+#define R(B)        bodies[B].radius
+#define M(B)        bodies[B].mass
 
-/*	Macros to hide memory layout
+/*  Macros to hide memory layout
 */
-#define	_X(B)		new_bodies[B].x[old]
-#define	_XN(B)		new_bodies[B].x[old^1]
-#define	_Y(B)		new_bodies[B].y[old]
-#define	_YN(B)		new_bodies[B].y[old^1]
-#define	_XF(B)		new_bodies[B].xf
-#define	_YF(B)		new_bodies[B].yf
-#define	_XV(B)		new_bodies[B].xv
-#define	_YV(B)		new_bodies[B].yv
-#define	_R(B)		new_bodies[B].radius
-#define	_M(B)		new_bodies[B].mass
+#define _X(B)       new_bodies[B].x[old]
+#define _XN(B)      new_bodies[B].x[old^1]
+#define _Y(B)       new_bodies[B].y[old]
+#define _YN(B)      new_bodies[B].y[old^1]
+#define _XF(B)      new_bodies[B].xf
+#define _YF(B)      new_bodies[B].yf
+#define _XV(B)      new_bodies[B].xv
+#define _YV(B)      new_bodies[B].yv
+#define _R(B)       new_bodies[B].radius
+#define _M(B)       new_bodies[B].mass
 
-/*	Dimensions of space (very finite, ain't it?)
+/*  Dimensions of space (very finite, ain't it?)
 */
-int		xdim = 0;
-int		ydim = 0;
+int     xdim = 0;
+int     ydim = 0;
 
 
 
-/*	Graphic output stuff...
+/*  Graphic output stuff...
 */
 
 #include <fcntl.h>
 #include <sys/mman.h>
 
-int		fsize;
-unsigned char	*map;
-unsigned char	*image;
+int     fsize;
+unsigned char   *map;
+unsigned char   *image;
 
 
 unsigned char *
@@ -106,12 +106,12 @@ map_P6(char *filename,
     /* Read size and map the whole file... */
     fsize = lseek(fd, ((off_t) 0), SEEK_END);
     map = ((unsigned char *)
-           mmap(0,		/* Put it anywhere */
-                fsize,	/* Map the whole file */
-                (PROT_READ | PROT_WRITE),	/* Read/write */
-                MAP_SHARED,	/* Not just for me */
-                fd,		/* The file */
-                0));	/* Right from the start */
+           mmap(0,      /* Put it anywhere */
+                fsize,  /* Map the whole file */
+                (PROT_READ | PROT_WRITE),   /* Read/write */
+                MAP_SHARED, /* Not just for me */
+                fd,     /* The file */
+                0));    /* Right from the start */
     if (map == ((unsigned char *) - 1)) {
         close(fd);
         return((unsigned char *) 0);
@@ -127,40 +127,40 @@ map_P6(char *filename,
         goto ppm_exit;
     }
 
-#define	Eat_Space \
-	while ((*p == ' ') || \
-	       (*p == '\t') || \
-	       (*p == '\n') || \
-	       (*p == '\r') || \
-	       (*p == '#')) { \
-		if (*p == '#') while (*(++p) != '\n') ; \
-		++p; \
-	}
+#define Eat_Space \
+    while ((*p == ' ') || \
+           (*p == '\t') || \
+           (*p == '\n') || \
+           (*p == '\r') || \
+           (*p == '#')) { \
+        if (*p == '#') while (*(++p) != '\n') ; \
+        ++p; \
+    }
 
-    Eat_Space;		/* Eat white space and comments */
+    Eat_Space;      /* Eat white space and comments */
 
-#define	Get_Number(n) \
-	{ \
-		int charval = *p; \
+#define Get_Number(n) \
+    { \
+        int charval = *p; \
  \
-		if ((charval < '0') || (charval > '9')) goto ppm_exit; \
+        if ((charval < '0') || (charval > '9')) goto ppm_exit; \
  \
-		n = (charval - '0'); \
-		charval = *(++p); \
-		while ((charval >= '0') && (charval <= '9')) { \
-			n *= 10; \
-			n += (charval - '0'); \
-			charval = *(++p); \
-		} \
-	}
+        n = (charval - '0'); \
+        charval = *(++p); \
+        while ((charval >= '0') && (charval <= '9')) { \
+            n *= 10; \
+            n += (charval - '0'); \
+            charval = *(++p); \
+        } \
+    }
 
-    Get_Number(*xdim);	/* Get image width */
+    Get_Number(*xdim);  /* Get image width */
 
-    Eat_Space;		/* Eat white space and comments */
-    Get_Number(*ydim);	/* Get image width */
+    Eat_Space;      /* Eat white space and comments */
+    Get_Number(*ydim);  /* Get image width */
 
-    Eat_Space;		/* Eat white space and comments */
-    Get_Number(maxval);	/* Get image max value */
+    Eat_Space;      /* Eat white space and comments */
+    Get_Number(maxval); /* Get image max value */
 
     /* Should be 8-bit binary after one whitespace char... */
     if (maxval > 255) {
@@ -187,8 +187,8 @@ ppm_exit:
     */
 }
 
-#undef	Eat_Space
-#undef	Get_Number
+#undef  Eat_Space
+#undef  Get_Number
 
 static inline void
 color(int x, int y, int b) {
@@ -298,22 +298,22 @@ compute_forces(void) {
                force of b on c is negative of c on b;
             */
 
-           /* if(printed <= 1) {
-                printf("id: %d, body: %d, from: %d, INCREMENT FORCE (BEFORE): (XF:%10.3f,YF:%10.3f)\n", myid, b, c, _XF(b), _YF(b));
-                if(c == 4) {
-                    printf("val-> dx:%10.3f, dy:%10.3f, angle:%10.3f, dsqr:%10.3f, mindist:%10.3f\n", dx, dy, angle, dsqr, mindist);
-                    printf("mindsqr:%10.3f, forced:%10.3f, force:%10.3f, xf:%10.3f, yf:%10.3f\n", mindsqr, forced, force, xf, yf);
-                }
-            }*/
+            /* if(printed <= 1) {
+                 printf("id: %d, body: %d, from: %d, INCREMENT FORCE (BEFORE): (XF:%10.3f,YF:%10.3f)\n", myid, b, c, _XF(b), _YF(b));
+                 if(c == 4) {
+                     printf("val-> dx:%10.3f, dy:%10.3f, angle:%10.3f, dsqr:%10.3f, mindist:%10.3f\n", dx, dy, angle, dsqr, mindist);
+                     printf("mindsqr:%10.3f, forced:%10.3f, force:%10.3f, xf:%10.3f, yf:%10.3f\n", mindsqr, forced, force, xf, yf);
+                 }
+             }*/
 
             _XF(b) += xf;
             _YF(b) += yf;
 
-/*
-            if(printed <= 1) {
-            	printf("id: %d, body: %d, from: %d, INCREMENT FORCE (AFTER): (XF:%10.3f,YF:%10.3f)\n", myid, b, c, _XF(b), _YF(b));
-            }
-*/
+            /*
+                        if(printed <= 1) {
+                            printf("id: %d, body: %d, from: %d, INCREMENT FORCE (AFTER): (XF:%10.3f,YF:%10.3f)\n", myid, b, c, _XF(b), _YF(b));
+                        }
+            */
 
             _XF(c) -= xf;
             _YF(c) -= yf;
@@ -380,7 +380,7 @@ print_mine(void) {
 
 
 
-/*	Main program...
+/*  Main program...
 */
 
 int
@@ -436,8 +436,11 @@ main(int argc, char **argv) {
     for (b = 0; b < bodyCt; ++b) {
         X(b) = (rand() % xdim);
         Y(b) = (rand() % ydim);
-        R(b) = ((b * b + 1.0) * sqrt(1.0 * ((xdim * xdim) + (ydim * ydim)))) /
+        /*R(b) = ((b * b + 1.0) * sqrt(1.0 * ((xdim * xdim) + (ydim * ydim)))) /
+               (25.0 * (bodyCt * bodyCt + 1.0));*/
+        R(b) = ((b + b + 1.0) * sqrt(1.0 * ((xdim * xdim) + (ydim * ydim)))) /
                (25.0 * (bodyCt * bodyCt + 1.0));
+        /*M(b) = R(b) * R(b) * R(b);*/
         M(b) = R(b) * R(b) * R(b);
         XV(b) = ((rand() % 20000) - 10000) / 2000.0;
         YV(b) = ((rand() % 20000) - 10000) / 2000.0;
@@ -497,7 +500,7 @@ main(int argc, char **argv) {
         sum += bodies_per_proc[i];
     }
     //fprintf(stderr, "e\n");
-    
+
     //printf("bodies_per_proc[%d] = %d\tdispls[%d] = %d\n", 0, bodies_per_proc[0], 0, displs[0]);
 
     int bufSize = bodyCt % numprocs == 0 ? bodyCt / numprocs : (bodyCt / numprocs + 1);
@@ -577,7 +580,7 @@ main(int argc, char **argv) {
         /* Flip old & new coordinates */
         old ^= 1;
 
-        rec_bodies=new_bodies+displs[myid];
+        rec_bodies = new_bodies + displs[myid];
         /*for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
             rec_bodies[cont] = new_bodies[b];
             cont++;
@@ -611,7 +614,7 @@ main(int argc, char **argv) {
     new_bodies = malloc(sizeof(bodyType) * bodyCt);
     MPI_Gatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, 0, MPI_COMM_WORLD);
 
-    if(0==myid){
+    if(0 == myid) {
         print();
     }
 
