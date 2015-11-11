@@ -699,10 +699,12 @@ main(int argc, char **argv) {
             }
         }*/
 
+/*THIS*//*
         new_forces2 = malloc(sizeof(forceType) * bodyCt);
         MPI_Allreduce(new_forces, new_forces2, bodyCt, mpi_force_type, mpi_sum, MPI_COMM_WORLD);
         free(new_forces);
         new_forces = new_forces2;
+        */
 
         /*if(printed <= 1) {
             printf("C -> %d\n", myid);
