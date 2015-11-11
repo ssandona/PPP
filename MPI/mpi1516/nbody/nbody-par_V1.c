@@ -611,8 +611,8 @@ main(int argc, char **argv) {
 
         fprintf(stderr, "fine\n");
     }
-    //new_bodies = malloc(sizeof(bodyType) * bodyCt);
-    //MPI_Gatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, 0, MPI_COMM_WORLD);
+    new_bodies = malloc(sizeof(bodyType) * bodyCt);
+    MPI_Gatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, 0, MPI_COMM_WORLD);
 
     if(0 == myid) {
         print();
