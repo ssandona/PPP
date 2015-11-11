@@ -741,9 +741,6 @@ main(int argc, char **argv) {
         }*/
     }
 
-        new_bodies = malloc(sizeof(bodyType) * bodyCt);
-    MPI_Gatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, 0, MPI_COMM_WORLD);
-
     if(0 == myid) {
         if(gettimeofday(&end, 0) != 0) {
             fprintf(stderr, "could not do timing\n");
@@ -754,6 +751,9 @@ main(int argc, char **argv) {
 
         fprintf(stderr, "N-body took %10.3f seconds\n", rtime);
     }
+
+    new_bodies = malloc(sizeof(bodyType) * bodyCt);
+    MPI_Gatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, 0, MPI_COMM_WORLD);
 
 
     /*for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
