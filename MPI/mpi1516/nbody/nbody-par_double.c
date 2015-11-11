@@ -15,7 +15,7 @@ extern double   atan2(double, double);
 
 #define GRAVITY     1.1
 #define FRICTION    0.01
-#define MAXBODIES   1024
+#define MAXBODIES  10000
 #define DELTA_T     (0.025/5000)
 #define BOUNCE      -0.9
 #define SEED        27102015
@@ -284,7 +284,7 @@ void compute(int b, int c) {
         printf("body: %d, from: %d, INCREMENT FORCE (BEFORE): (XF:%10.3f,YF:%10.3f)\n", b, c, _XF(b), _YF(b));
          printf("val-> dx:%10.3f, dy:%10.3f, angle:%10.3f, dsqr:%10.3f, mindist:%10.3f\n", dx, dy, angle, dsqr, mindist);
          printf("mindsqr:%10.3f, forced:%10.3f, force:%10.3f, xf:%10.3f, yf:%10.3f\n", mindsqr, forced, force, xf, yf);
-         
+
     }*/
 
     _XF(b) += xf;
@@ -512,8 +512,8 @@ main(int argc, char **argv) {
     for (b = 0; b < bodyCt; ++b) {
         X(b) = (rand() % xdim);
         Y(b) = (rand() % ydim);
-        R(b) = ((b * b + 1.0) * sqrt(1.0 * ((xdim * xdim) + (ydim * ydim)))) /
-                (25.0 * (bodyCt * bodyCt + 1.0));
+        R(b) = 1 + ((b * b + 1.0) * sqrt(1.0 * ((xdim * xdim) + (ydim * ydim)))) /
+               (25.0 * (bodyCt * bodyCt + 1.0));
         M(b) = R(b) * R(b) * R(b);
         XV(b) = ((rand() % 20000) - 10000) / 2000.0;
         YV(b) = ((rand() % 20000) - 10000) / 2000.0;
@@ -639,10 +639,10 @@ main(int argc, char **argv) {
     //fprintf(stderr, "h\n");
 
     // print what each process received
-   /* printf("__ID__: %d: ", myid);
-    for (i = 0; i < bodies_per_proc[myid]; i++) {
-        printf("\nbody: %d, mass: %d, pos: (%d,%d)", i, (int)(rec_bodies[i].mass), (int)rec_bodies[i].x[old], (int)rec_bodies[i].y[old]);
-    }*/
+    /* printf("__ID__: %d: ", myid);
+     for (i = 0; i < bodies_per_proc[myid]; i++) {
+         printf("\nbody: %d, mass: %d, pos: (%d,%d)", i, (int)(rec_bodies[i].mass), (int)rec_bodies[i].x[old], (int)rec_bodies[i].y[old]);
+     }*/
     //fprintf(stderr, "i\n");
     //printf("\n");
 
@@ -677,7 +677,7 @@ main(int argc, char **argv) {
     // printf("b\n");
 
     /* Main Loop */
-    
+
     while (steps--) {
         cont = 0;
         new_bodies = malloc(sizeof(bodyType) * bodyCt);
@@ -699,7 +699,7 @@ main(int argc, char **argv) {
             }
         }*/
 
-/*THIS*/
+        /*THIS*/
         new_forces2 = malloc(sizeof(forceType) * bodyCt);
         MPI_Allreduce(new_forces, new_forces2, bodyCt, mpi_force_type, mpi_sum, MPI_COMM_WORLD);
         free(new_forces);
@@ -715,7 +715,7 @@ main(int argc, char **argv) {
         }*/
         compute_velocities();
         compute_positions();
-        rec_bodies=new_bodies+displs[myid];
+        rec_bodies = new_bodies + displs[myid];
         new_bodies = malloc(sizeof(bodyType) * bodyCt);
         MPI_Allgatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
 
@@ -727,7 +727,7 @@ main(int argc, char **argv) {
             cont++;
         }*/
 
-        rec_bodies=new_bodies+displs[myid];
+        rec_bodies = new_bodies + displs[myid];
 
         /*if(printed <= 1) {
             printf("__ID__2: %d:\n", myid);
