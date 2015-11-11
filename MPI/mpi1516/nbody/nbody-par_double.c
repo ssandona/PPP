@@ -720,10 +720,12 @@ main(int argc, char **argv) {
 
         old ^= 1;
 
-        for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
+        /*for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
             rec_bodies[cont] = new_bodies[b];
             cont++;
-        }
+        }*/
+
+        rec_bodies=new_bodies+displs[i];
 
         /*if(printed <= 1) {
             printf("__ID__2: %d:\n", myid);
