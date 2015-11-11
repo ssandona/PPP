@@ -624,6 +624,7 @@ main(int argc, char **argv) {
 
     MPI_Finalize();
 
+    fprintf(stderr, "MYID: %d fine\n", myid);
     free(bodies_per_proc);
     free(displs);
     free(new_bodies);
