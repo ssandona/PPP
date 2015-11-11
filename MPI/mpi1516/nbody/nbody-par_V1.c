@@ -505,7 +505,7 @@ main(int argc, char **argv) {
 
     int bufSize = bodyCt % numprocs == 0 ? bodyCt / numprocs : (bodyCt / numprocs + 1);
     // Create a buffer that will hold a subset of the bodies
-    //fprintf(stderr, "bufsize: %d\n", bufSize);
+    fprintf(stderr, "bufsize: %d\n", bufSize);
     rec_bodies = malloc(sizeof(bodyType) * bufSize);
     //fprintf(stderr, "f\n");
 
@@ -532,10 +532,10 @@ main(int argc, char **argv) {
     //fprintf(stderr, "h\n");
 
     // print what each process received
-    /*printf("__ID__: %d: ", myid);
+    printf("__ID__: %d: ", myid);
     for (i = 0; i < bodies_per_proc[myid]; i++) {
         printf("\nbody: %d, mass: %d, pos: (%d,%d)", i, (int)(rec_bodies[i].mass), (int)rec_bodies[i].x[old], (int)rec_bodies[i].y[old]);
-    }*/
+    }
     //fprintf(stderr, "i\n");
     //printf("\n");
 
