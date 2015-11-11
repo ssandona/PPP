@@ -40,3 +40,48 @@
 130 bodies + 4 machines	-> 70.476 seconds	=> speedup=3.91
 130 bodies + 8 machines	-> 40.720 seconds	=> speedup=6.76
 130 bodies + 10 machines-> 35.579 seconds	=> speedup=7.74
+
+
+500000 interactions + 130 bodies
+
+558.205 seconds 1 machine
+138.832 seconds 8 machines => double (no forces)
+149.475 seconds 8 machine => double
+100.667 seconds 8 machins => 
+
+
+NEWW
+
+100000 interactions + 130 bodies
+
+112.324 seconds => 1 core
+29.846 seconds => 8 cores => double
+20.180 seconds => 8 cores => forces
+
+100 interactions + 10000 bodies
+
+ 655.162 seconds => 1 node
+186.764 seconds => 4 cores => forces
+240.633 seconds => 4 cores => double
+93.483 seconds => 8 cores => forces => speedup=7
+120.523 seconds => 8 cores => double => speedup=
+74.908 seconds => 10 cores => forces => speedup=8.74
+96.565seconds => 10 cores => double
+47.192 seconds => 16 cores => forces => speedup=13.88
+
+100 interactions + 10000 bodies
+328.588 seconds => 1 core
+46.751 seconds => 8 cores => speedup=7
+23.825 seconds => 16 cores => speedup=13.79
+
+
+
+200 interactions + 10000 bodies
+1306.629 seconds => 1 core
+187.054 seconds => 8 cores => speedup=6.98
+
+500 interactions + 10000 bodies
+3265.718 seconds => 1 
+467.417 seconds => 8 => speedup=6.98
+374.768 seconds => 10 => speedup=8.71
+

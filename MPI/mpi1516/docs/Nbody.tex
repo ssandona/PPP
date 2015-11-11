@@ -18,6 +18,7 @@
 \usepackage{subcaption}
 \usepackage[affil-it]{authblk}
 \usepackage{color}
+\usepackage{amssymb,amsmath}
 
 \begin{document}
 \title{MPI Assignment: N-body Simulations}
@@ -88,12 +89,14 @@ for (i = 0; i < numprocs; i++) {
 \label{sec:naive_rep}
 
 This is the most critical part of the implementation, from this depends the efficiency of the whole algorithm. 
-Using a naive approach for every step we could simply use the MPI\_Allgatherv operation, to send to all other nodes our updated chunk of bodies and receive all the other chunks from other nodes. Than compute the forces that all other bodies exert on the actual chunk and update the actual chunk bodies positions and speeds. For each iteration so we would send O(N/P) bodies and we would receive O(N-N/P) bodies, that means an O(N) communication and an O(N\textsuperscript{2}/P) compute time per timestamp. A problem of this approach is the big amount of data transferred in each iteration (N bodiesType structures) and that we are doing the same work for some bodies in more than one machine. In fact, computing the force that the body A exert on the body B, implicitly we are computing also the force that the body B exert on the body A (force of B on A is negative of A on B). 
+Using a naive approach for every step we could simply use the MPI\_Allgatherv operation, to send to all other nodes our updated chunk of bodies and receive all the other chunks from other nodes. Than compute the forces that all other bodies exert on the actual chunk and update the actual chunk bodies positions and speeds. 
+
+A problem of this approach is the big amount of data transferred in each iteration (N bodiesType structures) and the fact that we are computing the same forces between some pairs of bodies in more than one machine. In fact, computing the force that the body A exert on the body B, implicitly we are computing also the force that the body B exert on the body A (force of B on A is negative of A on B). Given a situation like the one described on Figure \ref{fig:nodes}, we can see on Tables \ref{table:t1} and \ref{table:t2} the forces computed by the first two nodes.
 
 \begin{figure}[ht]
   \centering\includegraphics[width=0.6\linewidth]{array_procs_3}
   \caption{12 bodies and 3 computational nodes}
-  \label{fig:3nodes_}
+  \label{fig:nodes}
 \end{figure}
 \FloatBarrier
 
@@ -121,7 +124,18 @@ bodies{[}7{]} & \textcolor{red}{7-0} & \textcolor{red}{7-1} & \textcolor{red}{7-
 \end{tabular}
 \end{table}
 
-As we can notice from Tables \ref{table:t1} and \ref{table:t2}, forces between the pairs highlighted in red are calculated by both Node 0 and Node 1. For each node we calculate the forces for 38 pairs, that means 114 pairs (38 x 3) in total. The number of possible pairs is 66, so we are doing about 1.7 times the needed work.
+As we can notice from Tables \ref{table:t1} and \ref{table:t2}, forces between the pairs highlighted in red are calculated by both Node 0 and Node 1. For each node we calculate the forces for 38 pairs, that means 114 pairs (38 x 3) in total. The number of possible pairs is 66, so we are doing about 1.7 times the needed work. 
+The detailed computation is explained on the Equation \ref{eq:eq1}). 
+
+\begin{equation} 
+\label{eq:eq1}
+\begin{split}
+Computation & = O(\lceil\frac{N}{P}\rceil * \lceil\frac{N}{P}\rceil * (P-1)) + O((\lceil\frac{N}{P}\rceil-1)!)\\
+ & = O(\frac{N^2}{P})
+\end{split}
+\end{equation}
+
+With this approach for each iteration we send O(N/P) bodies and we receive O(N-N/P) bodies, that means an O(N) communication. For the computation we have the O(N\textsuperscript{2}/2P) for the force computation, and an O(N-N/P)for each the velocities and the positions computation.
 
 \subsubsection{Optimized repartition}
 \label{sec:opt_rep}
@@ -187,7 +201,27 @@ The aim of a good repartition is to not repeat the same work on different nodes.
 \end{figure}
 \FloatBarrier
 
-Proceeding in this way, the forces between pairs of bodies are calculated only one time per step. Each node computes the forces of 22 pairs. We have 3 nodes, so 3 times 22 is 66 that correspond to the number of possible pairs. No useful work is done.
+Proceeding in this way, the forces between pairs of bodies are calculated only one time per step. Each node computes the forces of 22 pairs. We have 3 nodes, so 3 times 22 is 66 that correspond to the number of possible pairs. No useful work is done. The computational time is explained in the Equation \ref{eq:eq2}.
+
+\begin{equation} \label{eq:eq2}
+\begin{split}
+Complexity & = O(\lceil\frac{N}{P}\rceil * (\lceil\frac{N}{P}\rceil * \frac{1}{2}) * (P-1)) + O((\lceil\frac{N}{P}\rceil-1)!)\\
+ & = O(\frac{N^2}{2P})
+\end{split}
+\end{equation}
+
+\subsection{The final solution}
+\label{sec:comm_comp}
+
+\subsubsection{Communication VS Computation}
+\label{sec:comm_comp}
+The communication is a common bottleneck on lots of parallel implementations. The data exchange between nodes should be reduced at the minimum in order to obtain good performances. The problem with the N body algorithm is that at every step we need the updated information (positions, velocities) of all other bodies of the system in order to correctly compute the forces of the assigned chunk. That means an exchange of data for every step. To gain performances we have to find a good compromise between the data exchange and the work to do on each node. In particular, we have to maximize the ratio \textit{computation/communication}. Due to the fact that the force computation is the most expensive part of the algorithm and that we want to exhange as less data as possible, a good compromise is the following. At the begin, we broadcast to all the nodes the bodies (MPI_Bcast). Than for each step, each node calculates the forces for the assigned pairs (the one described on Section \ref{sec:opt_rep}), after that uses an MPI_Allreduce operation to sum all the calculated forces by all the nodes and as last thing it computes the velocities and positions for all the bodies. The major problem of this approach, is that we calculate the positions and velocities of bodies in every node, that represent a duplication of work. An alternative could be to calculate in each node only the velocities and the positions of the bodies of the assigned chunk, but doing this we have to share with the other nodes also this information. The decision so, is between computing the N velocities and positions in all the nodes or exchange more data with the other nodes. 
+
+\subsubsection{2 solutions comparison}
+\label{sec:sol_comp}
+After a comparison of the two solutions for different size of inputs (steps and number of bodies), it's clear that the amount of data exhanged is the key point. The Figure \ref{} shows just one example in which we can see how the execution time of the first approach is lower than the execution time on the other.
+
+
 
 
 \begin{figure}[ht]
