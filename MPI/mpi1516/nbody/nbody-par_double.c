@@ -667,6 +667,10 @@ main(int argc, char **argv) {
     }
     //MPI_Allgatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
 
+    new_bodies = malloc(sizeof(bodyType) * bodyCt);
+    MPI_Allgatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
+
+
     if(gettimeofday(&start, 0) != 0) {
         fprintf(stderr, "could not do timing\n");
         exit(1);
@@ -680,9 +684,6 @@ main(int argc, char **argv) {
 
     while (steps--) {
         cont = 0;
-        new_bodies = malloc(sizeof(bodyType) * bodyCt);
-        MPI_Allgatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
-
         clear_forces();
         /*if(printed <= 1 && myid == 0) {
             printf("A -> %d\n", myid);
