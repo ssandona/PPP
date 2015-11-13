@@ -74,14 +74,84 @@ NEWW
 46.751 seconds => 8 cores => speedup=7
 23.825 seconds => 16 cores => speedup=13.79
 
+50 interactions + 10000 bodies
+
+330.747 => 1 core
+186.686 => 2 cores
+ 93.398 => 4 cores
+46.754 => 8 cores
+37.526 => 10 cores
+23.738 => 16 cores 
 
 
 200 interactions + 10000 bodies
 1306.629 seconds => 1 core
 187.054 seconds => 8 cores => speedup=6.98
+94.080 => 16 cores=> 13.88
 
 500 interactions + 10000 bodies
 3265.718 seconds => 1 
 467.417 seconds => 8 => speedup=6.98
 374.768 seconds => 10 => speedup=8.71
+234.880 => 16
+
+
+
+500 interactions + 5000 bodies
+
+1
+2	 466.302
+4
+8
+16	58.933
+
+100 interactions + 5000 bodies
+
+1	164.242
+2	93.269	 
+4	46.664
+8	23.442
+10	18.767
+16	11.829
+
+100 interactions + 1000 bodies
+
+1	6.598
+2	3.749	 
+4	1.892
+8	1.001
+10	0.799
+16	0.555
+
+
+
+500 interactions + 1000 bodies
+
+1	33.140	 
+16	2.562	=> 12.93
+
+1000 interactions + 1000 bodies
+
+1	65.991
+16	5.070	=> 13.01
+
+
+10000 interactions + 1000 bodies
+
+1	654.008	
+16	50.201
+
+100 iterations + 100 bodies
+
+16 => 0.073
+
+
+100 iterations + 500 bodies
+
+1	1.639
+2	0.940
+4	0.482
+8	0.482
+10	
+16	0.176
 
