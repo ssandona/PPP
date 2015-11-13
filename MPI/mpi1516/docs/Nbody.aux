@@ -63,55 +63,63 @@
 \newlabel{sec:comm_comp}{{3.3.1}{4}{Communication VS Computation}{subsubsection.3.3.1}{}}
 \@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.2}Approach one}{5}{subsubsection.3.3.2}}
 \newlabel{sec:app_1}{{3.3.2}{5}{Approach one}{subsubsection.3.3.2}{}}
-\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces A - Scatter\relax }}{5}{figure.caption.8}}
-\newlabel{fig:A1}{{6}{5}{A - Scatter\relax }{figure.caption.8}{}}
-\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces B - Collect updated bodies from other nodes\relax }}{5}{figure.caption.9}}
-\newlabel{fig:B1}{{7}{5}{B - Collect updated bodies from other nodes\relax }{figure.caption.9}{}}
-\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces C - Forces computation\relax }}{6}{figure.caption.10}}
-\newlabel{fig:C1}{{8}{6}{C - Forces computation\relax }{figure.caption.10}{}}
-\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces D - Reduce forces\relax }}{6}{figure.caption.11}}
-\newlabel{fig:D1}{{9}{6}{D - Reduce forces\relax }{figure.caption.11}{}}
-\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces E - Update positions and velocities for bodies of the assigned chunk \relax }}{6}{figure.caption.11}}
-\newlabel{fig:E1}{{10}{6}{E - Update positions and velocities for bodies of the assigned chunk \relax }{figure.caption.11}{}}
+\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces A - Broadcast the bodies to all the nodes\relax }}{5}{figure.caption.8}}
+\newlabel{fig:A2}{{6}{5}{A - Broadcast the bodies to all the nodes\relax }{figure.caption.8}{}}
+\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces B - Forces computation, the results are put in a vector\relax }}{6}{figure.caption.9}}
+\newlabel{fig:B2}{{7}{6}{B - Forces computation, the results are put in a vector\relax }{figure.caption.9}{}}
+\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces C- Forces reduction, sum all the vectors of forces calculated by different nodes\relax }}{6}{figure.caption.10}}
+\newlabel{fig:C2}{{8}{6}{C- Forces reduction, sum all the vectors of forces calculated by different nodes\relax }{figure.caption.10}{}}
+\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces D - Update positions and velocities for all the bodies\relax }}{6}{figure.caption.10}}
+\newlabel{fig:D2}{{9}{6}{D - Update positions and velocities for all the bodies\relax }{figure.caption.10}{}}
+\newlabel{eq:comp_app1}{{3}{7}{Approach one}{equation.3.3}{}}
+\newlabel{eq:com_app1}{{4}{7}{Approach one}{equation.3.4}{}}
 \@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.3}Approach two}{7}{subsubsection.3.3.3}}
 \newlabel{sec:app_1}{{3.3.3}{7}{Approach two}{subsubsection.3.3.3}{}}
-\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces A - Broadcast\relax }}{7}{figure.caption.12}}
-\newlabel{fig:A2}{{11}{7}{A - Broadcast\relax }{figure.caption.12}{}}
-\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces B - Forces computation\relax }}{7}{figure.caption.13}}
-\newlabel{fig:B2}{{12}{7}{B - Forces computation\relax }{figure.caption.13}{}}
-\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces C- Reduce forces\relax }}{8}{figure.caption.14}}
-\newlabel{fig:C2}{{13}{8}{C- Reduce forces\relax }{figure.caption.14}{}}
-\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces D - Update positions and velocities for all the bodies\relax }}{8}{figure.caption.14}}
-\newlabel{fig:D2}{{14}{8}{D - Update positions and velocities for all the bodies\relax }{figure.caption.14}{}}
-\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.4}Solutions comparison}{8}{subsubsection.3.3.4}}
-\newlabel{sec:sol_comp}{{3.3.4}{8}{Solutions comparison}{subsubsection.3.3.4}{}}
-\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces Execution Time and Speedups of the two approaches\relax }}{9}{figure.caption.15}}
-\newlabel{fig:G1}{{15}{9}{Execution Time and Speedups of the two approaches\relax }{figure.caption.15}{}}
-\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.5}Results}{9}{subsubsection.3.3.5}}
-\newlabel{sec:res}{{3.3.5}{9}{Results}{subsubsection.3.3.5}{}}
-\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces Execution Time and Speedups, 100000 iterations\relax }}{10}{figure.caption.16}}
-\newlabel{fig:R1}{{16}{10}{Execution Time and Speedups, 100000 iterations\relax }{figure.caption.16}{}}
-\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {17}{\ignorespaces Execution Time and Speedups, 100 iterations\relax }}{11}{figure.caption.17}}
-\newlabel{fig:R2}{{17}{11}{Execution Time and Speedups, 100 iterations\relax }{figure.caption.17}{}}
-\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {18}{\ignorespaces 12 bodies and 5 computational nodes\relax }}{12}{figure.caption.23}}
-\newlabel{fig:5nodes}{{18}{12}{12 bodies and 5 computational nodes\relax }{figure.caption.23}{}}
-\@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces 100000 iterations - Execution times\relax }}{12}{table.caption.18}}
-\newlabel{t5}{{3}{12}{100000 iterations - Execution times\relax }{table.caption.18}{}}
-\@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces 100000 iterations - Speedups\relax }}{13}{table.caption.19}}
-\newlabel{t5}{{4}{13}{100000 iterations - Speedups\relax }{table.caption.19}{}}
-\@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Node 0\relax }}{13}{table.caption.20}}
-\newlabel{my-label}{{5}{13}{Node 0\relax }{table.caption.20}{}}
-\@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Node 1\relax }}{13}{table.caption.21}}
-\newlabel{my-label}{{6}{13}{Node 1\relax }{table.caption.21}{}}
-\@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Node 2\relax }}{13}{table.caption.22}}
-\newlabel{my-label}{{7}{13}{Node 2\relax }{table.caption.22}{}}
-\@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Node 0\relax }}{13}{table.caption.24}}
-\newlabel{my-label}{{8}{13}{Node 0\relax }{table.caption.24}{}}
-\@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces Node 1\relax }}{13}{table.caption.25}}
-\newlabel{my-label}{{9}{13}{Node 1\relax }{table.caption.25}{}}
-\@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\contentsline {table}{\numberline {10}{\ignorespaces Node 2\relax }}{13}{table.caption.26}}
-\newlabel{my-label}{{10}{13}{Node 2\relax }{table.caption.26}{}}
-\@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\contentsline {table}{\numberline {11}{\ignorespaces My caption\relax }}{13}{table.caption.27}}
-\newlabel{my-label}{{11}{13}{My caption\relax }{table.caption.27}{}}
-\@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\contentsline {table}{\numberline {12}{\ignorespaces Node 3\relax }}{14}{table.caption.28}}
-\newlabel{my-label}{{12}{14}{Node 3\relax }{table.caption.28}{}}
+\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces A - Scatter the bodies to the nodes\relax }}{7}{figure.caption.11}}
+\newlabel{fig:A1}{{10}{7}{A - Scatter the bodies to the nodes\relax }{figure.caption.11}{}}
+\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces B - Collect updated bodies from other nodes\relax }}{7}{figure.caption.12}}
+\newlabel{fig:B1}{{11}{7}{B - Collect updated bodies from other nodes\relax }{figure.caption.12}{}}
+\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces C - Forces computation, the results are put in a vector\relax }}{8}{figure.caption.13}}
+\newlabel{fig:C1}{{12}{8}{C - Forces computation, the results are put in a vector\relax }{figure.caption.13}{}}
+\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces D - Forces reduction, sum all the vectors of forces calculated by different nodes\relax }}{8}{figure.caption.14}}
+\newlabel{fig:D1}{{13}{8}{D - Forces reduction, sum all the vectors of forces calculated by different nodes\relax }{figure.caption.14}{}}
+\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces E - Update positions and velocities for bodies of the assigned chunk \relax }}{8}{figure.caption.14}}
+\newlabel{fig:E1}{{14}{8}{E - Update positions and velocities for bodies of the assigned chunk \relax }{figure.caption.14}{}}
+\newlabel{eq:comp_app2}{{5}{9}{Approach two}{equation.3.5}{}}
+\newlabel{eq:com_app2}{{6}{9}{Approach two}{equation.3.6}{}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.4}Solutions comparison}{9}{subsubsection.3.3.4}}
+\newlabel{sec:sol_comp}{{3.3.4}{9}{Solutions comparison}{subsubsection.3.3.4}{}}
+\@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces 128 bodies and 100000 iterations - Execution times\relax }}{9}{table.3}}
+\newlabel{tab:t_app1}{{3}{9}{128 bodies and 100000 iterations - Execution times\relax }{table.3}{}}
+\@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces 128 bodies and 100000 iterations - Speedups\relax }}{9}{table.4}}
+\newlabel{tab:t_app2}{{4}{9}{128 bodies and 100000 iterations - Speedups\relax }{table.4}{}}
+\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces Execution Time and Speedups of the two approaches with 128 bodies and 100000 iterations\relax }}{9}{figure.caption.15}}
+\newlabel{fig:G1}{{15}{9}{Execution Time and Speedups of the two approaches with 128 bodies and 100000 iterations\relax }{figure.caption.15}{}}
+\@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces 10000 bodies and 100 iterations - Execution times\relax }}{9}{table.5}}
+\newlabel{tab:t_app3}{{5}{9}{10000 bodies and 100 iterations - Execution times\relax }{table.5}{}}
+\@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces 10000 bodies and 100 iterations - Speedups\relax }}{9}{table.6}}
+\newlabel{tab:t_app4}{{6}{9}{10000 bodies and 100 iterations - Speedups\relax }{table.6}{}}
+\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces Execution Time and Speedups of the two approaches with 10000 bodies and 100 iterations\relax }}{10}{figure.caption.16}}
+\newlabel{fig:G2}{{16}{10}{Execution Time and Speedups of the two approaches with 10000 bodies and 100 iterations\relax }{figure.caption.16}{}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.5}Results}{10}{subsubsection.3.3.5}}
+\newlabel{sec:res}{{3.3.5}{10}{Results}{subsubsection.3.3.5}{}}
+\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {17}{\ignorespaces Execution Time and Speedups, 100000 iterations\relax }}{10}{figure.caption.17}}
+\newlabel{fig:R1}{{17}{10}{Execution Time and Speedups, 100000 iterations\relax }{figure.caption.17}{}}
+\@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces 100000 iterations - Exec. times\relax }}{11}{table.7}}
+\newlabel{tab:R1_t1}{{7}{11}{100000 iterations - Exec. times\relax }{table.7}{}}
+\@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces 100000 iterations - Speedups\relax }}{11}{table.8}}
+\newlabel{tab:R1_t2}{{8}{11}{100000 iterations - Speedups\relax }{table.8}{}}
+\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {18}{\ignorespaces Execution Time and Speedups, 100 iterations\relax }}{11}{figure.caption.18}}
+\newlabel{fig:R2}{{18}{11}{Execution Time and Speedups, 100 iterations\relax }{figure.caption.18}{}}
+\@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces 100000 iterations - Exec. times\relax }}{11}{table.9}}
+\newlabel{tab:R2_t1}{{9}{11}{100000 iterations - Exec. times\relax }{table.9}{}}
+\@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\contentsline {table}{\numberline {10}{\ignorespaces 100000 iterations - Speedups\relax }}{11}{table.10}}
+\newlabel{tab:R2_t2}{{10}{11}{100000 iterations - Speedups\relax }{table.10}{}}
+\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {19}{\ignorespaces Execution Time and Speedups, 1000 bodies\relax }}{12}{figure.caption.19}}
+\newlabel{fig:R3}{{19}{12}{Execution Time and Speedups, 1000 bodies\relax }{figure.caption.19}{}}
+\@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\contentsline {table}{\numberline {11}{\ignorespaces 1000 bodies - Execution times\relax }}{12}{table.11}}
+\newlabel{tab:R3_t1}{{11}{12}{1000 bodies - Execution times\relax }{table.11}{}}
+\@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\contentsline {table}{\numberline {12}{\ignorespaces 1000 bodies - Speedups\relax }}{12}{table.12}}
+\newlabel{tab:R3_t2}{{12}{12}{1000 bodies - Speedups\relax }{table.12}{}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {4}Conclusions and Personal considerations}{12}{section.4}}
+\newlabel{sec:con}{{4}{12}{Conclusions and Personal considerations}{section.4}{}}
