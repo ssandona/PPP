@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.2.3)  13 NOV 2015 15:50
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.2.3)  13 NOV 2015 19:37
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -834,6 +834,27 @@ Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
 ))
+(/usr/share/texlive/texmf-dist/tex/latex/subfloat/subfloat.sty
+Package: subfloat 2003/08/21 version 2.14
+
+Package `subfloat', Version 2.14 of 2003/08/21.
+
+Package subfloat Warning: Numbers of floats not counted:
+(subfloat)                If you use one of the counters subfloatfiguremax or
+(subfloat)                subfloattablemax you will get strange error messages
+(subfloat)                containing \c@subfloatfiguremax or
+(subfloat)                \c@subfloattablemax:
+(subfloat)                Please switch on countmax or remove the code using
+(subfloat)                the counter then..
+
+) (/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count305
+\float@exts=\toks25
+\float@box=\box56
+\@float@everytoks=\toks26
+\@floatcapt=\box57
+)
 Package csquotes Info: Checking for multilingual support...
 Package csquotes Info: ... found 'babel' package.
 Package csquotes Info: Adjusting default style.
@@ -843,46 +864,38 @@ Package biblatex Info: ... file 'english.lbx' found.
 
 (/usr/share/texlive/texmf-dist/tex/latex/biblatex/lbx/english.lbx
 File: english.lbx 2013/11/25 v2.8a biblatex localization (PK/JW/AB)
-) (./Nbody.aux
-
-LaTeX Warning: Label `sec:comm_comp' multiply defined.
-
-
-LaTeX Warning: Label `sec:app_1' multiply defined.
-
 )
+No file Nbody.aux.
 \openout1 = `Nbody.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-\c@lstlisting=\count305
-\AtBeginShipoutBox=\box56
-Package hyperref Info: Link coloring OFF on input line 23.
- (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+\c@lstlisting=\count306
+\AtBeginShipoutBox=\box58
+Package hyperref Info: Link coloring OFF on input line 25.
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
 
 (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
-\c@section@level=\count306
+\c@section@level=\count307
 )
-LaTeX Info: Redefining \ref on input line 23.
-LaTeX Info: Redefining \pageref on input line 23.
-LaTeX Info: Redefining \nameref on input line 23.
-
-(./Nbody.out) (./Nbody.out)
+LaTeX Info: Redefining \ref on input line 25.
+LaTeX Info: Redefining \pageref on input line 25.
+LaTeX Info: Redefining \nameref on input line 25.
 \@outlinefile=\write4
 \openout4 = `Nbody.out'.
 
@@ -895,21 +908,21 @@ Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'Nbody.bbl' not found.
 
 No file Nbody.bbl.
-Package biblatex Info: Reference section=0 on input line 23.
-Package biblatex Info: Reference segment=0 on input line 23.
+Package biblatex Info: Reference section=0 on input line 25.
+Package biblatex Info: Reference segment=0 on input line 25.
 (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count307
+\scratchcounter=\count308
 \scratchdimen=\dimen146
-\scratchbox=\box57
-\nofMPsegments=\count308
-\nofMParguments=\count309
-\everyMPshowfont=\toks25
-\MPscratchCnt=\count310
+\scratchbox=\box59
+\nofMPsegments=\count309
+\nofMParguments=\count310
+\everyMPshowfont=\toks27
+\MPscratchCnt=\count311
 \MPscratchDim=\dimen147
-\MPnumerator=\count311
-\makeMPintoPDFobject=\count312
-\everyMPtoPDFconversion=\toks26
+\MPnumerator=\count312
+\makeMPintoPDFobject=\count313
+\everyMPtoPDFconversion=\toks28
 ) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
 
@@ -960,434 +973,577 @@ e
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: float package is loaded.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Try loading font information for U+msa on input line 55.
+LaTeX Font Info:    Try loading font information for U+msa on input line 57.
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 55.
+LaTeX Font Info:    Try loading font information for U+msb on input line 57.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-) [1
+)
+
+LaTeX Warning: Reference `fig:repa' on page 1 undefined on input line 65.
+
+[1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-<array_procs_both.png, id=86, 583.17876pt x 200.75pt>
-File: array_procs_both.png Graphic file (type png)
-
-<use array_procs_both.png>
-Package pdftex.def Info: array_procs_both.png used on input line 79.
-(pdftex.def)             Requested size: 273.14923pt x 94.0278pt.
- <array_procs_3.png, id=91, 583.17876pt x 98.3675pt>
+<array_procs_3.png, id=31, 583.17876pt x 98.3675pt>
 File: array_procs_3.png Graphic file (type png)
+ <use array_procs_3.png>
+Package pdftex.def Info: array_procs_3.png used on input line 86.
+(pdftex.def)             Requested size: 227.62206pt x 38.39317pt.
 
-<use array_procs_3.png>
-Package pdftex.def Info: array_procs_3.png used on input line 97.
-(pdftex.def)             Requested size: 273.14923pt x 46.07361pt.
+<array_procs_5.png, id=33, 593.21625pt x 96.36pt>
+File: array_procs_5.png Graphic file (type png)
+ <use array_procs_5.png>
+Package pdftex.def Info: array_procs_5.png used on input line 93.
+(pdftex.def)             Requested size: 227.62206pt x 36.97446pt.
+
+Overfull \hbox (4.44336pt too wide) in paragraph at lines 84--97
+ [][]  [] 
+ []
 
 
-LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 103.
+LaTeX Warning: Reference `fig:repa1' on page 2 undefined on input line 112.
 
 
-LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 115.
+LaTeX Warning: Reference `table:t1' on page 2 undefined on input line 112.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 127--129
+LaTeX Warning: Reference `table:t2' on page 2 undefined on input line 112.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 112--113
 
  []
 
-[2 <./array_procs_both.png> <./array_procs_3.png>]
-<array_proc_0_b_0.png, id=121, 583.17876pt x 269.005pt>
+
+LaTeX Warning: No positions in optional float specifier.
+               Default added (so using `tbp') on input line 114.
+
+
+LaTeX Warning: No positions in optional float specifier.
+               Default added (so using `tbp') on input line 126.
+
+
+LaTeX Warning: Reference `eq:eq1' on page 2 undefined on input line 139.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 139--140
+
+ []
+
+
+LaTeX Warning: Reference `fig:pr1' on page 2 undefined on input line 152.
+
+
+LaTeX Warning: Reference `fig:pr2' on page 2 undefined on input line 152.
+
+
+LaTeX Warning: Reference `fig:pr3' on page 2 undefined on input line 152.
+
+[2 <./array_procs_3.png> <./array_procs_5.png>]
+<array_proc_0_b_0.png, id=66, 583.17876pt x 269.005pt>
 File: array_proc_0_b_0.png Graphic file (type png)
 
 <use array_proc_0_b_0.png>
-Package pdftex.def Info: array_proc_0_b_0.png used on input line 149.
+Package pdftex.def Info: array_proc_0_b_0.png used on input line 159.
 (pdftex.def)             Requested size: 159.33821pt x 73.4984pt.
-
-<array_proc_0_b_1.png, id=122, 642.4pt x 459.7175pt>
+ <array_proc_0_b_1.png, id=67, 642.4pt x 459.7175pt>
 File: array_proc_0_b_1.png Graphic file (type png)
 
 <use array_proc_0_b_1.png>
-Package pdftex.def Info: array_proc_0_b_1.png used on input line 153.
+Package pdftex.def Info: array_proc_0_b_1.png used on input line 163.
 (pdftex.def)             Requested size: 159.33821pt x 114.02419pt.
 
-<array_proc_0_b_2.png, id=123, 583.17876pt x 269.005pt>
+<array_proc_0_b_2.png, id=68, 583.17876pt x 269.005pt>
 File: array_proc_0_b_2.png Graphic file (type png)
 
 <use array_proc_0_b_2.png>
-Package pdftex.def Info: array_proc_0_b_2.png used on input line 157.
+Package pdftex.def Info: array_proc_0_b_2.png used on input line 167.
 (pdftex.def)             Requested size: 159.33821pt x 73.4984pt.
 
-<array_proc_1_b_0.png, id=124, 583.17876pt x 269.005pt>
+<array_proc_1_b_0.png, id=69, 583.17876pt x 269.005pt>
 File: array_proc_1_b_0.png Graphic file (type png)
 
 <use array_proc_1_b_0.png>
-Package pdftex.def Info: array_proc_1_b_0.png used on input line 169.
+Package pdftex.def Info: array_proc_1_b_0.png used on input line 179.
 (pdftex.def)             Requested size: 159.33821pt x 73.4984pt.
 
-<array_proc_1_b_1.png, id=125, 583.17876pt x 269.005pt>
+<array_proc_1_b_1.png, id=70, 583.17876pt x 269.005pt>
 File: array_proc_1_b_1.png Graphic file (type png)
 
 <use array_proc_1_b_1.png>
-Package pdftex.def Info: array_proc_1_b_1.png used on input line 173.
+Package pdftex.def Info: array_proc_1_b_1.png used on input line 183.
 (pdftex.def)             Requested size: 159.33821pt x 73.4984pt.
-
-<array_proc_1_b_2.png, id=126, 642.4pt x 459.7175pt>
+ <array_proc_1_b_2.png, id=71, 642.4pt x 459.7175pt>
 File: array_proc_1_b_2.png Graphic file (type png)
 
 <use array_proc_1_b_2.png>
-Package pdftex.def Info: array_proc_1_b_2.png used on input line 177.
+Package pdftex.def Info: array_proc_1_b_2.png used on input line 187.
 (pdftex.def)             Requested size: 159.33821pt x 114.02419pt.
- [3 <./array_proc_0_b_0.png> <./array_proc_0_b_1.png> <./array_proc_0_b_2.png>]
 
-<array_proc_2_b_0.png, id=144, 583.17876pt x 269.005pt>
+<array_proc_2_b_0.png, id=72, 583.17876pt x 269.005pt>
 File: array_proc_2_b_0.png Graphic file (type png)
 
 <use array_proc_2_b_0.png>
-Package pdftex.def Info: array_proc_2_b_0.png used on input line 189.
+Package pdftex.def Info: array_proc_2_b_0.png used on input line 199.
 (pdftex.def)             Requested size: 159.33821pt x 73.4984pt.
 
-<array_proc_2_b_1.png, id=145, 583.17876pt x 269.005pt>
+<array_proc_2_b_1.png, id=73, 583.17876pt x 269.005pt>
 File: array_proc_2_b_1.png Graphic file (type png)
 
 <use array_proc_2_b_1.png>
-Package pdftex.def Info: array_proc_2_b_1.png used on input line 193.
+Package pdftex.def Info: array_proc_2_b_1.png used on input line 203.
 (pdftex.def)             Requested size: 159.33821pt x 73.4984pt.
 
-<array_proc_2_b_2.png, id=146, 583.17876pt x 269.005pt>
+<array_proc_2_b_2.png, id=74, 583.17876pt x 269.005pt>
 File: array_proc_2_b_2.png Graphic file (type png)
 
 <use array_proc_2_b_2.png>
-Package pdftex.def Info: array_proc_2_b_2.png used on input line 197.
+Package pdftex.def Info: array_proc_2_b_2.png used on input line 207.
 (pdftex.def)             Requested size: 159.33821pt x 73.4984pt.
- [4 <./array_proc_1_b_0.png> <./array_proc_1_b_1.png> <./array_proc_1_b_2.png> 
-<./array_proc_2_b_0.png> <./array_proc_2_b_1.png> <./array_proc_2_b_2.png>] <br
-oadcast.png, id=166, 2039.62pt x 1051.93pt>
-File: broadcast.png Graphic file (type png)
+ [3 <./array_proc_0_b_0.png> <./array_proc_0_b_1.png> <./array_proc_0_b_2.png> 
+<./array_proc_1_b_0.png> <./array_proc_1_b_1.png> <./array_proc_1_b_2.png>]
 
-<use broadcast.png>
-Package pdftex.def Info: broadcast.png used on input line 228.
+LaTeX Warning: Reference `eq:eq2' on page 4 undefined on input line 214.
+
+
+LaTeX Warning: Reference `fig:A2' on page 4 undefined on input line 232.
+
+
+LaTeX Warning: Reference `fig:B2' on page 4 undefined on input line 232.
+
+
+LaTeX Warning: Reference `fig:C2' on page 4 undefined on input line 232.
+
+
+LaTeX Warning: Reference `fig:D2' on page 4 undefined on input line 232.
+
+
+LaTeX Warning: Reference `eq:comp_app1' on page 4 undefined on input line 232.
+
+
+LaTeX Warning: Reference `eq:com_app1' on page 4 undefined on input line 232.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 232--233
+
+ []
+
+<broadcast.png, id=89, 2039.62pt x 1051.93pt>
+File: broadcast.png Graphic file (type png)
+ <use broadcast.png>
+Package pdftex.def Info: broadcast.png used on input line 236.
 (pdftex.def)             Requested size: 227.62206pt x 117.38197pt.
- <force_calculation_0.png, id=167, 1702.36pt x 1003.75pt>
+ [4 <./array_proc_2_b_0.png> <./array_proc_2_b_1.png> <./array_proc_2_b_2.png>]
+
+<force_calculation_0.png, id=102, 1702.36pt x 1003.75pt>
 File: force_calculation_0.png Graphic file (type png)
 
 <use force_calculation_0.png>
-Package pdftex.def Info: force_calculation_0.png used on input line 237.
+Package pdftex.def Info: force_calculation_0.png used on input line 245.
 (pdftex.def)             Requested size: 227.62206pt x 134.19855pt.
 
-<force_calculation_1.png, id=168, 1565.85pt x 1051.93pt>
+<force_calculation_1.png, id=103, 1565.85pt x 1051.93pt>
 File: force_calculation_1.png Graphic file (type png)
 
 <use force_calculation_1.png>
-Package pdftex.def Info: force_calculation_1.png used on input line 241.
+Package pdftex.def Info: force_calculation_1.png used on input line 249.
 (pdftex.def)             Requested size: 227.62206pt x 152.90314pt.
 
-<force_calculation_2.png, id=169, 1614.03pt x 923.45pt>
+<force_calculation_2.png, id=104, 1614.03pt x 923.45pt>
 File: force_calculation_2.png Graphic file (type png)
 
 <use force_calculation_2.png>
-Package pdftex.def Info: force_calculation_2.png used on input line 245.
+Package pdftex.def Info: force_calculation_2.png used on input line 253.
 (pdftex.def)             Requested size: 227.62206pt x 130.2262pt.
 
-Overfull \hbox (2.22168pt too wide) in paragraph at lines 235--247
+Overfull \hbox (2.22168pt too wide) in paragraph at lines 243--255
 []$[]$ $[]$ 
  []
 
-[5 <./broadcast.png>] <MPI_all_reduce.png, id=181, 2232.34pt x 1266.7325pt>
+<MPI_all_reduce.png, id=105, 2232.34pt x 1266.7325pt>
 File: MPI_all_reduce.png Graphic file (type png)
+ <use MPI_all_reduce.png>
+Package pdftex.def Info: MPI_all_reduce.png used on input line 264.
+(pdftex.def)             Requested size: 227.62206pt x 129.15474pt.
 
-<use MPI_all_reduce.png>
-Package pdftex.def Info: MPI_all_reduce.png used on input line 256.
-(pdftex.def)             Requested size: 204.85846pt x 116.24313pt.
-
-<compute_positions.png, id=182, 2633.84pt x 1477.52pt>
+<compute_positions.png, id=106, 2633.84pt x 1477.52pt>
 File: compute_positions.png Graphic file (type png)
 
 <use compute_positions.png>
-Package pdftex.def Info: compute_positions.png used on input line 262.
-(pdftex.def)             Requested size: 204.85846pt x 114.91243pt.
- [6 <./force_calculation_0.png> <./force_calculation_1.png> <./force_calculatio
-n_2.png> <./MPI_all_reduce.png> <./compute_positions.png
+Package pdftex.def Info: compute_positions.png used on input line 270.
+(pdftex.def)             Requested size: 227.62206pt x 127.67296pt.
+ [5 <./broadcast.png> <./force_calculation_0.png> <./force_calculation_1.png> <
+./force_calculation_2.png> <./MPI_all_reduce.png> <./compute_positions.png
 
 pdfTeX warning: pdflatex (file ./compute_positions.png): large interlaced PNG m
 ight cause out of memory (use non-interlaced PNG to fix this)
->] <scatter.png, id=199, 2039.62pt x 1051.93pt>
+>]
+
+LaTeX Warning: Reference `fig:A1' on page 6 undefined on input line 295.
+
+
+LaTeX Warning: Reference `fig:B1' on page 6 undefined on input line 295.
+
+
+LaTeX Warning: Reference `fig:C1' on page 6 undefined on input line 295.
+
+
+LaTeX Warning: Reference `fig:D1' on page 6 undefined on input line 295.
+
+
+LaTeX Warning: Reference `fig:E1' on page 6 undefined on input line 295.
+
+
+LaTeX Warning: Reference `eq:comp_app2' on page 6 undefined on input line 296.
+
+
+LaTeX Warning: Reference `eq:com_app2' on page 6 undefined on input line 296.
+
+<scatter.png, id=120, 2039.62pt x 1051.93pt>
 File: scatter.png Graphic file (type png)
  <use scatter.png>
-Package pdftex.def Info: scatter.png used on input line 288.
+Package pdftex.def Info: scatter.png used on input line 300.
 (pdftex.def)             Requested size: 273.14923pt x 140.86479pt.
 
-<MPI_all_gather.png, id=200, 2690.05pt x 1363.0925pt>
+<MPI_all_gather.png, id=121, 2690.05pt x 1363.0925pt>
 File: MPI_all_gather.png Graphic file (type png)
  <use MPI_all_gather.png>
-Package pdftex.def Info: MPI_all_gather.png used on input line 296.
-(pdftex.def)             Requested size: 227.62206pt x 115.33095pt.
+Package pdftex.def Info: MPI_all_gather.png used on input line 308.
+(pdftex.def)             Requested size: 273.14923pt x 138.39714pt.
 File: force_calculation_0.png Graphic file (type png)
 
 <use force_calculation_0.png>
-Package pdftex.def Info: force_calculation_0.png used on input line 305.
+Package pdftex.def Info: force_calculation_0.png used on input line 317.
 (pdftex.def)             Requested size: 227.62206pt x 134.19855pt.
 File: force_calculation_1.png Graphic file (type png)
  <use force_calculation_1.png>
-Package pdftex.def Info: force_calculation_1.png used on input line 309.
+Package pdftex.def Info: force_calculation_1.png used on input line 321.
 (pdftex.def)             Requested size: 227.62206pt x 152.90314pt.
 File: force_calculation_2.png Graphic file (type png)
 
 <use force_calculation_2.png>
-Package pdftex.def Info: force_calculation_2.png used on input line 313.
+Package pdftex.def Info: force_calculation_2.png used on input line 325.
 (pdftex.def)             Requested size: 227.62206pt x 130.2262pt.
 
-Overfull \hbox (2.22168pt too wide) in paragraph at lines 303--315
+Overfull \hbox (2.22168pt too wide) in paragraph at lines 315--327
 []$[]$ $[]$ 
  []
 
-[7
-
- <./scatter.png> <./MPI_all_gather.png
+[6 <./scatter.png> <./MPI_all_gather.png
 
 pdfTeX warning: pdflatex (file ./MPI_all_gather.png): large interlaced PNG migh
 t cause out of memory (use non-interlaced PNG to fix this)
 >]
 File: MPI_all_reduce.png Graphic file (type png)
  <use MPI_all_reduce.png>
-Package pdftex.def Info: MPI_all_reduce.png used on input line 326.
-(pdftex.def)             Requested size: 204.85846pt x 116.24313pt.
+Package pdftex.def Info: MPI_all_reduce.png used on input line 338.
+(pdftex.def)             Requested size: 250.38564pt x 142.06636pt.
 
-<compute_positions_only.png, id=214, 2665.96pt x 1469.49pt>
+<compute_positions_only.png, id=133, 2665.96pt x 1469.49pt>
 File: compute_positions_only.png Graphic file (type png)
 
 <use compute_positions_only.png>
-Package pdftex.def Info: compute_positions_only.png used on input line 332.
-(pdftex.def)             Requested size: 204.85846pt x 112.8977pt.
- [8 <./compute_positions_only.png
+Package pdftex.def Info: compute_positions_only.png used on input line 344.
+(pdftex.def)             Requested size: 250.38564pt x 138.01099pt.
+
+Overfull \hbox (45.52716pt too wide) in paragraph at lines 336--348
+ []$[]$$[]$ 
+ []
+
+[7 <./compute_positions_only.png
 
 pdfTeX warning: pdflatex (file ./compute_positions_only.png): large interlaced 
 PNG might cause out of memory (use non-interlaced PNG to fix this)
 >]
-Underfull \hbox (badness 10000) in paragraph at lines 355--357
+
+LaTeX Warning: Reference `tab:t_app1' on page 8 undefined on input line 368.
+
+
+LaTeX Warning: Reference `tab:t_app2' on page 8 undefined on input line 368.
+
+
+LaTeX Warning: Reference `fig:G1' on page 8 undefined on input line 368.
+
+
+LaTeX Warning: Reference `tab:t_app3' on page 8 undefined on input line 368.
+
+
+LaTeX Warning: Reference `tab:t_app4' on page 8 undefined on input line 368.
+
+
+LaTeX Warning: Reference `fig:G2' on page 8 undefined on input line 368.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 367--370
 
  []
 
 
 Package caption Warning: The option `hypcap=true' will be ignored for this
-(caption)                particular \caption on input line 372.
+(caption)                particular \caption on input line 385.
 See the caption package documentation for explanation.
 
 
 Package caption Warning: The option `hypcap=true' will be ignored for this
-(caption)                particular \caption on input line 386.
+(caption)                particular \caption on input line 399.
 See the caption package documentation for explanation.
 
-<results/graph1.png, id=226, 627.34375pt x 364.36125pt>
+<results/graph1.png, id=142, 627.34375pt x 364.36125pt>
 File: results/graph1.png Graphic file (type png)
 
 <use results/graph1.png>
-Package pdftex.def Info: results/graph1.png used on input line 393.
+Package pdftex.def Info: results/graph1.png used on input line 406.
 (pdftex.def)             Requested size: 250.38564pt x 145.425pt.
 
-<results/graph1_sp.png, id=227, 347.2975pt x 365.365pt>
+<results/graph1_sp.png, id=143, 347.2975pt x 365.365pt>
 File: results/graph1_sp.png Graphic file (type png)
 
 <use results/graph1_sp.png>
-Package pdftex.def Info: results/graph1_sp.png used on input line 397.
+Package pdftex.def Info: results/graph1_sp.png used on input line 410.
 (pdftex.def)             Requested size: 159.33821pt x 167.6295pt.
 
 
 Package caption Warning: The option `hypcap=true' will be ignored for this
-(caption)                particular \caption on input line 420.
+(caption)                particular \caption on input line 433.
 See the caption package documentation for explanation.
 
 
 Package caption Warning: The option `hypcap=true' will be ignored for this
-(caption)                particular \caption on input line 434.
+(caption)                particular \caption on input line 447.
 See the caption package documentation for explanation.
 
-<results/graph2.png, id=228, 632.3625pt x 367.3725pt>
+<results/graph2.png, id=144, 632.3625pt x 367.3725pt>
 File: results/graph2.png Graphic file (type png)
  <use results/graph2.png>
-Package pdftex.def Info: results/graph2.png used on input line 442.
+Package pdftex.def Info: results/graph2.png used on input line 455.
 (pdftex.def)             Requested size: 250.38564pt x 145.46089pt.
 
-<results/graph2_sp.png, id=229, 358.33875pt x 366.36874pt>
+<results/graph2_sp.png, id=145, 358.33875pt x 366.36874pt>
 File: results/graph2_sp.png Graphic file (type png)
 
 <use results/graph2_sp.png>
-Package pdftex.def Info: results/graph2_sp.png used on input line 446.
+Package pdftex.def Info: results/graph2_sp.png used on input line 459.
 (pdftex.def)             Requested size: 159.33821pt x 162.90779pt.
- [9
+ [8
 
  <./results/graph1.png (PNG copy)> <./results/graph1_sp.png (PNG copy)>]
-Underfull \hbox (badness 10000) in paragraph at lines 456--457
+
+LaTeX Warning: Reference `fig:R1' on page 9 undefined on input line 469.
+
+
+LaTeX Warning: Reference `tab:R1_t1' on page 9 undefined on input line 469.
+
+
+LaTeX Warning: Reference `tab:R1_t2' on page 9 undefined on input line 469.
+
+
+LaTeX Warning: Reference `fig:R2' on page 9 undefined on input line 469.
+
+
+LaTeX Warning: Reference `tab:R2_t1' on page 9 undefined on input line 469.
+
+
+LaTeX Warning: Reference `tab:R2_t2' on page 9 undefined on input line 469.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 469--470
 
  []
 
-<results/graph3.png, id=246, 629.35126pt x 375.4025pt>
+<results/graph3.png, id=158, 629.35126pt x 375.4025pt>
 File: results/graph3.png Graphic file (type png)
 
 <use results/graph3.png>
-Package pdftex.def Info: results/graph3.png used on input line 461.
+Package pdftex.def Info: results/graph3.png used on input line 474.
 (pdftex.def)             Requested size: 227.62206pt x 135.77489pt.
- <results/graph4.png, id=247, 632.3625pt x 379.4175pt>
+ <results/graph4.png, id=159, 632.3625pt x 379.4175pt>
 File: results/graph4.png Graphic file (type png)
 
 <use results/graph4.png>
-Package pdftex.def Info: results/graph4.png used on input line 465.
+Package pdftex.def Info: results/graph4.png used on input line 478.
 (pdftex.def)             Requested size: 227.62206pt x 136.57281pt.
 
-<results/graph5.png, id=248, 629.35126pt x 376.40625pt>
+<results/graph5.png, id=160, 629.35126pt x 376.40625pt>
 File: results/graph5.png Graphic file (type png)
 
 <use results/graph5.png>
-Package pdftex.def Info: results/graph5.png used on input line 469.
+Package pdftex.def Info: results/graph5.png used on input line 482.
 (pdftex.def)             Requested size: 227.62206pt x 136.13792pt.
 
-<results/graph5_sp.png, id=249, 366.36874pt x 368.37625pt>
+<results/graph5_sp.png, id=161, 366.36874pt x 368.37625pt>
 File: results/graph5_sp.png Graphic file (type png)
 
 <use results/graph5_sp.png>
-Package pdftex.def Info: results/graph5_sp.png used on input line 473.
+Package pdftex.def Info: results/graph5_sp.png used on input line 486.
 (pdftex.def)             Requested size: 182.09486pt x 183.09157pt.
 
-Overfull \hbox (2.22168pt too wide) in paragraph at lines 459--475
+Overfull \hbox (2.22168pt too wide) in paragraph at lines 472--488
 []$[]$ $[]$ 
  []
 
 
 Package caption Warning: The option `hypcap=true' will be ignored for this
-(caption)                particular \caption on input line 495.
+(caption)                particular \caption on input line 508.
 See the caption package documentation for explanation.
 
 
-Overfull \hbox (16.81279pt too wide) in paragraph at lines 484--495
+Overfull \hbox (16.81279pt too wide) in paragraph at lines 497--508
  [][] 
  []
 
 
 Package caption Warning: The option `hypcap=true' will be ignored for this
-(caption)                particular \caption on input line 509.
+(caption)                particular \caption on input line 522.
 See the caption package documentation for explanation.
 
-<results/graph11.png, id=250, 630.355pt x 364.36125pt>
+<results/graph11.png, id=162, 630.355pt x 364.36125pt>
 File: results/graph11.png Graphic file (type png)
 
 <use results/graph11.png>
-Package pdftex.def Info: results/graph11.png used on input line 516.
+Package pdftex.def Info: results/graph11.png used on input line 529.
 (pdftex.def)             Requested size: 227.62206pt x 131.57024pt.
 
-<results/graph14.png, id=251, 625.33624pt x 374.39874pt>
+<results/graph14.png, id=163, 625.33624pt x 374.39874pt>
 File: results/graph14.png Graphic file (type png)
 
 <use results/graph14.png>
-Package pdftex.def Info: results/graph14.png used on input line 520.
+Package pdftex.def Info: results/graph14.png used on input line 533.
 (pdftex.def)             Requested size: 227.62206pt x 136.28021pt.
 
-<results/graph15.png, id=252, 629.35126pt x 373.395pt>
+<results/graph15.png, id=164, 629.35126pt x 373.395pt>
 File: results/graph15.png Graphic file (type png)
 
 <use results/graph15.png>
-Package pdftex.def Info: results/graph15.png used on input line 524.
+Package pdftex.def Info: results/graph15.png used on input line 537.
 (pdftex.def)             Requested size: 227.62206pt x 135.04883pt.
- <results/graph16.png, id=253, 379.4175pt x 377.41pt>
+ <results/graph16.png, id=165, 379.4175pt x 377.41pt>
 File: results/graph16.png Graphic file (type png)
 
 <use results/graph16.png>
-Package pdftex.def Info: results/graph16.png used on input line 528.
+Package pdftex.def Info: results/graph16.png used on input line 541.
 (pdftex.def)             Requested size: 227.62206pt x 226.41895pt.
 
-Overfull \hbox (2.22168pt too wide) in paragraph at lines 514--530
+Overfull \hbox (2.22168pt too wide) in paragraph at lines 527--543
 []$[]$ $[]$ 
  []
 
 
-Overfull \hbox (2.22168pt too wide) in paragraph at lines 514--530
+Overfull \hbox (2.22168pt too wide) in paragraph at lines 527--543
 []$ $[]$ 
  []
 
-[10 <./results/graph2.png (PNG copy)> <./results/graph2_sp.png (PNG copy)> <./r
-esults/graph3.png (PNG copy)> <./results/graph4.png (PNG copy)> <./results/grap
-h5.png (PNG copy)> <./results/graph5_sp.png (PNG copy)>]
+[9 <./results/graph2.png (PNG copy)> <./results/graph2_sp.png (PNG copy)> <./re
+sults/graph3.png (PNG copy)> <./results/graph4.png (PNG copy)> <./results/graph
+5.png (PNG copy)> <./results/graph5_sp.png (PNG copy)>]
 
 Package caption Warning: The option `hypcap=true' will be ignored for this
-(caption)                particular \caption on input line 548.
+(caption)                particular \caption on input line 561.
 See the caption package documentation for explanation.
 
 
-Overfull \hbox (1.81645pt too wide) in paragraph at lines 537--548
+Overfull \hbox (1.81645pt too wide) in paragraph at lines 550--561
  [][] 
  []
 
 
 Package caption Warning: The option `hypcap=true' will be ignored for this
-(caption)                particular \caption on input line 562.
+(caption)                particular \caption on input line 575.
 See the caption package documentation for explanation.
 
-<results/graph19.png, id=267, 628.3475pt x 373.395pt>
+
+LaTeX Warning: Reference `fig:R3' on page 10 undefined on input line 580.
+
+
+LaTeX Warning: Reference `tab:R3_t1' on page 10 undefined on input line 580.
+
+
+LaTeX Warning: Reference `tab:R3_t2' on page 10 undefined on input line 580.
+
+<results/graph19.png, id=173, 628.3475pt x 373.395pt>
 File: results/graph19.png Graphic file (type png)
 
 <use results/graph19.png>
-Package pdftex.def Info: results/graph19.png used on input line 572.
+Package pdftex.def Info: results/graph19.png used on input line 585.
 (pdftex.def)             Requested size: 227.62206pt x 135.25963pt.
 
-<results/graph17.png, id=268, 633.36626pt x 369.38pt>
+<results/graph17.png, id=174, 633.36626pt x 369.38pt>
 File: results/graph17.png Graphic file (type png)
 
 <use results/graph17.png>
-Package pdftex.def Info: results/graph17.png used on input line 576.
+Package pdftex.def Info: results/graph17.png used on input line 589.
 (pdftex.def)             Requested size: 227.62206pt x 132.7456pt.
 
-<results/graph18.png, id=269, 351.3125pt x 376.40625pt>
+<results/graph18.png, id=175, 351.3125pt x 376.40625pt>
 File: results/graph18.png Graphic file (type png)
 
 <use results/graph18.png>
-Package pdftex.def Info: results/graph18.png used on input line 580.
+Package pdftex.def Info: results/graph18.png used on input line 593.
 (pdftex.def)             Requested size: 182.09486pt x 195.10632pt.
 
-Overfull \hbox (2.22168pt too wide) in paragraph at lines 570--582
+Overfull \hbox (2.22168pt too wide) in paragraph at lines 583--595
 []$[]$ $[]$ 
  []
 
-[11 <./results/graph11.png (PNG copy)> <./results/graph14.png (PNG copy)> <./re
+[10 <./results/graph11.png (PNG copy)> <./results/graph14.png (PNG copy)> <./re
 sults/graph15.png (PNG copy)> <./results/graph16.png (PNG copy)>]
 
 Package caption Warning: The option `hypcap=true' will be ignored for this
-(caption)                particular \caption on input line 601.
+(caption)                particular \caption on input line 614.
 See the caption package documentation for explanation.
 
 
 Package caption Warning: The option `hypcap=true' will be ignored for this
-(caption)                particular \caption on input line 615.
+(caption)                particular \caption on input line 628.
 See the caption package documentation for explanation.
 
 
-LaTeX Warning: Empty bibliography on input line 626.
+LaTeX Warning: Empty bibliography on input line 639.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 628.
-[12 <./results/graph19.png (PNG copy)> <./results/graph17.png (PNG copy)> <./re
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 641.
+[11 <./results/graph19.png (PNG copy)> <./results/graph17.png (PNG copy)> <./re
 sults/graph18.png (PNG copy)>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 628.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 641.
  (./Nbody.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 628.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 628.
-Package rerunfilecheck Info: File `Nbody.out' has not changed.
-(rerunfilecheck)             Checksum: 1167E46A90B6BE9A75B06CFA188436A8;1052.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 641.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 641.
 
 
-LaTeX Warning: There were multiply-defined labels.
+Package rerunfilecheck Warning: File `Nbody.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `Nbody.out':
+(rerunfilecheck)             Before: <no file>
+(rerunfilecheck)             After:  1167E46A90B6BE9A75B06CFA188436A8;1052.
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+
+Package biblatex Warning: Please (re)run Biber on the file:
+(biblatex)                Nbody
+(biblatex)                and rerun LaTeX afterwards.
 
 Package logreq Info: Writing requests to 'Nbody.run.xml'.
 \openout1 = `Nbody.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 15995 strings out of 493304
- 246702 string characters out of 6139872
- 685671 words of memory out of 5000000
- 19151 multiletter control sequences out of 15000+600000
- 12867 words of font info for 32 fonts, out of 8000000 for 9000
+ 16076 strings out of 493304
+ 247944 string characters out of 6139872
+ 687982 words of memory out of 5000000
+ 19230 multiletter control sequences out of 15000+600000
+ 13632 words of font info for 33 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
- 42i,16n,49p,1960b,1842s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 42i,16n,49p,1082b,1844s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist
@@ -1399,14 +1555,15 @@ cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cms
 y7.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1000.pfb></usr/share/t
 exmf/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf/fonts/type1/pub
 lic/cm-super/sfbx1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm070
-0.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1000.pfb></usr/share/te
-xmf/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/publ
-ic/cm-super/sfrm1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1000
-.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1200.pfb>
-Output written on Nbody.pdf (12 pages, 1577366 bytes).
+0.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0900.pfb></usr/share/te
+xmf/fonts/type1/public/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1/publ
+ic/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1728
+.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1000.pfb></usr/share/tex
+mf/fonts/type1/public/cm-super/sfti1200.pfb>
+Output written on Nbody.pdf (11 pages, 1579605 bytes).
 PDF statistics:
- 357 PDF objects out of 1000 (max. 8388607)
- 268 compressed objects within 3 object streams
- 82 named destinations out of 1000 (max. 500000)
- 296 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 271 PDF objects out of 1000 (max. 8388607)
+ 183 compressed objects within 2 object streams
+ 81 named destinations out of 1000 (max. 500000)
+ 176 words of extra memory for PDF output out of 10000 (max. 10000000)
 
