@@ -47,7 +47,7 @@ void darkGray(const int width, const int height, const unsigned char *inputImage
     NSTimer kernelTimer("KernelTimer", false, false);
     NSTimer memoryTimer("MemoryTimer", false, false);
 
-    pixel_numbers=width() * height();
+    pixel_numbers=width * height;
 
 	// Start of the computation
 	globalTimer.start();

@@ -31,8 +31,10 @@ int main(int argc, char *argv[]) {
 	// Convert the input image to grayscale and make it darker
 	CImg< unsigned char > darkGrayImage = CImg< unsigned char >(inputImage.width(), inputImage.height(), 1, 1);
 
-	darkGray(inputImage.width(), inputImage.height(), inputImage.data(), darkGrayImage.data());
-
+	int r=darkGray(inputImage.width(), inputImage.height(), inputImage.data(), darkGrayImage.data());
+	if(r==1){
+		return 1;
+	}
 	// Save output
 	darkGrayImage.save(("./" + string(argv[1]) + ".dark.seq.bmp").c_str());
 
