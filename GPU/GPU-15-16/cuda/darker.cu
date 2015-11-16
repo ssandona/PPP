@@ -1,10 +1,9 @@
-using LOFAR::NSTimer;
-
 #include <Timer.hpp>
 #include <iostream>
 #include <iomanip>
 #include <CImg.h>
 #include <string>
+#include <cmath>
 
 using LOFAR::NSTimer;
 using std::cout;
@@ -38,17 +37,13 @@ __global__ void darkGray(unsigned int height, unsigned int width, unsigned char 
 
 
 
-int main(void) {
+int main(int argc, char *argv[]) {
 	cudaError_t devRetVal = cudaSuccess;
 	CImg< unsigned char > inputImage;
 	unsigned char * devInputImage;
 	CImg< unsigned char > darkGrayImage;
 	unsigned char * devDarkGrayImage;
 	unsigned char * outputImage;
-	int height;
-	int width;
-	int* devHeight;
-	int* devWidth;
 	int pixel_numbers;
 	
 	NSTimer globalTimer("GlobalTimer", false, false);
@@ -62,13 +57,13 @@ int main(void) {
 	}
 
 	// Load the input image
-	CImg< unsigned char > inputImage = CImg< unsigned char >(argv[1]);
+	inputImage = CImg< unsigned char >(argv[1]);
 	if ( inputImage.spectrum() != 3 ) {
 		cerr << "The input must be a color image." << endl;
 		return 1;
 	}
 
-	imageSize=inputImage.width() * inputImage.height();
+	pixel_numbers=inputImage.width() * inputImage.height();
 
 	// Start of the computation
 	globalTimer.start();
@@ -99,7 +94,7 @@ int main(void) {
 	int grid_height=inputImage.width()%B_HEIGHT==0?inputImage.height()/B_HEIGHT:inputImage.height()/B_HEIGHT+1;
 
 	// Execute the kernel
-	dim3 gridSize(tatic_cast< unsigned int >(ceil(inputImage.height() / static_cast< float >(B_HEIGHT))), static_cast< unsigned int >(ceil(inputImage.width() / static_cast< float >(B_WIDTH))));
+	dim3 gridSize(static_cast< unsigned int >(ceil(inputImage.height() / static_cast< float >(B_HEIGHT))), static_cast< unsigned int >(ceil(inputImage.width() / static_cast< float >(B_WIDTH))));
 	dim3 blockSize(B_WIDTH*B_HEIGHT);
 
 	kernelTimer.start();
@@ -134,8 +129,8 @@ int main(void) {
 	cout << "Memory (s): \t" << memoryTimer.getElapsed() << endl;
 	cout << endl;
 	cout << setprecision(3);
-	cout << "GFLOP/s: \t" << (DIM / kernelTimer.getElapsed()) / 1000000000.0 << endl;
-	cout << "GB/s: \t\t" << ((12 * DIM) / kernelTimer.getElapsed()) / 1000000000.0 << endl;
+	cout << "GFLOP/s: \t" << (pixel_numbers / kernelTimer.getElapsed()) / 1000000000.0 << endl;
+	cout << "GB/s: \t\t" << ((12 * pixel_numbers) / kernelTimer.getElapsed()) / 1000000000.0 << endl;
 	cout << endl;
 
 	// Save output
