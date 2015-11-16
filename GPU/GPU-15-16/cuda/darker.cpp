@@ -12,7 +12,7 @@ using std::fixed;
 using std::setprecision;
 using std::string;
 
-extern void darkGray(const int width, const int height, const unsigned char * inputImage, unsigned char * darkGrayImage);
+extern int darkGray(const int width, const int height, const unsigned char * inputImage, unsigned char * darkGrayImage);
 
 
 int main(int argc, char *argv[]) {
