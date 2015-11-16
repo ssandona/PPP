@@ -1,14 +1,19 @@
+using LOFAR::NSTimer;
 
-#include <iostream>
 #include <Timer.hpp>
-#include <cmath>
+#include <iostream>
 #include <iomanip>
+#include <CImg.h>
+#include <string>
+
+using LOFAR::NSTimer;
 using std::cout;
 using std::cerr;
 using std::endl;
 using std::fixed;
 using std::setprecision;
-using LOFAR::NSTimer;
+using cimg_library::CImg;
+using std::string;
 
 /*const unsigned int DIM = 16000000;
 const unsigned int nrThreads = 256;*/
