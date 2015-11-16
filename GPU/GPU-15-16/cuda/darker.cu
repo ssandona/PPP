@@ -69,7 +69,7 @@ int main(int argc, char *argv[]) {
 	globalTimer.start();
 
 	// Convert the input image to grayscale and make it darker
-	outputImage = new unsigned char [inputImage.height][inputImage.width];
+	outputImage = new unsigned char[pixel_numbers];
 
 	// Allocate CUDA memory
 	if ( (devRetVal = cudaMalloc(reinterpret_cast< void ** >(&devInputImage), pixel_numbers * sizeof(unsigned char))) != cudaSuccess ) {
