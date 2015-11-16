@@ -37,20 +37,20 @@ __global__ void darkGrayKernel(unsigned int height, unsigned int width, unsigned
 
 
 
-void darkGray(const int width, const int height, const unsigned char *inputImage, unsigned char *darkGrayImage) {
+void darkGray(const int width, const int height, const unsigned char *inputImage, unsigned char *outputImage) {
     cudaError_t devRetVal = cudaSuccess;
-    CImg< unsigned char > inputImage;
     unsigned char *devInputImage;
-    CImg< unsigned char > darkGrayImage;
     unsigned char *devDarkGrayImage;
-    unsigned char *outputImage;
     int pixel_numbers;
 
     NSTimer globalTimer("GlobalTimer", false, false);
     NSTimer kernelTimer("KernelTimer", false, false);
     NSTimer memoryTimer("MemoryTimer", false, false);
 
-    globalTimer.start();
+    pixel_numbers=width() * height();
+
+	// Start of the computation
+	globalTimer.start();
     // Convert the input image to grayscale and make it darker
     outputImage = new unsigned char[pixel_numbers];
 
@@ -66,22 +66,22 @@ void darkGray(const int width, const int height, const unsigned char *inputImage
 
     // Copy input to device
     memoryTimer.start();
-    if ( (devRetVal = cudaMemcpy(devInputImage, reinterpret_cast< void * >(inputImage.data()), pixel_numbers * sizeof(unsigned char), cudaMemcpyHostToDevice)) != cudaSuccess ) {
+    if ( (devRetVal = cudaMemcpy(devInputImage, reinterpret_cast< void * >inputImage, pixel_numbers * sizeof(unsigned char), cudaMemcpyHostToDevice)) != cudaSuccess ) {
         cerr << "Impossible to copy devA to device." << endl;
         return 1;
     }
     memoryTimer.stop();
 
 
-    int grid_width = inputImage.width() % B_WIDTH == 0 ? inputImage.width() / B_WIDTH : inputImage.width() / B_WIDTH + 1;
-    int grid_height = inputImage.width() % B_HEIGHT == 0 ? inputImage.height() / B_HEIGHT : inputImage.height() / B_HEIGHT + 1;
+    int grid_width = width % B_WIDTH == 0 ? width / B_WIDTH : width / B_WIDTH + 1;
+    int grid_height = width % B_HEIGHT == 0 ? height / B_HEIGHT : height / B_HEIGHT + 1;
 
     // Execute the kernel
-    dim3 gridSize(static_cast< unsigned int >(ceil(inputImage.height() / static_cast< float >(B_HEIGHT))), static_cast< unsigned int >(ceil(inputImage.width() / static_cast< float >(B_WIDTH))));
-    dim3 blockSize(B_WIDTH * B_HEIGHT);
+    dim3 gridSize(grid_height, grid_width);
+    dim3 blockSize(B_HEIGHT,B_WIDTH);
 
     kernelTimer.start();
-    darkGrayKernel <<< gridSize, blockSize >>>(grid_height, grid_width, devInputImage, devDarkGrayImage);
+    darkGrayKernel <<< gridSize, blockSize >>>(height, width, devInputImage, devDarkGrayImage);
     cudaDeviceSynchronize();
     kernelTimer.stop();
 
@@ -93,13 +93,13 @@ void darkGray(const int width, const int height, const unsigned char *inputImage
 
     // Copy the output back to host
     memoryTimer.start();
-    if ( (devRetVal = cudaMemcpy(reinterpret_cast< void * >(outputImage), devDarkGrayImage, pixel_numbers * sizeof(unsigned char), cudaMemcpyDeviceToHost)) != cudaSuccess ) {
+    if ( (devRetVal = cudaMemcpy(reinterpret_cast< void * >(&outputImage), devDarkGrayImage, pixel_numbers * sizeof(unsigned char), cudaMemcpyDeviceToHost)) != cudaSuccess ) {
         cerr << "Impossible to copy devC to host." << endl;
         return 1;
     }
     memoryTimer.stop();
 
-    darkGrayImage._data = outputImage;
+    //darkGrayImage._data = outputImage;
     // Time GFLOP/s GB/s
     cout << fixed << setprecision(6) << kernelTime.getElapsed() << setprecision(3) << " " << (static_cast< long long unsigned int >(width) * height * 7) / 1000000000.0 / kernelTime.getElapsed() << " " << (static_cast< long long unsigned int >(width) * height * (4 * sizeof(unsigned char))) / 1000000000.0 / kernelTime.getElapsed() << endl;
      
@@ -112,12 +112,10 @@ void darkGray(const int width, const int height, const unsigned char *inputImage
     globalTimer.stop();
 
     // Save output
-    darkGrayImage.save(("./" + string(argv[1]) + ".dark.seq.bmp").c_str());
+    //darkGrayImage.save(("./" + string(argv[1]) + ".dark.seq.bmp").c_str());
 
     cudaFree(devInputImage);
     cudaFree(devDarkGrayImage);
-    free(outputImage);
-
     return 0;
 }
 /*
@@ -147,7 +145,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    pixel_numbers = inputImage.width() * inputImage.height();
+    pixel_numbers = width() * height();
 
     // Start of the computation
     globalTimer.start();
@@ -174,11 +172,11 @@ int main(int argc, char *argv[]) {
     memoryTimer.stop();
 
 
-    int grid_width = inputImage.width() % B_WIDTH == 0 ? inputImage.width() / B_WIDTH : inputImage.width() / B_WIDTH + 1;
-    int grid_height = inputImage.width() % B_HEIGHT == 0 ? inputImage.height() / B_HEIGHT : inputImage.height() / B_HEIGHT + 1;
+    int grid_width = width() % B_WIDTH == 0 ? width() / B_WIDTH : width() / B_WIDTH + 1;
+    int grid_height = width() % B_HEIGHT == 0 ? height() / B_HEIGHT : height() / B_HEIGHT + 1;
 
     // Execute the kernel
-    dim3 gridSize(static_cast< unsigned int >(ceil(inputImage.height() / static_cast< float >(B_HEIGHT))), static_cast< unsigned int >(ceil(inputImage.width() / static_cast< float >(B_WIDTH))));
+    dim3 gridSize(static_cast< unsigned int >(ceil(height() / static_cast< float >(B_HEIGHT))), static_cast< unsigned int >(ceil(width() / static_cast< float >(B_WIDTH))));
     dim3 blockSize(B_WIDTH * B_HEIGHT);
 
     kernelTimer.start();
