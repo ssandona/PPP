@@ -10,23 +10,15 @@ using std::fixed;
 using std::setprecision;
 using LOFAR::NSTimer;
 
-const unsigned int DIM = 16000000;
-const unsigned int nrThreads = 256;
+/*const unsigned int DIM = 16000000;
+const unsigned int nrThreads = 256;*/
+const unsigned int B_WIDTH = 32;
+const unsigned int B_HEIGHT = 16;
 
-__global__ void vectorAdd(const unsigned int DIM, float *a, float *b, float *c) {
-	unsigned int item = (blockIdx.x * blockDim.x) + threadIdx.x;
-
-	if ( item < DIM ) {
-		c[item] = a[item] + b[item];
-	}
-}
-
-__global__ void darkGray(const unsigned int DIM, float *inputImage, float *darkGrayImage, int* height, int* width) {
-	unsigned int item = (blockIdx.x * blockDim.x) + threadIdx.x;
-
+__global__ void darkGray(unsigned int height, unsigned int width, unsigned char *inputImage, unsigned char *outputImage) {
 	int x = blockIdx.y * blockDim.y + threadIdx.y;
 	int y = blockIdx.x * blockDim.x + threadIdx.x;
-	if(x >= height || col >= width) return;
+	if(x >= height || y >= width) return;
 
 	float grayPix = 0.0f;
 	float r = static_cast< float >(inputImage[(y * width) + x]);
@@ -36,7 +28,7 @@ __global__ void darkGray(const unsigned int DIM, float *inputImage, float *darkG
 	grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
 	grayPix = (grayPix * 0.6f) + 0.5f;
 
-	darkGrayImage[(y * width) + x] = static_cast< unsigned char >(grayPix);
+	outputImage[(y * width) + x] = static_cast< unsigned char >(grayPix);
 	}
 }
 
@@ -47,12 +39,13 @@ int main(void) {
 	CImg< unsigned char > inputImage;
 	unsigned char * devInputImage;
 	CImg< unsigned char > darkGrayImage;
-	unsigned char * devDarkGrayImage
+	unsigned char * devDarkGrayImage;
+	unsigned char * outputImage;
 	int height;
 	int width;
 	int* devHeight;
 	int* devWidth;
-	int pixel_numbers
+	int pixel_numbers;
 	
 	NSTimer globalTimer("GlobalTimer", false, false);
 	NSTimer kernelTimer("KernelTimer", false, false);
@@ -77,115 +70,36 @@ int main(void) {
 	globalTimer.start();
 
 	// Convert the input image to grayscale and make it darker
-	CImg< unsigned char > darkGrayImage = CImg< unsigned char >(inputImage.width(), inputImage.height(), 1, 1);
+	outputImage = malloc(pixel_numbers * sizeof(unsigned char));
 
 	// Allocate CUDA memory
-	if ( (devRetVal = cudaMalloc(reinterpret_cast< void ** >(&devInputImage), DIM * sizeof(unsigned char))) != cudaSuccess ) {
+	if ( (devRetVal = cudaMalloc(reinterpret_cast< void ** >(&devInputImage), pixel_numbers * sizeof(unsigned char))) != cudaSuccess ) {
 		cerr << "Impossible to allocate device memory for inputImage." << endl;
 		return 1;
 	}
-	if ( (devRetVal = cudaMalloc(reinterpret_cast< void ** >(&devDarkGrayImage), DIM * sizeof(unsigned char))) != cudaSuccess ) {
+	if ( (devRetVal = cudaMalloc(reinterpret_cast< void ** >(&devDarkGrayImage), pixel_numbers * sizeof(unsigned char))) != cudaSuccess ) {
 		cerr << "Impossible to allocate device memory for darkGrayImage." << endl;
 		return 1;
 	}
 
-	if ( (devRetVal = cudaMalloc(reinterpret_cast< void ** >(&devHeight), DIM * sizeof(int))) != cudaSuccess ) {
-		cerr << "Impossible to allocate device memory for height." << endl;
-		return 1;
-	}
-
-	if ( (devRetVal = cudaMalloc(reinterpret_cast< void ** >(&devWidth), DIM * sizeof(int))) != cudaSuccess ) {
-		cerr << "Impossible to allocate device memory for width." << endl;
-		return 1;
-	}
-	
-
 	// Copy input to device
 	memoryTimer.start();
-	if ( (devRetVal = cudaMemcpy(devInputImage, reinterpret_cast< void * >(inputImage), DIM * sizeof(unsigned char), cudaMemcpyHostToDevice)) != cudaSuccess ) {
+	if ( (devRetVal = cudaMemcpy(devInputImage, reinterpret_cast< void * >(inputImage.data()), pixel_numbers * sizeof(unsigned char), cudaMemcpyHostToDevice)) != cudaSuccess ) {
 		cerr << "Impossible to copy devA to device." << endl;
-		return 1;
-	}
-	if ( (devRetVal = cudaMemcpy(devDarkGrayImage, reinterpret_cast< void * >(darkGrayImage), DIM * sizeof(unsigned char), cudaMemcpyHostToDevice)) != cudaSuccess ) {
-		cerr << "Impossible to copy devB to device." << endl;
 		return 1;
 	}
 	memoryTimer.stop();
 
 
+	int grid_width=inputImage.width()%B_WIDTH==0?inputImage.width()/B_WIDTH:inputImage.width()/B_WIDTH+1;
+	int grid_height=inputImage.width()%B_HEIGHT==0?inputImage.height()/B_HEIGHT:inputImage.height()/B_HEIGHT+1;
 
 	// Execute the kernel
-	dim3 gridSize(static_cast< unsigned int >(ceil(DIM / static_cast< float >(nrThreads))));
-	dim3 blockSize(nrThreads);
+	dim3 gridSize(tatic_cast< unsigned int >(ceil(inputImage.height() / static_cast< float >(B_HEIGHT))), static_cast< unsigned int >(ceil(inputImage.width() / static_cast< float >(B_WIDTH))));
+	dim3 blockSize(B_WIDTH*B_HEIGHT);
 
 	kernelTimer.start();
-	darkGray<<< gridSize, blockSize >>>(DIM, devInputImage, devDarkGrayImage, devHeight, devWidth);
-	cudaDeviceSynchronize();
-	kernelTimer.stop();
-
-	// Check if the kernel returned an error
-	if ( (devRetVal = cudaGetLastError()) != cudaSuccess ) {
-		cerr << "Uh, the kernel had some kind of issue: " << cudaGetErrorString(devRetVal) << endl;
-		return 1;
-	}
-
-
-
-	darkGray(inputImage.width(), inputImage.height(), inputImage.data(), darkGrayImage.data());
-
-	// Save output
-	darkGrayImage.save(("./" + string(argv[1]) + ".dark.seq.bmp").c_str());
-
-	return 0;
-}
-
-
-
-
-
-
-
-	// Prepare input and output data structures
-	for ( unsigned int i = 0; i < DIM; i++ ) {
-		a[i] = static_cast< float >(i);
-		b[i] = static_cast< float >(i + 1);
-		c[i] = 0.0f;
-	}
-
-	// Start of the computation
-	globalTimer.start();
-
-	// Allocate CUDA memory
-	if ( (devRetVal = cudaMalloc(reinterpret_cast< void ** >(&devA), DIM * sizeof(float))) != cudaSuccess ) {
-		cerr << "Impossible to allocate device memory for a." << endl;
-		return 1;
-	}
-	if ( (devRetVal = cudaMalloc(reinterpret_cast< void ** >(&devB), DIM * sizeof(float))) != cudaSuccess ) {
-		cerr << "Impossible to allocate device memory for b." << endl;
-		return 1;
-	}
-	if ( (devRetVal = cudaMalloc(reinterpret_cast< void ** >(&devC), DIM * sizeof(float))) != cudaSuccess ) {
-		cerr << "Impossible to allocate device memory for c." << endl;
-		return 1;
-	}
-	// Copy input to device
-	memoryTimer.start();
-	if ( (devRetVal = cudaMemcpy(devA, reinterpret_cast< void * >(a), DIM * sizeof(float), cudaMemcpyHostToDevice)) != cudaSuccess ) {
-		cerr << "Impossible to copy devA to device." << endl;
-		return 1;
-	}
-	if ( (devRetVal = cudaMemcpy(devB, reinterpret_cast< void * >(b), DIM * sizeof(float), cudaMemcpyHostToDevice)) != cudaSuccess ) {
-		cerr << "Impossible to copy devB to device." << endl;
-		return 1;
-	}
-	memoryTimer.stop();
-
-	// Execute the kernel
-	dim3 gridSize(static_cast< unsigned int >(ceil(DIM / static_cast< float >(nrThreads))));
-	dim3 blockSize(nrThreads);
-
-	kernelTimer.start();
-	vectorAdd<<< gridSize, blockSize >>>(DIM, devA, devB, devC);
+	darkGray<<< gridSize, blockSize >>>(grid_height, grid_width, devInputImage, devDarkGrayImage);
 	cudaDeviceSynchronize();
 	kernelTimer.stop();
 
@@ -197,23 +111,16 @@ int main(void) {
 
 	// Copy the output back to host
 	memoryTimer.start();
-	if ( (devRetVal = cudaMemcpy(reinterpret_cast< void * >(c), devC, DIM * sizeof(float), cudaMemcpyDeviceToHost)) != cudaSuccess ) {
+	if ( (devRetVal = cudaMemcpy(reinterpret_cast< void * >(outputImage), devDarkGrayImage, pixel_numbers * sizeof(unsigned char), cudaMemcpyDeviceToHost)) != cudaSuccess ) {
 		cerr << "Impossible to copy devC to host." << endl;
 		return 1;
 	}
 	memoryTimer.stop();
+	darkGrayImage._data=outputImage;
+	//CImg<float> darkGrayImage(matrix,width,height,1,1,true); 
 
 	// End of the computation
 	globalTimer.stop();
-
-	// Check the correctness
-	for ( unsigned int i = 0; i < DIM; i++ ) {
-		// Not the best floating point comparison, but this is just a CUDA example
-		if ( (c[i] - (a[i] + b[i])) > 0 ) {
-			cerr << "This result (" << i << ") looks wrong: " << c[i] << " != " << a[i] + b[i] << endl;
-			return 1;
-		}
-	}
 
 	// Print the timers
 	cout << fixed << setprecision(6);
@@ -227,9 +134,13 @@ int main(void) {
 	cout << "GB/s: \t\t" << ((12 * DIM) / kernelTimer.getElapsed()) / 1000000000.0 << endl;
 	cout << endl;
 
+	// Save output
+	darkGrayImage.save(("./" + string(argv[1]) + ".dark.seq.bmp").c_str());
+
 	cudaFree(devA);
 	cudaFree(devB);
 	cudaFree(devC);
+	free(outputImage);
 
 	return 0;
 }
