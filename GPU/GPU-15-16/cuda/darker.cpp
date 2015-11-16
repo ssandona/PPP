@@ -16,6 +16,7 @@ extern void darkGray(const int width, const int height, const unsigned char * in
 
 
 int main(int argc, char *argv[]) {
+	int r=0;
 	if ( argc != 2 ) {
 		cerr << "Usage: " << argv[0] << " <filename>" << endl;
 		return 1;
@@ -31,7 +32,7 @@ int main(int argc, char *argv[]) {
 	// Convert the input image to grayscale and make it darker
 	CImg< unsigned char > darkGrayImage = CImg< unsigned char >(inputImage.width(), inputImage.height(), 1, 1);
 
-	int r=darkGray(inputImage.width(), inputImage.height(), inputImage.data(), darkGrayImage.data());
+	r=darkGray(inputImage.width(), inputImage.height(), inputImage.data(), darkGrayImage.data());
 	if(r==1){
 		return 1;
 	}
