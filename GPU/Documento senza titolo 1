@@ -1,0 +1,54 @@
+GTX 480
+
+Fermi	Microarchitecture	
+2.0	Compute capability (version)
+3	Maximum dimensionality of grid of thread blocks (3d blocks)
+65535	Maximum x-dimension of a grid of thread blocks
+65535	Maximum y-, or z-dimension of a grid of thread blocks
+3	Maximum dimensionality of thread block
+1024	Maximum x- or y-dimension of a block
+64	Maximum z-dimension of a block
+1024	Maximum number of threads per block
+32 	cores per SM (warp size)
+15	SM
+480 	cores (32*15)
+8	Maximum number of resident blocks per multiprocessor
+48	Maximum number of resident warps per multiprocessor
+1536	Maximum number of resident threads per multiprocessor
+32K	Number of 32-bit registers per multiprocessor
+48KB	Maximum amount of shared memory per multiprocessor
+
+
+CUDA coalesced memory
+
+A coalesced memory transaction is one in which all of the threads in a half-warp access global memory at the same time. This is oversimple, but the correct way to do it is just have consecutive threads access consecutive memory addresses.
+
+In a matrix example, keep in mind that you want your matrix to reside linearly in memory. You can do this however you want, and your memory access should reflect how your matrix is laid out. So, the 3x4 matrix below
+
+0 1 2 3
+4 5 6 7
+8 9 a b
+
+could be done row after row, like this, so that (r,c) (or [r][c]) maps to memory (r*4 + c)
+
+0 1 2 3 4 5 6 7 8 9 a b
+
+Suppose you need to access element once, and say you have four threads. Which threads will be used for which element? Probably either
+
+thread 0:  0, 1, 2
+thread 1:  3, 4, 5
+thread 2:  6, 7, 8
+thread 3:  9, a, b
+
+or
+
+thread 0:  0, 4, 8
+thread 1:  1, 5, 9
+thread 2:  2, 6, a
+thread 3:  3, 7, b
+
+Which is better? Which will result in coalesced reads, and which will not?
+
+Either way, each thread makes three accesses. Let's look at the first access and see if the threads access memory consecutively. In the first option, the first access is 0, 3, 6, 9. Not consecutive, not coalesced. The second option, it's 0, 1, 2, 3. Consecutive! Coalesced! Yay!
+
+The best way is probably to write your kernel and then profile it to see if you have non-coalesced global loads and stores.
