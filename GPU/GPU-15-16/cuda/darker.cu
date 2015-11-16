@@ -15,18 +15,10 @@ const unsigned int nrThreads = 256;*/
 const unsigned int B_WIDTH = 32;
 const unsigned int B_HEIGHT = 16;
 
-__global__ void vectorAdd(const unsigned int DIM, float *a, float *b, float *c) {
-	unsigned int item = (blockIdx.x * blockDim.x) + threadIdx.x;
-
-	if ( item < DIM ) {
-		c[item] = a[item] + b[item];
-	}
-}
-
 __global__ void darkGray(unsigned int height, unsigned int width, unsigned char *inputImage, unsigned char *outputImage) {
 	int x = blockIdx.y * blockDim.y + threadIdx.y;
 	int y = blockIdx.x * blockDim.x + threadIdx.x;
-	if(x >= height || col >= width) return;
+	if(x >= height || y >= width) return;
 
 	float grayPix = 0.0f;
 	float r = static_cast< float >(inputImage[(y * width) + x]);
@@ -145,9 +137,8 @@ int main(void) {
 	// Save output
 	darkGrayImage.save(("./" + string(argv[1]) + ".dark.seq.bmp").c_str());
 
-	cudaFree(devA);
-	cudaFree(devB);
-	cudaFree(devC);
+	cudaFree(devInputImage);
+	cudaFree(devDarkGrayImage);
 	free(outputImage);
 
 	return 0;
