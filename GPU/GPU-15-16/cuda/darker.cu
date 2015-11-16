@@ -29,7 +29,6 @@ __global__ void darkGray(unsigned int height, unsigned int width, unsigned char 
 	grayPix = (grayPix * 0.6f) + 0.5f;
 
 	outputImage[(y * width) + x] = static_cast< unsigned char >(grayPix);
-	}
 }
 
 
