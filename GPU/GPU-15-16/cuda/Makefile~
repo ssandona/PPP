@@ -33,4 +33,5 @@ clean:
 	rm -f $(PROJ_BASE)/bin/darkerCUDA
 	rm -f $(PROJ_BASE)/bin/histogramCUDA
 	rm -f $(PROJ_BASE)/bin/smoothCUDA
+	rm -f $(PROJ_BASE)/bin/darkerOriginalCUDA
 

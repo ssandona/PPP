@@ -35,4 +35,3 @@ void darkGray(const int width, const int height, const unsigned char * inputImag
 	// Time GFLOP/s GB/s
 	cout << fixed << setprecision(6) << kernelTime.getElapsed() << setprecision(3) << " " << (static_cast< long long unsigned int >(width) * height * 7) / 1000000000.0 / kernelTime.getElapsed() << " " << (static_cast< long long unsigned int >(width) * height * (4 * sizeof(unsigned char))) / 1000000000.0 / kernelTime.getElapsed() << endl;
 }
-
