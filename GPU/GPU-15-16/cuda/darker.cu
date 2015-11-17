@@ -85,11 +85,11 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
     dim3 blockSize(B_HEIGHT,B_WIDTH);
     kernelTimer.start();
     cout << "FUNC5\n";
-    /*darkGrayKernel <<< gridSize, blockSize >>>(height, width, devInputImage, devDarkGrayImage);
+    darkGrayKernel <<< gridSize, blockSize >>>(height, width, devInputImage, devDarkGrayImage);
     cudaDeviceSynchronize();
     kernelTimer.stop();
-
-    // Check if the kernel returned an error
+    cout << "FUNC6\n";
+    /*// Check if the kernel returned an error
     if ( (devRetVal = cudaGetLastError()) != cudaSuccess ) {
         cerr << "Uh, the kernel had some kind of issue: " << cudaGetErrorString(devRetVal) << endl;
         return 1;
