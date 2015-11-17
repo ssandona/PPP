@@ -19,7 +19,7 @@ const unsigned int nrThreads = 256;*/
 const unsigned int B_WIDTH = 32;
 const unsigned int B_HEIGHT = 16;
 
-__global__ void darkGrayKernel(unsigned int height, unsigned int width, unsigned char *inputImage, unsigned char **outputImage) {
+__global__ void darkGrayKernel(unsigned int height, unsigned int width, unsigned char *inputImage, unsigned char *outputImage) {
     int x = blockIdx.y * blockDim.y + threadIdx.y;
     int y = blockIdx.x * blockDim.x + threadIdx.x;
     if(x >= height || y >= width) return;
@@ -37,7 +37,7 @@ __global__ void darkGrayKernel(unsigned int height, unsigned int width, unsigned
 
 
 
-int darkGray(const int width, const int height, const unsigned char *inputImage, unsigned char *outputImage) {
+int darkGray(const int width, const int height, const unsigned char *inputImage, unsigned char **outputImage) {
     cout << "FUNC\n";
     cudaError_t devRetVal = cudaSuccess;
     unsigned char *devInputImage;
