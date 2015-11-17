@@ -57,7 +57,7 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
     outputImage = new unsigned char[pixel_numbers];
 
     cout << "FUNC2\n";
-    /*// Allocate CUDA memory
+    // Allocate CUDA memory
     if ( (devRetVal = cudaMalloc(reinterpret_cast< void ** >(&devInputImage), pixel_numbers * sizeof(unsigned char))) != cudaSuccess ) {
         cerr << "Impossible to allocate device memory for inputImage." << endl;
         return 1;
@@ -67,7 +67,7 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
         return 1;
     }
     cout << "FUNC3\n";
-
+/*
     // Copy input to device
     memoryTimer.start();
     if ( (devRetVal = cudaMemcpy(devInputImage, inputImage, pixel_numbers * sizeof(unsigned char), cudaMemcpyHostToDevice)) != cudaSuccess ) {
