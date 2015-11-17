@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
 	}
 	cout << "Good\n";
 	// Save output
-	//darkGrayImage.save(("./" + string(argv[1]) + ".dark.seq.bmp").c_str());
+	darkGrayImage.save(("./" + string(argv[1]) + ".dark.seq.bmp").c_str());
 
 	return 0;
 }

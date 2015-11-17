@@ -103,7 +103,7 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
     }
     memoryTimer.stop();
     cout << "FUNC8\n";
-    /*//darkGrayImage._data = outputImage;
+    //darkGrayImage._data = outputImage;
     // Time GFLOP/s GB/s
     cout << fixed << setprecision(6) << kernelTimer.getElapsed() << setprecision(3) << " " << (static_cast< long long unsigned int >(width) * height * 7) / 1000000000.0 / kernelTimer.getElapsed() << " " << (static_cast< long long unsigned int >(width) * height * (4 * sizeof(unsigned char))) / 1000000000.0 / kernelTimer.getElapsed() << endl;
      
@@ -119,7 +119,7 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
     //darkGrayImage.save(("./" + string(argv[1]) + ".dark.seq.bmp").c_str());
 
     cudaFree(devInputImage);
-    cudaFree(devDarkGrayImage);*/
+    cudaFree(devDarkGrayImage);
     return 0;
 }
 /*
