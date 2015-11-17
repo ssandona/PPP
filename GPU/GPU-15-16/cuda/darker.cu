@@ -54,7 +54,7 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
 	// Start of the computation
 	globalTimer.start();
     // Convert the input image to grayscale and make it darker
-    outputImage = new unsigned char[pixel_numbers];
+    *outputImage = new unsigned char[pixel_numbers];
 
     cout << "FUNC2\n";
     // Allocate CUDA memory
