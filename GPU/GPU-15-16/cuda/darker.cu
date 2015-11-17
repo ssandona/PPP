@@ -80,6 +80,9 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
     int grid_width = width % B_WIDTH == 0 ? width / B_WIDTH : width / B_WIDTH + 1;
     int grid_height = height % B_HEIGHT == 0 ? height / B_HEIGHT : height / B_HEIGHT + 1;
 
+    cout << "Image size (w,h): (" << width << ", " << height << ")\n";
+    cout << "Grid size (w,h): (" << grid_width << ", " << grid_height << ")\n";
+
     // Execute the kernel
     dim3 gridSize(grid_width, grid_height,1);
     dim3 blockSize(B_WIDTH,B_HEIGHT,1);
