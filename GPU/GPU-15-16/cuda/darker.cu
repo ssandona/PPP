@@ -16,7 +16,7 @@ using std::string;
 
 /*const unsigned int DIM = 16000000;
 const unsigned int nrThreads = 256;*/
-const unsigned int B_WIDTH = 32;
+const unsigned int B_WIDTH = 16;
 const unsigned int B_HEIGHT = 16;
 
 __global__ void darkGrayKernel(unsigned int height, unsigned int width, unsigned char *inputImage, unsigned char *outputImage) {
@@ -81,8 +81,8 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
     int grid_height = width % B_HEIGHT == 0 ? height / B_HEIGHT : height / B_HEIGHT + 1;
 
     // Execute the kernel
-    dim3 gridSize(grid_height, grid_width);
-    dim3 blockSize(B_HEIGHT,B_WIDTH);
+    dim3 gridSize(grid_width, grid_height,1);
+    dim3 blockSize(B_WIDTH,B_HEIGHT,1);
     kernelTimer.start();
     cout << "FUNC5\n";
     darkGrayKernel <<< gridSize, blockSize >>>(height, width, devInputImage, devDarkGrayImage);
