@@ -67,7 +67,7 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
         return 1;
     }
     cout << "FUNC3\n";
-/*
+
     // Copy input to device
     memoryTimer.start();
     if ( (devRetVal = cudaMemcpy(devInputImage, inputImage, pixel_numbers * sizeof(unsigned char), cudaMemcpyHostToDevice)) != cudaSuccess ) {
@@ -76,14 +76,14 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
     }
     memoryTimer.stop();
 
-
-    int grid_width = width % B_WIDTH == 0 ? width / B_WIDTH : width / B_WIDTH + 1;
+    cout << "FUNC4\n";
+    /*int grid_width = width % B_WIDTH == 0 ? width / B_WIDTH : width / B_WIDTH + 1;
     int grid_height = width % B_HEIGHT == 0 ? height / B_HEIGHT : height / B_HEIGHT + 1;
 
     // Execute the kernel
     dim3 gridSize(grid_height, grid_width);
     dim3 blockSize(B_HEIGHT,B_WIDTH);
-
+    cout << "FUNC5\n";
     kernelTimer.start();
     darkGrayKernel <<< gridSize, blockSize >>>(height, width, devInputImage, devDarkGrayImage);
     cudaDeviceSynchronize();
