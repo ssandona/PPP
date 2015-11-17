@@ -37,7 +37,7 @@ __global__ void darkGrayKernel(unsigned int width, unsigned int height, unsigned
 
 
 
-int darkGray(const int width, const int height, const unsigned char *inputImage, unsigned char **outputImage) {
+int darkGray(const int width, const int height, unsigned char *inputImage, unsigned char **outputImage) {
     cout << "FUNC\n";
     cudaError_t devRetVal = cudaSuccess;
     unsigned char *devInputImage;
