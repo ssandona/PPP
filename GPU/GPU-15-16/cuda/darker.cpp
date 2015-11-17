@@ -16,7 +16,7 @@ extern int darkGray(const int width, const int height, const unsigned char * inp
 
 
 int main(int argc, char *argv[]) {
-	int r=0;
+	/*int r=0;
 	if ( argc != 2 ) {
 		cerr << "Usage: " << argv[0] << " <filename>" << endl;
 		return 1;
@@ -39,7 +39,8 @@ int main(int argc, char *argv[]) {
 	}
 	cout << "Good";
 	// Save output
-	darkGrayImage.save(("./" + string(argv[1]) + ".dark.seq.bmp").c_str());
+	darkGrayImage.save(("./" + string(argv[1]) + ".dark.seq.bmp").c_str());*/
+	cout << "A";
 
 	return 0;
 }
