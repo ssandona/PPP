@@ -39,7 +39,7 @@ __global__ void darkGrayKernel(unsigned int height, unsigned int width, unsigned
 
 int darkGray(const int width, const int height, const unsigned char *inputImage, unsigned char *outputImage) {
     cout << "FUNC\n";
-    /*cudaError_t devRetVal = cudaSuccess;
+    cudaError_t devRetVal = cudaSuccess;
     unsigned char *devInputImage;
     unsigned char *devDarkGrayImage;
     int pixel_numbers;
@@ -48,13 +48,15 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
     NSTimer kernelTimer("KernelTimer", false, false);
     NSTimer memoryTimer("MemoryTimer", false, false);
 
-    pixel_numbers=width * height;
+    cout << "FUNC1\n";
+    /*pixel_numbers=width * height;
 
 	// Start of the computation
 	globalTimer.start();
     // Convert the input image to grayscale and make it darker
     outputImage = new unsigned char[pixel_numbers];
 
+    cout << "FUNC2\n";
     // Allocate CUDA memory
     if ( (devRetVal = cudaMalloc(reinterpret_cast< void ** >(&devInputImage), pixel_numbers * sizeof(unsigned char))) != cudaSuccess ) {
         cerr << "Impossible to allocate device memory for inputImage." << endl;
@@ -64,6 +66,7 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
         cerr << "Impossible to allocate device memory for darkGrayImage." << endl;
         return 1;
     }
+    cout << "FUNC3\n";
 
     // Copy input to device
     memoryTimer.start();
