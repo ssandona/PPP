@@ -20,20 +20,19 @@ const unsigned int B_WIDTH = 16;
 const unsigned int B_HEIGHT = 16;
 
 __global__ void darkGrayKernel(unsigned int width, unsigned int height, unsigned char *inputImage, unsigned char *outputImage) {
-    int x = blockIdx.y * blockDim.y + threadIdx.y;
-    int y = blockIdx.x * blockDim.x + threadIdx.x;
-    if(x < width && y < height) {
+    int y = blockIdx.y * blockDim.y + threadIdx.y;
+    int x = blockIdx.x * blockDim.x + threadIdx.x;
+    if(x >= width || y >= height) return;
 
-        float grayPix = 0.0f;
-        float r = static_cast< float >(inputImage[(y * width) + x]);
-        float g = static_cast< float >(inputImage[(width * height) + (y * width) + x]);
-        float b = static_cast< float >(inputImage[(2 * width * height) + (y * width) + x]);
+    float grayPix = 0.0f;
+    float r = static_cast< float >(inputImage[(y * width) + x]);
+    float g = static_cast< float >(inputImage[(width * height) + (y * width) + x]);
+    float b = static_cast< float >(inputImage[(2 * width * height) + (y * width) + x]);
 
-        grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
-        grayPix = (grayPix * 0.6f) + 0.5f;
+    grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
+    grayPix = (grayPix * 0.6f) + 0.5f;
 
-        outputImage[(y * width) + x] = static_cast< unsigned char >(grayPix);
-    }
+    outputImage[(y * width) + x] = static_cast< unsigned char >(grayPix);
 }
 
 
@@ -50,10 +49,10 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
     NSTimer memoryTimer("MemoryTimer", false, false);
 
     cout << "FUNC1\n";
-    pixel_numbers = width * height;
+    pixel_numbers=width * height;
 
-    // Start of the computation
-    globalTimer.start();
+	// Start of the computation
+	globalTimer.start();
     // Convert the input image to grayscale and make it darker
     //*outputImage = new unsigned char[pixel_numbers];
 
@@ -85,8 +84,8 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
     cout << "Grid size (w,h): (" << grid_width << ", " << grid_height << ")\n";
 
     // Execute the kernel
-    dim3 gridSize(grid_width, grid_height, 1);
-    dim3 blockSize(B_WIDTH, B_HEIGHT, 1);
+    dim3 gridSize(grid_width, grid_height,1);
+    dim3 blockSize(B_WIDTH,B_HEIGHT,1);
     kernelTimer.start();
     cout << "FUNC5\n";
     darkGrayKernel <<< gridSize, blockSize >>>(width, height, devInputImage, devDarkGrayImage);
@@ -110,7 +109,7 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
     //darkGrayImage._data = outputImage;
     // Time GFLOP/s GB/s
     cout << fixed << setprecision(6) << kernelTimer.getElapsed() << setprecision(3) << " " << (static_cast< long long unsigned int >(width) * height * 7) / 1000000000.0 / kernelTimer.getElapsed() << " " << (static_cast< long long unsigned int >(width) * height * (4 * sizeof(unsigned char))) / 1000000000.0 / kernelTimer.getElapsed() << endl;
-
+     
 
     // Print the timers
     cout << "Total (s): \t" << globalTimer.getElapsed() << endl;
