@@ -19,7 +19,7 @@ const unsigned int nrThreads = 256;*/
 const unsigned int B_WIDTH = 32;
 const unsigned int B_HEIGHT = 16;
 
-__global__ void darkGrayKernel(unsigned int height, unsigned int width, unsigned char *inputImage, unsigned char *outputImage) {
+__global__ void darkGrayKernel(unsigned int height, unsigned int width, unsigned char *inputImage, unsigned char **outputImage) {
     int x = blockIdx.y * blockDim.y + threadIdx.y;
     int y = blockIdx.x * blockDim.x + threadIdx.x;
     if(x >= height || y >= width) return;
@@ -95,15 +95,15 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
         return 1;
     }
     cout << "FUNC7\n";
-    /*// Copy the output back to host
+    // Copy the output back to host
     memoryTimer.start();
-    if ( (devRetVal = cudaMemcpy(reinterpret_cast< void * >(&outputImage), devDarkGrayImage, pixel_numbers * sizeof(unsigned char), cudaMemcpyDeviceToHost)) != cudaSuccess ) {
+    if ( (devRetVal = cudaMemcpy(reinterpret_cast< void * >(*outputImage), devDarkGrayImage, pixel_numbers * sizeof(unsigned char), cudaMemcpyDeviceToHost)) != cudaSuccess ) {
         cerr << "Impossible to copy devC to host." << endl;
         return 1;
     }
     memoryTimer.stop();
-
-    //darkGrayImage._data = outputImage;
+    cout << "FUNC8\n";
+    /*//darkGrayImage._data = outputImage;
     // Time GFLOP/s GB/s
     cout << fixed << setprecision(6) << kernelTimer.getElapsed() << setprecision(3) << " " << (static_cast< long long unsigned int >(width) * height * 7) / 1000000000.0 / kernelTimer.getElapsed() << " " << (static_cast< long long unsigned int >(width) * height * (4 * sizeof(unsigned char))) / 1000000000.0 / kernelTimer.getElapsed() << endl;
      
