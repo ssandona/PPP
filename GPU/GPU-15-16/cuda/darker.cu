@@ -20,8 +20,8 @@ const unsigned int B_WIDTH = 16;
 const unsigned int B_HEIGHT = 16;
 
 __global__ void darkGrayKernel(unsigned int width, unsigned int height, unsigned char *inputImage, unsigned char *outputImage) {
-    int y = blockIdx.y * blockDim.y + threadIdx.y;
-    int x = blockIdx.x * blockDim.x + threadIdx.x;
+    int x = blockIdx.y * blockDim.y + threadIdx.y;
+    int y = blockIdx.x * blockDim.x + threadIdx.x;
     if(x >= width || y >= height) return;
 
     float grayPix = 0.0f;
