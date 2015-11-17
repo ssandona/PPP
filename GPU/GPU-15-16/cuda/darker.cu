@@ -38,7 +38,8 @@ __global__ void darkGrayKernel(unsigned int height, unsigned int width, unsigned
 
 
 int darkGray(const int width, const int height, const unsigned char *inputImage, unsigned char *outputImage) {
-    cudaError_t devRetVal = cudaSuccess;
+    cout << "FUNC\n";
+    /*cudaError_t devRetVal = cudaSuccess;
     unsigned char *devInputImage;
     unsigned char *devDarkGrayImage;
     int pixel_numbers;
@@ -115,7 +116,7 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
     //darkGrayImage.save(("./" + string(argv[1]) + ".dark.seq.bmp").c_str());
 
     cudaFree(devInputImage);
-    cudaFree(devDarkGrayImage);
+    cudaFree(devDarkGrayImage);*/
     return 0;
 }
 /*
