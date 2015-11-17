@@ -24,14 +24,14 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 	cout << "B\n";
-	/*// Load the input image
+	// Load the input image
 	CImg< unsigned char > inputImage = CImg< unsigned char >(argv[1]);
 	if ( inputImage.spectrum() != 3 ) {
 		cerr << "The input must be a color image." << endl;
 		return 1;
 	}
 	cout << "C\n";
-	// Convert the input image to grayscale and make it darker
+	/*// Convert the input image to grayscale and make it darker
 	CImg< unsigned char > darkGrayImage = CImg< unsigned char >(inputImage.width(), inputImage.height(), 1, 1);
 	cout << "D\n";
 	r=darkGray(inputImage.width(), inputImage.height(), inputImage.data(), darkGrayImage.data());
