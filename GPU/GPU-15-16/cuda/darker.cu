@@ -89,13 +89,13 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
     cudaDeviceSynchronize();
     kernelTimer.stop();
     cout << "FUNC6\n";
-    /*// Check if the kernel returned an error
+    // Check if the kernel returned an error
     if ( (devRetVal = cudaGetLastError()) != cudaSuccess ) {
         cerr << "Uh, the kernel had some kind of issue: " << cudaGetErrorString(devRetVal) << endl;
         return 1;
     }
-
-    // Copy the output back to host
+    cout << "FUNC7\n";
+    /*// Copy the output back to host
     memoryTimer.start();
     if ( (devRetVal = cudaMemcpy(reinterpret_cast< void * >(&outputImage), devDarkGrayImage, pixel_numbers * sizeof(unsigned char), cudaMemcpyDeviceToHost)) != cudaSuccess ) {
         cerr << "Impossible to copy devC to host." << endl;
