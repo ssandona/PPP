@@ -78,7 +78,7 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
 
     cout << "FUNC4\n";
     int grid_width = width % B_WIDTH == 0 ? width / B_WIDTH : width / B_WIDTH + 1;
-    int grid_height = width % B_HEIGHT == 0 ? height / B_HEIGHT : height / B_HEIGHT + 1;
+    int grid_height = height % B_HEIGHT == 0 ? height / B_HEIGHT : height / B_HEIGHT + 1;
 
     // Execute the kernel
     dim3 gridSize(grid_width, grid_height,1);
