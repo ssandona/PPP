@@ -22,7 +22,7 @@ const unsigned int B_HEIGHT = 16;
 __global__ void darkGrayKernel(unsigned int width, unsigned int height, unsigned char *inputImage, unsigned char *outputImage) {
     int y = blockIdx.y * blockDim.y + threadIdx.y;
     int x = blockIdx.x * blockDim.x + threadIdx.x;
-    if(x >= height || y >= width) return;
+    if(x >= width || y >= height) return;
 
     float grayPix = 0.0f;
     float r = static_cast< float >(inputImage[(y * width) + x]);
