@@ -19,7 +19,7 @@ const unsigned int nrThreads = 256;*/
 const unsigned int B_WIDTH = 16;
 const unsigned int B_HEIGHT = 16;
 
-__global__ void darkGrayKernel(unsigned int height, unsigned int width, unsigned char *inputImage, unsigned char *outputImage) {
+__global__ void darkGrayKernel(unsigned int width, unsigned int height, unsigned char *inputImage, unsigned char *outputImage) {
     int y = blockIdx.y * blockDim.y + threadIdx.y;
     int x = blockIdx.x * blockDim.x + threadIdx.x;
     if(x >= height || y >= width) return;
@@ -54,7 +54,7 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
 	// Start of the computation
 	globalTimer.start();
     // Convert the input image to grayscale and make it darker
-    *outputImage = new unsigned char[pixel_numbers];
+    //*outputImage = new unsigned char[pixel_numbers];
 
     cout << "FUNC2\n";
     // Allocate CUDA memory
@@ -85,7 +85,7 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
     dim3 blockSize(B_WIDTH,B_HEIGHT,1);
     kernelTimer.start();
     cout << "FUNC5\n";
-    darkGrayKernel <<< gridSize, blockSize >>>(height, width, devInputImage, devDarkGrayImage);
+    darkGrayKernel <<< gridSize, blockSize >>>(width, height, devInputImage, devDarkGrayImage);
     cudaDeviceSynchronize();
     kernelTimer.stop();
     cout << "FUNC6\n";
