@@ -19,11 +19,12 @@ int main(int argc, char *argv[]) {
 	int r=0;
 	cout << "A\n";
 	if ( argc != 2 ) {
+		cout << "Err1\n";
 		cerr << "Usage: " << argv[0] << " <filename>" << endl;
 		return 1;
 	}
 	cout << "B\n";
-	// Load the input image
+	/*// Load the input image
 	CImg< unsigned char > inputImage = CImg< unsigned char >(argv[1]);
 	if ( inputImage.spectrum() != 3 ) {
 		cerr << "The input must be a color image." << endl;
@@ -40,7 +41,7 @@ int main(int argc, char *argv[]) {
 	}
 	cout << "Good\n";
 	// Save output
-	darkGrayImage.save(("./" + string(argv[1]) + ".dark.seq.bmp").c_str());
+	darkGrayImage.save(("./" + string(argv[1]) + ".dark.seq.bmp").c_str());*/
 
 	return 0;
 }
