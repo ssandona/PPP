@@ -20,8 +20,8 @@ const unsigned int B_WIDTH = 16;
 const unsigned int B_HEIGHT = 16;
 
 __global__ void darkGrayKernel(unsigned int width, unsigned int height, unsigned char *inputImage, unsigned char *outputImage) {
-    unsigned int x = blockIdx.y * blockDim.y + threadIdx.y;
-    unsigned int y = blockIdx.x * blockDim.x + threadIdx.x;
+    int x = blockIdx.y * blockDim.y + threadIdx.y;
+    int y = blockIdx.x * blockDim.x + threadIdx.x;
     if(x >= width || y >= height) return;
 
     float grayPix = 0.0f;
@@ -51,8 +51,8 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
     cout << "FUNC1\n";
     pixel_numbers=width * height;
 
-	// Start of the computation
-	globalTimer.start();
+    // Start of the computation
+    globalTimer.start();
     // Convert the input image to grayscale and make it darker
     //*outputImage = new unsigned char[pixel_numbers];
 
