@@ -49,7 +49,7 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
     NSTimer memoryTimer("MemoryTimer", false, false);
 
     cout << "FUNC1\n";
-    /*pixel_numbers=width * height;
+    pixel_numbers=width * height;
 
 	// Start of the computation
 	globalTimer.start();
@@ -57,7 +57,7 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
     outputImage = new unsigned char[pixel_numbers];
 
     cout << "FUNC2\n";
-    // Allocate CUDA memory
+    /*// Allocate CUDA memory
     if ( (devRetVal = cudaMalloc(reinterpret_cast< void ** >(&devInputImage), pixel_numbers * sizeof(unsigned char))) != cudaSuccess ) {
         cerr << "Impossible to allocate device memory for inputImage." << endl;
         return 1;
