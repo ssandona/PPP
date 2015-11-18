@@ -38,6 +38,7 @@ __global__ void darkGrayKernel(unsigned int width, unsigned int height, unsigned
     grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
     grayPix = (grayPix * 0.6f) + 0.5f;
 
+    outputImage[0]=static_cast< unsigned char >(grayPix);
     /*outputImage[(i * width) + j] = static_cast< unsigned char >(grayPix);*/
 }
 
