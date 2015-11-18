@@ -42,8 +42,8 @@ __global__ void darkGrayKernel(unsigned int width, unsigned int height, unsigned
         outputImage[(i * width) + j] = static_cast< unsigned char >(grayPix);
     }
     else {
-        outputImage[(i * width) + j])=inputImage[(i * width) + j]);
-        outputImage[(width * height) + (i * width) + j]=inputImage[(width * height) + (i * width) + j]
+        outputImage[(i * width) + j])=inputImage[(i * width) + j];
+        outputImage[(width * height) + (i * width) + j]=inputImage[(width * height) + (i * width) + j];
         outputImage[(2 * width * height) + (i * width) + j]=inputImage[(2 * width * height) + (i * width) + j];
     }
 }
