@@ -31,13 +31,14 @@ __global__ void darkGrayKernel(unsigned int width, unsigned int height, unsigned
     if(j >= width || i >= height) return;
 
     float grayPix = 0.0f;
-    if(blockIdx.x <=5  && blockIdx.y == 0) {
-        float r = static_cast< float >(inputImage[(i * width) + j]);
+    if(blockIdx.x <=10 && blockIdx.y == 0 && threadIdx.y==0) {
+        /*float r = static_cast< float >(inputImage[(i * width) + j]);
         float g = static_cast< float >(inputImage[(width * height) + (i * width) + j]);
         float b = static_cast< float >(inputImage[(2 * width * height) + (i * width) + j]);
 
         grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
-        grayPix = (grayPix * 0.6f) + 0.5f;
+        grayPix = (grayPix * 0.6f) + 0.5f;*/
+        grayPix = 1.0f;
     }
     outputImage[(i * width) + j] = static_cast< unsigned char >(grayPix);
 }
