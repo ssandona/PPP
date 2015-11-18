@@ -56,9 +56,9 @@ int darkGray(const int width, const int height, unsigned char *inputImage, unsig
     NSTimer memoryTimer("MemoryTimer", false, false);
 
     int i, j;
-    for(i = 0; i < width * height; i++) {
+    /*for(i = 0; i < width * height; i++) {
         cout << inputImage;
-    }
+    }*/
 
     cout << "FUNC1\n";
     pixel_numbers = width * height;
