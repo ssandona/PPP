@@ -28,7 +28,7 @@ __global__ void darkGrayKernel(unsigned int width, unsigned int height, unsigned
     int j = blockIdx.x * blockDim.x + threadIdx.x;
 
     
-    if(j >= width || i >= height) return;
+    /*if(j >= width || i >= height) return;
 
     float grayPix = 0.0f;
     float r = static_cast< float >(inputImage[(i * width) + j]);
@@ -38,7 +38,7 @@ __global__ void darkGrayKernel(unsigned int width, unsigned int height, unsigned
     grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
     grayPix = (grayPix * 0.6f) + 0.5f;
 
-    outputImage[(i * width) + j] = static_cast< unsigned char >(grayPix);
+    outputImage[(i * width) + j] = static_cast< unsigned char >(grayPix);*/
 }
 
 
