@@ -19,13 +19,13 @@ const unsigned int nrThreads = 256;*/
 const unsigned int B_WIDTH = 16;
 const unsigned int B_HEIGHT = 16;
 
-__global__ void darkGrayKernel(unsigned int width, unsigned int height, unsigned char *inputImage, unsigned char *outputImage) {
+__global__ void darkGrayKernel(const int width, const int height, unsigned char *inputImage, unsigned char *outputImage) {
     /*unsigned int i = blockIdx.x * blockDim.x + threadIdx.x;
     unsigned int j = blockIdx.y * blockDim.y + threadIdx.y;*/
 
     //M[i,j]
-    int i = blockIdx.y * blockDim.y + threadIdx.y;
-    int j = blockIdx.x * blockDim.x + threadIdx.x;
+    unsigned int i = blockIdx.y * blockDim.y + threadIdx.y;
+    unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
 
 
     if(j >= width || i >= height) return;
@@ -105,7 +105,7 @@ int darkGray(const int width, const int height, unsigned char *inputImage, unsig
     // Execute the kernel
     dim3 gridSize(grid_width, grid_height);
     dim3 blockSize(B_WIDTH, B_HEIGHT);
-    
+
     kernelTimer.start();
     cout << "FUNC5\n";
     darkGrayKernel <<< gridSize, blockSize >>>(width, height, devInputImage, devDarkGrayImage);
