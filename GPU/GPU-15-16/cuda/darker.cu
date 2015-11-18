@@ -24,8 +24,8 @@ __global__ void darkGrayKernel(const unsigned int width, const unsigned int heig
     unsigned int j = blockIdx.y * blockDim.y + threadIdx.y;*/
 
     //M[i,j]
-    unsigned int j = blockIdx.y * blockDim.y + threadIdx.y;
-    unsigned int i = blockIdx.x * blockDim.x + threadIdx.x;
+    unsigned int i = blockIdx.y * blockDim.y + threadIdx.y;
+    unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
 
 
     if(j >= width || i >= height) return;
