@@ -73,7 +73,7 @@ int darkGray(const int width, const int height, unsigned char *inputImage, unsig
         cerr << "Impossible to allocate device memory for inputImage." << endl;
         return 1;
     }
-    if ( (devRetVal = cudaMalloc(reinterpret_cast< void ** >(&devDarkGrayImage), pixel_numbers * 3 * sizeof(unsigned char))) != cudaSuccess ) {
+    if ( (devRetVal = cudaMalloc(reinterpret_cast< void ** >(&devDarkGrayImage), pixel_numbers * sizeof(unsigned char))) != cudaSuccess ) {
         cerr << "Impossible to allocate device memory for darkGrayImage." << endl;
         return 1;
     }
