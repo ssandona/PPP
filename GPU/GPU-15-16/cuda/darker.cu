@@ -19,7 +19,7 @@ const unsigned int nrThreads = 256;*/
 const unsigned int B_WIDTH = 16;
 const unsigned int B_HEIGHT = 16;
 
-__global__ void darkGrayKernel(const int width, const int height, unsigned char *inputImage, unsigned char *outputImage) {
+__global__ void darkGrayKernel(const unsigned int width, const unsigned int height, unsigned char *inputImage, unsigned char *outputImage) {
     /*unsigned int i = blockIdx.x * blockDim.x + threadIdx.x;
     unsigned int j = blockIdx.y * blockDim.y + threadIdx.y;*/
 
