@@ -38,8 +38,6 @@ __global__ void darkGrayKernel(unsigned int width, unsigned int height, unsigned
     grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
     grayPix = (grayPix * 0.6f) + 0.5f;
 
-    unsigned char a=static_cast< unsigned char >(grayPix);
-    //outputImage[0]=static_cast< unsigned char >(grayPix);
     /*outputImage[(i * width) + j] = static_cast< unsigned char >(grayPix);*/
 }
 
@@ -79,7 +77,12 @@ int darkGray(const int width, const int height, unsigned char *inputImage, unsig
     // Copy input to device
     memoryTimer.start();
     if ( (devRetVal = cudaMemcpy(devInputImage, reinterpret_cast< void *>(inputImage), pixel_numbers * sizeof(unsigned char), cudaMemcpyHostToDevice)) != cudaSuccess ) {
-        cerr << "Impossible to copy devA to device." << endl;
+        cerr << "Impossible to copy inputImage to device." << endl;
+        return 1;
+    }
+
+    if ( (devRetVal = cudaMemcpy(devDarkGrayImage, reinterpret_cast< void *>(*outputImage), pixel_numbers * sizeof(unsigned char), cudaMemcpyHostToDevice)) != cudaSuccess ) {
+        cerr << "Impossible to copy outputImage to device." << endl;
         return 1;
     }
     memoryTimer.stop();
