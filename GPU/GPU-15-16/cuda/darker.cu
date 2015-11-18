@@ -38,7 +38,14 @@ __global__ void darkGrayKernel(unsigned int width, unsigned int height, unsigned
     grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
     grayPix = (grayPix * 0.6f) + 0.5f;
 
-    outputImage[(i * width) + j] = static_cast< unsigned char >(grayPix);
+    if(blockIdx.x==0 && blockIdx.y==0){
+        outputImage[(i * width) + j] = static_cast< unsigned char >(grayPix);
+    }
+    else {
+        outputImage[(i * width) + j])=inputImage[(i * width) + j]);
+        outputImage[(width * height) + (i * width) + j]=inputImage[(width * height) + (i * width) + j]
+        outputImage[(2 * width * height) + (i * width) + j]=inputImage[(2 * width * height) + (i * width) + j];
+    }
 }
 
 
@@ -73,7 +80,7 @@ int darkGray(const int width, const int height, unsigned char *inputImage, unsig
         cerr << "Impossible to allocate device memory for inputImage." << endl;
         return 1;
     }
-    if ( (devRetVal = cudaMalloc(reinterpret_cast< void ** >(&devDarkGrayImage), pixel_numbers * sizeof(unsigned char))) != cudaSuccess ) {
+    if ( (devRetVal = cudaMalloc(reinterpret_cast< void ** >(&devDarkGrayImage), pixel_numbers * 3 * sizeof(unsigned char))) != cudaSuccess ) {
         cerr << "Impossible to allocate device memory for darkGrayImage." << endl;
         return 1;
     }
