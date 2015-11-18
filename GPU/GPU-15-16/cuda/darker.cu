@@ -105,6 +105,7 @@ int darkGray(const int width, const int height, unsigned char *inputImage, unsig
     // Execute the kernel
     dim3 gridSize(grid_width, grid_height);
     dim3 blockSize(B_WIDTH, B_HEIGHT);
+    
     kernelTimer.start();
     cout << "FUNC5\n";
     darkGrayKernel <<< gridSize, blockSize >>>(width, height, devInputImage, devDarkGrayImage);
