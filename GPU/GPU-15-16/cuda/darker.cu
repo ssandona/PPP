@@ -46,8 +46,8 @@ __global__ void darkGrayKernel(unsigned int width, unsigned int height, unsigned
 int darkGray(const int width, const int height, unsigned char *inputImage, unsigned char **outputImage) {
     cout << "FUNC\n";
     cudaError_t devRetVal = cudaSuccess;
-    unsigned char *devInputImage;
-    unsigned char *devDarkGrayImage;
+    unsigned char *devInputImage=0;
+    unsigned char *devDarkGrayImage=0;
     int pixel_numbers;
 
     NSTimer globalTimer("GlobalTimer", false, false);
@@ -81,10 +81,10 @@ int darkGray(const int width, const int height, unsigned char *inputImage, unsig
         return 1;
     }
 
-    if ( (devRetVal = cudaMemcpy(devDarkGrayImage, reinterpret_cast< void *>(*outputImage), pixel_numbers * sizeof(unsigned char), cudaMemcpyHostToDevice)) != cudaSuccess ) {
+    /*if ( (devRetVal = cudaMemcpy(devDarkGrayImage, reinterpret_cast< void *>(*outputImage), pixel_numbers * sizeof(unsigned char), cudaMemcpyHostToDevice)) != cudaSuccess ) {
         cerr << "Impossible to copy outputImage to device." << endl;
         return 1;
-    }
+    }*/
     memoryTimer.stop();
 
     cout << "FUNC4\n";
