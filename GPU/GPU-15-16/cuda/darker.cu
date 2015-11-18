@@ -27,25 +27,19 @@ __global__ void darkGrayKernel(unsigned int width, unsigned int height, unsigned
     int i = blockIdx.y * blockDim.y + threadIdx.y;
     int j = blockIdx.x * blockDim.x + threadIdx.x;
 
-    
+
     if(j >= width || i >= height) return;
 
     float grayPix = 0.0f;
-    float r = static_cast< float >(inputImage[(i * width) + j]);
-    float g = static_cast< float >(inputImage[(width * height) + (i * width) + j]);
-    float b = static_cast< float >(inputImage[(2 * width * height) + (i * width) + j]);
+    if(blockIdx.x == 0 && blockIdx.y == 0) {
+        float r = static_cast< float >(inputImage[(i * width) + j]);
+        float g = static_cast< float >(inputImage[(width * height) + (i * width) + j]);
+        float b = static_cast< float >(inputImage[(2 * width * height) + (i * width) + j]);
 
-    grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
-    grayPix = (grayPix * 0.6f) + 0.5f;
-
-    if(blockIdx.x==0 && blockIdx.y==0){
-        outputImage[(i * width) + j] = static_cast< unsigned char >(grayPix);
+        grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
+        grayPix = (grayPix * 0.6f) + 0.5f;
     }
-    else {
-        outputImage[(i * width) + j])=inputImage[(i * width) + j];
-        outputImage[(width * height) + (i * width) + j]=inputImage[(width * height) + (i * width) + j];
-        outputImage[(2 * width * height) + (i * width) + j]=inputImage[(2 * width * height) + (i * width) + j];
-    }
+    outputImage[(i * width) + j] = static_cast< unsigned char >(grayPix);
 }
 
 
@@ -53,21 +47,21 @@ __global__ void darkGrayKernel(unsigned int width, unsigned int height, unsigned
 int darkGray(const int width, const int height, unsigned char *inputImage, unsigned char **outputImage) {
     cout << "FUNC\n";
     cudaError_t devRetVal = cudaSuccess;
-    unsigned char *devInputImage=0;
-    unsigned char *devDarkGrayImage=0;
+    unsigned char *devInputImage = 0;
+    unsigned char *devDarkGrayImage = 0;
     int pixel_numbers;
 
     NSTimer globalTimer("GlobalTimer", false, false);
     NSTimer kernelTimer("KernelTimer", false, false);
     NSTimer memoryTimer("MemoryTimer", false, false);
 
-    int i,j;
-    for(i=0;i<width*height;i++){
+    int i, j;
+    for(i = 0; i < width * height; i++) {
         cout << inputImage;
     }
 
     cout << "FUNC1\n";
-    pixel_numbers=width * height;
+    pixel_numbers = width * height;
 
     // Start of the computation
     globalTimer.start();
@@ -80,7 +74,7 @@ int darkGray(const int width, const int height, unsigned char *inputImage, unsig
         cerr << "Impossible to allocate device memory for inputImage." << endl;
         return 1;
     }
-    if ( (devRetVal = cudaMalloc(reinterpret_cast< void ** >(&devDarkGrayImage), pixel_numbers * 3 * sizeof(unsigned char))) != cudaSuccess ) {
+    if ( (devRetVal = cudaMalloc(reinterpret_cast< void ** >(&devDarkGrayImage), pixel_numbers * sizeof(unsigned char))) != cudaSuccess ) {
         cerr << "Impossible to allocate device memory for darkGrayImage." << endl;
         return 1;
     }
@@ -107,8 +101,8 @@ int darkGray(const int width, const int height, unsigned char *inputImage, unsig
     cout << "Grid size (w,h): (" << grid_width << ", " << grid_height << ")\n";
 
     // Execute the kernel
-    dim3 gridSize(grid_width, grid_height,1);
-    dim3 blockSize(B_WIDTH,B_HEIGHT,1);
+    dim3 gridSize(grid_width, grid_height, 1);
+    dim3 blockSize(B_WIDTH, B_HEIGHT, 1);
     kernelTimer.start();
     cout << "FUNC5\n";
     darkGrayKernel <<< gridSize, blockSize >>>(width, height, devInputImage, devDarkGrayImage);
@@ -132,7 +126,7 @@ int darkGray(const int width, const int height, unsigned char *inputImage, unsig
     //darkGrayImage._data = outputImage;
     // Time GFLOP/s GB/s
     cout << fixed << setprecision(6) << kernelTimer.getElapsed() << setprecision(3) << " " << (static_cast< long long unsigned int >(width) * height * 7) / 1000000000.0 / kernelTimer.getElapsed() << " " << (static_cast< long long unsigned int >(width) * height * (4 * sizeof(unsigned char))) / 1000000000.0 / kernelTimer.getElapsed() << endl;
-     
+
 
     // Print the timers
     cout << "Total (s): \t" << globalTimer.getElapsed() << endl;
