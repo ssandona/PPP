@@ -19,7 +19,7 @@ const unsigned int nrThreads = 256;*/
 const unsigned int B_WIDTH = 16;
 const unsigned int B_HEIGHT = 16;
 
-__global__ void darkGrayKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *outputImage) {
+__global__ void darkGrayKernel(const int width, const int height, const unsigned char * inputImage, unsigned char * darkGrayImage) {
     /*unsigned int i = blockIdx.x * blockDim.x + threadIdx.x;
     unsigned int j = blockIdx.y * blockDim.y + threadIdx.y;*/
 
@@ -39,12 +39,12 @@ __global__ void darkGrayKernel(const int width, const int height, const unsigned
         grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
         grayPix = (grayPix * 0.6f) + 0.5f;
     //}
-    outputImage[(i * width) + j] = static_cast< unsigned char >(grayPix);
+    darkGrayImage[(i * width) + j] = static_cast< unsigned char >(grayPix);
 }
 
 
 
-int darkGray(const int width, const int height, unsigned char *inputImage, unsigned char **outputImage) {
+void darkGray(const int width, const int height, const unsigned char * inputImage, unsigned char * darkGrayImage) {
     cout << "FUNC\n";
     cudaError_t devRetVal = cudaSuccess;
     unsigned char *devInputImage = 0;
@@ -82,7 +82,7 @@ int darkGray(const int width, const int height, unsigned char *inputImage, unsig
 
     // Copy input to device
     memoryTimer.start();
-    if ( (devRetVal = cudaMemcpy(devInputImage, reinterpret_cast< void *>(inputImage), pixel_numbers * sizeof(unsigned char), cudaMemcpyHostToDevice)) != cudaSuccess ) {
+    if ( (devRetVal = cudaMemcpy(devInputImage, reinterpret_cast< void *>(inputImage), pixel_numbers * 3 * sizeof(unsigned char), cudaMemcpyHostToDevice)) != cudaSuccess ) {
         cerr << "Impossible to copy inputImage to device." << endl;
         return 1;
     }
@@ -120,7 +120,7 @@ int darkGray(const int width, const int height, unsigned char *inputImage, unsig
     cout << "FUNC7\n";
     // Copy the output back to host
     memoryTimer.start();
-    if ( (devRetVal = cudaMemcpy(reinterpret_cast< void *>(*outputImage), devDarkGrayImage, pixel_numbers * sizeof(unsigned char), cudaMemcpyDeviceToHost)) != cudaSuccess ) {
+    if ( (devRetVal = cudaMemcpy(reinterpret_cast< void *>(darkGrayImage), devDarkGrayImage, pixel_numbers * sizeof(unsigned char), cudaMemcpyDeviceToHost)) != cudaSuccess ) {
         cerr << "Impossible to copy devC to host." << endl;
         return 1;
     }
