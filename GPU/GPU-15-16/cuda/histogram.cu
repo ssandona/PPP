@@ -40,9 +40,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     //}
     grayImage[(i * width) + j] = static_cast< unsigned char >(grayPix);
 
-    atomicInc(unsigned int* address,
-                       unsigned int val);
-    atomicInc(&(localHistogram[static_cast< unsigned int >(grayPix)]),1);
+    atomicInc(&(localHistogram[static_cast< unsigned int >(grayPix)]), 1);
     __syncthreads();
     atomicInc(&(histogram[globalIdx]), localHistogram[globalIdx]);
 
@@ -158,6 +156,6 @@ int histogram1D(const int width, const int height, const unsigned char *inputIma
     cout << endl;
 
     cudaFree(devInputImage);
-    cudaFree(devDarkGrayImage);
+    cudaFree(devGrayImage);
     return 0;
 }
