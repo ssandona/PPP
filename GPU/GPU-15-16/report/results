@@ -1,11 +1,28 @@
-Image		Pixels above threshold		Seq			Par
+Image		Pixels above threshold		Seq			Par				Speedup (prun - ./)
 
-image00		111 (0.01%)			
-image00N	48 (0.01%)
-image02		135 (0.00%)
-image04 	1503 (0.00%)
-image05		9 (0.00%)
-image06		4206 (0.00%)			0.590837 0.776 0.444	0.005860 78.290 44.737
+image00		111 (0.01%)			0.002138 0.858 0.490	0.000156 11.755 6.717		15.53	13.70
+image01		231 (0.00%)			0.021764 0.843 0.482	0.000351 52.267 29.867		69.18	62
+image02		135 (0.00%)			0.030811 0.838 0.479	0.000658 39.188 22.393		75.51	46.82
+image03		735 (0.00%)			0.204571 0.864 0.494	0.002287 77.255 44.146		148.20	89.44
+image04 	1503 (0.00%)			0.141341 0.831 0.475	0.001912 61.425 35.100		78.93	73.9
+image05		9 (0.00%)			0.268766 0.863 0.493	0.003211 72.247 41.284		138.67	83.7
+image06		4206 (0.00%)			0.531381 0.863 0.493	0.005860 78.290 44.737		100.82	90.67
 	
 
+[ssa223@fs0 bin]$ ./darkerSeq /home/ssa223/project/GPU/images/image00.png
+0.002138 0.858 0.490
+[ssa223@fs0 bin]$ ./darkerSeq /home/ssa223/project/GPU/images/image01.jpg
+
+[ssa223@fs0 bin]$ ./darkerSeq /home/ssa223/project/GPU/images/image02.jpg
+
+[ssa223@fs0 bin]$ ./darkerSeq /home/ssa223/project/GPU/images/image03.jpg
+
+[ssa223@fs0 bin]$ ./darkerSeq /home/ssa223/project/GPU/images/image04.jpg
+
+[ssa223@fs0 bin]$ ./darkerSeq /home/ssa223/project/GPU/images/image05.jpg
+
+[ssa223@fs0 bin]$ ./darkerSeq /home/ssa223/project/GPU/images/image06.jpg
+
+[ssa223@fs0 bin]$ ./darkerSeq /home/ssa223/project/GPU/images/image07.jpg
+The input must be a color image.
 
