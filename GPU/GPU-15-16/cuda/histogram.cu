@@ -35,8 +35,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     float g = static_cast< float >(inputImage[(width * height) + (i * width) + j]);
     float b = static_cast< float >(inputImage[(2 * width * height) + (i * width) + j]);
 
-    grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
-    grayPix = (grayPix * 0.6f) + 0.5f;
+    grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
     //}
     grayImage[(i * width) + j] = static_cast< unsigned char >(grayPix);
 
