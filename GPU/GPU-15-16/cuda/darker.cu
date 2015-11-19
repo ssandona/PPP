@@ -44,7 +44,7 @@ __global__ void darkGrayKernel(const int width, const int height, const unsigned
 
 
 
-void darkGray(const int width, const int height, const unsigned char * inputImage, unsigned char * darkGrayImage) {
+int darkGray(const int width, const int height, const unsigned char * inputImage, unsigned char * darkGrayImage) {
     cout << "FUNC\n";
     cudaError_t devRetVal = cudaSuccess;
     unsigned char *devInputImage = 0;
@@ -82,7 +82,7 @@ void darkGray(const int width, const int height, const unsigned char * inputImag
 
     // Copy input to device
     memoryTimer.start();
-    if ( (devRetVal = cudaMemcpy(devInputImage, reinterpret_cast< void *>(inputImage), pixel_numbers * 3 * sizeof(unsigned char), cudaMemcpyHostToDevice)) != cudaSuccess ) {
+    if ( (devRetVal = cudaMemcpy(devInputImage, (void*)(inputImage), pixel_numbers * 3 * sizeof(unsigned char), cudaMemcpyHostToDevice)) != cudaSuccess ) {
         cerr << "Impossible to copy inputImage to device." << endl;
         return 1;
     }
