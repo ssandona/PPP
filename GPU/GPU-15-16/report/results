@@ -1,6 +1,11 @@
-image00		Pixels above threshold: 111 (0.01%)
-image00N	Pixels above threshold: 48 (0.01%).
-image02		Pixels above threshold: 135 (0.00%).
-image04 	Pixels above threshold: 1503 (0.00%).
-image05		Pixels above threshold: 9 (0.00%).
-image06		Pixels above threshold: 4206 (0.00%).
+Image		Pixels above threshold		Seq			Par
+
+image00		111 (0.01%)			
+image00N	48 (0.01%)
+image02		135 (0.00%)
+image04 	1503 (0.00%)
+image05		9 (0.00%)
+image06		4206 (0.00%)			0.590837 0.776 0.444	0.005860 78.290 44.737
+	
+
+
