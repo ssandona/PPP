@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
 	// Convert the input image to grayscale and make it darker
 	CImg< unsigned char > darkGrayImage = CImg< unsigned char >(inputImage.width(), inputImage.height(), 1, 1);
 	//cout << "D\n";
-	r=darkGray(inputImage.width(), inputImage.height(), inputImage.data());
+	r=darkGray(inputImage.width(), inputImage.height(), inputImage.data(), darkGrayImage.data());
 	if(r==1){
 		cout << "ERRR\n";
 		return 1;
