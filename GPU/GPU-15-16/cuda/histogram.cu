@@ -38,7 +38,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
     grayPix = (grayPix * 0.6f) + 0.5f;
     //}
-    darkGrayImage[(i * width) + j] = static_cast< unsigned char >(grayPix);
+    grayImage[(i * width) + j] = static_cast< unsigned char >(grayPix);
 
     atomicInc(unsigned int* address,
                        unsigned int val);
