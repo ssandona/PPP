@@ -12,7 +12,7 @@ darker: darker.cpp darker.cu
 
 
 
-darker: darker_original.cpp darker_original.cu
+darker_original: darker_original.cpp darker_original.cu
 	$(NVCC) -c darker_original.cu $(INCLUDES) $(NVCCFLAGS)
 	$(LINKER) -o $(PROJ_BASE)/bin/darkerOriginalCUDA darker_original.cpp darker_original.o ../src/Timer.cpp $(INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./darker_original.o

@@ -3,21 +3,12 @@ debug		:= 0
 include		../Makefile.inc
 
 
-all: clean darker darker_original
+all: clean darker histogram smooth
 
 darker: darker.cpp darker.cu
 	$(NVCC) -c darker.cu $(INCLUDES) $(NVCCFLAGS)
 	$(LINKER) -o $(PROJ_BASE)/bin/darkerCUDA darker.cpp darker.o ../src/Timer.cpp $(INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./darker.o
-
-
-
-darker_original: darker_original.cpp darker_original.cu
-	$(NVCC) -c darker_original.cu $(INCLUDES) $(NVCCFLAGS)
-	$(LINKER) -o $(PROJ_BASE)/bin/darkerOriginalCUDA darker_original.cpp darker_original.o ../src/Timer.cpp $(INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
-	rm -f ./darker_original.o
-
-
 
 histogram: histogram.cpp histogram.cu
 	$(NVCC) -c histogram.cu $(INCLUDES) $(NVCCFLAGS)
@@ -33,5 +24,4 @@ clean:
 	rm -f $(PROJ_BASE)/bin/darkerCUDA
 	rm -f $(PROJ_BASE)/bin/histogramCUDA
 	rm -f $(PROJ_BASE)/bin/smoothCUDA
-	rm -f $(PROJ_BASE)/bin/darkerOriginalCUDA
 
