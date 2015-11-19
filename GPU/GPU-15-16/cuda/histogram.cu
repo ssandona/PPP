@@ -39,11 +39,11 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     //}
     grayImage[(i * width) + j] = static_cast< unsigned char >(grayPix);
 
-    localHistogram[static_cast< unsigned int >(grayPix)]+=1;
-    //atomicAdd(&(localHistogram[static_cast< unsigned int >(grayPix)]), 1);
+    //localHistogram[static_cast< unsigned int >(grayPix)]+=1;
+    atomicAdd((unsigned int *)&localHistogram[static_cast< unsigned int >(grayPix)], 1);
     __syncthreads();
-    histogram[globalIdx]+=localHistogram[globalIdx];
-    //atomicAdd(&(histogram[globalIdx]), localHistogram[globalIdx]);
+    //histogram[globalIdx]+=localHistogram[globalIdx];
+    atomicAdd((unsigned int *)&histogram[globalIdx], localHistogram[globalIdx]);
 
 }
 
