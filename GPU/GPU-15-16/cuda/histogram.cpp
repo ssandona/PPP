@@ -16,7 +16,7 @@ using std::string;
 const int HISTOGRAM_SIZE = 256;
 const int BAR_WIDTH = 4;
 
-extern void histogram1D(const int width, const int height, const unsigned char * inputImage, unsigned char * grayImage, unsigned int * histogram, unsigned char * histogramImage);
+extern int histogram1D(const int width, const int height, const unsigned char * inputImage, unsigned char * grayImage, unsigned int * histogram, unsigned char * histogramImage);
 
 
 int main(int argc, char *argv[]) {
@@ -40,7 +40,14 @@ int main(int argc, char *argv[]) {
 	CImg< unsigned char > histogramImage = CImg< unsigned char >(BAR_WIDTH * HISTOGRAM_SIZE, HISTOGRAM_SIZE, 1, 1);
 
 	memset(reinterpret_cast< void * >(histogram), 0, HISTOGRAM_SIZE * sizeof(unsigned int));
-	histogram1D(inputImage.width(), inputImage.height(), inputImage.data(), grayImage.data(), histogram, histogramImage.data());
+	
+
+	int r=histogram1D(inputImage.width(), inputImage.height(), inputImage.data(), grayImage.data(), histogram, histogramImage.data());
+	if(r==1){
+		cout << "ERROR\n";
+		return 1;
+	}
+
 
 	for ( int i = 0; i < HISTOGRAM_SIZE; i++ ) {
 		if ( histogram[i] > max ) {

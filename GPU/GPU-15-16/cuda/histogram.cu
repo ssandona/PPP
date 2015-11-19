@@ -11,8 +11,10 @@ using std::fixed;
 using std::setprecision;
 
 const int HISTOGRAM_SIZE = 256;
+const unsigned int B_WIDTH = 16;
+const unsigned int B_HEIGHT = 16;
 
-void histogram1DKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram) {
+__global__ void histogram1DKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram) {
 
     unsigned int i = blockIdx.y * blockDim.y + threadIdx.y;
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
@@ -48,10 +50,10 @@ void histogram1DKernel(const int width, const int height, const unsigned char *i
 
 
 
-void histogram1D(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram) {
+int histogram1D(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram) {
     cudaError_t devRetVal = cudaSuccess;
     unsigned char *devInputImage = 0;
-    unsigned char *devDarkGrayImage = 0;
+    unsigned char *devGrayImage = 0;
     unsigned int *devHistogram = 0;
 
     int pixel_numbers;
@@ -74,7 +76,7 @@ void histogram1D(const int width, const int height, const unsigned char *inputIm
         cerr << "Impossible to allocate device memory for inputImage." << endl;
         return 1;
     }
-    if ( (devRetVal = cudaMalloc(reinterpret_cast< void ** >(&devDarkGrayImage), pixel_numbers * sizeof(unsigned char))) != cudaSuccess ) {
+    if ( (devRetVal = cudaMalloc(reinterpret_cast< void ** >(&devGrayImage), pixel_numbers * sizeof(unsigned char))) != cudaSuccess ) {
         cerr << "Impossible to allocate device memory for darkGrayImage." << endl;
         return 1;
     }
@@ -120,7 +122,7 @@ void histogram1D(const int width, const int height, const unsigned char *inputIm
 
     kernelTimer.start();
     //cout << "FUNC5\n";
-    histogram1DKernel <<< gridSize, blockSize >>>(width, height, devInputImage, devDarkGrayImage, devHistogram);
+    histogram1DKernel <<< gridSize, blockSize >>>(width, height, devInputImage, devGrayImage, devHistogram);
     cudaDeviceSynchronize();
     kernelTimer.stop();
     //cout << "FUNC6\n";
@@ -132,7 +134,7 @@ void histogram1D(const int width, const int height, const unsigned char *inputIm
     //cout << "FUNC7\n";
     // Copy the output back to host
     memoryTimer.start();
-    if ( (devRetVal = cudaMemcpy(reinterpret_cast< void *>(darkGrayImage), devDarkGrayImage, pixel_numbers * sizeof(unsigned char), cudaMemcpyDeviceToHost)) != cudaSuccess ) {
+    if ( (devRetVal = cudaMemcpy(reinterpret_cast< void *>(grayImage), devGrayImage, pixel_numbers * sizeof(unsigned char), cudaMemcpyDeviceToHost)) != cudaSuccess ) {
         cerr << "Impossible to copy devC to host." << endl;
         return 1;
     }
