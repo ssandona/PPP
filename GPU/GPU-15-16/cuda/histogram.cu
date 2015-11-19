@@ -22,7 +22,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
 
 
     __shared__ unsigned int localHistogram[HISTOGRAM_SIZE];
-    unsigned int globalIdx = j + (width * i);
+    unsigned int globalIdx = threadIdx.x + (blockDim.x * threadIdx.y);
     localHistogram[globalIdx] = histogram[globalIdx];
     __syncthreads();
 
