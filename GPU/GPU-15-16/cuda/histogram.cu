@@ -21,10 +21,10 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
 
 
 
-    __shared__ unsigned int localHistogram[HISTOGRAM_SIZE];
+    /*__shared__ unsigned int localHistogram[HISTOGRAM_SIZE];
     unsigned int globalIdx = threadIdx.x + (blockDim.x * threadIdx.y);
     localHistogram[globalIdx] = histogram[globalIdx];
-    __syncthreads();
+    __syncthreads();*/
 
 
     if(j >= width || i >= height) return;
@@ -39,11 +39,13 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     //}
     grayImage[(i * width) + j] = static_cast< unsigned char >(grayPix);
 
-    //localHistogram[static_cast< unsigned int >(grayPix)]+=1;
+    /*//localHistogram[static_cast< unsigned int >(grayPix)]+=1;
     atomicAdd((unsigned int *)&localHistogram[static_cast< unsigned int >(grayPix)], 1);
     __syncthreads();
     //histogram[globalIdx]+=localHistogram[globalIdx];
-    atomicAdd((unsigned int *)&histogram[globalIdx], localHistogram[globalIdx]);
+    atomicAdd((unsigned int *)&histogram[globalIdx], localHistogram[globalIdx]);*/
+
+    atomicAdd((unsigned int *)&histogram[globalIdx], 1);
 
 }
 
