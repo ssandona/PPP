@@ -13,6 +13,7 @@ using std::setprecision;
 const int HISTOGRAM_SIZE = 256;
 const unsigned int B_WIDTH = 16;
 const unsigned int B_HEIGHT = 16;
+const int WARP_SIZE = 32;
 
 __global__ void histogram1DKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram) {
 
@@ -21,13 +22,15 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
 
     if(j >= width || i >= height) return;
 
-    unsigned int globalIdx = threadIdx.x + (blockDim.x * threadIdx.y);
-    unsigned int warpid = globalIdx / warpSize;
+    int k;
 
-    __shared__ unsigned int localHistogram[warpSize][HISTOGRAM_SIZE];
+    unsigned int globalIdx = threadIdx.x + (blockDim.x * threadIdx.y);
+    unsigned int warpid = globalIdx / WARP_SIZE;
+
+    __shared__ unsigned int localHistogram[WARP_SIZE][HISTOGRAM_SIZE];
 
     if(warpid == 0){
-        for(k = 0; k < warpSize; k++) {
+        for(k = 0; k < WARP_SIZE; k++) {
             localHistogram[k][globalIdx]=histogram[globalIdx];
         }
     }
@@ -52,12 +55,12 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
 
     if(warpid == 0) {
         int s = 0;
-        for(k = 0; k < warpSize; k++) {
+        for(k = 0; k < WARP_SIZE; k++) {
             s += localHistogram[k][globalIdx];
         }
 
         //histogram[globalIdx]+=localHistogram[globalIdx];
-        atomicAdd((unsigned int *)&histogram[globalIdx], localHistogram[globalIdx]);
+        atomicAdd((unsigned int *)&histogram[globalIdx], s);
     }
 
     //atomicAdd((unsigned int *)&histogram[static_cast< unsigned int >(grayPix)], 1);
