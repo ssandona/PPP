@@ -58,7 +58,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     
     __syncthreads();
     
-    atomicAdd((unsigned int *)&histogram[static_cast< unsigned int >(grayPix)], localHistogram[globalIdx]);
+    atomicAdd((unsigned int *)&histogram[static_cast< unsigned int >(globalIdx)], localHistogram[globalIdx]);
 
 }
 
