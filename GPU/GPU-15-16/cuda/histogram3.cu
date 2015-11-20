@@ -46,7 +46,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
     //}
     grayImage[(i * width) + j] = static_cast< unsigned char >(grayPix);
-   // localHistogram[static_cast< unsigned int >(grayPix)][globalIdx]+=1;
+    localHistogram[static_cast< unsigned int >(grayPix)][globalIdx]+=1;
 
     __syncthreads();
 
