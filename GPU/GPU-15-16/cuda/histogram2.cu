@@ -37,13 +37,20 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     float grayPix = 0.0f;
     int k,z;
 
+    float r = static_cast< float >(localImagePortion[globalIdx]);
+    float g = static_cast< float >(localImagePortion[globalIdx + (B_WIDTH * B_HEIGHT)]);
+    float b = static_cast< float >(localImagePortion[globalIdx] + 2*(B_WIDTH * B_HEIGHT));
+    grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
+    grayImage[(i * width) + j] = static_cast< unsigned char >(grayPix);
+
+
     for(k=0;k<B_HEIGHT;k++){
         for(z=0;z<B_WIDTH;z++){
-            float r = static_cast< float >(localImagePortion[(k * width) + z]);
-            float g = static_cast< float >(localImagePortion[(width * height) + (k * width) + z]);
-            float b = static_cast< float >(localImagePortion[(2 * width * height) + (k * width) + z]);
+            grayPix = 0.0f;
+            r = static_cast< float >(localImagePortion[(k * B_WIDTH) + z]);
+            g = static_cast< float >(localImagePortion[(B_WIDTH * B_HEIGHT) + (k * B_WIDTH) + z]);
+            b = static_cast< float >(localImagePortion[(2 * B_WIDTH * B_HEIGHT) + (k * B_WIDTH) + z]);
             grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
-            grayImage[(i * width) + j] = static_cast< unsigned char >(grayPix);
             if(static_cast< unsigned int >(grayPix) == globalIdx)
                 localHistogram[globalIdx]+=1;
         }
