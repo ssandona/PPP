@@ -9,20 +9,12 @@ image05		9 (0.00%)			0.268766 0.863 0.493	0.003211 72.247 41.284		138.67	83.7
 image06		4206 (0.00%)			0.531381 0.863 0.493	0.005860 78.290 44.737		100.82	90.67
 	
 
-[ssa223@fs0 bin]$ ./darkerSeq /home/ssa223/project/GPU/images/image00.png
-0.002138 0.858 0.490
-[ssa223@fs0 bin]$ ./darkerSeq /home/ssa223/project/GPU/images/image01.jpg
+histogram
 
-[ssa223@fs0 bin]$ ./darkerSeq /home/ssa223/project/GPU/images/image02.jpg
+Image		Pixels above the threshold	Seq			Par				Speedup	
 
-[ssa223@fs0 bin]$ ./darkerSeq /home/ssa223/project/GPU/images/image03.jpg
+image00		324 (0.04%)			0.001925 0.817 1.089	0.000213 7.374 9.832		9.03
 
-[ssa223@fs0 bin]$ ./darkerSeq /home/ssa223/project/GPU/images/image04.jpg
 
-[ssa223@fs0 bin]$ ./darkerSeq /home/ssa223/project/GPU/images/image05.jpg
 
-[ssa223@fs0 bin]$ ./darkerSeq /home/ssa223/project/GPU/images/image06.jpg
-
-[ssa223@fs0 bin]$ ./darkerSeq /home/ssa223/project/GPU/images/image07.jpg
-The input must be a color image.
 
