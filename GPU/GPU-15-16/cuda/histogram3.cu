@@ -59,7 +59,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     int s7=0;
     int s8=0;
 
-    /*for(k=0;k<HISTOGRAM_SIZE;k++){
+    for(k=0;k<B_WIDTH*B_HEIGHT;k++){
         s1+=localHistogram[globalIdx][k];
         s2+=localHistogram[globalIdx+ B_WIDTH*B_HEIGHT][k];
         s3+=localHistogram[globalIdx+ 2*(B_WIDTH*B_HEIGHT)][k];
@@ -76,7 +76,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     atomicAdd((unsigned int *)&histogram[globalIdx+ 4*(B_WIDTH*B_HEIGHT)], s5);
     atomicAdd((unsigned int *)&histogram[globalIdx+ 5*(B_WIDTH*B_HEIGHT)], s6);
     atomicAdd((unsigned int *)&histogram[globalIdx+ 6*(B_WIDTH*B_HEIGHT)], s7);
-    atomicAdd((unsigned int *)&histogram[globalIdx+ 7*(B_WIDTH*B_HEIGHT)], s8);*/
+    atomicAdd((unsigned int *)&histogram[globalIdx+ 7*(B_WIDTH*B_HEIGHT)], s8);
 
 }
 
