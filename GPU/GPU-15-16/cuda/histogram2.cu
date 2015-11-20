@@ -34,7 +34,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     localImagePortion[globalIdx + 2*(B_WIDTH * B_HEIGHT)] = inputImage[(2 * width * height) + (i * width) + j];
     __syncthreads();
 
-    float grayPix = 0.0f;
+    /*float grayPix = 0.0f;
     int k,z;
 
     float r = static_cast< float >(localImagePortion[globalIdx]);
@@ -56,7 +56,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
         }
     }
     
-    __syncthreads();
+    __syncthreads();*/
     
     atomicAdd((unsigned int *)&histogram[globalIdx], localHistogram[globalIdx]);
 
