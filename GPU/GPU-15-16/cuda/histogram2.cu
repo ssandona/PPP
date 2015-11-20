@@ -29,11 +29,15 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
 
     __shared__ unsigned int localHistogram[WARP_SIZE][HISTOGRAM_SIZE];
 
-    if(warpid == 0){
+    /*if(warpid == 0){
         for(k = 0; k < WARP_SIZE; k++) {
             localHistogram[k][globalIdx]=histogram[globalIdx];
         }
+    }*/
+    for(k = 0; k < WARP_SIZE; k++) {
+        localHistogram[k][globalIdx] = histogram[globalIdx];
     }
+
     __syncthreads();
 
 
@@ -53,15 +57,15 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     localHistogram[warpid][static_cast< unsigned int >(grayPix)] += 1;
     __syncthreads();
 
-    if(warpid == 0) {
-        int s = 0;
-        for(k = 0; k < WARP_SIZE; k++) {
-            s += localHistogram[k][globalIdx];
-        }
 
-        //histogram[globalIdx]+=localHistogram[globalIdx];
-        atomicAdd((unsigned int *)&histogram[globalIdx], s);
+    int s = 0;
+    for(k = 0; k < WARP_SIZE; k++) {
+        s += localHistogram[k][globalIdx];
     }
+
+    //histogram[globalIdx]+=localHistogram[globalIdx];
+    atomicAdd((unsigned int *)&histogram[globalIdx], s);
+    
 
     //atomicAdd((unsigned int *)&histogram[static_cast< unsigned int >(grayPix)], 1);
 
