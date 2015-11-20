@@ -12,7 +12,7 @@ using std::setprecision;
 
 const int HISTOGRAM_SIZE = 256;
 const unsigned int B_WIDTH = 16;
-const unsigned int B_HEIGHT = 16;
+const unsigned int B_HEIGHT = 8;
 
 __global__ void histogram1DKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram) {
 
@@ -50,11 +50,14 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
 
     __syncthreads();
 
-    int s=0;
+    int s1=0;
+    int s2=0;
     for(k=0;k<HISTOGRAM_SIZE;k++){
-        s+=localHistogram[globalIdx][k];
+        s1+=localHistogram[globalIdx][k];
+        s2+=localHistogram[globalIdx+ B_WIDTH*B_HEIGHT][k];
     }
-    atomicAdd((unsigned int *)&histogram[globalIdx], s);
+    atomicAdd((unsigned int *)&histogram[globalIdx], s1);
+    atomicAdd((unsigned int *)&histogram[globalIdx+ B_WIDTH*B_HEIGHT], s2);
 
 }
 
