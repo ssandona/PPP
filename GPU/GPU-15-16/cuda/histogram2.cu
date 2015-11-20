@@ -51,7 +51,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
             g = static_cast< float >(localImagePortion[(B_WIDTH * B_HEIGHT) + (k * B_WIDTH) + z]);
             b = static_cast< float >(localImagePortion[(2 * B_WIDTH * B_HEIGHT) + (k * B_WIDTH) + z]);
             grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
-            if(static_cast< unsigned int >(grayPix) != globalIdx)
+            if(static_cast< unsigned int >(grayPix) == globalIdx)
                 localHistogram[globalIdx]+=1;
         }
     }
