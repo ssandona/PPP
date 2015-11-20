@@ -22,47 +22,43 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     if(j >= width || i >= height) return;
 
     unsigned int globalIdx = threadIdx.x + (blockDim.x * threadIdx.y);
-    unsigned int warpid = globalIdx / warpSize;
 
-    __shared__ unsigned int localHistogram[warpSize][HISTOGRAM_SIZE];
+    //attention for images with sizes not multiple of 16
 
-    if(warpid == 0){
-        for(k = 0; k < warpSize; k++) {
-            localHistogram[k][globalIdx]=histogram[globalIdx];
-        }
-    }
+    __shared__ unsigned char localImagePortion[B_WIDTH*B_HEIGHT*3];
+    __shared__ unsigned int localHistogram[HISTOGRAM_SIZE];
+    
+    localHistogram[globalIdx] = histogram[globalIdx];
+    localImagePortion[globalIdx] = inputImage[(i * width) + j];
+    localImagePortion[globalIdx + (B_WIDTH * B_HEIGHT)] = inputImage[(width * height) + (i * width) + j];
+    localImagePortion[globalIdx + 2*(B_WIDTH * B_HEIGHT)] = inputImage[(2 * width * height) + (i * width) + j];
     __syncthreads();
 
+    /*float grayPix = 0.0f;
+    int k,z;
 
-
-
-    float grayPix = 0.0f;
-    //if(blockIdx.x >= 10) {
-    float r = static_cast< float >(inputImage[(i * width) + j]);
-    float g = static_cast< float >(inputImage[(width * height) + (i * width) + j]);
-    float b = static_cast< float >(inputImage[(2 * width * height) + (i * width) + j]);
-
+    float r = static_cast< float >(localImagePortion[globalIdx]);
+    float g = static_cast< float >(localImagePortion[globalIdx + (B_WIDTH * B_HEIGHT)]);
+    float b = static_cast< float >(localImagePortion[globalIdx + 2*(B_WIDTH * B_HEIGHT)]);
     grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
-    //}
-    grayImage[(i * width) + j] = static_cast< unsigned char >(grayPix);
+    grayImage[(i * width) + j] = static_cast< unsigned char >(grayPix);*/
 
-    //localHistogram[static_cast< unsigned int >(grayPix)]+=1;
-    localHistogram[warpid][static_cast< unsigned int >(grayPix)] += 1;
-    __syncthreads();
 
-    if(warpid == 0) {
-        int s = 0;
-        for(k = 0; k < warpSize; k++) {
-            s += localHistogram[k][globalIdx];
+    for(k=0;k<B_HEIGHT;k++){
+        for(z=0;z<B_WIDTH;z++){
+            grayPix = 0.0f;
+            r = static_cast< float >(localImagePortion[(k * B_WIDTH) + z]);
+            g = static_cast< float >(localImagePortion[(B_WIDTH * B_HEIGHT) + (k * B_WIDTH) + z]);
+            b = static_cast< float >(localImagePortion[(2 * B_WIDTH * B_HEIGHT) + (k * B_WIDTH) + z]);
+            grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
+            if(static_cast< unsigned int >(grayPix) == globalIdx)
+                localHistogram[globalIdx]+=1;
         }
-
-        //histogram[globalIdx]+=localHistogram[globalIdx];
-        atomicAdd((unsigned int *)&histogram[globalIdx], localHistogram[globalIdx]);
     }
-
-    //atomicAdd((unsigned int *)&histogram[static_cast< unsigned int >(grayPix)], 1);
-
-    //atomicAdd((unsigned int *)&histogram[globalIdx], 1);
+    
+    __syncthreads();
+    
+    atomicAdd((unsigned int *)&histogram[globalIdx], localHistogram[globalIdx]);
 
 }
 
@@ -179,3 +175,4 @@ int histogram1D(const int width, const int height, const unsigned char *inputIma
     cudaFree(devGrayImage);
     return 0;
 }
+
