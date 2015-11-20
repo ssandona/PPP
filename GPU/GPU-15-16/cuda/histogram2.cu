@@ -29,9 +29,9 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     __shared__ unsigned int localHistogram[HISTOGRAM_SIZE];
     
     localHistogram[globalIdx] = histogram[globalIdx];
-    localImagePortion[globalIdx] = inputImage[(i * width) + j]);
-    localImagePortion[globalIdx + (B_WIDTH * B_HEIGHT)] = inputImage[(width * height) + (i * width) + j]);
-    localImagePortion[globalIdx + 2*(B_WIDTH * B_HEIGHT)] = inputImage[(2 * width * height) + (i * width) + j]);
+    localImagePortion[globalIdx] = inputImage[(i * width) + j];
+    localImagePortion[globalIdx + (B_WIDTH * B_HEIGHT)] = inputImage[(width * height) + (i * width) + j];
+    localImagePortion[globalIdx + 2*(B_WIDTH * B_HEIGHT)] = inputImage[(2 * width * height) + (i * width) + j];
     __syncthreads();
 
     float grayPix = 0.0f;
