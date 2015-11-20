@@ -13,7 +13,7 @@ histogram
 
 Image		Pixels above the threshold	Seq			Par				Speedup	
 
-image00		324 (0.04%)			0.001925 0.817 1.089	0.000213 7.374 9.832
+image00		324 (0.04%)			0.001925 0.817 1.089	0.000213 7.374 9.832		9.03
 
 
 
