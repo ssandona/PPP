@@ -25,11 +25,13 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
 
     //attention for images with sizes not multiple of 16
 
-    __shared__ unsigned char localImagePortion[B_WIDTH * B_HEIGHT * 3];
+    //__shared__ unsigned char localImagePortion[B_WIDTH * B_HEIGHT * 3];
     __shared__ unsigned int localHistogram[HISTOGRAM_SIZE][B_WIDTH * B_HEIGHT];
 
+    int k;
+
     for(k = 0; k < HISTOGRAM_SIZE; k++) {
-        localHistogram[k][globalIdx]==histogram[k];
+        localHistogram[k][globalIdx]=histogram[k];
 
     }
     
