@@ -11,8 +11,8 @@ using std::fixed;
 using std::setprecision;
 
 const int HISTOGRAM_SIZE = 256;
-const unsigned int B_WIDTH = 16;
-const unsigned int B_HEIGHT = 8;
+const unsigned int B_WIDTH = 8;
+const unsigned int B_HEIGHT = 4;
 
 __global__ void histogram1DKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram) {
 
@@ -52,12 +52,31 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
 
     int s1=0;
     int s2=0;
+    int s3=0;
+    int s4=0;
+    int s5=0;
+    int s6=0;
+    int s7=0;
+    int s8=0;
+
     for(k=0;k<HISTOGRAM_SIZE;k++){
         s1+=localHistogram[globalIdx][k];
         s2+=localHistogram[globalIdx+ B_WIDTH*B_HEIGHT][k];
+        s3+=localHistogram[globalIdx+ 2*(B_WIDTH*B_HEIGHT)][k];
+        s4+=localHistogram[globalIdx+ 3*(B_WIDTH*B_HEIGHT)][k];
+        s5+=localHistogram[globalIdx+ 4*(B_WIDTH*B_HEIGHT)][k];
+        s6+=localHistogram[globalIdx+ 5*(B_WIDTH*B_HEIGHT)][k];
+        s7+=localHistogram[globalIdx+ 6*(B_WIDTH*B_HEIGHT)][k];
+        s8+=localHistogram[globalIdx+ 7*(B_WIDTH*B_HEIGHT)][k];
     }
     atomicAdd((unsigned int *)&histogram[globalIdx], s1);
     atomicAdd((unsigned int *)&histogram[globalIdx+ B_WIDTH*B_HEIGHT], s2);
+    atomicAdd((unsigned int *)&histogram[globalIdx+ B_WIDTH*B_HEIGHT], s3);
+    atomicAdd((unsigned int *)&histogram[globalIdx+ 2*(B_WIDTH*B_HEIGHT)], s4);
+    atomicAdd((unsigned int *)&histogram[globalIdx+ 3*(B_WIDTH*B_HEIGHT)], s5);
+    atomicAdd((unsigned int *)&histogram[globalIdx+ 4*(B_WIDTH*B_HEIGHT)], s6);
+    atomicAdd((unsigned int *)&histogram[globalIdx+ 5*(B_WIDTH*B_HEIGHT)], s7);
+    atomicAdd((unsigned int *)&histogram[globalIdx+ 6*(B_WIDTH*B_HEIGHT)], s8);
 
 }
 
