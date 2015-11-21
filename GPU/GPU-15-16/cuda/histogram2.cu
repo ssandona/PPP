@@ -35,7 +35,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
         }
     }*/
     for(k = 0; k < WARP_SIZE; k++) {
-        localHistogram[k][globalIdx] = histogram[globalIdx];
+        localHistogram[k][globalIdx] = 0;
     }
 
     __syncthreads();
