@@ -59,9 +59,9 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
 
 
     int s = 0;
-    for(k = 0; k < WARP_SIZE; k++) {
+    /*for(k = 0; k < WARP_SIZE; k++) {
         s += localHistogram[k][globalIdx];
-    }
+    }*/
 
     //histogram[globalIdx]+=localHistogram[globalIdx];
     atomicAdd((unsigned int *)&histogram[globalIdx], s);
