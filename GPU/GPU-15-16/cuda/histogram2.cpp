@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-	cout << "result on " << string(argv[1]) + ".gray.2.par.bmp").c_str());
+	cout << "result on " <<  ((string(argv[1]) + ".gray.2.par.bmp").c_str());
 	// Save output
 	grayImage.save(("" + string(argv[1]) + ".gray.2.par.bmp").c_str());
 	histogramImage.save(("" + string(argv[1]) + ".hist.2.par.bmp").c_str());
