@@ -41,13 +41,12 @@ int main(int argc, char *argv[]) {
 
 	memset(reinterpret_cast< void * >(histogram), 0, HISTOGRAM_SIZE * sizeof(unsigned int));
 	
+
 	int r=histogram1D(inputImage.width(), inputImage.height(), inputImage.data(), grayImage.data(), histogram);
 	if(r==1){
 		cout << "ERROR\n";
 		return 1;
 	}
-
-	cout << "DENNIS\n";
 
 
 	for ( int i = 0; i < HISTOGRAM_SIZE; i++ ) {
@@ -55,8 +54,6 @@ int main(int argc, char *argv[]) {
 			max = histogram[i];
 		}
 	}
-
-	cout << "DENNIS2\n";
 
 	for ( int x = 0; x < HISTOGRAM_SIZE * BAR_WIDTH; x += BAR_WIDTH ) {
 		unsigned int value = HISTOGRAM_SIZE - ((histogram[x / BAR_WIDTH] * HISTOGRAM_SIZE) / max);
@@ -73,7 +70,6 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-	cout << "result on " <<  ((string(argv[1]) + ".gray.2.par.bmp").c_str());
 	// Save output
 	grayImage.save(("" + string(argv[1]) + ".gray.2.par.bmp").c_str());
 	histogramImage.save(("" + string(argv[1]) + ".hist.2.par.bmp").c_str());
