@@ -49,7 +49,7 @@ __global__ void histogram1DKernel_1(const int width, const int height, const uns
 
 }
 
-__global__ void histogram1DKernel_2(unsigned int *histogram, unsigned int *subHistogram) {
+__global__ void histogram1DKernel_2(const int width, const int height, unsigned int *histogram, unsigned int *subHistogram) {
 
     unsigned int i = blockIdx.y * blockDim.y + threadIdx.y;
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
@@ -60,7 +60,7 @@ __global__ void histogram1DKernel_2(unsigned int *histogram, unsigned int *subHi
 
     unsigned int inBlockIdx = threadIdx.x + (blockDim.x * threadIdx.y);
 
-    for(k = 0; k < B_WIDTH * B_HEIGHT) {
+    for(k = 0; k < B_WIDTH * B_HEIGHT;k++) {
         histogram[inBlockIdx] = subHistogram[k][inBlockIdx];
     }
 
@@ -73,7 +73,7 @@ int histogram1D(const int width, const int height, const unsigned char *inputIma
     unsigned char *devInputImage = 0;
     unsigned char *devGrayImage = 0;
     unsigned int *devHistogram = 0;
-    unsigned int *subHistogram = 0;
+    unsigned int *devSubHistogram = 0;
 
     int pixel_numbers;
 
@@ -156,8 +156,8 @@ int histogram1D(const int width, const int height, const unsigned char *inputIma
         return 1;
     }
 
-    dim3 gridSize(1, HISTOGRAM_SIZE);
-    histogram1DKernel_2 <<< gridSize, blockSize >>>(devHistogram,devSubHistogram);
+    gridSize(1, HISTOGRAM_SIZE);
+    histogram1DKernel_2 <<< gridSize, blockSize >>>(width, height, devHistogram,devSubHistogram);
     cudaDeviceSynchronize();
     kernelTimer.stop();
     //cout << "FUNC6\n";
