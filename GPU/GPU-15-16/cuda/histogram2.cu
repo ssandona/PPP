@@ -49,6 +49,11 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     //}
     grayImage[(i * width) + j] = static_cast< unsigned char >(grayPix);
 
+    //localHistogram[static_cast< unsigned int >(grayPix)]+=1;
+    //localHistogram[warpid][static_cast< unsigned int >(grayPix)] += 1;
+    localHistogram[inWarpId][static_cast< unsigned int >(grayPix)] += 1;
+    __syncthreads();
+
     /*//localHistogram[static_cast< unsigned int >(grayPix)]+=1;
     atomicAdd((unsigned int *)&localHistogram[static_cast< unsigned int >(grayPix)], 1);
     __syncthreads();
