@@ -60,9 +60,16 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     //histogram[globalIdx]+=localHistogram[globalIdx];
     atomicAdd((unsigned int *)&histogram[globalIdx], localHistogram[globalIdx]);*/
 
-    atomicAdd((unsigned int *)&histogram[static_cast< unsigned int >(grayPix)], 1);
+    //atomicAdd((unsigned int *)&histogram[static_cast< unsigned int >(grayPix)], 1);
 
     //atomicAdd((unsigned int *)&histogram[globalIdx], 1);
+
+    int s = 0;
+    for(k = 0; k < WARP_SIZE; k++) {
+        s += localHistogram[k][inBlockIdx];
+    }
+
+    atomicAdd((unsigned int *)&histogram[inBlockIdx], s);
 
 }
 
