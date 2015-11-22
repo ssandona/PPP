@@ -45,7 +45,7 @@ __global__ void histogram1DKernel_1(const int width, const int height, const uns
     atomicAdd((unsigned int *)&localHistogram[static_cast< unsigned int >(grayPix)], 1);
     __syncthreads();
 
-    subHistogram[static_cast< unsigned int >(grayPix)+ HISTOGRAM_SIZE* indexOfBlock] += 1;
+    subHistogram[static_cast< unsigned int >(grayPix)+ HISTOGRAM_SIZE* indexOfBlock] += localHistogram[inBlockIdx];
 
 }
 
