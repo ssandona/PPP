@@ -41,8 +41,8 @@ int main(int argc, char *argv[]) {
 
 	memset(reinterpret_cast< void * >(histogram), 0, HISTOGRAM_SIZE * sizeof(unsigned int));
 	
-
-	int r=histogram1D(inputImage.width(), inputImage.height(), inputImage.data(), grayImage.data(), histogram);
+	int r=0;
+	//int r=histogram1D(inputImage.width(), inputImage.height(), inputImage.data(), grayImage.data(), histogram);
 	if(r==1){
 		cout << "ERROR\n";
 		return 1;
