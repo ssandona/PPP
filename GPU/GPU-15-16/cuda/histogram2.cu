@@ -31,7 +31,11 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
 
     __shared__ unsigned int localHistogram[WARP_SIZE][HISTOGRAM_SIZE];
 
+    for(k = 0; k < WARP_SIZE; k++) {
+        localHistogram[k][inBlockIdx] = 0;
+    }
 
+    __syncthreads();
 
     
 
