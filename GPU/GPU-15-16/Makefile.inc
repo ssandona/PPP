@@ -6,7 +6,7 @@ INCLUDES	:= -I"$(PROJ_BASE)/include"
 CUDA_LIBS	:= -L"$(CUDA_INSTALL_PATH)/lib64/"
 
 
-NVCCFLAGS	:= -arch compute_20 -code sm_20 --ptxas-options=-v
+NVCCFLAGS	:= -arch compute_20 -code sm_20 --ptxas-options=-v --resource-usage
 ifneq ($(debug), 1)
 	CFLAGS		:= -std=c++0x -O3 -g0 -Wall
 	NVCCFLAGS	+= -O3
@@ -16,7 +16,7 @@ else
 endif
 
 LDFLAGS         := -lm -lX11 -lpthread
-CUDA_LDFLAGS	:= $(LDFLAGS) -lrt -lcudart
+CUDA_LDFLAGS	:= $(LDFLAGS) -lrt -lcudart 
 
 CC		:= g++
 NVCC	:= nvcc
