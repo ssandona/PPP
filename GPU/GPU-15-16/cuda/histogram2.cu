@@ -23,23 +23,18 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
 
     if(j >= width || i >= height) return;
 
-    int k;
-
+    __shared__ unsigned int localHistogram[HISTOGRAM_SIZE];
     unsigned int inBlockIdx = threadIdx.x + (blockDim.x * threadIdx.y);
-    //unsigned int globalIdx = j + (width * i);
-    unsigned int warpid = inBlockIdx / WARP_SIZE;
-    //unsigned int inWarpId = inBlockIdx % WARP_SIZE;
-
-    __shared__ unsigned int localHistogram[WARPS][HISTOGRAM_SIZE];
-
-    for(k = 0; k < WARPS; k++) {
-        localHistogram[k][inBlockIdx] = 0;
-    }
-
+    localHistogram[inBlockIdx] = 0;
     __syncthreads();
 
+    
 
+    //unsigned int globalIdx = j + (width * i);
+    //unsigned int warpid = inBlockIdx / WARP_SIZE;
+    //unsigned int inWarpId = inBlockIdx % WARP_SIZE;
 
+    
     float grayPix = 0.0f;
     //if(blockIdx.x >= 10) {
     float r = static_cast< float >(inputImage[(i * width) + j]);
@@ -50,16 +45,11 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     //}
     grayImage[(i * width) + j] = static_cast< unsigned char >(grayPix);
 
-    atomicAdd((unsigned int *)&localHistogram[warpid][static_cast< unsigned int >(grayPix)], 1);
+
+    atomicAdd((unsigned int *)&localHistogram[static_cast< unsigned int >(grayPix)], 1);
     __syncthreads();
 
-
-    int s = 0;
-    for(k = 0; k < WARPS; k++) {
-        s += localHistogram[k][inBlockIdx];
-    }
-
-    atomicAdd((unsigned int *)&histogram[inBlockIdx], s);
+    atomicAdd((unsigned int *)&histogram[inBlockIdx], localHistogram[inBlockIdx]);
 
 }
 
