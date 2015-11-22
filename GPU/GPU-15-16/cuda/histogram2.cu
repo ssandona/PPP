@@ -37,7 +37,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
 
     __syncthreads();
 
-    
+
 
     float grayPix = 0.0f;
     //if(blockIdx.x >= 10) {
@@ -60,7 +60,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     //histogram[globalIdx]+=localHistogram[globalIdx];
     atomicAdd((unsigned int *)&histogram[globalIdx], localHistogram[globalIdx]);*/
 
-    atomicAdd((unsigned int *)&histogram[static_cast< unsigned int >(grayPix)], 1);
+    //atomicAdd((unsigned int *)&histogram[static_cast< unsigned int >(grayPix)], 1);
 
     //atomicAdd((unsigned int *)&histogram[globalIdx], 1);
 
