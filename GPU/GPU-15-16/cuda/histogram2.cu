@@ -14,7 +14,7 @@ const int HISTOGRAM_SIZE = 256;
 const unsigned int B_WIDTH = 16;
 const unsigned int B_HEIGHT = 16;
 const int WARP_SIZE = 32;
-const int WARPS=8
+const int WARPS=8;
 
 __global__ void histogram1DKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram) {
 
