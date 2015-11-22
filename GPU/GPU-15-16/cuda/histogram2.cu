@@ -15,7 +15,7 @@ const unsigned int B_WIDTH = 16;
 const unsigned int B_HEIGHT = 16;
 const int WARP_SIZE = 32;
 
-__global__ void histogram1DKernel_1(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int **subHistogram) {
+__global__ void histogram1DKernel_1(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *subHistogram) {
 
     unsigned int i = blockIdx.y * blockDim.y + threadIdx.y;
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
@@ -45,11 +45,11 @@ __global__ void histogram1DKernel_1(const int width, const int height, const uns
     atomicAdd((unsigned int *)&localHistogram[static_cast< unsigned int >(grayPix)], 1);
     __syncthreads();
 
-    subHistogram[indexOfBlock][static_cast< unsigned int >(grayPix)] += 1;
+    subHistogram[static_cast< unsigned int >(grayPix)+ HISTOGRAM_SIZE* indexOfBlock] += 1;
 
 }
 
-__global__ void histogram1DKernel_2(const int width, const int height, unsigned int *histogram, unsigned int **subHistogram) {
+__global__ void histogram1DKernel_2(const int width, const int height, unsigned int *histogram, unsigned int *subHistogram) {
 
     unsigned int i = blockIdx.y * blockDim.y + threadIdx.y;
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
@@ -62,7 +62,7 @@ __global__ void histogram1DKernel_2(const int width, const int height, unsigned 
 
     int s=0;
     for(k = 0; k < B_WIDTH * B_HEIGHT;k++) {
-        s+= subHistogram[k][inBlockIdx];
+        s+= subHistogram[inBlockIdx + k*HISTOGRAM_SIZE];
     }
     histogram[inBlockIdx]=s;
 
