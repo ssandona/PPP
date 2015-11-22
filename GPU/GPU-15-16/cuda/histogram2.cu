@@ -15,7 +15,7 @@ const unsigned int B_WIDTH = 16;
 const unsigned int B_HEIGHT = 16;
 const int WARP_SIZE = 32;
 
-__global__ void histogram1DKernel_1(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *subHistogram) {
+__global__ void histogram1DKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram) {
 
     unsigned int i = blockIdx.y * blockDim.y + threadIdx.y;
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
@@ -25,11 +25,18 @@ __global__ void histogram1DKernel_1(const int width, const int height, const uns
     int k;
 
     unsigned int inBlockIdx = threadIdx.x + (blockDim.x * threadIdx.y);
-    unsigned int indexOfBlock = blockIdx.x + (gridDim.x * blockIdx.y);
+    unsigned int globalIdx = j + (width * i);
+    unsigned int warpid = inBlockIdx / WARP_SIZE;
+    unsigned int inWarpId = inBlockIdx % WARP_SIZE;
 
-    __shared__ unsigned int localHistogram[HISTOGRAM_SIZE];
-    localHistogram[inBlockIdx] = 0;
+    __shared__ unsigned int localHistogram[WARP_SIZE][HISTOGRAM_SIZE];
+
+    for(k = 0; k < WARP_SIZE; k++) {
+        localHistogram[k][inBlockIdx] = 0;
+    }
+
     __syncthreads();
+
 
 
     float grayPix = 0.0f;
@@ -42,29 +49,16 @@ __global__ void histogram1DKernel_1(const int width, const int height, const uns
     //}
     grayImage[(i * width) + j] = static_cast< unsigned char >(grayPix);
 
-    atomicAdd((unsigned int *)&localHistogram[static_cast< unsigned int >(grayPix)], 1);
+    localHistogram[inWarpId][static_cast< unsigned int >(grayPix)] += 1;
     __syncthreads();
 
-    subHistogram[static_cast< unsigned int >(grayPix)+ HISTOGRAM_SIZE* indexOfBlock] += localHistogram[inBlockIdx];
 
-}
-
-__global__ void histogram1DKernel_2(const int width, const int height, unsigned int *histogram, unsigned int *subHistogram) {
-
-    unsigned int i = blockIdx.y * blockDim.y + threadIdx.y;
-    unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
-
-    if(j >= width || i >= height) return;
-
-    int k;
-
-    unsigned int inBlockIdx = threadIdx.x + (blockDim.x * threadIdx.y);
-
-    int s=0;
-    for(k = 0; k < B_WIDTH * B_HEIGHT;k++) {
-        s+= subHistogram[inBlockIdx + k*HISTOGRAM_SIZE];
+    int s = 0;
+    for(k = 0; k < WARP_SIZE; k++) {
+        s += localHistogram[k][inBlockIdx];
     }
-    histogram[inBlockIdx]=s;
+
+    atomicAdd((unsigned int *)&histogram[inBlockIdx], s);
 
 }
 
@@ -75,7 +69,6 @@ int histogram1D(const int width, const int height, const unsigned char *inputIma
     unsigned char *devInputImage = 0;
     unsigned char *devGrayImage = 0;
     unsigned int *devHistogram = 0;
-    unsigned int *devSubHistogram = 0;
 
     int pixel_numbers;
 
@@ -91,9 +84,6 @@ int histogram1D(const int width, const int height, const unsigned char *inputIma
     // Convert the input image to grayscale and make it darker
     //*outputImage = new unsigned char[pixel_numbers];
 
-    unsigned int grid_width = static_cast< unsigned int >(ceil(width / static_cast< float >(B_WIDTH)));
-    unsigned int grid_height = static_cast< unsigned int >(ceil(height / static_cast< float >(B_HEIGHT)));
-
     //cout << "FUNC2\n";
     // Allocate CUDA memory
     if ( (devRetVal = cudaMalloc(reinterpret_cast< void ** >(&devInputImage), pixel_numbers * 3 * sizeof(unsigned char))) != cudaSuccess ) {
@@ -106,11 +96,6 @@ int histogram1D(const int width, const int height, const unsigned char *inputIma
     }
 
     if ( (devRetVal = cudaMalloc(reinterpret_cast< void ** >(&devHistogram), HISTOGRAM_SIZE * sizeof(unsigned int))) != cudaSuccess ) {
-        cerr << "Impossible to allocate device memory for histogram." << endl;
-        return 1;
-    }
-
-    if ( (devRetVal = cudaMalloc(reinterpret_cast< void ** >(&devSubHistogram), HISTOGRAM_SIZE * grid_width * grid_height * sizeof(unsigned int))) != cudaSuccess ) {
         cerr << "Impossible to allocate device memory for histogram." << endl;
         return 1;
     }
@@ -143,23 +128,15 @@ int histogram1D(const int width, const int height, const unsigned char *inputIma
     //cout << "Image size (w,h): (" << width << ", " << height << ")\n";
     //cout << "Grid size (w,h): (" << grid_width << ", " << grid_height << ")\n";
 
-
+    unsigned int grid_width = static_cast< unsigned int >(ceil(width / static_cast< float >(B_WIDTH)));
+    unsigned int grid_height = static_cast< unsigned int >(ceil(height / static_cast< float >(B_HEIGHT)));
     // Execute the kernel
     dim3 gridSize(grid_width, grid_height);
     dim3 blockSize(B_WIDTH, B_HEIGHT);
 
     kernelTimer.start();
     //cout << "FUNC5\n";
-    histogram1DKernel_1 <<< gridSize, blockSize >>>(width, height, devInputImage, devGrayImage, devSubHistogram);
-    cudaDeviceSynchronize();
-
-    if ( (devRetVal = cudaGetLastError()) != cudaSuccess ) {
-        cerr << "Uh, the kernel had some kind of issue: " << cudaGetErrorString(devRetVal) << endl;
-        return 1;
-    }
-
-    dim3 gridSize2(1, HISTOGRAM_SIZE);
-    histogram1DKernel_2 <<< gridSize2, blockSize >>>(width, height, devHistogram,devSubHistogram);
+    histogram1DKernel <<< gridSize, blockSize >>>(width, height, devInputImage, devGrayImage, devHistogram);
     cudaDeviceSynchronize();
     kernelTimer.stop();
     //cout << "FUNC6\n";
