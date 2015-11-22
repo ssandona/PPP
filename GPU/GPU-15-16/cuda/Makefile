@@ -28,5 +28,6 @@ smooth: smooth.cpp smooth.cu
 clean:
 	rm -f $(PROJ_BASE)/bin/darkerCUDA
 	rm -f $(PROJ_BASE)/bin/histogramCUDA
+	rm -f $(PROJ_BASE)/bin/histogram2CUDA
 	rm -f $(PROJ_BASE)/bin/smoothCUDA
 
