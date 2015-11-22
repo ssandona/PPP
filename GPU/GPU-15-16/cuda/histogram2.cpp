@@ -48,12 +48,16 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
+	cout << "DENNIS\n";
+
 
 	for ( int i = 0; i < HISTOGRAM_SIZE; i++ ) {
 		if ( histogram[i] > max ) {
 			max = histogram[i];
 		}
 	}
+
+	cout << "DENNIS2\n";
 
 	for ( int x = 0; x < HISTOGRAM_SIZE * BAR_WIDTH; x += BAR_WIDTH ) {
 		unsigned int value = HISTOGRAM_SIZE - ((histogram[x / BAR_WIDTH] * HISTOGRAM_SIZE) / max);
