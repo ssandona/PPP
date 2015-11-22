@@ -20,30 +20,15 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     unsigned int i = blockIdx.y * blockDim.y + threadIdx.y;
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
 
+
+
+    /*__shared__ unsigned int localHistogram[HISTOGRAM_SIZE];
+    unsigned int globalIdx = threadIdx.x + (blockDim.x * threadIdx.y);
+    localHistogram[globalIdx] = histogram[globalIdx];
+    __syncthreads();*/
+
+
     if(j >= width || i >= height) return;
-
-    int k;
-
-    unsigned int inBlockIdx = threadIdx.x + (blockDim.x * threadIdx.y);
-    unsigned int globalIdx = j + (width * i);
-    unsigned int warpid = inBlockIdx / WARP_SIZE;
-    unsigned int inWarpId = inBlockIdx % WARP_SIZE;
-
-    __shared__ unsigned int localHistogram[WARP_SIZE][HISTOGRAM_SIZE];
-
-    /*if(warpid == 0){
-        for(k = 0; k < WARP_SIZE; k++) {
-            localHistogram[k][inBlockIdx]=histogram[inBlockIdx];
-        }
-    }*/
-    for(k = 0; k < WARP_SIZE; k++) {
-        localHistogram[k][inBlockIdx] = 0;
-    }
-
-    __syncthreads();
-
-
-
 
     float grayPix = 0.0f;
     //if(blockIdx.x >= 10) {
@@ -55,24 +40,15 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     //}
     grayImage[(i * width) + j] = static_cast< unsigned char >(grayPix);
 
-    //localHistogram[static_cast< unsigned int >(grayPix)]+=1;
-    //localHistogram[warpid][static_cast< unsigned int >(grayPix)] += 1;
-    localHistogram[inWarpId][static_cast< unsigned int >(grayPix)] += 1;
+    /*//localHistogram[static_cast< unsigned int >(grayPix)]+=1;
+    atomicAdd((unsigned int *)&localHistogram[static_cast< unsigned int >(grayPix)], 1);
     __syncthreads();
+    //histogram[globalIdx]+=localHistogram[globalIdx];
+    atomicAdd((unsigned int *)&histogram[globalIdx], localHistogram[globalIdx]);*/
 
+    atomicAdd((unsigned int *)&histogram[static_cast< unsigned int >(grayPix)], 1);
 
-    int s = 0;
-    /*for(k = 0; k < WARP_SIZE; k++) {
-        s += localHistogram[k][inBlockIdx];
-    }*/
-
-    //histogram[inBlockIdx]+=localHistogram[inBlockIdx];
-    //atomicAdd((unsigned int *)&histogram[inBlockIdx], s);
-    
-
-    //atomicAdd((unsigned int *)&histogram[static_cast< unsigned int >(grayPix)], 1);
-
-    //atomicAdd((unsigned int *)&histogram[inBlockIdx], 1);
+    //atomicAdd((unsigned int *)&histogram[globalIdx], 1);
 
 }
 
