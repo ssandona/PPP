@@ -20,15 +20,20 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     unsigned int i = blockIdx.y * blockDim.y + threadIdx.y;
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
 
-
-
-    /*__shared__ unsigned int localHistogram[HISTOGRAM_SIZE];
-    unsigned int globalIdx = threadIdx.x + (blockDim.x * threadIdx.y);
-    localHistogram[globalIdx] = histogram[globalIdx];
-    __syncthreads();*/
-
-
     if(j >= width || i >= height) return;
+
+    int k;
+
+    unsigned int inBlockIdx = threadIdx.x + (blockDim.x * threadIdx.y);
+    unsigned int globalIdx = j + (width * i);
+    unsigned int warpid = inBlockIdx / WARP_SIZE;
+    unsigned int inWarpId = inBlockIdx % WARP_SIZE;
+
+    __shared__ unsigned int localHistogram[WARP_SIZE][HISTOGRAM_SIZE];
+
+
+
+    
 
     float grayPix = 0.0f;
     //if(blockIdx.x >= 10) {
