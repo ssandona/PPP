@@ -20,10 +20,6 @@ histogram2: histogram2.cpp histogram2.cu
 	$(LINKER) -o $(PROJ_BASE)/bin/histogram2CUDA histogram2.cpp histogram2.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./histogram2.o
 
-histogram3: histogram3.cpp histogram3.cu
-	$(NVCC) -c histogram3.cu $(INCLUDES) $(NVCCFLAGS)
-	$(LINKER) -o $(PROJ_BASE)/bin/histogram3CUDA histogram3.cpp histogram3.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
-	rm -f ./histogram3.o
 
 smooth: smooth.cpp smooth.cu
 	$(NVCC) -c smooth.cu $(INCLUDES) $(NVCCFLAGS)
