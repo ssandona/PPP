@@ -15,7 +15,7 @@ const unsigned int B_HEIGHT = 16;
 const unsigned int NTHREADS = 256;
 const int WARP_SIZE = 32;
 const int WARPS = 8;
-const int NBLOCKS = 30;
+const int NBLOCKS = 1024;
 
 __global__ void histogram1DKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram) {
 
