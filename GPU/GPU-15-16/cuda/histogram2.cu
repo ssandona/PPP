@@ -31,9 +31,9 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
 
     __shared__ unsigned int localHistogram[WARP_SIZE][HISTOGRAM_SIZE];
 
-    for(k = 0; k < WARP_SIZE; k++) {
+    /*for(k = 0; k < WARP_SIZE; k++) {
         localHistogram[k][inBlockIdx] = 0;
-    }
+    }*/
 
     __syncthreads();
 
@@ -53,10 +53,10 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     __syncthreads();
 
 
-    int s = 1;
+    /*int s = 1;
     for(k = 0; k < WARP_SIZE; k++) {
         s += localHistogram[k][inBlockIdx];
-    }
+    }*/
 
     //atomicAdd((unsigned int *)&histogram[inBlockIdx], s);
 
