@@ -69,7 +69,7 @@ __global__ void histogram1DKernel_2(const int width, const int height, unsigned 
 
     int k;
     for(k=startIdx;k<startIdx+B_HEIGHT*B_WIDTH;k++){
-        localHistogram[inBlockIdx]+=!(grayImage[k]-static_cast< unsigned int >inBlockIdx);
+        localHistogram[inBlockIdx]+=!(grayImage[k]-static_cast< unsigned int >(inBlockIdx));
     }
 
     /*float grayPix = 0.0f;
