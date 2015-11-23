@@ -39,9 +39,10 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     //unsigned int inWarpId = inBlockIdx % WARP_SIZE;
     float grayPix = 0.0f;
     float r, g, b;
+    int k;
 
 
-    for(k = globalIdx; k < globalIdx+pixelPerThread || k<width*height; k++ {
+    for(k = globalIdx; k < globalIdx+pixelPerThread || k<width*height; k++) {
         r = static_cast< float >(inputImage[k]);
         g = static_cast< float >(inputImage[(width * height) + k]);
         b = static_cast< float >(inputImage[(2 * width * height) + k]);
