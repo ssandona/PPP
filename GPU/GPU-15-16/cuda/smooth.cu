@@ -10,6 +10,9 @@ using std::endl;
 using std::fixed;
 using std::setprecision;
 
+const unsigned int B_WIDTH = 16;
+const unsigned int B_HEIGHT = 16;
+
 __constant__ float filter[] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2.0f, 1.0f, 1.0f, 2.0f, 3.0f, 2.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
 
 
@@ -53,7 +56,7 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
 }
 
 
-void triangularSmooth(const int width, const int height, const int spectrum, unsigned char *inputImage, unsigned char *smoothImage) {
+int triangularSmooth(const int width, const int height, const int spectrum, unsigned char *inputImage, unsigned char *smoothImage) {
     cudaError_t devRetVal = cudaSuccess;
     unsigned char *devInputImage = 0;
     unsigned char *devSmoothImage = 0;

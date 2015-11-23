@@ -13,7 +13,7 @@ using std::setprecision;
 using std::string;
 
 
-extern void triangularSmooth(const int width, const int height, const int spectrum, unsigned char * inputImage, unsigned char * smoothImage);
+extern int triangularSmooth(const int width, const int height, const int spectrum, unsigned char * inputImage, unsigned char * smoothImage);
 
 
 int main(int argc, char *argv[]) {
@@ -33,8 +33,12 @@ int main(int argc, char *argv[]) {
 	// Apply the triangular smooth
 	CImg< unsigned char > smoothImage = CImg< unsigned char >(inputImage.width(), inputImage.height(), 1, inputImage.spectrum());
 
-	triangularSmooth(inputImage.width(), inputImage.height(), inputImage.spectrum(), inputImage.data(), smoothImage.data());
+	int r=triangularSmooth(inputImage.width(), inputImage.height(), inputImage.spectrum(), inputImage.data(), smoothImage.data());
 
+	if(r==1){
+		cout<<"ERR";
+		return 1;
+	}
 	// Save output
 	smoothImage.save(("" + string(argv[1]) + ".smooth.par.bmp").c_str());
 
