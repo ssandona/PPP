@@ -1,4 +1,3 @@
-
 #include <Timer.hpp>
 #include <iostream>
 #include <iomanip>
@@ -14,6 +13,7 @@ const int HISTOGRAM_SIZE = 256;
 const unsigned int B_WIDTH = 16;
 const unsigned int B_HEIGHT = 16;
 const int WARP_SIZE = 32;
+const int WARPS=8;
 
 __global__ void histogram1DKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram) {
 
@@ -22,23 +22,18 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
 
     if(j >= width || i >= height) return;
 
-    int k;
-
+    __shared__ unsigned int localHistogram[HISTOGRAM_SIZE];
     unsigned int inBlockIdx = threadIdx.x + (blockDim.x * threadIdx.y);
-    unsigned int globalIdx = j + (width * i);
-    unsigned int warpid = inBlockIdx / WARP_SIZE;
-    unsigned int inWarpId = inBlockIdx % WARP_SIZE;
-
-    __shared__ unsigned int localHistogram[WARP_SIZE][HISTOGRAM_SIZE];
-
-    /*for(k = 0; k < WARP_SIZE; k++) {
-        localHistogram[k][inBlockIdx] = 0;
-    }*/
-
+    localHistogram[inBlockIdx] = 0;
     __syncthreads();
 
+    
 
+    //unsigned int globalIdx = j + (width * i);
+    //unsigned int warpid = inBlockIdx / WARP_SIZE;
+    //unsigned int inWarpId = inBlockIdx % WARP_SIZE;
 
+    
     float grayPix = 0.0f;
     //if(blockIdx.x >= 10) {
     float r = static_cast< float >(inputImage[(i * width) + j]);
@@ -49,16 +44,11 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     //}
     grayImage[(i * width) + j] = static_cast< unsigned char >(grayPix);
 
-    localHistogram[inWarpId][static_cast< unsigned int >(grayPix)] += 1;
+
+    atomicAdd((unsigned int *)&localHistogram[static_cast< unsigned int >(grayPix)], 1);
     __syncthreads();
 
-
-    /*int s = 1;
-    for(k = 0; k < WARP_SIZE; k++) {
-        s += localHistogram[k][inBlockIdx];
-    }*/
-
-    //atomicAdd((unsigned int *)&histogram[inBlockIdx], s);
+    atomicAdd((unsigned int *)&histogram[inBlockIdx], localHistogram[inBlockIdx]);
 
 }
 
