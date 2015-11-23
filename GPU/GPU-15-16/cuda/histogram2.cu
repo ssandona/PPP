@@ -64,14 +64,12 @@ __global__ void histogram1DKernel_2(const int width, const int height, unsigned 
     unsigned int inBlockIdx = threadIdx.x + (blockDim.x * threadIdx.y);
     localHistogram[inBlockIdx] = 0;
     __syncthreads();
-
-    unsigned int startIdx = j + (width * i);
     //unsigned int warpid = inBlockIdx / WARP_SIZE;
     //unsigned int inWarpId = inBlockIdx % WARP_SIZE;
 
     int k;
     for(k=startIdx;k<startIdx+B_HEIGHT*B_WIDTH;k++){
-        localHistogram[inBlockIdx]+=!(grayImage[k]-inBlockIdx)
+        localHistogram[inBlockIdx]+=!(grayImage[k]-static_cast< unsigned int >inBlockIdx);
     }
 
     /*float grayPix = 0.0f;
@@ -168,7 +166,7 @@ int histogram1D(const int width, const int height, const unsigned char *inputIma
     //cout << "FUNC5\n";
     histogram1DKernel <<< gridSize, blockSize >>>(width, height, devInputImage, devGrayImage);
     cudaDeviceSynchronize();
-    histogram1DKernel <<< gridSize, blockSize >>>(width, height, devGrayImage, devHistogram);
+    histogram1DKernel_2 <<< gridSize, blockSize >>>(width, height, devGrayImage, devHistogram);
     cudaDeviceSynchronize();
     kernelTimer.stop();
     //cout << "FUNC6\n";
