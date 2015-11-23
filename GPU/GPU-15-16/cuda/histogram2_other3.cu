@@ -12,40 +12,51 @@ using std::setprecision;
 const int HISTOGRAM_SIZE = 256;
 const unsigned int B_WIDTH = 16;
 const unsigned int B_HEIGHT = 16;
+const unsigned int NTHREADS = 256;
 const int WARP_SIZE = 32;
-const int WARPS=8;
+const int WARPS = 8;
+const int NBLOCKS = 64;
 
 __global__ void histogram1DKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram) {
+
+    unsigned int pixelPerBlock = ceil(width * height / (float)(NBLOCKS*NBLOCKS));
+    unsigned int pixelPerThread = ceil(pixelPerBlock / (float)(NTHREADS));
+    pixelPerBlock = pixelPerThread * NTHREADS;
 
     unsigned int i = blockIdx.y * blockDim.y + threadIdx.y;
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
 
-    if(j >= width || i >= height) return;
+    unsigned int globalIdx = pixelPerBlock * blockIdx.x + pixelPerThread * threadIdx.x;
+
+    if(globalIdx >= width * height) return;
 
     __shared__ unsigned int localHistogram[HISTOGRAM_SIZE];
-    unsigned int inBlockIdx = threadIdx.x + (blockDim.x * threadIdx.y);
+    unsigned int inBlockIdx = threadIdx.x;
     localHistogram[inBlockIdx] = 0;
     __syncthreads();
 
-    
+
 
     //unsigned int globalIdx = j + (width * i);
     //unsigned int warpid = inBlockIdx / WARP_SIZE;
     //unsigned int inWarpId = inBlockIdx % WARP_SIZE;
-
-    
     float grayPix = 0.0f;
-    //if(blockIdx.x >= 10) {
-    float r = static_cast< float >(inputImage[(i * width) + j]);
-    float g = static_cast< float >(inputImage[(width * height) + (i * width) + j]);
-    float b = static_cast< float >(inputImage[(2 * width * height) + (i * width) + j]);
-
-    grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
-    //}
-    grayImage[(i * width) + j] = static_cast< unsigned char >(grayPix);
+    float r, g, b;
+    int k;
 
 
-    atomicAdd((unsigned int *)&localHistogram[static_cast< unsigned int >(grayPix)], 1);
+    for(k = globalIdx; k < globalIdx+pixelPerThread || k<width*height; k++) {
+        r = static_cast< float >(inputImage[k]);
+        g = static_cast< float >(inputImage[(width * height) + k]);
+        b = static_cast< float >(inputImage[(2 * width * height) + k]);
+
+        grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
+        //}
+        grayImage[globalIdx] = static_cast< unsigned char >(grayPix);
+
+
+        atomicAdd((unsigned int *)&localHistogram[static_cast< unsigned int >(grayPix)], 1);
+    }
     __syncthreads();
 
     atomicAdd((unsigned int *)&histogram[inBlockIdx], localHistogram[inBlockIdx]);
@@ -118,11 +129,12 @@ int histogram1D(const int width, const int height, const unsigned char *inputIma
     //cout << "Image size (w,h): (" << width << ", " << height << ")\n";
     //cout << "Grid size (w,h): (" << grid_width << ", " << grid_height << ")\n";
 
+
     unsigned int grid_width = static_cast< unsigned int >(ceil(width / static_cast< float >(B_WIDTH)));
     unsigned int grid_height = static_cast< unsigned int >(ceil(height / static_cast< float >(B_HEIGHT)));
     // Execute the kernel
-    dim3 gridSize(grid_width, grid_height);
-    dim3 blockSize(B_WIDTH, B_HEIGHT);
+    dim3 gridSize(NBLOCKS, NTHREADS);
+    dim3 blockSize(B, B_HEIGHT);
 
     kernelTimer.start();
     //cout << "FUNC5\n";
