@@ -54,11 +54,11 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
 
 
     int s = 1;
-    /*for(k = 0; k < WARP_SIZE; k++) {
+    for(k = 0; k < WARP_SIZE; k++) {
         s += localHistogram[k][inBlockIdx];
-    }*/
+    }
 
-    atomicAdd((unsigned int *)&histogram[inBlockIdx], s);
+    //atomicAdd((unsigned int *)&histogram[inBlockIdx], s);
 
 }
 
