@@ -162,10 +162,11 @@ int histogram1D(const int width, const int height, const unsigned char *inputIma
     dim3 gridSize(grid_width, grid_height);
     dim3 blockSize(B_WIDTH, B_HEIGHT);
 
-    kernelTimer.start();
+    
     //cout << "FUNC5\n";
     histogram1DKernel <<< gridSize, blockSize >>>(width, height, devInputImage, devGrayImage);
     cudaDeviceSynchronize();
+    kernelTimer.start();
     histogram1DKernel_2 <<< gridSize, blockSize >>>(width, height, devGrayImage, devHistogram);
     cudaDeviceSynchronize();
     kernelTimer.stop();
