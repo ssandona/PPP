@@ -15,17 +15,17 @@ const unsigned int B_HEIGHT = 16;
 const int WARP_SIZE = 32;
 const int WARPS=8;
 
-__global__ void histogram1DKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage) {
+__global__ void histogram1DKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram) {
 
     unsigned int i = blockIdx.y * blockDim.y + threadIdx.y;
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
 
     if(j >= width || i >= height) return;
 
-    /*__shared__ unsigned int localHistogram[HISTOGRAM_SIZE];
+    __shared__ unsigned int localHistogram[HISTOGRAM_SIZE];
     unsigned int inBlockIdx = threadIdx.x + (blockDim.x * threadIdx.y);
     localHistogram[inBlockIdx] = 0;
-    __syncthreads();*/
+    __syncthreads();
 
     
 
@@ -45,50 +45,8 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     grayImage[(i * width) + j] = static_cast< unsigned char >(grayPix);
 
 
-    /*atomicAdd((unsigned int *)&localHistogram[static_cast< unsigned int >(grayPix)], 1);
+    atomicAdd((unsigned int *)&localHistogram[static_cast< unsigned int >(grayPix)], 1);
     __syncthreads();
-
-    atomicAdd((unsigned int *)&histogram[inBlockIdx], localHistogram[inBlockIdx]);*/
-
-}
-
-__global__ void histogram1DKernel_2(const int width, const int height, unsigned char *grayImage, unsigned int *histogram) {
-
-    unsigned int i = blockIdx.y * blockDim.y + threadIdx.y;
-    unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
-
-    if(j >= width || i >= height) return;
-
-    __shared__ unsigned int localHistogram[HISTOGRAM_SIZE];
-    unsigned int inBlockIdx = threadIdx.x + (blockDim.x * threadIdx.y);
-    localHistogram[inBlockIdx] = 0;
-
-    __shared__ unsigned int localImage[B_HEIGHT*B_WIDTH];
-    //unsigned int globalIdx = (j+threadIdx.x) + (width * (i+threadIdx.y);
-    localImage[inBlockIdx] = grayImage[j + (width * i)];
-
-    __syncthreads();
-    //unsigned int warpid = inBlockIdx / WARP_SIZE;
-    //unsigned int inWarpId = inBlockIdx % WARP_SIZE;
-
-    int k;
-    for(k=0;k<B_HEIGHT*B_WIDTH;k++){
-        localHistogram[inBlockIdx]+=!(localImage[k]-static_cast< unsigned int >(inBlockIdx));
-    }
-
-    /*float grayPix = 0.0f;
-    //if(blockIdx.x >= 10) {
-    float r = static_cast< float >(inputImage[(i * width) + j]);
-    float g = static_cast< float >(inputImage[(width * height) + (i * width) + j]);
-    float b = static_cast< float >(inputImage[(2 * width * height) + (i * width) + j]);
-
-    grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
-    //}
-    grayImage[(i * width) + j] = static_cast< unsigned char >(grayPix);*/
-
-
-    /*atomicAdd((unsigned int *)&localHistogram[static_cast< unsigned int >(grayPix)], 1);
-    __syncthreads();*/
 
     atomicAdd((unsigned int *)&histogram[inBlockIdx], localHistogram[inBlockIdx]);
 
@@ -166,12 +124,9 @@ int histogram1D(const int width, const int height, const unsigned char *inputIma
     dim3 gridSize(grid_width, grid_height);
     dim3 blockSize(B_WIDTH, B_HEIGHT);
 
-    
-    //cout << "FUNC5\n";
-    histogram1DKernel <<< gridSize, blockSize >>>(width, height, devInputImage, devGrayImage);
-    cudaDeviceSynchronize();
     kernelTimer.start();
-    histogram1DKernel_2 <<< gridSize, blockSize >>>(width, height, devGrayImage, devHistogram);
+    //cout << "FUNC5\n";
+    histogram1DKernel <<< gridSize, blockSize >>>(width, height, devInputImage, devGrayImage, devHistogram);
     cudaDeviceSynchronize();
     kernelTimer.stop();
     //cout << "FUNC6\n";
