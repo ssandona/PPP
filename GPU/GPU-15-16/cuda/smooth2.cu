@@ -18,10 +18,24 @@ __constant__ float filter[] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2
 
 __global__ void triangularSmoothDKernel(const int width, const int height, const int spectrum, unsigned char *inputImage, unsigned char *smoothImage) {
 
-    unsigned sint i = blockIdx.y * blockDim.y + threadIdx.y;
-    unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
+    int i = blockIdx.y * blockDim.y + threadIdx.y;
+    int j = blockIdx.x * blockDim.x + threadIdx.x;
 
     if(j >= width || i >= height) return;
+
+    int globalIdx= threadIdx.x + (blockDim.x * threadIdx.y);
+
+    __shared__ unsigned char localImagePortion[(B_WIDTH * B_HEIGHT + (B_WIDTH*2 + B_HEIGHT*2)) * 3];
+
+    localImagePortion[globalIdx] = inputImage[(i * width) + j];
+    localImagePortion[globalIdx + (B_WIDTH * B_HEIGHT)] = inputImage[(width * height) + (i * width) + j];
+    localImagePortion[globalIdx + 2*(B_WIDTH * B_HEIGHT)] = inputImage[(2 * width * height) + (i * width) + j];
+    if(i==blockDim.y){
+        localImagePortion[globalIdx+blockDim.x] = inputImage[(i* (width+1)+j)];
+        localImagePortion[globalIdx + (B_WIDTH * B_HEIGHT)] = inputImage[(width * height) + (i * width) + j];
+
+    }
+    __syncthreads();
 
     for ( int z = 0; z < spectrum; z++ ) {
         unsigned int filterItem = 0;
@@ -42,7 +56,7 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
                     continue;
                 }
 
-                smoothPix += static_cast< float >(inputImage[(z * width * height) + (fy * width) + fx]) * filter[filterItem];
+                smoothPix += static_cast< float >(localImagePortion[(z * width * height) + (fy * width) + fx]) * filter[filterItem];
                 filterSum += filter[filterItem];
                 filterItem++;
             }

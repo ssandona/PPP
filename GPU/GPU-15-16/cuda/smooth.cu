@@ -18,17 +18,17 @@ __constant__ float filter[] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2
 
 __global__ void triangularSmoothDKernel(const int width, const int height, const int spectrum, unsigned char *inputImage, unsigned char *smoothImage) {
 
-    unsigned int i = blockIdx.y * blockDim.y + threadIdx.y;
-    unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
+    int i = blockIdx.y * blockDim.y + threadIdx.y;
+    int j = blockIdx.x * blockDim.x + threadIdx.x;
 
     if(j >= width || i >= height) return;
 
-    for (unsigned int z = 0; z < spectrum; z++ ) {
+    for ( int z = 0; z < spectrum; z++ ) {
         unsigned int filterItem = 0;
         float filterSum = 0.0f;
         float smoothPix = 0.0f;
 
-        for (unsigned int fy = i - 2; fy < i + 3; fy++ ) {
+        for (int fy = i - 2; fy < i + 3; fy++ ) {
             if ( fy < 0 ) {
                 filterItem += 5;
                 continue;
@@ -36,7 +36,7 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
                 break;
             }
 
-            for (unsigned int fx = j - 2; fx < j + 3; fx++ ) {
+            for ( int fx = j - 2; fx < j + 3; fx++ ) {
                 if ( (fx < 0) || (fx >= width) ) {
                     filterItem++;
                     continue;
