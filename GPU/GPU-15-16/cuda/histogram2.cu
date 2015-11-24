@@ -12,28 +12,22 @@ using std::setprecision;
 const int HISTOGRAM_SIZE = 256;
 const unsigned int B_WIDTH = 16;
 const unsigned int B_HEIGHT = 16;
-const int WARP_SIZE = 32;
-const int WARPS=8;
 
 __global__ void histogram1DKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram) {
 
     unsigned int i = blockIdx.y * blockDim.y + threadIdx.y;
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
 
+
+
+    /*__shared__ unsigned int localHistogram[HISTOGRAM_SIZE];
+    unsigned int globalIdx = threadIdx.x + (blockDim.x * threadIdx.y);
+    localHistogram[globalIdx] = histogram[globalIdx];
+    __syncthreads();*/
+
+
     if(j >= width || i >= height) return;
 
-    __shared__ unsigned int localHistogram[HISTOGRAM_SIZE];
-    unsigned int inBlockIdx = threadIdx.x + (blockDim.x * threadIdx.y);
-    localHistogram[inBlockIdx] = 0;
-    __syncthreads();
-
-    
-
-    //unsigned int globalIdx = j + (width * i);
-    //unsigned int warpid = inBlockIdx / WARP_SIZE;
-    //unsigned int inWarpId = inBlockIdx % WARP_SIZE;
-
-    
     float grayPix = 0.0f;
     //if(blockIdx.x >= 10) {
     float r = static_cast< float >(inputImage[(i * width) + j]);
@@ -44,11 +38,15 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     //}
     grayImage[(i * width) + j] = static_cast< unsigned char >(grayPix);
 
-
+    /*//localHistogram[static_cast< unsigned int >(grayPix)]+=1;
     atomicAdd((unsigned int *)&localHistogram[static_cast< unsigned int >(grayPix)], 1);
     __syncthreads();
+    //histogram[globalIdx]+=localHistogram[globalIdx];
+    atomicAdd((unsigned int *)&histogram[globalIdx], localHistogram[globalIdx]);*/
 
-    atomicAdd((unsigned int *)&histogram[inBlockIdx], localHistogram[inBlockIdx]);
+    atomicAdd((unsigned int *)&histogram[static_cast< unsigned int >(grayPix)], 1);
+
+    //atomicAdd((unsigned int *)&histogram[globalIdx], 1);
 
 }
 
