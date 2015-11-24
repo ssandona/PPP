@@ -18,7 +18,7 @@ __constant__ float filter[] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2
 
 __global__ void triangularSmoothDKernel(const int width, const int height, const int spectrum, unsigned char *inputImage, unsigned char *smoothImage) {
 
-    unsigned int i = blockIdx.y * blockDim.y + threadIdx.y;
+    unsigned sint i = blockIdx.y * blockDim.y + threadIdx.y;
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
 
     if(j >= width || i >= height) return;
