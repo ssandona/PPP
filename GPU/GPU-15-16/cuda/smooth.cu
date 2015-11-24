@@ -23,14 +23,12 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
 
     if(j >= width || i >= height) return;
 
-    unsigned int inBlockIdx = threadIdx.x + (blockDim.x * threadIdx.y);
-
     for ( int z = 0; z < spectrum; z++ ) {
         unsigned int filterItem = 0;
         float filterSum = 0.0f;
         float smoothPix = 0.0f;
 
-        for ( int fy = i - 2; fy < i + 3; fy++ ) {
+        for (int fy = i - 2; fy < i + 3; fy++ ) {
             if ( fy < 0 ) {
                 filterItem += 5;
                 continue;
@@ -51,7 +49,17 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
         }
 
         smoothPix /= filterSum;
-        smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(smoothPix + 0.5f);
+
+
+        if(y == 0 || x == 0) {
+                    if(z == 0) {
+                        smoothImage[(z * width * height) + (y * width) + x] = static_cast< unsigned char >(1.0f);
+                    } else {
+                        smoothImage[(z * width * height) + (y * width) + x] = static_cast< unsigned char >(0.0f);
+                    }
+                } else {
+                    smoothImage[(z * width * height) + (y * width) + x] = static_cast< unsigned char >(smoothPix + 0.5f);
+                }
     }
 }
 
