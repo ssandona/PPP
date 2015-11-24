@@ -113,7 +113,7 @@ int histogram1D(const int width, const int height, const unsigned char *inputIma
     //cout << "Image size (w,h): (" << width << ", " << height << ")\n";
     //cout << "Grid size (w,h): (" << grid_width << ", " << grid_height << ")\n";
 
-    unsigned int grid_width = static_cast< unsigned int >(ceil(width*height / static_cast< float >(THREAD_NUMBER)));
+    unsigned int grid_width = static_cast< unsigned int >(ceil((width*height) / static_cast< float >(THREAD_NUMBER)));
     //unsigned int grid_height = static_cast< unsigned int >(ceil(height / static_cast< float >(B_HEIGHT)));
     // Execute the kernel
     dim3 gridSize(grid_width, 1);
