@@ -15,11 +15,15 @@ const unsigned int THREAD_NUMBER = 256;
 __global__ void histogram1DKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram) {
 
     unsigned int globalIdx = threadIdx.x + (blockDim.x * blockIdx.x);
+
+    unsigned int i = blockIdx.y * blockDim.y + threadIdx.y;
+    unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
+
     if(globalIdx>=width*height) return;
 
     __shared__ unsigned int localHistogram[HISTOGRAM_SIZE];
     
-    //localHistogram[threadIdx.x] = 0;
+    localHistogram[threadIdx.x] = 0;
     __syncthreads();
 
     
@@ -29,11 +33,11 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     //unsigned int inWarpId = inBlockIdx % WARP_SIZE;
 
     
-    /*float grayPix = 0.0f;
+    float grayPix = 0.0f;
     //if(blockIdx.x >= 10) {
-    float r = static_cast< float >(inputImage[globalIdx]);
-    float g = static_cast< float >(inputImage[(width * height) + globalIdx]);
-    float b = static_cast< float >(inputImage[(2 * width * height) + globalIdx]);
+    float r = static_cast< float >(inputImage[(i * width) + j]);
+    float g = static_cast< float >(inputImage[(width * height) + (i * width) + j]);
+    float b = static_cast< float >(inputImage[(2 * width * height) + (i * width) + j]);
 
     grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
     //}
@@ -43,7 +47,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     atomicAdd((unsigned int *)&localHistogram[static_cast< unsigned int >(grayPix)], 1);
     __syncthreads();
 
-    atomicAdd((unsigned int *)&histogram[threadIdx.x], localHistogram[threadIdx.x]);*/
+    atomicAdd((unsigned int *)&histogram[threadIdx.x], localHistogram[threadIdx.x]);
 
 }
 
@@ -113,10 +117,9 @@ int histogram1D(const int width, const int height, const unsigned char *inputIma
     //cout << "Image size (w,h): (" << width << ", " << height << ")\n";
     //cout << "Grid size (w,h): (" << grid_width << ", " << grid_height << ")\n";
 
-    unsigned int grid_width = static_cast< unsigned int >(ceil((width*height) / static_cast< float >(THREAD_NUMBER)));
-    //unsigned int grid_height = static_cast< unsigned int >(ceil(height / static_cast< float >(B_HEIGHT)));
+    unsigned int grid_width = static_cast< unsigned int >(ceil(width / static_cast< float >(THREAD_NUMBER)));
     // Execute the kernel
-    dim3 gridSize(grid_width, 1);
+    dim3 gridSize(grid_width, height);
     dim3 blockSize(THREAD_NUMBER, 1);
 
     kernelTimer.start();
