@@ -18,8 +18,8 @@ __constant__ float filter[] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2
 
 __global__ void triangularSmoothDKernel(const int width, const int height, const int spectrum, unsigned char *inputImage, unsigned char *smoothImage) {
 
-    unsigned int i = blockIdx.y * blockDim.y + threadIdx.y;
-    unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
+    int i = blockIdx.y * blockDim.y + threadIdx.y;
+    int j = blockIdx.x * blockDim.x + threadIdx.x;
 
     if(j >= width || i >= height) return;
 
@@ -49,21 +49,7 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
         }
 
         smoothPix /= filterSum;
-
-
-        if(threadIdx.x == 0 || threadIdx.y == 0) {
-            //if(z == 0) {
-        		smoothImage[(z * width * height) + (i * width) + j] = inputImage[(z * width * height) + (i * width) + j];
-        		//static_cast< unsigned char >(smoothPix + 0.5f);
-                //smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(0.0f);
-            //} else {
-                //smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(0.0f);
-            //}
-        } else {
-            //smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(smoothPix + 0.5f);
-        	smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(1.0f);
-        }
-    }
+        smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(smoothPix + 0.5f);
 }
 
 
