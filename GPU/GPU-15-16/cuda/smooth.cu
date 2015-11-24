@@ -51,7 +51,7 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
         smoothPix /= filterSum;
 
 
-        if(i == 0 || j == 0) {
+        if(blockIdx.y == 0 || blockIdx.x == 0) {
             //if(z == 0) {
                 smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(1.0f);
             //} else {
