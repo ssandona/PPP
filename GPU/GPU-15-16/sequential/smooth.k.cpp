@@ -45,7 +45,7 @@ void triangularSmooth(const int width, const int height, const int spectrum, uns
 					}
 				}
 
-				smoothPix /= filterSum;z
+				smoothPix /= filterSum;
 				smoothImage[(z * width * height) + (y * width) + x] = static_cast< unsigned char >(smoothPix + 0.5f);
 			}
 		}
