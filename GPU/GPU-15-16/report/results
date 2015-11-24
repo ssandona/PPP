@@ -1,32 +1,43 @@
+darker
+
 Image		Pixels above threshold		Seq			Par				Speedup
 
-image00		111 (0.01%)			0.002138 0.858 0.490	0.000156 11.755 6.717		13.70
-image01		231 (0.00%)			0.021764 0.843 0.482	0.000351 52.267 29.867		62
-image02		135 (0.00%)			0.030811 0.838 0.479	0.000658 39.188 22.393		46.82
-image03		735 (0.00%)			0.204571 0.864 0.494	0.002287 77.255 44.146		89.44
-image04 	1503 (0.00%)			0.141341 0.831 0.475	0.001912 61.425 35.100		73.9
-image05		9 (0.00%)			0.268766 0.863 0.493	0.003211 72.247 41.284		83.7
-image06		4206 (0.00%)			0.531381 0.863 0.493	0.005860 78.290 44.737		90.67
+image00		111 (0.01%)					0.002138	0.000156		13.70
+image01		231 (0.00%)					0.021764	0.000351		62
+image02		135 (0.00%)					0.030811	0.000658		46.82
+image03		735 (0.00%)					0.204571	0.002287		89.44
+image04 	1503 (0.00%)				0.141341	0.001912		73.9
+image05		9 (0.00%)					0.268766	0.003211		83.7
+image06		4206 (0.00%)				0.531381	0.005860		90.67
 	
 
 histogram
 
-Image		Pixels above the threshold	Seq			Par				Speedup	
+Image		Pixels above threshold		Seq			Par				Speedup	
 
-image00		324 (0.04%)			0.001925 0.817 1.089	0.000101  		
-image04						0.118874		0.013887				
-image05						0.240826		0.009230				
-image06						0.46			0.024285 		
+image00		324 (0.04%)					0.001949	0.000100  		19.49		
+image01		12 (0.00%)					0.018946	0.002105		9
+image02		0 (0.00%)					0.026186	0.002558		10.23
+image03		24 (0.00%)					0.181148	0.011838		15.30
+image04		0 (0.00%)					0.119002	0.013888		8.56				
+image05		264 (0.03%)					0.248222	0.009223		26.91		
+image06		48 (0.01%)					0.466205	0.024215		19.25	
 
 
 smooth
 
-Image		Pixels above the threshold	Seq			Par				Speedup	
+Image		Pixels above threshold		Seq			Par				Speedup	
 
-images00	0 (0.00%)			0.061197		0.000786			77.85
-images01	0 (0.00%)			0.607604		0.006609			91.93
-images02	0 (0.00%)			0.858147		0.009223			93.04
-images03	0 (0.00%)			5.865732		0.061720			95.03
-images04	0 (0.00%)			4.233016		0.043625			97.03
-images05	0 (0.00%)			7.766216		0.081083			95.78
-images06	0 (0.00%)			16.743480		0.159923			104.69
+images00	0 (0.00%)					0.061197	0.000786		77.85
+images01	0 (0.00%)					0.607604	0.006609		91.93
+images02	0 (0.00%)					0.858147	0.009223		93.04
+images03	0 (0.00%)					5.865732	0.061720		95.03
+images04	0 (0.00%)					4.233016	0.043625		97.03
+images05	0 (0.00%)					7.766216	0.081083		95.78
+images06	0 (0.00%)					16.743480	0.159923		104.69
+
+Better 2d because we need square of pixels
+
+Consider an image processing algorithm. Some of these may be interested in lines, but most are interested in rectangular areas of the image (say, filters). If I make my threads 2D in a block, then all threads handling a certain rectangle end up on the same warp and can share memory efficiently, right?
+
+Whereas, if I organized threads 1D in a block, then threads handling a line (rather than a rectangular block) would be able to share memory.
