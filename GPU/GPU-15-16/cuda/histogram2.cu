@@ -29,7 +29,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     //unsigned int inWarpId = inBlockIdx % WARP_SIZE;
 
     
-    float grayPix = 0.0f;
+    /*float grayPix = 0.0f;
     //if(blockIdx.x >= 10) {
     float r = static_cast< float >(inputImage[globalIdx]);
     float g = static_cast< float >(inputImage[(width * height) + globalIdx]);
@@ -43,7 +43,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     atomicAdd((unsigned int *)&localHistogram[static_cast< unsigned int >(grayPix)], 1);
     __syncthreads();
 
-    atomicAdd((unsigned int *)&histogram[threadIdx.x], localHistogram[threadIdx.x]);
+    atomicAdd((unsigned int *)&histogram[threadIdx.x], localHistogram[threadIdx.x]);*/
 
 }
 
