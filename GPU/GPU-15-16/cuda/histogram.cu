@@ -9,7 +9,7 @@ using std::endl;
 using std::fixed;
 using std::setprecision;
 
-__constant__  int HISTOGRAM_SIZE = 256;
+const int HISTOGRAM_SIZE = 256;
 const unsigned int B_WIDTH = 16;
 const unsigned int B_HEIGHT = 16;
 const int WARP_SIZE = 32;
