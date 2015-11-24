@@ -52,14 +52,15 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
 
 
         if(i == 0 || j == 0) {
-                    if(z == 0) {
-                        smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(1.0f);
-                    } else {
-                        smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(0.0f);
-                    }
-                } else {
-                    smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(smoothPix + 0.5f);
-                }
+            //if(z == 0) {
+                smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(1.0f);
+            //} else {
+                //smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(0.0f);
+            //}
+        } else {
+            //smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(smoothPix + 0.5f);
+        	smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(0.0f);
+        }
     }
 }
 
