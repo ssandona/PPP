@@ -53,7 +53,8 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
 
         if(blockIdx.y == 0 || blockIdx.x == 0) {
             //if(z == 0) {
-                smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(0.0f);
+        		smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(smoothPix + 0.5f);
+                //smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(0.0f);
             //} else {
                 //smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(0.0f);
             //}
