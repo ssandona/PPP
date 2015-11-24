@@ -19,7 +19,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
 
     __shared__ unsigned int localHistogram[HISTOGRAM_SIZE];
     
-    localHistogram[threadIdx.x] = 0;
+    //localHistogram[threadIdx.x] = 0;
     __syncthreads();
 
     
