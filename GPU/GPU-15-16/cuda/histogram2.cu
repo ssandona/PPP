@@ -14,10 +14,14 @@ const unsigned int THREAD_NUMBER = 256;
 
 __global__ void histogram1DKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram) {
 
-    unsigned int globalIdx = threadIdx.x + (blockDim.x * blockIdx.x);
+    /*unsigned int globalIdx = threadIdx.x + (blockDim.x * blockIdx.x);
 
     unsigned int i = blockIdx.y * blockDim.y + threadIdx.y;
+    unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;*/
+
+    unsigned int i = blockIdx.y;
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
+    unsigned int globalIdx = j + (blockDim.x * gridDim.x * i);
 
     if(globalIdx>=width*height) return;
 
@@ -35,9 +39,9 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     
     float grayPix = 0.0f;
     //if(blockIdx.x >= 10) {
-    float r = static_cast< float >(inputImage[(i * width) + j]);
-    float g = static_cast< float >(inputImage[(width * height) + (i * width) + j]);
-    float b = static_cast< float >(inputImage[(2 * width * height) + (i * width) + j]);
+    float r = static_cast< float >(inputImage[globalIdx]);
+    float g = static_cast< float >(inputImage[(width * height) + globalIdx]);
+    float b = static_cast< float >(inputImage[(2 * width * height) + globalIdx]);
 
     grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
     //}
