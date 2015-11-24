@@ -25,22 +25,23 @@ __global__ void darkGrayKernel(const int width, const int height, const unsigned
     unsigned int j = blockIdx.y * blockDim.y + threadIdx.y;*/
 
     //M[i,j]
-    int i = blockIdx.y * blockDim.y + threadIdx.y;
+    int i = blockIdx.y * blockDim.y;
     int j = blockIdx.x * blockDim.x + threadIdx.x;
+    unsigned int globalIdx = j + (width * i);
 
 
     if(j >= width || i >= height) return;
 
     float grayPix = 0.0f;
     //if(blockIdx.x >= 10) {
-        float r = static_cast< float >(inputImage[(i * width) + j]);
-        float g = static_cast< float >(inputImage[(width * height) + (i * width) + j]);
-        float b = static_cast< float >(inputImage[(2 * width * height) + (i * width) + j]);
+        float r = static_cast< float >(inputImage[globalIdx]);
+        float g = static_cast< float >(inputImage[(width * height) + globalIdx]);
+        float b = static_cast< float >(inputImage[(2 * width * height) + globalIdx]);
 
         grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
         grayPix = (grayPix * 0.6f) + 0.5f;
     //}
-    darkGrayImage[(i * width) + j] = static_cast< unsigned char >(grayPix);
+    darkGrayImage[globalIdx] = static_cast< unsigned char >(grayPix);
 }
 
 
@@ -101,9 +102,9 @@ int darkGray(const int width, const int height, const unsigned char * inputImage
     //cout << "Image size (w,h): (" << width << ", " << height << ")\n";
     //cout << "Grid size (w,h): (" << grid_width << ", " << grid_height << ")\n";
 
-    unsigned int grid_width = static_cast< unsigned int >(ceil(width / static_cast< float >(THREAD_NUMBER)));
+    unsigned int grid_size = static_cast< unsigned int >(ceil(sqrt((width * height)/(float)256)));
     // Execute the kernel
-    dim3 gridSize(grid_width, height);
+    dim3 gridSize(grid_size, grid_size);
     dim3 blockSize(THREAD_NUMBER, 1);
 
     kernelTimer.start();
