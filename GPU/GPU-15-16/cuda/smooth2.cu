@@ -23,7 +23,7 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
 
     if(j >= width || i >= height) return;
 
-    unsigned int inBlockIdx = threadIdx.x + (blockDim.x * threadIdx.y);
+    int inBlockIdx = threadIdx.x + (blockDim.x * threadIdx.y);
     //unsigned int globalIdx = j + (width * i);
 
     __shared__ unsigned char localImagePortion[20 * 20 * 3];
@@ -70,7 +70,7 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
 
     __syncthreads();
 
-    const unsigned char example = 0;
+    //const unsigned char example = 0;
 
     for ( int z = 0; z < spectrum; z++ ) {
         unsigned int filterItem = 0;
@@ -98,8 +98,8 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
         }
 
         smoothPix /= filterSum;
-        //smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(smoothPix + 0.5f);
-        smoothImage[(z * width * height) + (i * width) + j] = example;
+        smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(smoothPix + 0.5f);
+        //smoothImage[(z * width * height) + (i * width) + j] = example;
 
         //smoothImage[(z * width * height) + (i * width) + j] = localImagePortion[(z * 20 * 20) + (inLocalPortionI * 20) + inLocalPortionJ];
     }
