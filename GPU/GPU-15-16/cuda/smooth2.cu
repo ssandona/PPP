@@ -101,7 +101,7 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
         //smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(smoothPix + 0.5f);
 
         smoothImage[(z * width * height) + (i * width) + j] = localImagePortion[(z * 20 * 20) + (inLocalPortionI * 20) + inLocalPortionJ];
-        if(z !=1) {
+        if(z !=1 || blockIdx.x<=16) {
             smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(0.0f);
 
         }
