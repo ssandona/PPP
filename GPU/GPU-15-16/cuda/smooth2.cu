@@ -30,7 +30,7 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
 
     //int topLeftPx=(globalIdx-2*width-2);
     int topLeftPxI=(blockIdx.y * blockDim.y)-2;
-    int topLeftPxY=(blockIdx.x * blockDim.x)-2;
+    int topLeftPxJ=(blockIdx.x * blockDim.x)-2;
 
     int pxAI=topLeftPxI+(inBlockIdx/20);
     int pxAJ=topLeftPxJ+(inBlockIdx%20);
@@ -64,7 +64,7 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
         float filterSum = 0.0f;
         float smoothPix = 0.0f;
 
-        for (int fy = i - 2, int localFy = inLocalPortionI-2 ; fy < i + 3; fy++, localFy++) {
+        for (int fy = i - 2, localFy = inLocalPortionI-2 ; fy < i + 3; fy++, localFy++) {
             if ( fy < 0 ) {
                 filterItem += 5;
                 continue;
@@ -72,7 +72,7 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
                 break;
             }
 
-            for ( int fx = j - 2, int localFx = inLocalPortionJ-2; fx < j + 3; fx++, localFx++) {
+            for ( int fx = j - 2, localFx = inLocalPortionJ-2; fx < j + 3; fx++, localFx++) {
                 if ( (fx < 0) || (fx >= width) ) {
                     filterItem++;
                     continue;
