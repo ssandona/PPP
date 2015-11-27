@@ -52,7 +52,7 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
         localImagePortion[imageIdx + 2 * 20 * 20] = inputImage[pxA + 2 * (B_WIDTH * B_HEIGHT)];
     }
 
-    int newInBlockIdx = inBlockIdx + 16 * 16;
+    /*int newInBlockIdx = inBlockIdx + 16 * 16;
 
     pxAI = topLeftPxI + (newInBlockIdx / 20);
     pxAJ = topLeftPxJ + (newInBlockIdx % 20);
@@ -66,7 +66,7 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
         localImagePortion[imageIdx] = inputImage[pxA];
         localImagePortion[imageIdx + 20 * 20] = inputImage[pxA + (B_WIDTH * B_HEIGHT)];
         localImagePortion[imageIdx + 2 * 20 * 20] = inputImage[pxA + 2 * (B_WIDTH * B_HEIGHT)];
-    }
+    }*/
 
     __syncthreads();
 
