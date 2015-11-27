@@ -58,10 +58,14 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
     pxAJ = topLeftPxJ + (newInBlockIdx % 20);
     pxA = pxAJ + (width * pxAI);
 
+    imageIdxI = pxAI - topLeftPxI;
+    imageIdxJ = pxAJ - topLeftPxJ;
+    imageIdx= imageIdxJ + (20*imageIdxI);
+
     if(pxAI >= 0 && pxAI < height && pxAJ >= 0 && pxAJ < width) {
-        localImagePortion[newInBlockIdx] = inputImage[pxA];
-        localImagePortion[newInBlockIdx + 20 * 20] = inputImage[pxA + (B_WIDTH * B_HEIGHT)];
-        localImagePortion[newInBlockIdx + 2 * 20 * 20] = inputImage[pxA + 2 * (B_WIDTH * B_HEIGHT)];
+        localImagePortion[imageIdx] = inputImage[pxA];
+        localImagePortion[imageIdx + 20 * 20] = inputImage[pxA + (B_WIDTH * B_HEIGHT)];
+        localImagePortion[imageIdx + 2 * 20 * 20] = inputImage[pxA + 2 * (B_WIDTH * B_HEIGHT)];
     }
 
     __syncthreads();
