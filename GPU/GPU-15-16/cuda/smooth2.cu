@@ -21,7 +21,7 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
     int i = blockIdx.y * blockDim.y + threadIdx.y;
     int j = blockIdx.x * blockDim.x + threadIdx.x;
 
-    if(j >= width || i >= height) return;
+    //if(j >= width || i >= height) return;
 
     int inBlockIdx = threadIdx.x + (blockDim.x * threadIdx.y);
     //unsigned int globalIdx = j + (width * i);
@@ -69,6 +69,8 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
     }
 
     __syncthreads();
+
+    if(j >= width || i >= height) return;
 
     //const unsigned char example = 0;
 
