@@ -62,46 +62,49 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
     imageIdxJ = pxAJ - topLeftPxJ;
     imageIdx = imageIdxJ + (20 * imageIdxI);
 
-    if(pxAI >= 0 && pxAI < height && pxAJ >= 0 && pxAJ < width && imageIdx<20*20) {
+    /*if(pxAI >= 0 && pxAI < height && pxAJ >= 0 && pxAJ < width && imageIdx<20*20) {
         localImagePortion[imageIdx] = inputImage[pxA];
         //localImagePortion[imageIdx + 20 * 20] = inputImage[pxA + (B_WIDTH * B_HEIGHT)];
         //localImagePortion[imageIdx + 2 * 20 * 20] = inputImage[pxA + 2 * (B_WIDTH * B_HEIGHT)];
-    }
+    }*/
 
     __syncthreads();
 
 
-        for ( int z = 0; z < spectrum; z++ ) {
-            unsigned int filterItem = 0;
-            float filterSum = 0.0f;
-            float smoothPix = 0.0f;
+    for ( int z = 0; z < spectrum; z++ ) {
+        unsigned int filterItem = 0;
+        float filterSum = 0.0f;
+        float smoothPix = 0.0f;
 
-            for (int fy = i - 2, localFy = inLocalPortionI - 2 ; fy < i + 3; fy++, localFy++) {
-                if ( fy < 0 ) {
-                    filterItem += 5;
-                    continue;
-                } else if ( fy == height ) {
-                    break;
-                }
-
-                for ( int fx = j - 2, localFx = inLocalPortionJ - 2; fx < j + 3; fx++, localFx++) {
-                    if ( (fx < 0) || (fx >= width) ) {
-                        filterItem++;
-                        continue;
-                    }
-
-                    smoothPix += static_cast< float >(localImagePortion[(z * 20 * 20) + (localFy * 20) + localFx]) * filter[filterItem];
-                    filterSum += filter[filterItem];
-                    filterItem++;
-                }
+        for (int fy = i - 2, localFy = inLocalPortionI - 2 ; fy < i + 3; fy++, localFy++) {
+            if ( fy < 0 ) {
+                filterItem += 5;
+                continue;
+            } else if ( fy == height ) {
+                break;
             }
 
-            smoothPix /= filterSum;
-            //smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(smoothPix + 0.5f);
+            for ( int fx = j - 2, localFx = inLocalPortionJ - 2; fx < j + 3; fx++, localFx++) {
+                if ( (fx < 0) || (fx >= width) ) {
+                    filterItem++;
+                    continue;
+                }
 
-            smoothImage[(z * width * height) + (i * width) + j] = localImagePortion[(z * 20 * 20) + (inLocalPortionI * 20) + inLocalPortionJ];
+                smoothPix += static_cast< float >(localImagePortion[(z * 20 * 20) + (localFy * 20) + localFx]) * filter[filterItem];
+                filterSum += filter[filterItem];
+                filterItem++;
+            }
+        }
+
+        smoothPix /= filterSum;
+        //smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(smoothPix + 0.5f);
+
+        smoothImage[(z * width * height) + (i * width) + j] = localImagePortion[(z * 20 * 20) + (inLocalPortionI * 20) + inLocalPortionJ];
+        if(z > 0) {
+            smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(0.0f)];
 
         }
+    }
 }
 
 
