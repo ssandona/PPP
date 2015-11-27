@@ -3,7 +3,7 @@ debug		:= 0
 include		../Makefile.inc
 
 
-all: clean histogram histogram2 smooth
+all: clean darker histogram histogram2 smooth smooth2
 
 darker: darker.cpp darker.cu
 	$(NVCC) -c darker.cu $(INCLUDES) $(NVCCFLAGS)
@@ -24,6 +24,11 @@ smooth: smooth.cpp smooth.cu
 	$(NVCC) -c smooth.cu $(INCLUDES) $(NVCCFLAGS)
 	$(LINKER) -o $(PROJ_BASE)/bin/smoothCUDA smooth.cpp smooth.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./smooth.o
+
+smooth: smooth2.cpp smooth2.cu
+	$(NVCC) -c smooth2.cu $(INCLUDES) $(NVCCFLAGS)
+	$(LINKER) -o $(PROJ_BASE)/bin/smooth2CUDA smooth2.cpp smooth2.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
+	rm -f ./smooth2.o
 
 clean:
 	rm -f $(PROJ_BASE)/bin/darkerCUDA

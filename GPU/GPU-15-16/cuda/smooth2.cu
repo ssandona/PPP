@@ -23,26 +23,48 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
 
     if(j >= width || i >= height) return;
 
-    int globalIdx= threadIdx.x + (blockDim.x * threadIdx.y);
+    unsigned int inBlockIdx = threadIdx.x + (blockDim.x * threadIdx.y);
+    //unsigned int globalIdx = j + (width * i);
 
-    __shared__ unsigned char localImagePortion[(B_WIDTH * B_HEIGHT + (B_WIDTH*2 + B_HEIGHT*2)) * 3];
+    __shared__ unsigned char localImagePortion[20*20 * 3];
 
-    localImagePortion[globalIdx] = inputImage[(i * width) + j];
-    localImagePortion[globalIdx + (B_WIDTH * B_HEIGHT)] = inputImage[(width * height) + (i * width) + j];
-    localImagePortion[globalIdx + 2*(B_WIDTH * B_HEIGHT)] = inputImage[(2 * width * height) + (i * width) + j];
-    if(i==blockDim.y){
-        localImagePortion[globalIdx+blockDim.x] = inputImage[(i* (width+1)+j)];
-        localImagePortion[globalIdx + (B_WIDTH * B_HEIGHT)] = inputImage[(width * height) + (i * width) + j];
+    //int topLeftPx=(globalIdx-2*width-2);
+    int topLeftPxI=(blockIdx.y * blockDim.y)-2;
+    int topLeftPxY=(blockIdx.x * blockDim.x)-2;
 
+    int pxAI=topLeftPxI+(inBlockIdx/20);
+    int pxAJ=topLeftPxJ+(inBlockIdx%20);
+    int pxA=pxAJ+(width*pxAI);
+
+    if(pxAI>=0 && pxAI<height && pxAJ>=0 && pxAJ<width){
+        localImagePortion[inBlockIdx]=inputImage[pxA];
+        localImagePortion[inBlockIdx+20*20]=inputImage[pxA+(B_WIDTH*B_HEIGHT)];
+        localImagePortion[inBlockIdx+2*20*20]=inputImage[pxA+2*(B_WIDTH*B_HEIGHT)];
     }
+
+    int newInBlockIdx=inBlockIdx+16*16;
+
+    pxAI=topLeftPxI+(newInBlockIdx/20);
+    pxAJ=topLeftPxJ+(newInBlockIdx%20);
+    pxA=pxAJ+(width*pxAI);
+
+    if(pxAI>=0 && pxAI<height && pxAJ>=0 && pxAJ<width){
+        localImagePortion[newInBlockIdx]=inputImage[pxA];
+        localImagePortion[newInBlockIdx+20*20]=inputImage[pxA+(B_WIDTH*B_HEIGHT)];
+        localImagePortion[newInBlockIdx+2*20*20]=inputImage[pxA+2*(B_WIDTH*B_HEIGHT)];
+    }
+
     __syncthreads();
+
+    int inLocalPortionI=threadIdx.y+2;
+    int inLocalPortionJ=threadIdx.x+2;
 
     for ( int z = 0; z < spectrum; z++ ) {
         unsigned int filterItem = 0;
         float filterSum = 0.0f;
         float smoothPix = 0.0f;
 
-        for (int fy = i - 2; fy < i + 3; fy++ ) {
+        for (int fy = i - 2, int localFy = inLocalPortionI-2 ; fy < i + 3; fy++, localFy++) {
             if ( fy < 0 ) {
                 filterItem += 5;
                 continue;
@@ -50,13 +72,13 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
                 break;
             }
 
-            for ( int fx = j - 2; fx < j + 3; fx++ ) {
+            for ( int fx = j - 2, int localFx = inLocalPortionJ-2; fx < j + 3; fx++, localFx++) {
                 if ( (fx < 0) || (fx >= width) ) {
                     filterItem++;
                     continue;
                 }
 
-                smoothPix += static_cast< float >(localImagePortion[(z * width * height) + (fy * width) + fx]) * filter[filterItem];
+                smoothPix += static_cast< float >(localImagePortion[(z * 20 * 20) + (localFy * 20) + localFx]) * filter[filterItem];
                 filterSum += filter[filterItem];
                 filterItem++;
             }
