@@ -38,7 +38,6 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
 
     int inLocalPortionI = threadIdx.y + 2;
     int inLocalPortionJ = threadIdx.x + 2;
-    int inLocalPortionIdx = inLocalPortionJ + (20 * inLocalPortionI);
 
     int imageIdxI = pxAI - topLeftPxI;
     int imageIdxJ = pxAJ - topLeftPxJ;
