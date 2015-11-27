@@ -38,6 +38,7 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
 
     int inLocalPortionI = threadIdx.y + 2;
     int inLocalPortionJ = threadIdx.x + 2;
+    int inLocalPortionIdx = inLocalPortionJ + (20 * inLocalPortionI);
 
     int imageIdxI = pxAI - topLeftPxI;
     int imageIdxJ = pxAJ - topLeftPxJ;
@@ -49,7 +50,7 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
     if(pxAI >= 0 && pxAI < height && pxAJ >= 0 && pxAJ < width) {
         //localImagePortion[imageIdx] = inputImage[pxA];
         //localImagePortion[imageIdx + 20 * 20] = inputImage[pxA + (B_WIDTH * B_HEIGHT)];
-        localImagePortion[imageIdx + 2 * 20 * 20] = inputImage[pxA + 2 * (B_WIDTH * B_HEIGHT)];
+        //localImagePortion[imageIdx + 2 * 20 * 20] = inputImage[pxA + 2 * (B_WIDTH * B_HEIGHT)];
     }
 
     int newInBlockIdx = inBlockIdx + 16 * 16;
@@ -64,8 +65,8 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
 
     if(pxAI >= 0 && pxAI < height && pxAJ >= 0 && pxAJ < width && imageIdx<20*20) {
         //localImagePortion[imageIdx] = inputImage[pxA];
-        //localImagePortion[imageIdx + 20 * 20] = inputImage[pxA + (B_WIDTH * B_HEIGHT)];
-        localImagePortion[imageIdx + 2 * 20 * 20] = inputImage[pxA + 2 * (B_WIDTH * B_HEIGHT)];
+        localImagePortion[imageIdx + 20 * 20] = inputImage[pxA + (B_WIDTH * B_HEIGHT)];
+        //localImagePortion[imageIdx + 2 * 20 * 20] = inputImage[pxA + 2 * (B_WIDTH * B_HEIGHT)];
     }
 
     __syncthreads();
@@ -100,7 +101,7 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
         //smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(smoothPix + 0.5f);
 
         smoothImage[(z * width * height) + (i * width) + j] = localImagePortion[(z * 20 * 20) + (inLocalPortionI * 20) + inLocalPortionJ];
-        if(z ==1) {
+        if(z !=1) {
             smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(0.0f);
 
         }
