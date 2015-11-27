@@ -70,7 +70,7 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
 
     __syncthreads();
 
-    /*
+    
 
     for ( int z = 0; z < spectrum; z++ ) {
         unsigned int filterItem = 0;
@@ -100,7 +100,7 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
         smoothPix /= filterSum;
         smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(smoothPix + 0.5f);
 
-    }*/
+    }
 }
 
 
