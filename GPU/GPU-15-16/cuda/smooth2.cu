@@ -48,8 +48,8 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
 
     if(pxAI >= 0 && pxAI < height && pxAJ >= 0 && pxAJ < width) {
         localImagePortion[imageIdx] = inputImage[pxA];
-        localImagePortion[imageIdx + 20 * 20] = inputImage[pxA + (B_WIDTH * B_HEIGHT)];
-        localImagePortion[imageIdx + 2 * 20 * 20] = inputImage[pxA + 2 * (B_WIDTH * B_HEIGHT)];
+        //localImagePortion[imageIdx + 20 * 20] = inputImage[pxA + (B_WIDTH * B_HEIGHT)];
+        //localImagePortion[imageIdx + 2 * 20 * 20] = inputImage[pxA + 2 * (B_WIDTH * B_HEIGHT)];
     }
 
     int newInBlockIdx = inBlockIdx + 16 * 16;
@@ -64,8 +64,8 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
 
     if(pxAI >= 0 && pxAI < height && pxAJ >= 0 && pxAJ < width && imageIdx<20*20) {
         localImagePortion[imageIdx] = inputImage[pxA];
-        localImagePortion[imageIdx + 20 * 20] = inputImage[pxA + (B_WIDTH * B_HEIGHT)];
-        localImagePortion[imageIdx + 2 * 20 * 20] = inputImage[pxA + 2 * (B_WIDTH * B_HEIGHT)];
+        //localImagePortion[imageIdx + 20 * 20] = inputImage[pxA + (B_WIDTH * B_HEIGHT)];
+        //localImagePortion[imageIdx + 2 * 20 * 20] = inputImage[pxA + 2 * (B_WIDTH * B_HEIGHT)];
     }
 
     __syncthreads();
