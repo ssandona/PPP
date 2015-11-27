@@ -70,6 +70,7 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
 
     __syncthreads();
 
+/*
 
     if(blockIdx.x == 0 && blockIdx.y == 0) {
         for ( int z = 0; z < spectrum; z++ ) {
@@ -103,7 +104,7 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
             smoothImage[(z * width * height) + (i * width) + j] = localImagePortion[(z * 20 * 20) + (inLocalPortionI * 20) + inLocalPortionJ];
 
         }
-    }
+    }*/
 }
 
 
