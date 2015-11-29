@@ -335,7 +335,7 @@ public class Cube implements Serializable {
         this.copyTo(result);
 
         //System.out.println("AAA: CubeToTwist:");
-        result.print(System.out);
+        //result.print(System.out);
 
         switch (axis) {
         case X:
