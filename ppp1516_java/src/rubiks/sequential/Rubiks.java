@@ -37,6 +37,9 @@ public class Rubiks {
             return 0;
         }
 
+        if(counter <= 1) {
+                System.out.println("AAA: GenerateChildren");
+            }
         // generate all possible cubes from this one by twisting it in
         // every possible way. Gets new objects from the cache
         Cube[] children = cube.generateChildren(cache);
@@ -44,6 +47,9 @@ public class Rubiks {
         int result = 0;
 
         for (Cube child : children) {
+            if(counter <= 1) {
+                System.out.println("AAA: Child");
+            }
             // recursion step
             int childSolutions = solutions(child, cache);
             if (childSolutions > 0) {
