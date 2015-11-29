@@ -21,7 +21,7 @@ public class Rubiks {
      * @return the number of solutions found
      */
     private static int solutions(Cube cube, CubeCache cache) {
-        System.out.println("AAA: Solutions");
+        System.out.println("AAA: Solutions -> cache size:"+cache.getSize());
         if (cube.isSolved()) {
             return 1;
         }
