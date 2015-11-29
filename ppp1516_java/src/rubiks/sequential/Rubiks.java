@@ -8,7 +8,7 @@ package rubiks.sequential;
  */
 public class Rubiks {
 
-    static counter = 0;
+    static int counter = 0;
 
     public static final boolean PRINT_SOLUTION = false;
 
