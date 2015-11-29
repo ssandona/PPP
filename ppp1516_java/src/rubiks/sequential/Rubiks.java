@@ -22,9 +22,9 @@ public class Rubiks {
      *            cache of cubes used for new cube objects
      * @return the number of solutions found
      */
-    private static int solutions(Cube cube, CubeCache cache) {
+    private static int solutions(Cube cube, CubeCache cache, String s) {
         if(counter <= 1) {
-            System.out.println("AAA: Solutions -> cache size:" + cache.getSize());
+            System.out.println(s+"AAA: Solutions -> cache size:" + cache.getSize());
         }
         if (cube.isSolved()) {
             return 1;
@@ -32,13 +32,13 @@ public class Rubiks {
 
         if (cube.getTwists() >= cube.getBound()) {
             if(counter <= 1) {
-                System.out.println("AAA: Twist>=Bound");
+                System.out.println(s+"AAA: Twist>=Bound");
             }
             return 0;
         }
 
         if(counter <= 1) {
-                System.out.println("AAA: GenerateChildren");
+                System.out.println(s+"AAA: GenerateChildren");
             }
         // generate all possible cubes from this one by twisting it in
         // every possible way. Gets new objects from the cache
@@ -48,10 +48,10 @@ public class Rubiks {
 
         for (Cube child : children) {
             if(counter <= 1) {
-                System.out.println("AAA: Child");
+                System.out.println(s+"AAA: Child");
             }
             // recursion step
-            int childSolutions = solutions(child, cache);
+            int childSolutions = solutions(child, cache, s+" ");
             if (childSolutions > 0) {
                 result += childSolutions;
                 if (PRINT_SOLUTION) {
@@ -87,7 +87,7 @@ public class Rubiks {
             cube.setBound(bound);
 
             System.out.print(" " + bound);
-            result = solutions(cube, cache);
+            result = solutions(cube, cache,"");
             counter++;
         }
 
