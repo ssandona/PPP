@@ -21,11 +21,13 @@ public class Rubiks {
      * @return the number of solutions found
      */
     private static int solutions(Cube cube, CubeCache cache) {
+        System.out.println("AAA: Solutions");
         if (cube.isSolved()) {
             return 1;
         }
 
         if (cube.getTwists() >= cube.getBound()) {
+            System.out.println("AAA: Twist>=Bound");
             return 0;
         }
 

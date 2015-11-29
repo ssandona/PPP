@@ -290,6 +290,7 @@ public class Cube implements Serializable {
      * @return all the possible children of this cube.
      */
     public Cube[] generateChildren(CubeCache cache) {
+        System.out.println("AAA: Generate Children");
         // number of possible twists is constant for each size cube
         Cube[] result = new Cube[6 * (size - 1)];
         int next = 0;
@@ -319,6 +320,7 @@ public class Cube implements Serializable {
      * @return the resulting cube after twisting
      */
     public Cube twist(Axis axis, int row, boolean direction, CubeCache cache) {
+        System.out.println("AAA: Twist: axis-"+axis+" row-"+row+" direction-"+direction);
         if (row <= 0) {
             throw new Error("first row to twist must be greater then zero");
         }
@@ -331,6 +333,9 @@ public class Cube implements Serializable {
 
         Cube result = cache.get();
         this.copyTo(result);
+
+        System.out.println("AAA: CubeToTwist:");
+        result.print(System.out);
 
         switch (axis) {
         case X:
