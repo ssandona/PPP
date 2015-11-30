@@ -1,0 +1,13 @@
+--- Shell 1 ---
+IPL_HOME=/home/ssa223/project/ppp1516_java/ipl-2.3
+export IPL_HOME
+$IPL_HOME/scripts/ipl-server --events --port 5658
+
+--- Shell 2 & Shell 3 ---
+IPL_HOME=/home/ssa223/project/ppp1516_java/ipl-2.3
+export IPL_HOME
+
+CLASSPATH=$IPL_HOME/examples/lib/ipl-examples.jar
+export CLASSPATH
+
+$IPL_HOME/scripts/ipl-run -Dibis.server.address=localhost -Dibis.pool.name=test ibis.ipl.examples.Hello

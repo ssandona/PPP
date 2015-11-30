@@ -1,0 +1,2369 @@
+Searching for solution for cube of size 3, twists = 11, seed = 0
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ O  G  G  R  Y  W  G  R  R  B  B  B 
+          Y  O  O 
+          Y  B  B 
+          Y  Y  Y 
+Bound now: 1AAA: Solutions -> cache size:0
+AAA: GenerateChildren
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ O  G  G  R  Y  W  G  R  R  B  B  B 
+          Y  O  O 
+          Y  B  B 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ O  G  G  R  Y  W  G  R  R  B  B  B 
+          Y  O  O 
+          Y  B  B 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ O  G  G  R  Y  W  G  R  R  B  B  B 
+          Y  O  O 
+          Y  B  B 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ O  G  G  R  Y  W  G  R  R  B  B  B 
+          Y  O  O 
+          Y  B  B 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ O  G  G  R  Y  W  G  R  R  B  B  B 
+          Y  O  O 
+          Y  B  B 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ O  G  G  R  Y  W  G  R  R  B  B  B 
+          Y  O  O 
+          Y  B  B 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ O  G  G  R  Y  W  G  R  R  B  B  B 
+          Y  O  O 
+          Y  B  B 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ O  G  G  R  Y  W  G  R  R  B  B  B 
+          Y  O  O 
+          Y  B  B 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ O  G  G  R  Y  W  G  R  R  B  B  B 
+          Y  O  O 
+          Y  B  B 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ O  G  G  R  Y  W  G  R  R  B  B  B 
+          Y  O  O 
+          Y  B  B 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ O  G  G  R  Y  W  G  R  R  B  B  B 
+          Y  O  O 
+          Y  B  B 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ O  G  G  R  Y  W  G  R  R  B  B  B 
+          Y  O  O 
+          Y  B  B 
+          Y  Y  Y 
+AAA: Child
+ AAA: Solutions -> cache size:0
+ AAA: Twist>=Bound
+AAA: Child
+ AAA: Solutions -> cache size:1
+ AAA: Twist>=Bound
+AAA: Child
+ AAA: Solutions -> cache size:2
+ AAA: Twist>=Bound
+AAA: Child
+ AAA: Solutions -> cache size:3
+ AAA: Twist>=Bound
+AAA: Child
+ AAA: Solutions -> cache size:4
+ AAA: Twist>=Bound
+AAA: Child
+ AAA: Solutions -> cache size:5
+ AAA: Twist>=Bound
+AAA: Child
+ AAA: Solutions -> cache size:6
+ AAA: Twist>=Bound
+AAA: Child
+ AAA: Solutions -> cache size:7
+ AAA: Twist>=Bound
+AAA: Child
+ AAA: Solutions -> cache size:8
+ AAA: Twist>=Bound
+AAA: Child
+ AAA: Solutions -> cache size:9
+ AAA: Twist>=Bound
+AAA: Child
+ AAA: Solutions -> cache size:10
+ AAA: Twist>=Bound
+AAA: Child
+ AAA: Solutions -> cache size:11
+ AAA: Twist>=Bound
+ 2AAA: Solutions -> cache size:12
+AAA: GenerateChildren
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ O  G  G  R  Y  W  G  R  R  B  B  B 
+          Y  O  O 
+          Y  B  B 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ O  G  G  R  Y  W  G  R  R  B  B  B 
+          Y  O  O 
+          Y  B  B 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ O  G  G  R  Y  W  G  R  R  B  B  B 
+          Y  O  O 
+          Y  B  B 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ O  G  G  R  Y  W  G  R  R  B  B  B 
+          Y  O  O 
+          Y  B  B 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ O  G  G  R  Y  W  G  R  R  B  B  B 
+          Y  O  O 
+          Y  B  B 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ O  G  G  R  Y  W  G  R  R  B  B  B 
+          Y  O  O 
+          Y  B  B 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ O  G  G  R  Y  W  G  R  R  B  B  B 
+          Y  O  O 
+          Y  B  B 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ O  G  G  R  Y  W  G  R  R  B  B  B 
+          Y  O  O 
+          Y  B  B 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ O  G  G  R  Y  W  G  R  R  B  B  B 
+          Y  O  O 
+          Y  B  B 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ O  G  G  R  Y  W  G  R  R  B  B  B 
+          Y  O  O 
+          Y  B  B 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ O  G  G  R  Y  W  G  R  R  B  B  B 
+          Y  O  O 
+          Y  B  B 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ O  G  G  R  Y  W  G  R  R  B  B  B 
+          Y  O  O 
+          Y  B  B 
+          Y  Y  Y 
+AAA: Child
+ AAA: Solutions -> cache size:0
+ AAA: GenerateChildren
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ B  W  G  R  O  O  G  Y  R  Y  R  O 
+ B  B  B  O  G  G  R  Y  W  G  R  R 
+          Y  Y  Y 
+          Y  B  O 
+          Y  B  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ B  W  G  R  O  O  G  Y  R  Y  R  O 
+ B  B  B  O  G  G  R  Y  W  G  R  R 
+          Y  Y  Y 
+          Y  B  O 
+          Y  B  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ B  W  G  R  O  O  G  Y  R  Y  R  O 
+ B  B  B  O  G  G  R  Y  W  G  R  R 
+          Y  Y  Y 
+          Y  B  O 
+          Y  B  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ B  W  G  R  O  O  G  Y  R  Y  R  O 
+ B  B  B  O  G  G  R  Y  W  G  R  R 
+          Y  Y  Y 
+          Y  B  O 
+          Y  B  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ B  W  G  R  O  O  G  Y  R  Y  R  O 
+ B  B  B  O  G  G  R  Y  W  G  R  R 
+          Y  Y  Y 
+          Y  B  O 
+          Y  B  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ B  W  G  R  O  O  G  Y  R  Y  R  O 
+ B  B  B  O  G  G  R  Y  W  G  R  R 
+          Y  Y  Y 
+          Y  B  O 
+          Y  B  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ B  W  G  R  O  O  G  Y  R  Y  R  O 
+ B  B  B  O  G  G  R  Y  W  G  R  R 
+          Y  Y  Y 
+          Y  B  O 
+          Y  B  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ B  W  G  R  O  O  G  Y  R  Y  R  O 
+ B  B  B  O  G  G  R  Y  W  G  R  R 
+          Y  Y  Y 
+          Y  B  O 
+          Y  B  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ B  W  G  R  O  O  G  Y  R  Y  R  O 
+ B  B  B  O  G  G  R  Y  W  G  R  R 
+          Y  Y  Y 
+          Y  B  O 
+          Y  B  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ B  W  G  R  O  O  G  Y  R  Y  R  O 
+ B  B  B  O  G  G  R  Y  W  G  R  R 
+          Y  Y  Y 
+          Y  B  O 
+          Y  B  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ B  W  G  R  O  O  G  Y  R  Y  R  O 
+ B  B  B  O  G  G  R  Y  W  G  R  R 
+          Y  Y  Y 
+          Y  B  O 
+          Y  B  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ B  W  G  R  O  O  G  Y  R  Y  R  O 
+ B  B  B  O  G  G  R  Y  W  G  R  R 
+          Y  Y  Y 
+          Y  B  O 
+          Y  B  O 
+ AAA: Child
+  AAA: Solutions -> cache size:0
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:1
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:2
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:3
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:4
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:5
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:6
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:7
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:8
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:9
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:10
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:11
+  AAA: Twist>=Bound
+AAA: Child
+ AAA: Solutions -> cache size:13
+ AAA: GenerateChildren
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ G  Y  R  Y  R  O  B  W  G  R  O  O 
+ R  Y  W  G  R  R  B  B  B  O  G  G 
+          O  B  Y 
+          O  B  Y 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ G  Y  R  Y  R  O  B  W  G  R  O  O 
+ R  Y  W  G  R  R  B  B  B  O  G  G 
+          O  B  Y 
+          O  B  Y 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ G  Y  R  Y  R  O  B  W  G  R  O  O 
+ R  Y  W  G  R  R  B  B  B  O  G  G 
+          O  B  Y 
+          O  B  Y 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ G  Y  R  Y  R  O  B  W  G  R  O  O 
+ R  Y  W  G  R  R  B  B  B  O  G  G 
+          O  B  Y 
+          O  B  Y 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ G  Y  R  Y  R  O  B  W  G  R  O  O 
+ R  Y  W  G  R  R  B  B  B  O  G  G 
+          O  B  Y 
+          O  B  Y 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ G  Y  R  Y  R  O  B  W  G  R  O  O 
+ R  Y  W  G  R  R  B  B  B  O  G  G 
+          O  B  Y 
+          O  B  Y 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ G  Y  R  Y  R  O  B  W  G  R  O  O 
+ R  Y  W  G  R  R  B  B  B  O  G  G 
+          O  B  Y 
+          O  B  Y 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ G  Y  R  Y  R  O  B  W  G  R  O  O 
+ R  Y  W  G  R  R  B  B  B  O  G  G 
+          O  B  Y 
+          O  B  Y 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ G  Y  R  Y  R  O  B  W  G  R  O  O 
+ R  Y  W  G  R  R  B  B  B  O  G  G 
+          O  B  Y 
+          O  B  Y 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ G  Y  R  Y  R  O  B  W  G  R  O  O 
+ R  Y  W  G  R  R  B  B  B  O  G  G 
+          O  B  Y 
+          O  B  Y 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ G  Y  R  Y  R  O  B  W  G  R  O  O 
+ R  Y  W  G  R  R  B  B  B  O  G  G 
+          O  B  Y 
+          O  B  Y 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ G  Y  R  Y  R  O  B  W  G  R  O  O 
+ R  Y  W  G  R  R  B  B  B  O  G  G 
+          O  B  Y 
+          O  B  Y 
+          Y  Y  Y 
+ AAA: Child
+  AAA: Solutions -> cache size:1
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:2
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:3
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:4
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:5
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:6
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:7
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:8
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:9
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:10
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:11
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:12
+  AAA: Twist>=Bound
+AAA: Child
+ AAA: Solutions -> cache size:14
+ AAA: GenerateChildren
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ B  B  B  O  G  G  R  Y  W  G  R  R 
+          Y  Y  Y 
+          Y  B  O 
+          Y  B  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ B  B  B  O  G  G  R  Y  W  G  R  R 
+          Y  Y  Y 
+          Y  B  O 
+          Y  B  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ B  B  B  O  G  G  R  Y  W  G  R  R 
+          Y  Y  Y 
+          Y  B  O 
+          Y  B  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ B  B  B  O  G  G  R  Y  W  G  R  R 
+          Y  Y  Y 
+          Y  B  O 
+          Y  B  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ B  B  B  O  G  G  R  Y  W  G  R  R 
+          Y  Y  Y 
+          Y  B  O 
+          Y  B  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ B  B  B  O  G  G  R  Y  W  G  R  R 
+          Y  Y  Y 
+          Y  B  O 
+          Y  B  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ B  B  B  O  G  G  R  Y  W  G  R  R 
+          Y  Y  Y 
+          Y  B  O 
+          Y  B  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ B  B  B  O  G  G  R  Y  W  G  R  R 
+          Y  Y  Y 
+          Y  B  O 
+          Y  B  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ B  B  B  O  G  G  R  Y  W  G  R  R 
+          Y  Y  Y 
+          Y  B  O 
+          Y  B  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ B  B  B  O  G  G  R  Y  W  G  R  R 
+          Y  Y  Y 
+          Y  B  O 
+          Y  B  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ B  B  B  O  G  G  R  Y  W  G  R  R 
+          Y  Y  Y 
+          Y  B  O 
+          Y  B  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ B  B  B  O  G  G  R  Y  W  G  R  R 
+          Y  Y  Y 
+          Y  B  O 
+          Y  B  O 
+ AAA: Child
+  AAA: Solutions -> cache size:2
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:3
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:4
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:5
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:6
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:7
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:8
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:9
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:10
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:11
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:12
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:13
+  AAA: Twist>=Bound
+AAA: Child
+ AAA: Solutions -> cache size:15
+ AAA: GenerateChildren
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ R  Y  W  G  R  R  B  B  B  O  G  G 
+          O  B  Y 
+          O  B  Y 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ R  Y  W  G  R  R  B  B  B  O  G  G 
+          O  B  Y 
+          O  B  Y 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ R  Y  W  G  R  R  B  B  B  O  G  G 
+          O  B  Y 
+          O  B  Y 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ R  Y  W  G  R  R  B  B  B  O  G  G 
+          O  B  Y 
+          O  B  Y 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ R  Y  W  G  R  R  B  B  B  O  G  G 
+          O  B  Y 
+          O  B  Y 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ R  Y  W  G  R  R  B  B  B  O  G  G 
+          O  B  Y 
+          O  B  Y 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ R  Y  W  G  R  R  B  B  B  O  G  G 
+          O  B  Y 
+          O  B  Y 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ R  Y  W  G  R  R  B  B  B  O  G  G 
+          O  B  Y 
+          O  B  Y 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ R  Y  W  G  R  R  B  B  B  O  G  G 
+          O  B  Y 
+          O  B  Y 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ R  Y  W  G  R  R  B  B  B  O  G  G 
+          O  B  Y 
+          O  B  Y 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ R  Y  W  G  R  R  B  B  B  O  G  G 
+          O  B  Y 
+          O  B  Y 
+          Y  Y  Y 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  W 
+          W  W  G 
+ O  W  B  O  O  R  W  B  B  W  W  G 
+ R  O  O  G  Y  R  Y  R  O  B  W  G 
+ R  Y  W  G  R  R  B  B  B  O  G  G 
+          O  B  Y 
+          O  B  Y 
+          Y  Y  Y 
+ AAA: Child
+  AAA: Solutions -> cache size:3
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:4
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:5
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:6
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:7
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:8
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:9
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:10
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:11
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:12
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:13
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:14
+  AAA: Twist>=Bound
+AAA: Child
+ AAA: Solutions -> cache size:16
+ AAA: GenerateChildren
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  O  R 
+          G  Y  R 
+          W  Y  W 
+ O  W  B  O  O  O  G  Y  W  G  W  G 
+ R  O  O  G  B  B  R  R  B  W  G  G 
+ O  G  G  R  Y  Y  R  O  B  R  R  B 
+          Y  B  B 
+          Y  W  B 
+          Y  W  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  O  R 
+          G  Y  R 
+          W  Y  W 
+ O  W  B  O  O  O  G  Y  W  G  W  G 
+ R  O  O  G  B  B  R  R  B  W  G  G 
+ O  G  G  R  Y  Y  R  O  B  R  R  B 
+          Y  B  B 
+          Y  W  B 
+          Y  W  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  O  R 
+          G  Y  R 
+          W  Y  W 
+ O  W  B  O  O  O  G  Y  W  G  W  G 
+ R  O  O  G  B  B  R  R  B  W  G  G 
+ O  G  G  R  Y  Y  R  O  B  R  R  B 
+          Y  B  B 
+          Y  W  B 
+          Y  W  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  O  R 
+          G  Y  R 
+          W  Y  W 
+ O  W  B  O  O  O  G  Y  W  G  W  G 
+ R  O  O  G  B  B  R  R  B  W  G  G 
+ O  G  G  R  Y  Y  R  O  B  R  R  B 
+          Y  B  B 
+          Y  W  B 
+          Y  W  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  O  R 
+          G  Y  R 
+          W  Y  W 
+ O  W  B  O  O  O  G  Y  W  G  W  G 
+ R  O  O  G  B  B  R  R  B  W  G  G 
+ O  G  G  R  Y  Y  R  O  B  R  R  B 
+          Y  B  B 
+          Y  W  B 
+          Y  W  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  O  R 
+          G  Y  R 
+          W  Y  W 
+ O  W  B  O  O  O  G  Y  W  G  W  G 
+ R  O  O  G  B  B  R  R  B  W  G  G 
+ O  G  G  R  Y  Y  R  O  B  R  R  B 
+          Y  B  B 
+          Y  W  B 
+          Y  W  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  O  R 
+          G  Y  R 
+          W  Y  W 
+ O  W  B  O  O  O  G  Y  W  G  W  G 
+ R  O  O  G  B  B  R  R  B  W  G  G 
+ O  G  G  R  Y  Y  R  O  B  R  R  B 
+          Y  B  B 
+          Y  W  B 
+          Y  W  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  O  R 
+          G  Y  R 
+          W  Y  W 
+ O  W  B  O  O  O  G  Y  W  G  W  G 
+ R  O  O  G  B  B  R  R  B  W  G  G 
+ O  G  G  R  Y  Y  R  O  B  R  R  B 
+          Y  B  B 
+          Y  W  B 
+          Y  W  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  O  R 
+          G  Y  R 
+          W  Y  W 
+ O  W  B  O  O  O  G  Y  W  G  W  G 
+ R  O  O  G  B  B  R  R  B  W  G  G 
+ O  G  G  R  Y  Y  R  O  B  R  R  B 
+          Y  B  B 
+          Y  W  B 
+          Y  W  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  O  R 
+          G  Y  R 
+          W  Y  W 
+ O  W  B  O  O  O  G  Y  W  G  W  G 
+ R  O  O  G  B  B  R  R  B  W  G  G 
+ O  G  G  R  Y  Y  R  O  B  R  R  B 
+          Y  B  B 
+          Y  W  B 
+          Y  W  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  O  R 
+          G  Y  R 
+          W  Y  W 
+ O  W  B  O  O  O  G  Y  W  G  W  G 
+ R  O  O  G  B  B  R  R  B  W  G  G 
+ O  G  G  R  Y  Y  R  O  B  R  R  B 
+          Y  B  B 
+          Y  W  B 
+          Y  W  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  O  R 
+          G  Y  R 
+          W  Y  W 
+ O  W  B  O  O  O  G  Y  W  G  W  G 
+ R  O  O  G  B  B  R  R  B  W  G  G 
+ O  G  G  R  Y  Y  R  O  B  R  R  B 
+          Y  B  B 
+          Y  W  B 
+          Y  W  W 
+ AAA: Child
+  AAA: Solutions -> cache size:4
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:5
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:6
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:7
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:8
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:9
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:10
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:11
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:12
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:13
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:14
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:15
+  AAA: Twist>=Bound
+AAA: Child
+ AAA: Solutions -> cache size:17
+ AAA: GenerateChildren
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  B  B 
+          G  W  B 
+          W  W  W 
+ O  W  B  O  R  R  B  O  R  Y  Y  G 
+ R  O  O  G  G  W  B  R  R  B  B  G 
+ O  G  G  R  W  G  W  Y  G  O  O  B 
+          Y  O  R 
+          Y  Y  R 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  B  B 
+          G  W  B 
+          W  W  W 
+ O  W  B  O  R  R  B  O  R  Y  Y  G 
+ R  O  O  G  G  W  B  R  R  B  B  G 
+ O  G  G  R  W  G  W  Y  G  O  O  B 
+          Y  O  R 
+          Y  Y  R 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  B  B 
+          G  W  B 
+          W  W  W 
+ O  W  B  O  R  R  B  O  R  Y  Y  G 
+ R  O  O  G  G  W  B  R  R  B  B  G 
+ O  G  G  R  W  G  W  Y  G  O  O  B 
+          Y  O  R 
+          Y  Y  R 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  B  B 
+          G  W  B 
+          W  W  W 
+ O  W  B  O  R  R  B  O  R  Y  Y  G 
+ R  O  O  G  G  W  B  R  R  B  B  G 
+ O  G  G  R  W  G  W  Y  G  O  O  B 
+          Y  O  R 
+          Y  Y  R 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  B  B 
+          G  W  B 
+          W  W  W 
+ O  W  B  O  R  R  B  O  R  Y  Y  G 
+ R  O  O  G  G  W  B  R  R  B  B  G 
+ O  G  G  R  W  G  W  Y  G  O  O  B 
+          Y  O  R 
+          Y  Y  R 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  B  B 
+          G  W  B 
+          W  W  W 
+ O  W  B  O  R  R  B  O  R  Y  Y  G 
+ R  O  O  G  G  W  B  R  R  B  B  G 
+ O  G  G  R  W  G  W  Y  G  O  O  B 
+          Y  O  R 
+          Y  Y  R 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  B  B 
+          G  W  B 
+          W  W  W 
+ O  W  B  O  R  R  B  O  R  Y  Y  G 
+ R  O  O  G  G  W  B  R  R  B  B  G 
+ O  G  G  R  W  G  W  Y  G  O  O  B 
+          Y  O  R 
+          Y  Y  R 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  B  B 
+          G  W  B 
+          W  W  W 
+ O  W  B  O  R  R  B  O  R  Y  Y  G 
+ R  O  O  G  G  W  B  R  R  B  B  G 
+ O  G  G  R  W  G  W  Y  G  O  O  B 
+          Y  O  R 
+          Y  Y  R 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  B  B 
+          G  W  B 
+          W  W  W 
+ O  W  B  O  R  R  B  O  R  Y  Y  G 
+ R  O  O  G  G  W  B  R  R  B  B  G 
+ O  G  G  R  W  G  W  Y  G  O  O  B 
+          Y  O  R 
+          Y  Y  R 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  B  B 
+          G  W  B 
+          W  W  W 
+ O  W  B  O  R  R  B  O  R  Y  Y  G 
+ R  O  O  G  G  W  B  R  R  B  B  G 
+ O  G  G  R  W  G  W  Y  G  O  O  B 
+          Y  O  R 
+          Y  Y  R 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  B  B 
+          G  W  B 
+          W  W  W 
+ O  W  B  O  R  R  B  O  R  Y  Y  G 
+ R  O  O  G  G  W  B  R  R  B  B  G 
+ O  G  G  R  W  G  W  Y  G  O  O  B 
+          Y  O  R 
+          Y  Y  R 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  B  B 
+          G  W  B 
+          W  W  W 
+ O  W  B  O  R  R  B  O  R  Y  Y  G 
+ R  O  O  G  G  W  B  R  R  B  B  G 
+ O  G  G  R  W  G  W  Y  G  O  O  B 
+          Y  O  R 
+          Y  Y  R 
+          Y  Y  W 
+ AAA: Child
+  AAA: Solutions -> cache size:5
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:6
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:7
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:8
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:9
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:10
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:11
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:12
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:13
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:14
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:15
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:16
+  AAA: Twist>=Bound
+AAA: Child
+ AAA: Solutions -> cache size:18
+ AAA: GenerateChildren
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  R 
+          W  W  W 
+ O  W  B  O  O  O  G  Y  W  G  W  G 
+ R  O  O  G  Y  B  R  R  B  W  W  G 
+ O  G  G  R  Y  Y  R  O  B  R  B  B 
+          Y  O  B 
+          Y  B  B 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  R 
+          W  W  W 
+ O  W  B  O  O  O  G  Y  W  G  W  G 
+ R  O  O  G  Y  B  R  R  B  W  W  G 
+ O  G  G  R  Y  Y  R  O  B  R  B  B 
+          Y  O  B 
+          Y  B  B 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  R 
+          W  W  W 
+ O  W  B  O  O  O  G  Y  W  G  W  G 
+ R  O  O  G  Y  B  R  R  B  W  W  G 
+ O  G  G  R  Y  Y  R  O  B  R  B  B 
+          Y  O  B 
+          Y  B  B 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  R 
+          W  W  W 
+ O  W  B  O  O  O  G  Y  W  G  W  G 
+ R  O  O  G  Y  B  R  R  B  W  W  G 
+ O  G  G  R  Y  Y  R  O  B  R  B  B 
+          Y  O  B 
+          Y  B  B 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  R 
+          W  W  W 
+ O  W  B  O  O  O  G  Y  W  G  W  G 
+ R  O  O  G  Y  B  R  R  B  W  W  G 
+ O  G  G  R  Y  Y  R  O  B  R  B  B 
+          Y  O  B 
+          Y  B  B 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  R 
+          W  W  W 
+ O  W  B  O  O  O  G  Y  W  G  W  G 
+ R  O  O  G  Y  B  R  R  B  W  W  G 
+ O  G  G  R  Y  Y  R  O  B  R  B  B 
+          Y  O  B 
+          Y  B  B 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  R 
+          W  W  W 
+ O  W  B  O  O  O  G  Y  W  G  W  G 
+ R  O  O  G  Y  B  R  R  B  W  W  G 
+ O  G  G  R  Y  Y  R  O  B  R  B  B 
+          Y  O  B 
+          Y  B  B 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  R 
+          W  W  W 
+ O  W  B  O  O  O  G  Y  W  G  W  G 
+ R  O  O  G  Y  B  R  R  B  W  W  G 
+ O  G  G  R  Y  Y  R  O  B  R  B  B 
+          Y  O  B 
+          Y  B  B 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  R 
+          W  W  W 
+ O  W  B  O  O  O  G  Y  W  G  W  G 
+ R  O  O  G  Y  B  R  R  B  W  W  G 
+ O  G  G  R  Y  Y  R  O  B  R  B  B 
+          Y  O  B 
+          Y  B  B 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  R 
+          W  W  W 
+ O  W  B  O  O  O  G  Y  W  G  W  G 
+ R  O  O  G  Y  B  R  R  B  W  W  G 
+ O  G  G  R  Y  Y  R  O  B  R  B  B 
+          Y  O  B 
+          Y  B  B 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  R 
+          W  W  W 
+ O  W  B  O  O  O  G  Y  W  G  W  G 
+ R  O  O  G  Y  B  R  R  B  W  W  G 
+ O  G  G  R  Y  Y  R  O  B  R  B  B 
+          Y  O  B 
+          Y  B  B 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  R 
+          G  G  R 
+          W  W  W 
+ O  W  B  O  O  O  G  Y  W  G  W  G 
+ R  O  O  G  Y  B  R  R  B  W  W  G 
+ O  G  G  R  Y  Y  R  O  B  R  B  B 
+          Y  O  B 
+          Y  B  B 
+          Y  Y  W 
+ AAA: Child
+  AAA: Solutions -> cache size:6
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:7
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:8
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:9
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:10
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:11
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:12
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:13
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:14
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:15
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:16
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:17
+  AAA: Twist>=Bound
+AAA: Child
+ AAA: Solutions -> cache size:19
+ AAA: GenerateChildren
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  B 
+          G  G  B 
+          W  W  W 
+ O  W  B  O  O  R  B  O  R  Y  W  G 
+ R  O  O  G  Y  W  B  R  R  B  W  G 
+ O  G  G  R  Y  G  W  Y  G  O  B  B 
+          Y  O  R 
+          Y  B  R 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  B 
+          G  G  B 
+          W  W  W 
+ O  W  B  O  O  R  B  O  R  Y  W  G 
+ R  O  O  G  Y  W  B  R  R  B  W  G 
+ O  G  G  R  Y  G  W  Y  G  O  B  B 
+          Y  O  R 
+          Y  B  R 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  B 
+          G  G  B 
+          W  W  W 
+ O  W  B  O  O  R  B  O  R  Y  W  G 
+ R  O  O  G  Y  W  B  R  R  B  W  G 
+ O  G  G  R  Y  G  W  Y  G  O  B  B 
+          Y  O  R 
+          Y  B  R 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  B 
+          G  G  B 
+          W  W  W 
+ O  W  B  O  O  R  B  O  R  Y  W  G 
+ R  O  O  G  Y  W  B  R  R  B  W  G 
+ O  G  G  R  Y  G  W  Y  G  O  B  B 
+          Y  O  R 
+          Y  B  R 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  B 
+          G  G  B 
+          W  W  W 
+ O  W  B  O  O  R  B  O  R  Y  W  G 
+ R  O  O  G  Y  W  B  R  R  B  W  G 
+ O  G  G  R  Y  G  W  Y  G  O  B  B 
+          Y  O  R 
+          Y  B  R 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  B 
+          G  G  B 
+          W  W  W 
+ O  W  B  O  O  R  B  O  R  Y  W  G 
+ R  O  O  G  Y  W  B  R  R  B  W  G 
+ O  G  G  R  Y  G  W  Y  G  O  B  B 
+          Y  O  R 
+          Y  B  R 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  B 
+          G  G  B 
+          W  W  W 
+ O  W  B  O  O  R  B  O  R  Y  W  G 
+ R  O  O  G  Y  W  B  R  R  B  W  G 
+ O  G  G  R  Y  G  W  Y  G  O  B  B 
+          Y  O  R 
+          Y  B  R 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  B 
+          G  G  B 
+          W  W  W 
+ O  W  B  O  O  R  B  O  R  Y  W  G 
+ R  O  O  G  Y  W  B  R  R  B  W  G 
+ O  G  G  R  Y  G  W  Y  G  O  B  B 
+          Y  O  R 
+          Y  B  R 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  B 
+          G  G  B 
+          W  W  W 
+ O  W  B  O  O  R  B  O  R  Y  W  G 
+ R  O  O  G  Y  W  B  R  R  B  W  G 
+ O  G  G  R  Y  G  W  Y  G  O  B  B 
+          Y  O  R 
+          Y  B  R 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  B 
+          G  G  B 
+          W  W  W 
+ O  W  B  O  O  R  B  O  R  Y  W  G 
+ R  O  O  G  Y  W  B  R  R  B  W  G 
+ O  G  G  R  Y  G  W  Y  G  O  B  B 
+          Y  O  R 
+          Y  B  R 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  B 
+          G  G  B 
+          W  W  W 
+ O  W  B  O  O  R  B  O  R  Y  W  G 
+ R  O  O  G  Y  W  B  R  R  B  W  G 
+ O  G  G  R  Y  G  W  Y  G  O  B  B 
+          Y  O  R 
+          Y  B  R 
+          Y  Y  W 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          Y  R  B 
+          G  G  B 
+          W  W  W 
+ O  W  B  O  O  R  B  O  R  Y  W  G 
+ R  O  O  G  Y  W  B  R  R  B  W  G 
+ O  G  G  R  Y  G  W  Y  G  O  B  B 
+          Y  O  R 
+          Y  B  R 
+          Y  Y  W 
+ AAA: Child
+  AAA: Solutions -> cache size:7
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:8
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:9
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:10
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:11
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:12
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:13
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:14
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:15
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:16
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:17
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:18
+  AAA: Twist>=Bound
+AAA: Child
+ AAA: Solutions -> cache size:20
+ AAA: GenerateChildren
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          O  R  O 
+          G  O  W 
+          W  W  G 
+ Y  Y  B  O  O  R  W  G  Y  G  G  B 
+ Y  B  O  G  Y  R  Y  G  R  W  W  B 
+ Y  B  G  R  Y  W  G  W  R  W  B  B 
+          Y  O  O 
+          R  R  B 
+          R  O  B 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          O  R  O 
+          G  O  W 
+          W  W  G 
+ Y  Y  B  O  O  R  W  G  Y  G  G  B 
+ Y  B  O  G  Y  R  Y  G  R  W  W  B 
+ Y  B  G  R  Y  W  G  W  R  W  B  B 
+          Y  O  O 
+          R  R  B 
+          R  O  B 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          O  R  O 
+          G  O  W 
+          W  W  G 
+ Y  Y  B  O  O  R  W  G  Y  G  G  B 
+ Y  B  O  G  Y  R  Y  G  R  W  W  B 
+ Y  B  G  R  Y  W  G  W  R  W  B  B 
+          Y  O  O 
+          R  R  B 
+          R  O  B 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          O  R  O 
+          G  O  W 
+          W  W  G 
+ Y  Y  B  O  O  R  W  G  Y  G  G  B 
+ Y  B  O  G  Y  R  Y  G  R  W  W  B 
+ Y  B  G  R  Y  W  G  W  R  W  B  B 
+          Y  O  O 
+          R  R  B 
+          R  O  B 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          O  R  O 
+          G  O  W 
+          W  W  G 
+ Y  Y  B  O  O  R  W  G  Y  G  G  B 
+ Y  B  O  G  Y  R  Y  G  R  W  W  B 
+ Y  B  G  R  Y  W  G  W  R  W  B  B 
+          Y  O  O 
+          R  R  B 
+          R  O  B 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          O  R  O 
+          G  O  W 
+          W  W  G 
+ Y  Y  B  O  O  R  W  G  Y  G  G  B 
+ Y  B  O  G  Y  R  Y  G  R  W  W  B 
+ Y  B  G  R  Y  W  G  W  R  W  B  B 
+          Y  O  O 
+          R  R  B 
+          R  O  B 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          O  R  O 
+          G  O  W 
+          W  W  G 
+ Y  Y  B  O  O  R  W  G  Y  G  G  B 
+ Y  B  O  G  Y  R  Y  G  R  W  W  B 
+ Y  B  G  R  Y  W  G  W  R  W  B  B 
+          Y  O  O 
+          R  R  B 
+          R  O  B 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          O  R  O 
+          G  O  W 
+          W  W  G 
+ Y  Y  B  O  O  R  W  G  Y  G  G  B 
+ Y  B  O  G  Y  R  Y  G  R  W  W  B 
+ Y  B  G  R  Y  W  G  W  R  W  B  B 
+          Y  O  O 
+          R  R  B 
+          R  O  B 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          O  R  O 
+          G  O  W 
+          W  W  G 
+ Y  Y  B  O  O  R  W  G  Y  G  G  B 
+ Y  B  O  G  Y  R  Y  G  R  W  W  B 
+ Y  B  G  R  Y  W  G  W  R  W  B  B 
+          Y  O  O 
+          R  R  B 
+          R  O  B 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          O  R  O 
+          G  O  W 
+          W  W  G 
+ Y  Y  B  O  O  R  W  G  Y  G  G  B 
+ Y  B  O  G  Y  R  Y  G  R  W  W  B 
+ Y  B  G  R  Y  W  G  W  R  W  B  B 
+          Y  O  O 
+          R  R  B 
+          R  O  B 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          O  R  O 
+          G  O  W 
+          W  W  G 
+ Y  Y  B  O  O  R  W  G  Y  G  G  B 
+ Y  B  O  G  Y  R  Y  G  R  W  W  B 
+ Y  B  G  R  Y  W  G  W  R  W  B  B 
+          Y  O  O 
+          R  R  B 
+          R  O  B 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          O  R  O 
+          G  O  W 
+          W  W  G 
+ Y  Y  B  O  O  R  W  G  Y  G  G  B 
+ Y  B  O  G  Y  R  Y  G  R  W  W  B 
+ Y  B  G  R  Y  W  G  W  R  W  B  B 
+          Y  O  O 
+          R  R  B 
+          R  O  B 
+ AAA: Child
+  AAA: Solutions -> cache size:8
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:9
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:10
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:11
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:12
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:13
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:14
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:15
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:16
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:17
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:18
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:19
+  AAA: Twist>=Bound
+AAA: Child
+ AAA: Solutions -> cache size:21
+ AAA: GenerateChildren
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          B  O  R 
+          B  R  R 
+          W  W  G 
+ R  W  B  O  O  R  W  B  Y  B  B  W 
+ R  G  O  G  Y  R  Y  B  Y  B  W  W 
+ Y  G  G  R  Y  W  G  Y  Y  B  G  G 
+          Y  O  O 
+          W  O  G 
+          O  R  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          B  O  R 
+          B  R  R 
+          W  W  G 
+ R  W  B  O  O  R  W  B  Y  B  B  W 
+ R  G  O  G  Y  R  Y  B  Y  B  W  W 
+ Y  G  G  R  Y  W  G  Y  Y  B  G  G 
+          Y  O  O 
+          W  O  G 
+          O  R  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          B  O  R 
+          B  R  R 
+          W  W  G 
+ R  W  B  O  O  R  W  B  Y  B  B  W 
+ R  G  O  G  Y  R  Y  B  Y  B  W  W 
+ Y  G  G  R  Y  W  G  Y  Y  B  G  G 
+          Y  O  O 
+          W  O  G 
+          O  R  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          B  O  R 
+          B  R  R 
+          W  W  G 
+ R  W  B  O  O  R  W  B  Y  B  B  W 
+ R  G  O  G  Y  R  Y  B  Y  B  W  W 
+ Y  G  G  R  Y  W  G  Y  Y  B  G  G 
+          Y  O  O 
+          W  O  G 
+          O  R  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          B  O  R 
+          B  R  R 
+          W  W  G 
+ R  W  B  O  O  R  W  B  Y  B  B  W 
+ R  G  O  G  Y  R  Y  B  Y  B  W  W 
+ Y  G  G  R  Y  W  G  Y  Y  B  G  G 
+          Y  O  O 
+          W  O  G 
+          O  R  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          B  O  R 
+          B  R  R 
+          W  W  G 
+ R  W  B  O  O  R  W  B  Y  B  B  W 
+ R  G  O  G  Y  R  Y  B  Y  B  W  W 
+ Y  G  G  R  Y  W  G  Y  Y  B  G  G 
+          Y  O  O 
+          W  O  G 
+          O  R  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          B  O  R 
+          B  R  R 
+          W  W  G 
+ R  W  B  O  O  R  W  B  Y  B  B  W 
+ R  G  O  G  Y  R  Y  B  Y  B  W  W 
+ Y  G  G  R  Y  W  G  Y  Y  B  G  G 
+          Y  O  O 
+          W  O  G 
+          O  R  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          B  O  R 
+          B  R  R 
+          W  W  G 
+ R  W  B  O  O  R  W  B  Y  B  B  W 
+ R  G  O  G  Y  R  Y  B  Y  B  W  W 
+ Y  G  G  R  Y  W  G  Y  Y  B  G  G 
+          Y  O  O 
+          W  O  G 
+          O  R  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          B  O  R 
+          B  R  R 
+          W  W  G 
+ R  W  B  O  O  R  W  B  Y  B  B  W 
+ R  G  O  G  Y  R  Y  B  Y  B  W  W 
+ Y  G  G  R  Y  W  G  Y  Y  B  G  G 
+          Y  O  O 
+          W  O  G 
+          O  R  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          B  O  R 
+          B  R  R 
+          W  W  G 
+ R  W  B  O  O  R  W  B  Y  B  B  W 
+ R  G  O  G  Y  R  Y  B  Y  B  W  W 
+ Y  G  G  R  Y  W  G  Y  Y  B  G  G 
+          Y  O  O 
+          W  O  G 
+          O  R  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          B  O  R 
+          B  R  R 
+          W  W  G 
+ R  W  B  O  O  R  W  B  Y  B  B  W 
+ R  G  O  G  Y  R  Y  B  Y  B  W  W 
+ Y  G  G  R  Y  W  G  Y  Y  B  G  G 
+          Y  O  O 
+          W  O  G 
+          O  R  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          B  O  R 
+          B  R  R 
+          W  W  G 
+ R  W  B  O  O  R  W  B  Y  B  B  W 
+ R  G  O  G  Y  R  Y  B  Y  B  W  W 
+ Y  G  G  R  Y  W  G  Y  Y  B  G  G 
+          Y  O  O 
+          W  O  G 
+          O  R  O 
+ AAA: Child
+  AAA: Solutions -> cache size:9
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:10
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:11
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:12
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:13
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:14
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:15
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:16
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:17
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:18
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:19
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:20
+  AAA: Twist>=Bound
+AAA: Child
+ AAA: Solutions -> cache size:22
+ AAA: GenerateChildren
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          O  R  O 
+          G  G  W 
+          W  W  G 
+ Y  W  B  O  O  R  W  B  Y  G  G  B 
+ Y  O  O  G  Y  R  Y  R  R  W  W  B 
+ Y  G  G  R  Y  W  G  R  R  W  B  B 
+          Y  O  O 
+          Y  B  B 
+          R  O  B 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          O  R  O 
+          G  G  W 
+          W  W  G 
+ Y  W  B  O  O  R  W  B  Y  G  G  B 
+ Y  O  O  G  Y  R  Y  R  R  W  W  B 
+ Y  G  G  R  Y  W  G  R  R  W  B  B 
+          Y  O  O 
+          Y  B  B 
+          R  O  B 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          O  R  O 
+          G  G  W 
+          W  W  G 
+ Y  W  B  O  O  R  W  B  Y  G  G  B 
+ Y  O  O  G  Y  R  Y  R  R  W  W  B 
+ Y  G  G  R  Y  W  G  R  R  W  B  B 
+          Y  O  O 
+          Y  B  B 
+          R  O  B 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          O  R  O 
+          G  G  W 
+          W  W  G 
+ Y  W  B  O  O  R  W  B  Y  G  G  B 
+ Y  O  O  G  Y  R  Y  R  R  W  W  B 
+ Y  G  G  R  Y  W  G  R  R  W  B  B 
+          Y  O  O 
+          Y  B  B 
+          R  O  B 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          O  R  O 
+          G  G  W 
+          W  W  G 
+ Y  W  B  O  O  R  W  B  Y  G  G  B 
+ Y  O  O  G  Y  R  Y  R  R  W  W  B 
+ Y  G  G  R  Y  W  G  R  R  W  B  B 
+          Y  O  O 
+          Y  B  B 
+          R  O  B 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          O  R  O 
+          G  G  W 
+          W  W  G 
+ Y  W  B  O  O  R  W  B  Y  G  G  B 
+ Y  O  O  G  Y  R  Y  R  R  W  W  B 
+ Y  G  G  R  Y  W  G  R  R  W  B  B 
+          Y  O  O 
+          Y  B  B 
+          R  O  B 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          O  R  O 
+          G  G  W 
+          W  W  G 
+ Y  W  B  O  O  R  W  B  Y  G  G  B 
+ Y  O  O  G  Y  R  Y  R  R  W  W  B 
+ Y  G  G  R  Y  W  G  R  R  W  B  B 
+          Y  O  O 
+          Y  B  B 
+          R  O  B 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          O  R  O 
+          G  G  W 
+          W  W  G 
+ Y  W  B  O  O  R  W  B  Y  G  G  B 
+ Y  O  O  G  Y  R  Y  R  R  W  W  B 
+ Y  G  G  R  Y  W  G  R  R  W  B  B 
+          Y  O  O 
+          Y  B  B 
+          R  O  B 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          O  R  O 
+          G  G  W 
+          W  W  G 
+ Y  W  B  O  O  R  W  B  Y  G  G  B 
+ Y  O  O  G  Y  R  Y  R  R  W  W  B 
+ Y  G  G  R  Y  W  G  R  R  W  B  B 
+          Y  O  O 
+          Y  B  B 
+          R  O  B 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          O  R  O 
+          G  G  W 
+          W  W  G 
+ Y  W  B  O  O  R  W  B  Y  G  G  B 
+ Y  O  O  G  Y  R  Y  R  R  W  W  B 
+ Y  G  G  R  Y  W  G  R  R  W  B  B 
+          Y  O  O 
+          Y  B  B 
+          R  O  B 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          O  R  O 
+          G  G  W 
+          W  W  G 
+ Y  W  B  O  O  R  W  B  Y  G  G  B 
+ Y  O  O  G  Y  R  Y  R  R  W  W  B 
+ Y  G  G  R  Y  W  G  R  R  W  B  B 
+          Y  O  O 
+          Y  B  B 
+          R  O  B 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          O  R  O 
+          G  G  W 
+          W  W  G 
+ Y  W  B  O  O  R  W  B  Y  G  G  B 
+ Y  O  O  G  Y  R  Y  R  R  W  W  B 
+ Y  G  G  R  Y  W  G  R  R  W  B  B 
+          Y  O  O 
+          Y  B  B 
+          R  O  B 
+ AAA: Child
+  AAA: Solutions -> cache size:10
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:11
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:12
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:13
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:14
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:15
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:16
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:17
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:18
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:19
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:20
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:21
+  AAA: Twist>=Bound
+AAA: Child
+ AAA: Solutions -> cache size:23
+ AAA: GenerateChildren
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          B  O  R 
+          G  G  W 
+          W  W  G 
+ R  W  B  O  O  R  W  B  Y  B  B  W 
+ R  O  O  G  Y  R  Y  R  Y  B  W  W 
+ Y  G  G  R  Y  W  G  R  Y  B  G  G 
+          Y  O  O 
+          Y  B  B 
+          O  R  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          B  O  R 
+          G  G  W 
+          W  W  G 
+ R  W  B  O  O  R  W  B  Y  B  B  W 
+ R  O  O  G  Y  R  Y  R  Y  B  W  W 
+ Y  G  G  R  Y  W  G  R  Y  B  G  G 
+          Y  O  O 
+          Y  B  B 
+          O  R  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          B  O  R 
+          G  G  W 
+          W  W  G 
+ R  W  B  O  O  R  W  B  Y  B  B  W 
+ R  O  O  G  Y  R  Y  R  Y  B  W  W 
+ Y  G  G  R  Y  W  G  R  Y  B  G  G 
+          Y  O  O 
+          Y  B  B 
+          O  R  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          B  O  R 
+          G  G  W 
+          W  W  G 
+ R  W  B  O  O  R  W  B  Y  B  B  W 
+ R  O  O  G  Y  R  Y  R  Y  B  W  W 
+ Y  G  G  R  Y  W  G  R  Y  B  G  G 
+          Y  O  O 
+          Y  B  B 
+          O  R  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          B  O  R 
+          G  G  W 
+          W  W  G 
+ R  W  B  O  O  R  W  B  Y  B  B  W 
+ R  O  O  G  Y  R  Y  R  Y  B  W  W 
+ Y  G  G  R  Y  W  G  R  Y  B  G  G 
+          Y  O  O 
+          Y  B  B 
+          O  R  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          B  O  R 
+          G  G  W 
+          W  W  G 
+ R  W  B  O  O  R  W  B  Y  B  B  W 
+ R  O  O  G  Y  R  Y  R  Y  B  W  W 
+ Y  G  G  R  Y  W  G  R  Y  B  G  G 
+          Y  O  O 
+          Y  B  B 
+          O  R  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          B  O  R 
+          G  G  W 
+          W  W  G 
+ R  W  B  O  O  R  W  B  Y  B  B  W 
+ R  O  O  G  Y  R  Y  R  Y  B  W  W 
+ Y  G  G  R  Y  W  G  R  Y  B  G  G 
+          Y  O  O 
+          Y  B  B 
+          O  R  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          B  O  R 
+          G  G  W 
+          W  W  G 
+ R  W  B  O  O  R  W  B  Y  B  B  W 
+ R  O  O  G  Y  R  Y  R  Y  B  W  W 
+ Y  G  G  R  Y  W  G  R  Y  B  G  G 
+          Y  O  O 
+          Y  B  B 
+          O  R  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          B  O  R 
+          G  G  W 
+          W  W  G 
+ R  W  B  O  O  R  W  B  Y  B  B  W 
+ R  O  O  G  Y  R  Y  R  Y  B  W  W 
+ Y  G  G  R  Y  W  G  R  Y  B  G  G 
+          Y  O  O 
+          Y  B  B 
+          O  R  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          B  O  R 
+          G  G  W 
+          W  W  G 
+ R  W  B  O  O  R  W  B  Y  B  B  W 
+ R  O  O  G  Y  R  Y  R  Y  B  W  W 
+ Y  G  G  R  Y  W  G  R  Y  B  G  G 
+          Y  O  O 
+          Y  B  B 
+          O  R  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          B  O  R 
+          G  G  W 
+          W  W  G 
+ R  W  B  O  O  R  W  B  Y  B  B  W 
+ R  O  O  G  Y  R  Y  R  Y  B  W  W 
+ Y  G  G  R  Y  W  G  R  Y  B  G  G 
+          Y  O  O 
+          Y  B  B 
+          O  R  O 
+AAA: CubeToTwist:
+Cube of size 3, solved = false
+          B  O  R 
+          G  G  W 
+          W  W  G 
+ R  W  B  O  O  R  W  B  Y  B  B  W 
+ R  O  O  G  Y  R  Y  R  Y  B  W  W 
+ Y  G  G  R  Y  W  G  R  Y  B  G  G 
+          Y  O  O 
+          Y  B  B 
+          O  R  O 
+ AAA: Child
+  AAA: Solutions -> cache size:11
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:12
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:13
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:14
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:15
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:16
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:17
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:18
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:19
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:20
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:21
+  AAA: Twist>=Bound
+ AAA: Child
+  AAA: Solutions -> cache size:22
+  AAA: Twist>=Bound
+ 3 4 5 6 7
+Solving cube possible in 2 ways of 7 steps
