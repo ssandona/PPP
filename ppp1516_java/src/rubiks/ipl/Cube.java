@@ -720,22 +720,16 @@ public class Cube implements Serializable {
         switch (color) {
         case WHITE:
             return "W";
-            break;
         case BLUE:
             return "B";
-            break;
         case ORANGE:
             return "O";
-            break;
         case GREEN:
             return "G";
-            break;
         case RED:
             return "R";
-            break;
         case YELLOW:
             return "Y";
-            break;
         default:
             throw new Error("unknown color: " + color);
         }
