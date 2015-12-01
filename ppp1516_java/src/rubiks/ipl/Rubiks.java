@@ -19,7 +19,7 @@ public class Rubiks implements RegistryEventHandler {
     IbisCapabilities ibisCapabilities = new IbisCapabilities(
         IbisCapabilities.ELECTIONS_STRICT, IbisCapabilities.MEMBERSHIP_TOTALLY_ORDERED, IbisCapabilities.TERMINATION);
 
-    //static int counter = 0;
+    static int counter = 0;
     static ArrayList<Cube> toDo;
     //static ArrayList<String> done;
     static int result = 0;
