@@ -1,7 +1,8 @@
 package rubiks.ipl;
 
 import ibis.ipl.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Solver for rubik's cube puzzle.
@@ -24,7 +25,7 @@ public class Rubiks implements RegistryEventHandler {
     //static ArrayList<String> done;
     static int result = 0;
     static int nodes = 1;
-    static List<List<Cube>> machines;
+    static ArrayList<ArrayList<Cube>> machines;
     static IbisIdentifier[] joinedIbises;
     static IbisIdentifier myIbisId;
     static Integer[] cubes_per_proc;
@@ -152,7 +153,7 @@ public class Rubiks implements RegistryEventHandler {
         for (IbisIdentifier joinedIbis : joinedIbises){
         	i++;
         	if(joinedIbis == myIbisId) {
-                toDo.add(Arrays.asList(Arrays.copyOfRange(children, last_displs, displs[i])));
+                toDo.add(new ArrayList<Cube>(Arrays.asList(Arrays.copyOfRange(children, last_displs, displs[i]))));
                 last_displs = displs[i];
                 continue;
             }
