@@ -18,11 +18,11 @@ public class Rubiks implements RegistryEventHandler {
                                      PortType.CONNECTION_ONE_TO_ONE);
 
 
-    //static IbisCapabilities ibisCapabilities = new IbisCapabilities(
-     //   IbisCapabilities.ELECTIONS_STRICT, IbisCapabilities.MEMBERSHIP_TOTALLY_ORDERED, IbisCapabilities.TERMINATION);
-
     static IbisCapabilities ibisCapabilities = new IbisCapabilities(
-        IbisCapabilities.ELECTIONS_STRICT);
+        IbisCapabilities.ELECTIONS_STRICT, IbisCapabilities.MEMBERSHIP_TOTALLY_ORDERED, IbisCapabilities.TERMINATION);
+
+    /*static IbisCapabilities ibisCapabilities = new IbisCapabilities(
+        IbisCapabilities.ELECTIONS_STRICT);*/
 
     static int counter = 0;
     static ArrayList<Cube> toDo;
