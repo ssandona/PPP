@@ -128,7 +128,7 @@ public class Rubiks implements RegistryEventHandler {
      */
 
 
-    public static int solutionsServer(Cube c, CubeCache cache) {
+    public static int solutionsServer(Ibis ibis, Cube cube, CubeCache cache) {
         ReceivePort resultsReceiver = ibis.createReceivePort(portType, "results");
         resultsReceiver.enableConnections();
         SendPort taskSender = ibis.createSendPort(portType);
@@ -148,15 +148,19 @@ public class Rubiks implements RegistryEventHandler {
         //work distribution
         machines = new ArrayList<ArrayList<Cube>>();
         int last_displs = 0;
-        int i;
-        for(i = 0; i < nodes; i++) {
-            if(i == myIbisId) {
+        int i=-1;
+        for (IbisIdentifier joinedIbis : joinedIbises){
+        	i++;
+        	if(joinedIbis == myIbisId) {
                 toDo.add(Arrays.copyOfRange(children, last_displs, displs[i]));
                 last_displs = displs[i];
                 continue;
             }
             machines[i].add(Arrays.copyOfRange(children, last_displs, displs[i]));
             last_displs = displs[i];
+        }
+        
+            
         }
         i = 0;
         for (IbisIdentifier joinedIbis : joinedIbises) {
@@ -200,7 +204,7 @@ public class Rubiks implements RegistryEventHandler {
             bound++;
             cube.setBound(bound);
             System.out.print(" " + bound);
-            result = solutionsServer(cube, cache, "");
+            result = solutionsServer(ibis, cube, cache, "");
         }
 
         System.out.println();
