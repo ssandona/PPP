@@ -160,8 +160,6 @@ public class Rubiks implements RegistryEventHandler {
             last_displs = displs[i];
         }
         
-            
-        }
         i = 0;
         for (IbisIdentifier joinedIbis : joinedIbises) {
             if(joinedIbis != myIbisId && !machines[i].isEmpty()) {
