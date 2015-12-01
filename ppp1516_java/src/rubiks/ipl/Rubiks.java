@@ -296,7 +296,7 @@ public class Rubiks implements RegistryEventHandler {
     private void run() throws Exception {
     	System.out.println("done");
         // Create an ibis instance.
-        Ibis ibis = IbisFactory.createIbis(ibisCapabilities, null, portType1);
+        Ibis ibis = IbisFactory.createIbis(ibisCapabilities, null, portType1, portType2);
         System.out.println("Ibis created");
         myIbisId = ibis.identifier();
 
