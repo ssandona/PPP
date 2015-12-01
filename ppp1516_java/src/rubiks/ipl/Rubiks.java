@@ -3,6 +3,7 @@ package rubiks.ipl;
 import ibis.ipl.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.io.IOException;
 
 /**
  * Solver for rubik's cube puzzle.
@@ -129,7 +130,7 @@ public class Rubiks implements RegistryEventHandler {
      */
 
 
-    public static int solutionsServer(Ibis ibis, Cube cube, CubeCache cache) {
+    public static int solutionsServer(Ibis ibis, Cube cube, CubeCache cache) throws IOException {
         ReceivePort resultsReceiver = ibis.createReceivePort(portType, "results");
         resultsReceiver.enableConnections();
         SendPort taskSender = ibis.createSendPort(portType);
@@ -195,7 +196,7 @@ public class Rubiks implements RegistryEventHandler {
     }
 
 
-    private static void solveServer(Ibis ibis) {
+    private static void solveServer(Ibis ibis) throws IOException{
 
         
         int bound = 0;
@@ -216,7 +217,7 @@ public class Rubiks implements RegistryEventHandler {
 
     }
 
-    public static void solveWorkers(Ibis ibis, IbisIdentifier server) {
+    public static void solveWorkers(Ibis ibis, IbisIdentifier server) throws IOException{
         ReceivePort taskReceiver = ibis.createReceivePort(portType, "" + myIbisId);
         taskReceiver.enableConnections();
         SendPort sender = ibis.createSendPort(portType);
