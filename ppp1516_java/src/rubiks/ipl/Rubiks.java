@@ -1,8 +1,7 @@
 package rubiks.ipl;
 
 import ibis.ipl.*;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * Solver for rubik's cube puzzle.
