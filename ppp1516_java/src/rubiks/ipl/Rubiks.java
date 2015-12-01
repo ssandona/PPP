@@ -25,7 +25,7 @@ public class Rubiks implements RegistryEventHandler {
     //static ArrayList<String> done;
     static int result = 0;
     static int nodes = 1;
-    static ArrayList<ArrayList<Cube>> machines;
+    static List<List<Cube>> machines;
     static IbisIdentifier[] joinedIbises;
     static IbisIdentifier myIbisId;
     static Integer[] cubes_per_proc;
