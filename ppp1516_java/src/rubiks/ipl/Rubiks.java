@@ -19,19 +19,20 @@ public class Rubiks implements RegistryEventHandler {
     IbisCapabilities ibisCapabilities = new IbisCapabilities(
         IbisCapabilities.ELECTIONS_STRICT, IbisCapabilities.MEMBERSHIP_TOTALLY_ORDERED, IbisCapabilities.TERMINATION);
 
-    static int counter = 0;
+    //static int counter = 0;
     static ArrayList<Cube> toDo;
-    static ArrayList<String> done;
+    //static ArrayList<String> done;
     static int result = 0;
     static int nodes = 1;
     static ArrayList<ArrayList<Cube>> machines;
     static IbisIdentifier[] joinedIbises;
     static IbisIdentifier myIbisId;
-    static SendPort sender;
+    static Integer[] cubes_per_proc;
+    static Integer[] displs;
 
     public void joined(IbisIdentifier joinedIbis) {
         System.err.println("Got event from registry: " + joinedIbis
-                + " joined pool");
+                           + " joined pool");
     }
 
     public void died(IbisIdentifier corpse) {
@@ -44,12 +45,12 @@ public class Rubiks implements RegistryEventHandler {
 
     public void electionResult(String electionName, IbisIdentifier winner) {
         System.err.println("Got event from registry: " + winner
-                + " won election " + electionName);
+                           + " won election " + electionName);
     }
 
     public void gotSignal(String signal, IbisIdentifier source) {
         System.err.println("Got event from registry: signal \"" + signal
-                + "\" from " + source);
+                           + "\" from " + source);
     }
 
     public void poolClosed() {
@@ -58,7 +59,7 @@ public class Rubiks implements RegistryEventHandler {
 
     public void poolTerminated(IbisIdentifier source) {
         System.err.println("Got event from registry: pool terminated by "
-                + source);
+                           + source);
     }
 
     public static final boolean PRINT_SOLUTION = false;
@@ -171,14 +172,14 @@ public class Rubiks implements RegistryEventHandler {
 
         //compute my part
         int result = 0;
-        for(Cube c in toDo) {
+        for(Cube c : toDo) {
             result += solutions(cube, cache, "");
         }
 
         //collect results from other nodes
         for(i = 0; i < nodes - 1; i++) {
             ReadMessage r = resultsReceiver.receive();
-            result += r.readInt()();
+            result += r.readInt();
             r.finish();
         }
 
@@ -201,14 +202,14 @@ public class Rubiks implements RegistryEventHandler {
             System.out.print(" " + bound);
             result = solutionsServer(cube, cache, "");
         }
-        
+
         System.out.println();
         System.out.println("Solving cube possible in " + result + " ways of "
                            + bound + " steps");
 
     }
 
-    public static solveWorkers(Ibis ibis, IbisIdentifier server) {
+    public static void solveWorkers(Ibis ibis, IbisIdentifier server) {
         ReceivePort taskReceiver = ibis.createReceivePort(portType, "" + myIbisId);
         taskReceiver.enableConnections();
         SendPort sender = ibis.createSendPort(portType);
@@ -221,15 +222,15 @@ public class Rubiks implements RegistryEventHandler {
             if(toDo.isEmpty()) {
                 // Read the message.
                 ReadMessage r = taskReceiver.receive();
-                toDo = (ArrayList<Cube>)r.readObject()();
+                toDo = (ArrayList<Cube>)r.readObject();
                 r.finish();
             }
             if(first) {
-                cache == new CubeCache(toDo.get(0).getSize());
+                cache = new CubeCache(toDo.get(0).getSize());
                 first = false;
             }
             int result = 0;
-            for(Cube c in toDo) {
+            for(Cube c : toDo) {
                 result += solutions(cube, cache, "");
             }
             // create a message
@@ -304,106 +305,105 @@ public class Rubiks implements RegistryEventHandler {
             displs[i] = sum;
             sum += cubes_per_proc[i];
         }
-    }
 
-    // If I am the server, run server, else run client.
-    if (server.equals(ibis.identifier())) {
-        long start = System.currentTimeMillis();
-        solveServer(ibis);
-        long end = System.currentTimeMillis();
+        // If I am the server, run server, else run client.
+        if (server.equals(ibis.identifier())) {
+            long start = System.currentTimeMillis();
+            solveServer(ibis);
+            long end = System.currentTimeMillis();
 
-        // NOTE: this is printed to standard error! The rest of the output is
-        // constant for each set of parameters. Printing this to standard error
-        // makes the output of standard out comparable with "diff"
-        System.err.println("Solving cube took " + (end - start)
-                           + " milliseconds");
-        //terminate all workers
-        // terminate the pool
-        System.out.println("Terminating pool");
-        myIbisId.registry().terminate();
-        // wait for this termination to propagate through the system
-        myIbisId.registry().waitUntilTerminated();
+            // NOTE: this is printed to standard error! The rest of the output is
+            // constant for each set of parameters. Printing this to standard error
+            // makes the output of standard out comparable with "diff"
+            System.err.println("Solving cube took " + (end - start)
+                               + " milliseconds");
+            //terminate all workers
+            // terminate the pool
+            System.out.println("Terminating pool");
+            myIbisId.registry().terminate();
+            // wait for this termination to propagate through the system
+            myIbisId.registry().waitUntilTerminated();
 
 
-    } else {
-        solveWorkers(ibis, server);
-    }
-
-    // End ibis.
-    ibis.registry().terminate();
-    ibis.end();
-}
-
-public static void main(String[] arguments) {
-
-    Cube cube = null;
-
-    // default parameters of puzzle
-    int size = 3;
-    int twists = 11;
-    int seed = 0;
-    String fileName = null;
-
-    // number of threads used to solve puzzle
-    // (not used in sequential version)
-
-    //If beginner
-
-    for (int i = 0; i < arguments.length; i++) {
-        if (arguments[i].equalsIgnoreCase("--size")) {
-            i++;
-            size = Integer.parseInt(arguments[i]);
-        } else if (arguments[i].equalsIgnoreCase("--twists")) {
-            i++;
-            twists = Integer.parseInt(arguments[i]);
-        } else if (arguments[i].equalsIgnoreCase("--seed")) {
-            i++;
-            seed = Integer.parseInt(arguments[i]);
-        } else if (arguments[i].equalsIgnoreCase("--file")) {
-            i++;
-            fileName = arguments[i];
-        } else if (arguments[i].equalsIgnoreCase("--help") || arguments[i].equalsIgnoreCase("-h")) {
-            printUsage();
-            System.exit(0);
         } else {
-            System.err.println("unknown option : " + arguments[i]);
-            printUsage();
-            System.exit(1);
+            solveWorkers(ibis, server);
         }
+
+        // End ibis.
+        ibis.registry().terminate();
+        ibis.end();
     }
 
-    // create cube
-    if (fileName == null) {
-        cube = new Cube(size, twists, seed);
-    } else {
+    public static void main(String[] arguments) {
+
+        Cube cube = null;
+
+        // default parameters of puzzle
+        int size = 3;
+        int twists = 11;
+        int seed = 0;
+        String fileName = null;
+
+        // number of threads used to solve puzzle
+        // (not used in sequential version)
+
+        //If beginner
+
+        for (int i = 0; i < arguments.length; i++) {
+            if (arguments[i].equalsIgnoreCase("--size")) {
+                i++;
+                size = Integer.parseInt(arguments[i]);
+            } else if (arguments[i].equalsIgnoreCase("--twists")) {
+                i++;
+                twists = Integer.parseInt(arguments[i]);
+            } else if (arguments[i].equalsIgnoreCase("--seed")) {
+                i++;
+                seed = Integer.parseInt(arguments[i]);
+            } else if (arguments[i].equalsIgnoreCase("--file")) {
+                i++;
+                fileName = arguments[i];
+            } else if (arguments[i].equalsIgnoreCase("--help") || arguments[i].equalsIgnoreCase("-h")) {
+                printUsage();
+                System.exit(0);
+            } else {
+                System.err.println("unknown option : " + arguments[i]);
+                printUsage();
+                System.exit(1);
+            }
+        }
+
+        // create cube
+        if (fileName == null) {
+            cube = new Cube(size, twists, seed);
+        } else {
+            try {
+                cube = new Cube(fileName);
+            } catch (Exception e) {
+                System.err.println("Cannot load cube from file: " + e);
+                System.exit(1);
+            }
+        }
+
+        // print cube info
+        System.out.println("Searching for solution for cube of size "
+                           + cube.getSize() + ", twists = " + twists + ", seed = " + seed);
+        cube.print(System.out);
+        System.out.flush();
+
+        //end if beginner
+
+        done = new ArrayList<String>();
+        toDo = new ArrayList<Cube>();
+
+        //if beginner
+        toDo.add(cube);
+
         try {
-            cube = new Cube(fileName);
+            new Hello().run();
         } catch (Exception e) {
-            System.err.println("Cannot load cube from file: " + e);
-            System.exit(1);
+            e.printStackTrace(System.err);
         }
+
     }
-
-    // print cube info
-    System.out.println("Searching for solution for cube of size "
-                       + cube.getSize() + ", twists = " + twists + ", seed = " + seed);
-    cube.print(System.out);
-    System.out.flush();
-
-    //end if beginner
-
-    done = new ArrayList<String>();
-    toDo = new ArrayList<Cube>();
-
-    //if beginner
-    toDo.add(cube);
-
-    try {
-        new Hello().run();
-    } catch (Exception e) {
-        e.printStackTrace(System.err);
-    }
-
-}
 
 }
