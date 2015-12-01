@@ -285,12 +285,14 @@ public class Rubiks implements RegistryEventHandler {
 
 
     private void run() throws Exception {
-    	System.out.println("fatto");
+    	System.out.println("done");
         // Create an ibis instance.
         Ibis ibis = IbisFactory.createIbis(ibisCapabilities, null, portType);
+        System.out.println("Ibis created");
         myIbisId = ibis.identifier();
 
         // Elect a server
+        System.out.println("elections");
         IbisIdentifier server = ibis.registry().elect("Server");
 
         System.out.println("Server is " + server);
@@ -407,7 +409,7 @@ public class Rubiks implements RegistryEventHandler {
         toDo.add(cube);
 
         try {
-        	System.out.println("faccio run");
+        	System.out.println("run");
             new Rubiks().run();
         } catch (Exception e) {
             e.printStackTrace(System.err);
