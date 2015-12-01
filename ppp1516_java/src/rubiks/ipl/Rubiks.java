@@ -11,12 +11,12 @@ import java.util.ArrayList;
  */
 public class Rubiks implements RegistryEventHandler {
 
-    PortType portType = new PortType(PortType.COMMUNICATION_RELIABLE,
+    static PortType portType = new PortType(PortType.COMMUNICATION_RELIABLE,
                                      PortType.SERIALIZATION_DATA, PortType.RECEIVE_EXPLICIT,
                                      PortType.CONNECTION_ONE_TO_ONE);
 
 
-    IbisCapabilities ibisCapabilities = new IbisCapabilities(
+    static IbisCapabilities ibisCapabilities = new IbisCapabilities(
         IbisCapabilities.ELECTIONS_STRICT, IbisCapabilities.MEMBERSHIP_TOTALLY_ORDERED, IbisCapabilities.TERMINATION);
 
     static int counter = 0;

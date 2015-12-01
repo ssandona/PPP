@@ -429,7 +429,7 @@ public class Cube implements Serializable {
                 s+=elementToString(BOTTOM, row, column);
             }
         }
-        return s.GetHashCode();
+        return s.hashCode();
 
     }
 
@@ -711,7 +711,7 @@ public class Cube implements Serializable {
 
     }
 
-    private String elementToString(int side, int row, int column, PrintStream out) {
+    private String elementToString(int side, int row, int column) {
         // System.err.println("printing side = " + side + " row = " + row
         // + " column = " + column);
 
