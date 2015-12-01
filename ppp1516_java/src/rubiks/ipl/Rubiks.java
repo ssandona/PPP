@@ -139,7 +139,7 @@ public class Rubiks implements RegistryEventHandler {
      */
 
 
-    public static int solutionsServer(Ibis ibis, Cube cube, CubeCache cache) throws IOException {
+    public static int solutionsServer(Ibis ibis, Cube cube, CubeCache cache) throws Exception {
         ReceivePort resultsReceiver = ibis.createReceivePort(portType2, "results");
         resultsReceiver.enableConnections();
         SendPort taskSender = ibis.createSendPort(portType2);
@@ -205,7 +205,7 @@ public class Rubiks implements RegistryEventHandler {
     }
 
 
-    private static void solveServer(Ibis ibis) throws IOException{
+    private static void solveServer(Ibis ibis) throws Exception{
 
         
         int bound = 0;
