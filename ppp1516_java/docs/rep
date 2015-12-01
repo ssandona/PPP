@@ -1,0 +1,2 @@
+The transposition table is particularly useful when
+a state can have multiple predecessors (i.e., when the search space is a graph rather than a tree)

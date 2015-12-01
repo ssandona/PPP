@@ -70,6 +70,9 @@ public class Cube implements Serializable {
 
     private int bound; // bound, useful for limiting the search depth
 
+    private int id;
+
+
     /**
      * Creates a "solved" cube of a given size
      *
@@ -231,6 +234,14 @@ public class Cube implements Serializable {
      */
     public int getSize() {
         return size;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public int setId(int id) {
+        this.id=id;
     }
 
     /**

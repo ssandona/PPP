@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * @author Niels Drost, Timo van Kessel
  *
  */
-public class Rubiks {
+public class Rubiks implements RegistryEventHandler {
 
     PortType portType = new PortType(PortType.COMMUNICATION_RELIABLE,
                                      PortType.SERIALIZATION_DATA, PortType.RECEIVE_EXPLICIT,
@@ -17,7 +17,7 @@ public class Rubiks {
 
 
     IbisCapabilities ibisCapabilities = new IbisCapabilities(
-        IbisCapabilities.ELECTIONS_STRICT, IbisCapabilities.MEMBERSHIP_TOTALLY_ORDERED);
+        IbisCapabilities.ELECTIONS_STRICT, IbisCapabilities.MEMBERSHIP_TOTALLY_ORDERED, IbisCapabilities.TERMINATION);
 
     static int counter = 0;
     static ArrayList<Cube> toDo;
@@ -26,8 +26,40 @@ public class Rubiks {
     static int nodes = 1;
     static ArrayList<ArrayList<Cube>> machines;
     static IbisIdentifier[] joinedIbises;
-    static IbisIdentifier myId;
+    static IbisIdentifier myIbisId;
     static SendPort sender;
+
+    public void joined(IbisIdentifier joinedIbis) {
+        System.err.println("Got event from registry: " + joinedIbis
+                + " joined pool");
+    }
+
+    public void died(IbisIdentifier corpse) {
+        System.err.println("Got event from registry: " + corpse + " died!");
+    }
+
+    public void left(IbisIdentifier leftIbis) {
+        System.err.println("Got event from registry: " + leftIbis + " left");
+    }
+
+    public void electionResult(String electionName, IbisIdentifier winner) {
+        System.err.println("Got event from registry: " + winner
+                + " won election " + electionName);
+    }
+
+    public void gotSignal(String signal, IbisIdentifier source) {
+        System.err.println("Got event from registry: signal \"" + signal
+                + "\" from " + source);
+    }
+
+    public void poolClosed() {
+        System.err.println("Got event from registry: pool closed");
+    }
+
+    public void poolTerminated(IbisIdentifier source) {
+        System.err.println("Got event from registry: pool terminated by "
+                + source);
+    }
 
     public static final boolean PRINT_SOLUTION = false;
 
@@ -41,7 +73,8 @@ public class Rubiks {
      *            cache of cubes used for new cube objects
      * @return the number of solutions found
      */
-    private static int solutions(Cube cube, CubeCache cache, int twistSolution, String s) {
+
+    private static int solutions(Cube cube, CubeCache cache, String s) {
         /*if(counter <= 1) {
             System.out.println(s+"AAA: Solutions -> cache size:" + cache.getSize());
         }*/
@@ -49,182 +82,166 @@ public class Rubiks {
             return 1;
         }
 
-        if(cube.getTwist() >= twistSolution)
+        if (cube.getTwists() >= cube.getBound()) {
+            /*if(counter <= 1) {
+                System.out.println(s+"AAA: Twist>=Bound");
+            }*/
             return 0;
+        }
 
-
+        /*if(counter <= 1) {
+                System.out.println(s+"AAA: GenerateChildren");
+            }*/
         // generate all possible cubes from this one by twisting it in
         // every possible way. Gets new objects from the cache
         Cube[] children = cube.generateChildren(cache);
 
-        machines = new ArrayList<ArrayList<Cube>>();
-        //
+        int result = 0;
 
         for (Cube child : children) {
-            switch(child.hash() % nodes) {
-            case(myId): {
-                toDo.add(child);
-                break;
-            }
-            case(0):
-            {machines[0].add(child); break;},
-            case(1):
-            {machines[1].add(child); break;},
-            case(2):
-            {machines[2].add(child); break;},
-            case(3):
-            {machines[3].add(child); break;},
-            case(4):
-            {machines[4].add(child); break;},
-            case(5):
-            {machines[5].add(child); break;},
-            case(6):
-            {machines[6].add(child); break;},
-            case(7):
-            {machines[7].add(child); break;},
-            case(8):
-            {machines[8].add(child); break;},
-            case(9):
-            {machines[9].add(child); break;},
-            case(10):
-            {machines[10].add(child); break;},
-            case(11):
-            {machines[11].add(child); break;},
-            }
-
-            int i = 0;
-            for (IbisIdentifier joinedIbis : joinedIbises) {
-                if(joinedIbis != myIbisId && !machines[i].isEmpty()) {
-                    sender.connect(joinedIbis, "" + joinedIbis);
-                    // create a reply message
-                    WriteMessage reply = sender.newMessage();
-                    reply.writeObject(machines[i]);
-                    reply.finish();
+            /*if(counter <= 1) {
+                System.out.println(s+"AAA: Child");
+            }*/
+            // recursion step
+            int childSolutions = solutions(child, cache, s + " ");
+            if (childSolutions > 0) {
+                result += childSolutions;
+                if (PRINT_SOLUTION) {
+                    child.print(System.err);
                 }
-                i++;
             }
-
+            // put child object in cache
+            cache.put(child);
         }
-        // put child object in cache
-        cache.put(child);
-        return 0;
+
+        return result;
     }
 
-    // Create a send port for sending requests and connect.
+    /**
+     * Solves a Rubik's cube by iteratively searching for solutions with a
+     * greater depth. This guarantees the optimal solution is found. Repeats all
+     * work for the previous iteration each iteration though...
+     *
+     * @param cube
+     *            the cube to solve
+     */
 
 
+    public static int solutionsServer(Cube c, CubeCache cache) {
+        ReceivePort resultsReceiver = ibis.createReceivePort(portType, "results");
+        resultsReceiver.enableConnections();
+        SendPort taskSender = ibis.createSendPort(portType);
 
-
-    return result;
-}
-
-/**
- * Solves a Rubik's cube by iteratively searching for solutions with a
- * greater depth. This guarantees the optimal solution is found. Repeats all
- * work for the previous iteration each iteration though...
- *
- * @param cube
- *            the cube to solve
- */
-private static void solve(Ibis ibis, boolean server) {
-    // cache used for cube objects. Doing new Cube() for every move
-    // overloads the garbage collector
-    boolean end = false;
-    CubeCache cache;
-    //int bound = 0;
-
-    // Create a receive port and enable connections.
-    ReceivePort taskReceiver = ibis.createReceivePort(portType, "" + myId);
-    taskReceiver.enableConnections();
-    sender = ibis.createSendPort(portType);
-    ReceivePort resultsReceiver;
-    if(myId == server) {
-        resultsReceiver = myIbis.createReceivePort(portType, "results");
-        taskReceiver.enableConnections();
-    }
-
-    if(myId == server) {
-
-    }
-
-    //System.out.print("Bound now:");
-    if(toDo.isEmpty()) {
-        // Read the message.
-        ReadMessage r = taskReceiver.receive();
-        toDo = (ArrayList<Cube>)r.readObject()();
-        r.finish();
-        //System.out.println("Server received: " + s);
-
-        if(toDo.get(0).getClass().equals(NullCube.class)) {
-            end = true;
-        } else {
-            cache = new CubeCache(toDo.get(0).getSize());
+        if (cube.isSolved()) {
+            return 1;
         }
-    } else {
-        cache = new CubeCache(toDo.get(0).getSize());
-    }
 
-    Cube actual=toDo.get(0);
-    int twistSolution = -1;
-    while (result == 0) {
-        if(done.indexOf(actual.hash()) == -1) {
-            done.add(actual.hash());
-            actual = toDo.remove(0);
-            result = solutions(actual, cache, twistSolution, "");
-            if(result != 0) {
-                break;
+        /*if(counter <= 1) {
+                System.out.println(s+"AAA: GenerateChildren");
+            }*/
+        // generate all possible cubes from this one by twisting it in
+        // every possible way. Gets new objects from the cache
+        Cube[] children = cube.generateChildren(cache);
+
+
+        //work distribution
+        machines = new ArrayList<ArrayList<Cube>>();
+        int last_displs = 0;
+        int i;
+        for(i = 0; i < nodes; i++) {
+            if(i == myIbisId) {
+                toDo.add(Arrays.copyOfRange(children, last_displs, displs[i]));
+                last_displs = displs[i];
+                continue;
             }
+            machines[i].add(Arrays.copyOfRange(children, last_displs, displs[i]));
+            last_displs = displs[i];
         }
-        if(toDo.isEmpty()) {
-            // Read the message.
-            ReadMessage r = receiver.receive();
-            toDo = (ArrayList<Cube>)r.readObject()();
+        i = 0;
+        for (IbisIdentifier joinedIbis : joinedIbises) {
+            if(joinedIbis != myIbisId && !machines[i].isEmpty()) {
+                taskSender.connect(joinedIbis, "" + joinedIbis);
+                // create a reply message
+                WriteMessage task = taskSender.newMessage();
+                task.writeObject(machines[i]);
+                task.finish();
+            }
+            i++;
+        }
+
+        //compute my part
+        int result = 0;
+        for(Cube c in toDo) {
+            result += solutions(cube, cache, "");
+        }
+
+        //collect results from other nodes
+        for(i = 0; i < nodes - 1; i++) {
+            ReadMessage r = resultsReceiver.receive();
+            result += r.readInt()();
             r.finish();
-            //System.out.println("Server received: " + s);
-
-            if(toDo.get(0).isSolved()) {
-                twistSolution = toDo.get(0).getTwist();
-                //send to server that we have received the last cube
-            }
         }
 
+        resultsReceiver.close();
+        taskSender.close();
+        return result;
+    }
 
-        if(myId != server && result > 0) {
 
-            for (IbisIdentifier joinedIbis : joinedIbises) {
-                if(joinedIbis != myIbisId) {
-                    sender.connect(joinedIbis, "" + joinedIbis);
-                    // create a reply message
-                    WriteMessage reply = sender.newMessage();
-                    reply.writeObject(actual);
-                    reply.finish();
-                }
-                i++;
-            }
-            sender.connect(server, "results");
-            // create a reply message
-            WriteMessage res = sender.newMessage();
-            res.writeInt(actual.getTwist());
-            reply.finish();
+    private static void solveServer(Ibis ibis) {
+
+        CubeCache cache = new CubeCache(c.getSize());
+        int bound = 0;
+        int result = 0;
+        Cube cube = toDo.remove(0);
+
+        while (result == 0) {
+            bound++;
+            cube.setBound(bound);
+            System.out.print(" " + bound);
+            result = solutionsServer(cube, cache, "");
         }
-
-
-
-
-
-        //send "end" to all
-
-        //collect results from all and select best (until twist of the winner)
-
+        
         System.out.println();
         System.out.println("Solving cube possible in " + result + " ways of "
                            + bound + " steps");
 
-        //else send to beginner
-
-        // Close receive port.
-        receiver.close();
     }
+
+    public static solveWorkers(Ibis ibis, IbisIdentifier server) {
+        ReceivePort taskReceiver = ibis.createReceivePort(portType, "" + myIbisId);
+        taskReceiver.enableConnections();
+        SendPort sender = ibis.createSendPort(portType);
+        sender.connect(server, "results");
+        boolean first = true;
+
+        CubeCache cache;
+        while(!end) {
+            //System.out.print("Bound now:");
+            if(toDo.isEmpty()) {
+                // Read the message.
+                ReadMessage r = taskReceiver.receive();
+                toDo = (ArrayList<Cube>)r.readObject()();
+                r.finish();
+            }
+            if(first) {
+                cache == new CubeCache(toDo.get(0).getSize());
+                first = false;
+            }
+            int result = 0;
+            for(Cube c in toDo) {
+                result += solutions(cube, cache, "");
+            }
+            // create a message
+            WriteMessage resultMessage = sender.newMessage();
+            resultMessage.writeInt(result);
+            resultMessage.finish();
+        }
+        taskReceiver.close();
+        sender.close();
+    }
+
+
 
     public static void printUsage() {
         System.out.println("Rubiks Cube solver");
@@ -273,98 +290,120 @@ private static void solve(Ibis ibis, boolean server) {
         for (IbisIdentifier joinedIbis : joinedIbises) {
             System.err.println("Ibis joined: " + joinedIbis);
         }
-
-        // If I am the server, run server, else run client.
-        if (server.equals(ibis.identifier())) {
-            long start = System.currentTimeMillis();
-            solve(ibis, true);
-            long end = System.currentTimeMillis();
-
-            // NOTE: this is printed to standard error! The rest of the output is
-            // constant for each set of parameters. Printing this to standard error
-            // makes the output of standard out comparable with "diff"
-            System.err.println("Solving cube took " + (end - start)
-                               + " milliseconds");
-
-
-        } else {
-            solve(ibis, false);
+        cubes_per_proc = new Integer[nodes];
+        displs = new Integer[nodes];
+        int avarage_cubes_per_proc = 12 / nodes;
+        int rem = 12 % nodes;
+        int sum = 0;
+        for (i = 0; i < nodes; i++) {
+            cubes_per_proc[i] = avarage_cubes_per_proc;
+            if (rem > 0) {
+                bodies_per_proc[i]++;
+                rem--;
+            }
+            displs[i] = sum;
+            sum += cubes_per_proc[i];
         }
-
-        // End ibis.
-        ibis.end();
     }
 
-    public static void main(String[] arguments) {
+    // If I am the server, run server, else run client.
+    if (server.equals(ibis.identifier())) {
+        long start = System.currentTimeMillis();
+        solveServer(ibis);
+        long end = System.currentTimeMillis();
 
-        Cube cube = null;
+        // NOTE: this is printed to standard error! The rest of the output is
+        // constant for each set of parameters. Printing this to standard error
+        // makes the output of standard out comparable with "diff"
+        System.err.println("Solving cube took " + (end - start)
+                           + " milliseconds");
+        //terminate all workers
+        // terminate the pool
+        System.out.println("Terminating pool");
+        myIbisId.registry().terminate();
+        // wait for this termination to propagate through the system
+        myIbisId.registry().waitUntilTerminated();
 
-        // default parameters of puzzle
-        int size = 3;
-        int twists = 11;
-        int seed = 0;
-        String fileName = null;
 
-        // number of threads used to solve puzzle
-        // (not used in sequential version)
+    } else {
+        solveWorkers(ibis, server);
+    }
 
-        //If beginner
+    // End ibis.
+    ibis.registry().terminate();
+    ibis.end();
+}
 
-        for (int i = 0; i < arguments.length; i++) {
-            if (arguments[i].equalsIgnoreCase("--size")) {
-                i++;
-                size = Integer.parseInt(arguments[i]);
-            } else if (arguments[i].equalsIgnoreCase("--twists")) {
-                i++;
-                twists = Integer.parseInt(arguments[i]);
-            } else if (arguments[i].equalsIgnoreCase("--seed")) {
-                i++;
-                seed = Integer.parseInt(arguments[i]);
-            } else if (arguments[i].equalsIgnoreCase("--file")) {
-                i++;
-                fileName = arguments[i];
-            } else if (arguments[i].equalsIgnoreCase("--help") || arguments[i].equalsIgnoreCase("-h")) {
-                printUsage();
-                System.exit(0);
-            } else {
-                System.err.println("unknown option : " + arguments[i]);
-                printUsage();
-                System.exit(1);
-            }
-        }
+public static void main(String[] arguments) {
 
-        // create cube
-        if (fileName == null) {
-            cube = new Cube(size, twists, seed);
+    Cube cube = null;
+
+    // default parameters of puzzle
+    int size = 3;
+    int twists = 11;
+    int seed = 0;
+    String fileName = null;
+
+    // number of threads used to solve puzzle
+    // (not used in sequential version)
+
+    //If beginner
+
+    for (int i = 0; i < arguments.length; i++) {
+        if (arguments[i].equalsIgnoreCase("--size")) {
+            i++;
+            size = Integer.parseInt(arguments[i]);
+        } else if (arguments[i].equalsIgnoreCase("--twists")) {
+            i++;
+            twists = Integer.parseInt(arguments[i]);
+        } else if (arguments[i].equalsIgnoreCase("--seed")) {
+            i++;
+            seed = Integer.parseInt(arguments[i]);
+        } else if (arguments[i].equalsIgnoreCase("--file")) {
+            i++;
+            fileName = arguments[i];
+        } else if (arguments[i].equalsIgnoreCase("--help") || arguments[i].equalsIgnoreCase("-h")) {
+            printUsage();
+            System.exit(0);
         } else {
-            try {
-                cube = new Cube(fileName);
-            } catch (Exception e) {
-                System.err.println("Cannot load cube from file: " + e);
-                System.exit(1);
-            }
+            System.err.println("unknown option : " + arguments[i]);
+            printUsage();
+            System.exit(1);
         }
+    }
 
-        // print cube info
-        System.out.println("Searching for solution for cube of size "
-                           + cube.getSize() + ", twists = " + twists + ", seed = " + seed);
-        cube.print(System.out);
-        System.out.flush();
-
-        //end if beginner
-
-        done = new ArrayList<String>();
-        toDo = new ArrayList<Cube>();
-
-        //if beginner
-        toDo.add(cube);
-
+    // create cube
+    if (fileName == null) {
+        cube = new Cube(size, twists, seed);
+    } else {
         try {
-            new Hello().run();
+            cube = new Cube(fileName);
         } catch (Exception e) {
-            e.printStackTrace(System.err);
+            System.err.println("Cannot load cube from file: " + e);
+            System.exit(1);
         }
-
     }
+
+    // print cube info
+    System.out.println("Searching for solution for cube of size "
+                       + cube.getSize() + ", twists = " + twists + ", seed = " + seed);
+    cube.print(System.out);
+    System.out.flush();
+
+    //end if beginner
+
+    done = new ArrayList<String>();
+    toDo = new ArrayList<Cube>();
+
+    //if beginner
+    toDo.add(cube);
+
+    try {
+        new Hello().run();
+    } catch (Exception e) {
+        e.printStackTrace(System.err);
+    }
+
+}
 
 }
