@@ -157,7 +157,7 @@ public class Rubiks implements RegistryEventHandler {
                 last_displs = displs[i];
                 continue;
             }
-            machines.add(new ArrayList<Cube>(Arrays.copyOfRange(children, last_displs, displs[i])));
+            machines.add(new ArrayList<Cube>Arrays.asList((Arrays.copyOfRange(children, last_displs, displs[i]))));
             last_displs = displs[i];
         }
         
@@ -307,7 +307,7 @@ public class Rubiks implements RegistryEventHandler {
         for (i = 0; i < nodes; i++) {
             cubes_per_proc[i] = avarage_cubes_per_proc;
             if (rem > 0) {
-                bodies_per_proc[i]++;
+                cubes_per_proc[i]++;
                 rem--;
             }
             displs[i] = sum;
@@ -400,14 +400,14 @@ public class Rubiks implements RegistryEventHandler {
 
         //end if beginner
 
-        done = new ArrayList<String>();
+        //done = new ArrayList<String>();
         toDo = new ArrayList<Cube>();
 
         //if beginner
         toDo.add(cube);
 
         try {
-            new Hello().run();
+            new Rubiks().run();
         } catch (Exception e) {
             e.printStackTrace(System.err);
         }
