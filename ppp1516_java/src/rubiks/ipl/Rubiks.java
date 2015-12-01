@@ -157,13 +157,16 @@ public class Rubiks implements RegistryEventHandler {
                 last_displs = displs[i];
                 continue;
             }
-            machines.get(i)=new ArrayList<Cube>(Arrays.copyOfRange(children, last_displs, displs[i]));
+            machines.add(new ArrayList<Cube>(Arrays.copyOfRange(children, last_displs, displs[i])));
             last_displs = displs[i];
         }
         
         i = 0;
         for (IbisIdentifier joinedIbis : joinedIbises) {
-            if(joinedIbis != myIbisId && !machines.get(i).isEmpty()) {
+        	if(joinedIbis == myIbisId){
+        		continue;
+        	}
+            if(machines.get(i).isEmpty()) {
                 taskSender.connect(joinedIbis, "" + joinedIbis);
                 // create a reply message
                 WriteMessage task = taskSender.newMessage();
@@ -300,6 +303,7 @@ public class Rubiks implements RegistryEventHandler {
         int avarage_cubes_per_proc = 12 / nodes;
         int rem = 12 % nodes;
         int sum = 0;
+        int i;
         for (i = 0; i < nodes; i++) {
             cubes_per_proc[i] = avarage_cubes_per_proc;
             if (rem > 0) {
@@ -324,9 +328,9 @@ public class Rubiks implements RegistryEventHandler {
             //terminate all workers
             // terminate the pool
             System.out.println("Terminating pool");
-            myIbisId.registry().terminate();
+            ibis.registry().terminate();
             // wait for this termination to propagate through the system
-            myIbisId.registry().waitUntilTerminated();
+            ibis.registry().waitUntilTerminated();
 
 
         } else {
