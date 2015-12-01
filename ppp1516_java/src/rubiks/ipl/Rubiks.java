@@ -331,6 +331,7 @@ public class Rubiks implements RegistryEventHandler {
 
         // If I am the server, run server, else run client.
         if (server.equals(ibis.identifier())) {
+        	try{
             long start = System.currentTimeMillis();
             solveServer(ibis);
             long end = System.currentTimeMillis();
@@ -345,7 +346,11 @@ public class Rubiks implements RegistryEventHandler {
             System.out.println("Terminating pool");
             ibis.registry().terminate();
             // wait for this termination to propagate through the system
-            ibis.registry().waitUntilTerminated();
+            ibis.registry().waitUntilTerminated();}
+            catch(Exception e){
+            	ibis.registry().terminate();
+            	ibis.end();
+            }
 
 
         } else {
