@@ -13,9 +13,15 @@ import java.io.IOException;
  */
 public class Rubiks implements RegistryEventHandler {
 
-    static PortType portType = new PortType(PortType.COMMUNICATION_RELIABLE,
+    static PortType portType1 = new PortType(PortType.COMMUNICATION_RELIABLE,
                                      PortType.SERIALIZATION_DATA, PortType.RECEIVE_EXPLICIT,
                                      PortType.CONNECTION_ONE_TO_ONE);
+
+    static PortType portType2 = new PortType(PortType.COMMUNICATION_RELIABLE,
+                                     PortType.SERIALIZATION_DATA, PortType.RECEIVE_EXPLICIT,
+                                     PortType.CONNECTION_ONE_TO_MANY);
+
+    
 
 
     static IbisCapabilities ibisCapabilities = new IbisCapabilities(
@@ -134,9 +140,9 @@ public class Rubiks implements RegistryEventHandler {
 
 
     public static int solutionsServer(Ibis ibis, Cube cube, CubeCache cache) throws IOException {
-        ReceivePort resultsReceiver = ibis.createReceivePort(portType, "results");
+        ReceivePort resultsReceiver = ibis.createReceivePort(portType2, "results");
         resultsReceiver.enableConnections();
-        SendPort taskSender = ibis.createSendPort(portType);
+        SendPort taskSender = ibis.createSendPort(portType2);
 
         if (cube.isSolved()) {
             return 1;
@@ -221,9 +227,9 @@ public class Rubiks implements RegistryEventHandler {
     }
 
     public static void solveWorkers(Ibis ibis, IbisIdentifier server) throws Exception{
-        ReceivePort taskReceiver = ibis.createReceivePort(portType, "" + myIbisId);
+        ReceivePort taskReceiver = ibis.createReceivePort(portType1, "" + myIbisId);
         taskReceiver.enableConnections();
-        SendPort sender = ibis.createSendPort(portType);
+        SendPort sender = ibis.createSendPort(portType1);
         sender.connect(server, "results");
         boolean first = true;
 
@@ -290,7 +296,7 @@ public class Rubiks implements RegistryEventHandler {
     private void run() throws Exception {
     	System.out.println("done");
         // Create an ibis instance.
-        Ibis ibis = IbisFactory.createIbis(ibisCapabilities, null, portType);
+        Ibis ibis = IbisFactory.createIbis(ibisCapabilities, null, portType1);
         System.out.println("Ibis created");
         myIbisId = ibis.identifier();
 
