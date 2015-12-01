@@ -11,3 +11,12 @@ CLASSPATH=$IPL_HOME/examples/lib/ipl-examples.jar
 export CLASSPATH
 
 $IPL_HOME/scripts/ipl-run -Dibis.server.address=localhost -Dibis.pool.name=test ibis.ipl.examples.Hello
+
+
+
+
+With Prun
+
+- Change java-run script
+- create property file with server-address the one printed launching the server with $IPL_HOME/scripts/ipl-server --events --port 5658
+    and pool name
