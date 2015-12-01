@@ -153,7 +153,7 @@ public class Rubiks implements RegistryEventHandler {
         for (IbisIdentifier joinedIbis : joinedIbises){
         	i++;
         	if(joinedIbis == myIbisId) {
-                toDo.add(Arrays.asList((Arrays.copyOfRange(children, last_displs, displs[i])));
+                toDo.add(Arrays.asList(Arrays.copyOfRange(children, last_displs, displs[i])));
                 last_displs = displs[i];
                 continue;
             }
