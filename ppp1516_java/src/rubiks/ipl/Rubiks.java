@@ -217,14 +217,14 @@ public class Rubiks implements RegistryEventHandler {
 
     }
 
-    public static void solveWorkers(Ibis ibis, IbisIdentifier server) throws IOException{
+    public static void solveWorkers(Ibis ibis, IbisIdentifier server) throws Exception{
         ReceivePort taskReceiver = ibis.createReceivePort(portType, "" + myIbisId);
         taskReceiver.enableConnections();
         SendPort sender = ibis.createSendPort(portType);
         sender.connect(server, "results");
         boolean first = true;
 
-        CubeCache cache;
+        CubeCache cache=null;
         while(!ibis.registry().hasTerminated()) {
             //System.out.print("Bound now:");
             if(toDo.isEmpty()) {
