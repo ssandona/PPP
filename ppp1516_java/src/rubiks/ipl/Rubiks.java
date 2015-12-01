@@ -307,7 +307,7 @@ public class Rubiks implements RegistryEventHandler {
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
                 try {
-                    myIbis.registry().terminate();
+                    //myIbis.registry().terminate();
                     myIbis.end();
                 }
                 catch(IOException e){
