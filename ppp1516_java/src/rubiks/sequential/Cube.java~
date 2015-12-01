@@ -320,6 +320,7 @@ public class Cube implements Serializable {
      * @return the resulting cube after twisting
      */
     public Cube twist(Axis axis, int row, boolean direction, CubeCache cache) {
+        //System.out.println("AAA: Twist: axis-"+axis+" row-"+row+" direction-"+direction);
         if (row <= 0) {
             throw new Error("first row to twist must be greater then zero");
         }
