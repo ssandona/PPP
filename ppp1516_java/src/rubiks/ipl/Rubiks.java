@@ -153,17 +153,17 @@ public class Rubiks implements RegistryEventHandler {
         for (IbisIdentifier joinedIbis : joinedIbises){
         	i++;
         	if(joinedIbis == myIbisId) {
-                toDo.add(Arrays.copyOfRange(children, last_displs, displs[i]));
+                toDo.add(Arrays.asList((Arrays.copyOfRange(children, last_displs, displs[i])));
                 last_displs = displs[i];
                 continue;
             }
-            machines[i].add(Arrays.copyOfRange(children, last_displs, displs[i]));
+            machines.get(i).add(Arrays.copyOfRange(children, last_displs, displs[i]));
             last_displs = displs[i];
         }
         
         i = 0;
         for (IbisIdentifier joinedIbis : joinedIbises) {
-            if(joinedIbis != myIbisId && !machines[i].isEmpty()) {
+            if(joinedIbis != myIbisId && !machines.get(i).isEmpty()) {
                 taskSender.connect(joinedIbis, "" + joinedIbis);
                 // create a reply message
                 WriteMessage task = taskSender.newMessage();
