@@ -285,6 +285,7 @@ public class Rubiks implements RegistryEventHandler {
 
 
     private void run() throws Exception {
+    	System.out.println("fatto");
         // Create an ibis instance.
         Ibis ibis = IbisFactory.createIbis(ibisCapabilities, null, portType);
         myIbisId = ibis.identifier();
@@ -356,8 +357,6 @@ public class Rubiks implements RegistryEventHandler {
         // number of threads used to solve puzzle
         // (not used in sequential version)
 
-        //If beginner
-
         for (int i = 0; i < arguments.length; i++) {
             if (arguments[i].equalsIgnoreCase("--size")) {
                 i++;
@@ -408,6 +407,7 @@ public class Rubiks implements RegistryEventHandler {
         toDo.add(cube);
 
         try {
+        	System.out.println("faccio run");
             new Rubiks().run();
         } catch (Exception e) {
             e.printStackTrace(System.err);
