@@ -235,7 +235,7 @@ public class Rubiks{
             ReadMessage r = resultsReceiver.receive();
             result += r.readInt();
             r.finish();
-            System.out.println("YEAH");
+            //System.out.println("YEAH");
         }
         //System.out.println("EndFor, Result= "+result);
         //System.out.println("return");
@@ -296,9 +296,9 @@ public class Rubiks{
         while(!ibis.registry().hasTerminated()) {
             //System.out.print("Bound now:");
             if(toDo.isEmpty()) {
-                System.out.println("EmptyWorkQueueWait");
+                //System.out.println("EmptyWorkQueueWait");
                 ReadMessage r = taskReceiver.receive();
-                System.out.println("ReceivedMyWork");
+                //System.out.println("ReceivedMyWork");
                 cube=(Cube)r.readObject();
                 r.finish();
             }
