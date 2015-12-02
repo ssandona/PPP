@@ -142,11 +142,7 @@ public class Rubiks implements RegistryEventHandler {
      */
 
 
-    public static int solutionsServer(Ibis ibis, Cube cube, CubeCache cache) throws Exception {
-        System.out.println("SolutionsServer");
-        ReceivePort resultsReceiver = ibis.createReceivePort(portType2, "results");
-        resultsReceiver.enableConnections();
-        SendPort taskSender = ibis.createSendPort(portType2);
+    public static int solutionsServer(Ibis ibis, Cube cube, CubeCache cache, ReceivePort resultsReceiver, SendPort taskSender) throws Exception {
         if (cube.isSolved()) {
             return 1;
         }
@@ -240,9 +236,6 @@ public class Rubiks implements RegistryEventHandler {
             System.out.println("YEAH");
         }
         System.out.println("EndFor, Result= "+result);
-
-        //resultsReceiver.close();
-        //taskSender.close();
         System.out.println("return");
         return result;
     }
@@ -255,18 +248,24 @@ public class Rubiks implements RegistryEventHandler {
         int result = 0;
         Cube cube = toDo.remove(0);
         CubeCache cache = new CubeCache(cube.getSize());
+        System.out.println("SolutionsServer");
+        ReceivePort resultsReceiver = ibis.createReceivePort(portType2, "results");
+        resultsReceiver.enableConnections();
+        SendPort taskSender = ibis.createSendPort(portType2);
 
         while (result == 0) {
             bound++;
             cube.setBound(bound);
             System.out.print(" " + bound);
-            result = solutionsServer(ibis, cube, cache);
+            result = solutionsServer(ibis, cube, cache,resultsReceiver,taskSender);
             System.out.println("Result: "+result);
         }
 
         System.out.println();
         System.out.println("Solving cube possible in " + result + " ways of "
                            + bound + " steps");
+        resultsReceiver.close();
+        taskSender.close();
 
     }
 
