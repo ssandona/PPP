@@ -185,7 +185,7 @@ public class Rubiks implements RegistryEventHandler {
                 taskSender.connect(joinedIbis, "" + joinedIbis);
                 // create a reply message
                 WriteMessage task = taskSender.newMessage();
-                task.writeArray(machines.get(i).toArray(new Cube[machine.get(i).size()]));
+                task.writeArray(machines.get(i).toArray(new Cube[machines.get(i).size()]));
                 task.finish();
                 System.out.println("Sent");
             }
@@ -240,6 +240,7 @@ public class Rubiks implements RegistryEventHandler {
         sender.connect(server, "results");
         System.out.println("ConnectedToServerPort");
         boolean first = true;
+        int i;
 
         Cube[] myCubes=new Cube[12];
         CubeCache cache = null;
