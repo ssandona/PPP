@@ -208,10 +208,10 @@ public class Rubiks{
             WriteMessage task = taskSender.newMessage();
             task.writeObject(cube);
             task.finish();
-            //System.out.println("Sent");
+            System.out.println("Sent");
         //}
 
-        //System.out.println("ComputeMyPart");
+        System.out.println("ComputeMyPart");
         Cube[] children = cube.generateChildren(cache);
         int last_displs;
         if(id != 0) {
@@ -219,7 +219,7 @@ public class Rubiks{
         } else {
             last_displs = 0;
         }
-        //System.out.println("ComputeMyPart"+myIbisId+": ["+displs[id]+","+(displs[id]+cubes_per_proc[id])+"]");
+        System.out.println("ComputeMyPart"+myIbisId+": ["+displs[id]+","+(displs[id]+cubes_per_proc[id])+"]");
         toDo = new ArrayList<Cube>(Arrays.asList(Arrays.copyOfRange(children, displs[id], displs[id]+cubes_per_proc[id])));
 
 
@@ -228,8 +228,8 @@ public class Rubiks{
         while(!toDo.isEmpty()) {
             result += solutions(toDo.remove(0), cache, "");
         }
-        //System.out.println("MyResult: " + result);
-        //System.out.println("CollectResults of " + nodes + " nodes");
+        System.out.println("MyResult: " + result);
+        System.out.println("CollectResults of " + nodes + " nodes");
         //collect results from other nodes
         for(i = 0; i < nodes - 1; i++) {
             ReadMessage r = resultsReceiver.receive();
@@ -237,8 +237,8 @@ public class Rubiks{
             r.finish();
             System.out.println("YEAH");
         }
-        //System.out.println("EndFor, Result= "+result);
-        //System.out.println("return");
+        System.out.println("EndFor, Result= "+result);
+        System.out.println("return");
         return result;
     }
 
@@ -250,7 +250,7 @@ public class Rubiks{
         int result = 0;
         Cube cube = toDo.remove(0);
         CubeCache cache = new CubeCache(cube.getSize());
-        //System.out.println("SolutionsServer");
+        System.out.println("SolutionsServer");
         ReceivePort resultsReceiver = ibis.createReceivePort(portType2, "results");
         resultsReceiver.enableConnections();
         SendPort taskSender = ibis.createSendPort(portType1);
@@ -264,9 +264,9 @@ public class Rubiks{
         while (result == 0) {
             bound++;
             cube.setBound(bound);
-            //System.out.print(" " + bound);
+            System.out.print(" " + bound);
             result = solutionsServer(ibis, cube, cache,resultsReceiver,taskSender);
-            //System.out.println("Result: "+result);
+            System.out.println("Result: "+result);
         }
 
         System.out.println();
@@ -287,7 +287,7 @@ public class Rubiks{
         SendPort sender = ibis.createSendPort(portType2);
         Thread.sleep(1000);
         sender.connect(server, "results");
-        //System.out.println("ConnectedToServerPort");
+        System.out.println("ConnectedToServerPort");
         boolean first = true;
         int i;
 
@@ -303,18 +303,18 @@ public class Rubiks{
                 r.finish();
             }
             if(first) {
-                //System.out.println("First");
+                System.out.println("First");
                 cache = new CubeCache(cube.getSize());
                 first = false;
             }
             int result = 0;
             Cube[] children = cube.generateChildren(cache);
-            //System.out.println("ComputeMyPart"+myIbisId+": ["+displs[id]+","+(displs[id]+cubes_per_proc[id])+"]");
+            System.out.println("ComputeMyPart"+myIbisId+": ["+displs[id]+","+(displs[id]+cubes_per_proc[id])+"]");
             toDo = new ArrayList<Cube>(Arrays.asList(Arrays.copyOfRange(children, displs[id], displs[id]+cubes_per_proc[id])));
             while(!toDo.isEmpty()) {
                 result += solutions(toDo.remove(0), cache, "");
             }
-            //System.out.println("CalculatedResult: " + result);
+            System.out.println("CalculatedResult: " + result);
             // create a message
             WriteMessage resultMessage = sender.newMessage();
             resultMessage.writeInt(result);
@@ -359,7 +359,7 @@ public class Rubiks{
 
 
     private void run() throws Exception {
-        //System.out.println("done");
+        System.out.println("done");
         // Create an ibis instance.
         Ibis ibis = IbisFactory.createIbis(ibisCapabilities, null, portType2, portType1);
         Thread.sleep(5000);
@@ -517,3 +517,4 @@ public class Rubiks{
     }
 
 }
+
