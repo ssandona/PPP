@@ -171,7 +171,7 @@ public class Rubiks implements RegistryEventHandler {
             machines.add(new ArrayList<Cube>(Arrays.asList((Arrays.copyOfRange(children, last_displs, displs[i])))));
             last_displs = displs[i];
         }
-
+        System.out.println("MachinesNumber: "+machnes.size());
         Thread.sleep(5000);
         System.out.println("SendTask");
         i = 0;
@@ -186,7 +186,6 @@ public class Rubiks implements RegistryEventHandler {
                 task.writeObject(machines.get(i));
                 task.finish();
             }
-            i++;
         }
 
         //compute my part
@@ -242,12 +241,14 @@ public class Rubiks implements RegistryEventHandler {
         while(!ibis.registry().hasTerminated()) {
             //System.out.print("Bound now:");
             if(toDo.isEmpty()) {
-                // Read the message.
+                System.out.println("EmptyWorkQueueWait");
                 ReadMessage r = taskReceiver.receive();
+                System.out.println("ReceivedMyWork");
                 toDo = (ArrayList<Cube>)r.readObject();
                 r.finish();
             }
             if(first) {
+            	System.out.println("First");
                 cache = new CubeCache(toDo.get(0).getSize());
                 first = false;
             }
@@ -255,6 +256,7 @@ public class Rubiks implements RegistryEventHandler {
             for(Cube cube : toDo) {
                 result += solutions(cube, cache, "");
             }
+            System.out.println("CalculatdResult");
             // create a message
             WriteMessage resultMessage = sender.newMessage();
             resultMessage.writeInt(result);
