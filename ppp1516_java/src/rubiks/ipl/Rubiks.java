@@ -223,7 +223,7 @@ public class Rubiks{
         while (result == 0) {
             bound++;
             cube.setBound(bound);
-            //System.out.print(" " + bound);
+            System.out.print("BOUND: " + bound);
             result = solutionsServer(ibis, cube, cache,resultsReceiver,taskSender);
             //System.out.println("Result: "+result);
         }
