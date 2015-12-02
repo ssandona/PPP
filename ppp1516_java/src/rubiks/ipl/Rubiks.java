@@ -197,18 +197,18 @@ public class Rubiks implements RegistryEventHandler {
         }*/
         Thread.sleep(5000);
 
-        for (IbisIdentifier joinedIbis : joinedIbises) {
+        /*for (IbisIdentifier joinedIbis : joinedIbises) {
             if(joinedIbis.equals(myIbisId)) {
                 continue;
             }
             System.out.println("SendTaskToMachine");
-            taskSender.connect(joinedIbis, "" + joinedIbis);
+            taskSender.connect(joinedIbis, "" + joinedIbis);*/
             // create a reply message
             WriteMessage task = taskSender.newMessage();
             task.writeObject(cube);
             task.finish();
             System.out.println("Sent");
-        }
+        //}
 
         System.out.println("ComputeMyPart");
         Cube[] children = cube.generateChildren(cache);
@@ -252,6 +252,12 @@ public class Rubiks implements RegistryEventHandler {
         ReceivePort resultsReceiver = ibis.createReceivePort(portType2, "results");
         resultsReceiver.enableConnections();
         SendPort taskSender = ibis.createSendPort(portType1);
+        for (IbisIdentifier joinedIbis : joinedIbises) {
+            if(joinedIbis.equals(myIbisId)) {
+                continue;
+            }
+            taskSender.connect(joinedIbis, "" + joinedIbis);
+        }
 
         while (result == 0) {
             bound++;
