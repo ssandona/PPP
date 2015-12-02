@@ -180,21 +180,24 @@ public class Rubiks implements RegistryEventHandler {
             if(joinedIbis.equals(myIbisId)) {
                 continue;
             }
-            if(machines.get(i).isEmpty()) {
+            if(!machines.get(i).isEmpty()) {
+            	System.out.println("SendTaskToMachine");
                 taskSender.connect(joinedIbis, "" + joinedIbis);
                 // create a reply message
                 WriteMessage task = taskSender.newMessage();
                 task.writeObject(machines.get(i));
                 task.finish();
+                System.out.println("Sent");
             }
         }
 
+        System.out.println("ComputeMyPart");
         //compute my part
         int result = 0;
-        for(Cube c : toDo) {
-            result += solutions(cube, cache, "");
+        while(!toDo.isEmpty()) {
+            result += solutions(toDo.remove(0), cache, "");
         }
-
+        System.out.println("CollectResults of "+nodes+" nodes");
         //collect results from other nodes
         for(i = 0; i < nodes - 1; i++) {
             ReadMessage r = resultsReceiver.receive();
