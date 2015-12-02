@@ -11,7 +11,8 @@ import java.io.IOException;
  * @author Niels Drost, Timo van Kessel
  *
  */
-public class Rubiks implements RegistryEventHandler {
+//public class Rubiks implements RegistryEventHandler {
+public class Rubiks{
 
     static PortType portType1 = new PortType(PortType.COMMUNICATION_RELIABLE,
                                      PortType.SERIALIZATION_OBJECT, PortType.RECEIVE_EXPLICIT,
@@ -44,7 +45,7 @@ public class Rubiks implements RegistryEventHandler {
     static Cube cube = null;
     static int id;
 
-    public void joined(IbisIdentifier joinedIbis) {
+    /*public void joined(IbisIdentifier joinedIbis) {
         System.err.println("Got event from registry: " + joinedIbis
                            + " joined pool");
     }
@@ -74,7 +75,7 @@ public class Rubiks implements RegistryEventHandler {
     public void poolTerminated(IbisIdentifier source) {
         System.err.println("Got event from registry: pool terminated by "
                            + source);
-    }
+    }*/
 
     public static final boolean PRINT_SOLUTION = false;
 
@@ -244,7 +245,7 @@ public class Rubiks implements RegistryEventHandler {
 
     private static void solveServer(Ibis ibis) throws Exception {
 
-
+    	long start = System.currentTimeMillis();
         int bound = 0;
         int result = 0;
         Cube cube = toDo.remove(0);
@@ -271,8 +272,12 @@ public class Rubiks implements RegistryEventHandler {
         System.out.println();
         System.out.println("Solving cube possible in " + result + " ways of "
                            + bound + " steps");
-        resultsReceiver.close();
-        taskSender.close();
+        long end = System.currentTimeMillis();
+        System.err.println("Solving cube took " + (end - start)
+                               + " milliseconds");
+        ibis.registry().terminate();
+        myIbis.registry().waitUntilTerminated();
+        System.out.println("TERMINATE");
 
     }
 
@@ -416,15 +421,14 @@ public class Rubiks implements RegistryEventHandler {
         // If I am the server, run server, else run client.
         if (server.equals(ibis.identifier())) {
             toDo.add(cube);
-            long start = System.currentTimeMillis();
+            //long start = System.currentTimeMillis();
             solveServer(ibis);
-            long end = System.currentTimeMillis();
+            //long end = System.currentTimeMillis();
 
             // NOTE: this is printed to standard error! The rest of the output is
             // constant for each set of parameters. Printing this to standard error
             // makes the output of standard out comparable with "diff"
-            System.err.println("Solving cube took " + (end - start)
-                               + " milliseconds");
+            
             //terminate all workers
             // terminate the pool
             System.out.println("Terminating pool");
