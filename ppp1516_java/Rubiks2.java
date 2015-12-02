@@ -42,7 +42,6 @@ public class Rubiks implements RegistryEventHandler {
     static Integer[] displs;
     static Ibis myIbis;
     static Cube cube = null;
-    static int id;
 
     public void joined(IbisIdentifier joinedIbis) {
         System.err.println("Got event from registry: " + joinedIbis
@@ -156,7 +155,7 @@ public class Rubiks implements RegistryEventHandler {
             }*/
         // generate all possible cubes from this one by twisting it in
         // every possible way. Gets new objects from the cache
-        /*Cube[] children = cube.generateChildren(cache);
+        Cube[] children = cube.generateChildren(cache);
 
         System.out.println("ChildrenGenerated");
         //work distribution
@@ -171,7 +170,7 @@ public class Rubiks implements RegistryEventHandler {
                 continue;
             }
             Cube[] cubes=new Cube[12];
-            Cube[] others=Arrays.copyOfRange(children, last_displs, displs[i])
+            Cube[] others=Arrays.copyOfRange(children, last_displs, displs[i]);
             for(j=0;j<12;j++){
             	if(j<others.length){
             		cubes[j]=others[j];
@@ -187,10 +186,11 @@ public class Rubiks implements RegistryEventHandler {
         Thread.sleep(5000);
         System.out.println("SendTasks");
         i = 0;
-        /*for (IbisIdentifier joinedIbis : joinedIbises) {
+        for (IbisIdentifier joinedIbis : joinedIbises) {
             if(joinedIbis.equals(myIbisId)) {
                 continue;
             }
+            //if(machines.get(i).length!=0) {
                 System.out.println("SendTaskToMachine");
                 taskSender.connect(joinedIbis, "" + joinedIbis);
                 // create a reply message
@@ -198,32 +198,10 @@ public class Rubiks implements RegistryEventHandler {
                 task.writeArray(machines.get(i));
                 task.finish();
                 System.out.println("Sent");
-        }*/
-
-        for (IbisIdentifier joinedIbis : joinedIbises) {
-            if(joinedIbis.equals(myIbisId)) {
-                continue;
-            }
-            System.out.println("SendTaskToMachine");
-            taskSender.connect(joinedIbis, "" + joinedIbis);
-            // create a reply message
-            WriteMessage task = taskSender.newMessage();
-            task.writeArray(cube);
-            task.finish();
-            System.out.println("Sent");
+            //}
         }
 
         System.out.println("ComputeMyPart");
-        Cube[] children = cube.generateChildren(cache);
-
-        if(id != 0) {
-            last_displs = displs[id - 1];
-        } else {
-            last_displs = 0;
-        }
-        toDo = new ArrayList<Cube>(Arrays.asList(Arrays.copyOfRange(children, last_displs, displs[id])));
-
-
         //compute my part
         int result = 0;
         while(!toDo.isEmpty()) {
@@ -274,7 +252,7 @@ public class Rubiks implements RegistryEventHandler {
         boolean first = true;
         int i;
 
-        Cube cube = null;
+        Cube[] myCubes=new Cube[12];
         CubeCache cache = null;
         while(!ibis.registry().hasTerminated()) {
             //System.out.print("Bound now:");
@@ -282,23 +260,21 @@ public class Rubiks implements RegistryEventHandler {
                 System.out.println("EmptyWorkQueueWait");
                 ReadMessage r = taskReceiver.receive();
                 System.out.println("ReceivedMyWork");
-                r.readArray(cube);
+                r.readArray(myCubes);
                 r.finish();
+
+                for(i = 0; i < 12; i++) {
+                    if(myCubes[i] != null) {
+                        toDo.add((Cube)myCubes[i]);
+                    }
+                }
             }
             if(first) {
                 System.out.println("First");
-                cache = new CubeCache(cube.getSize());
+                cache = new CubeCache(toDo.get(0).getSize());
                 first = false;
             }
             int result = 0;
-            Cube[] children = cube.generateChildren(cache);
-            int last_displs;
-            if(id != 0) {
-                last_displs = displs[id - 1];
-            } else {
-                last_displs = 0;
-            }
-            toDo = new ArrayList<Cube>(Arrays.asList(Arrays.copyOfRange(children, last_displs, displs[id])));
             while(!toDo.isEmpty()) {
                 result += solutions(toDo.remove(0), cache, "");
             }
@@ -374,19 +350,15 @@ public class Rubiks implements RegistryEventHandler {
 
         joinedIbises = ibis.registry().joinedIbises();
         nodes = joinedIbises.length;
-        int i = 0;
         for (IbisIdentifier joinedIbis : joinedIbises) {
             System.err.println("Ibis joined: " + joinedIbis);
-            if(joinedIbis.equals(myIbisId)) {
-                id = i;
-            }
-            i++;
         }
         cubes_per_proc = new Integer[nodes];
         displs = new Integer[nodes];
         int avarage_cubes_per_proc = 12 / nodes;
         int rem = 12 % nodes;
         int sum = 0;
+        int i;
         for (i = 0; i < nodes; i++) {
             cubes_per_proc[i] = avarage_cubes_per_proc;
             if (rem > 0) {
@@ -497,3 +469,4 @@ public class Rubiks implements RegistryEventHandler {
     }
 
 }
+
