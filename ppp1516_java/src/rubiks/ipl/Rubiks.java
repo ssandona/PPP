@@ -216,11 +216,11 @@ public class Rubiks {
         WriteMessage task = taskSender.newMessage();
         task.writeObject(cube);
         task.finish();
-        System.out.print("cube sent");
+        System.out.println("cube sent");
         while (result == 0) {
             bound++;
             cube.setBound(bound);
-            System.out.print("BOUND: " + bound);
+            System.out.println("BOUND: " + bound);
             result = solutionsServer(ibis, cube, cache, resultsReceiver, taskSender);
             System.out.println("Result: " + result);
             if(result == 0) {
@@ -228,7 +228,7 @@ public class Rubiks {
                 task = taskSender.newMessage();
                 task.writeBoolean(false);
                 task.finish();
-                System.out.print("boolean sent");
+                System.out.println("boolean sent");
             }
         }
 
@@ -265,12 +265,11 @@ public class Rubiks {
         //System.out.println("ReceivedMyWork");
         cube = (Cube)r.readObject();
         r.finish();
-        System.out.print("cube received");
+        System.out.println("cube received");
     
         boolean end = false;
         while(!end) {
-            System.out.print("boolean received -> ");
-            r.finish();
+            System.out.println("boolean received -> "+end);
             //System.out.print("Bound now:");
             if(toDo.isEmpty()) {
                 //System.out.println("EmptyWorkQueueWait");
@@ -295,8 +294,9 @@ public class Rubiks {
             resultMessage.finish();
             r = taskReceiver.receive();
             end=r.readBoolean();
+            r.finish();
         }
-        System.out.print("FINE");
+        System.out.println("FINE");
         myIbis.registry().waitUntilTerminated();
         //taskReceiver.close();
         //sender.close();
