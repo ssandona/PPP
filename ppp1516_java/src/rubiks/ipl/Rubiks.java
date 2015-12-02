@@ -12,11 +12,11 @@ import java.io.IOException;
  *
  */
 //public class Rubiks implements RegistryEventHandler {
-public class Rubiks{
+public class Rubiks {
 
     static PortType portType1 = new PortType(PortType.COMMUNICATION_RELIABLE,
-                                     PortType.SERIALIZATION_OBJECT, PortType.RECEIVE_EXPLICIT,
-                                     PortType.CONNECTION_ONE_TO_MANY);
+            PortType.SERIALIZATION_OBJECT, PortType.RECEIVE_EXPLICIT,
+            PortType.CONNECTION_ONE_TO_MANY);
 
     static PortType portType2 = new PortType(PortType.COMMUNICATION_RELIABLE,
             PortType.SERIALIZATION_OBJECT, PortType.RECEIVE_EXPLICIT,
@@ -149,21 +149,17 @@ public class Rubiks{
         }
 
 
-        //new part
-        WriteMessage task = taskSender.newMessage();
-        task.writeBoolean(false);
-        task.finish();
-        System.out.print("boolean sent");
+
 
 
         //end new part
 
 
 
-            /*WriteMessage task = taskSender.newMessage();
-            task.writeObject(cube);
-            task.finish();*/
-            //System.out.println("Sent");
+        /*WriteMessage task = taskSender.newMessage();
+        task.writeObject(cube);
+        task.finish();*/
+        //System.out.println("Sent");
         //}
 
         //System.out.println("ComputeMyPart");
@@ -175,11 +171,12 @@ public class Rubiks{
             last_displs = 0;
         }
         //System.out.println("ComputeMyPart"+myIbisId+": ["+displs[id]+","+(displs[id]+cubes_per_proc[id])+"]");
-        toDo = new ArrayList<Cube>(Arrays.asList(Arrays.copyOfRange(children, displs[id], displs[id]+cubes_per_proc[id])));
+        toDo = new ArrayList<Cube>(Arrays.asList(Arrays.copyOfRange(children, displs[id], displs[id] + cubes_per_proc[id])));
 
 
         //compute my part
-        int result = 0; int i;
+        int result = 0;
+        int i;
         while(!toDo.isEmpty()) {
             result += solutions(toDo.remove(0), cache, "");
         }
@@ -200,7 +197,7 @@ public class Rubiks{
 
     private static void solveServer(Ibis ibis) throws Exception {
 
-    	long start = System.currentTimeMillis();
+        long start = System.currentTimeMillis();
         int bound = 0;
         int result = 0;
         Cube cube = toDo.remove(0);
@@ -224,11 +221,18 @@ public class Rubiks{
             bound++;
             cube.setBound(bound);
             System.out.print("BOUND: " + bound);
-            result = solutionsServer(ibis, cube, cache,resultsReceiver,taskSender);
-            System.out.println("Result: "+result);
+            result = solutionsServer(ibis, cube, cache, resultsReceiver, taskSender);
+            System.out.println("Result: " + result);
+            if(result == 0) {
+                //new part
+                WriteMessage task = taskSender.newMessage();
+                task.writeBoolean(false);
+                task.finish();
+                System.out.print("boolean sent");
+            }
         }
 
-      	task = taskSender.newMessage();
+        task = taskSender.newMessage();
         task.writeBoolean(true);
         task.finish();
 
@@ -237,7 +241,7 @@ public class Rubiks{
                            + bound + " steps");
         long end = System.currentTimeMillis();
         System.err.println("Solving cube took " + (end - start)
-                               + " milliseconds");
+                           + " milliseconds");
         ibis.registry().terminate();
         myIbis.registry().waitUntilTerminated();
         System.out.println("TERMINATE");
@@ -258,19 +262,19 @@ public class Rubiks{
         CubeCache cache = null;
 
         ReadMessage r = taskReceiver.receive();
-                //System.out.println("ReceivedMyWork");
-        cube=(Cube)r.readObject();
+        //System.out.println("ReceivedMyWork");
+        cube = (Cube)r.readObject();
         r.finish();
         System.out.print("cube received");
-        r = taskReceiver.receive();   
-
-        while(!r.readBoolean()) {
-        	System.out.print("boolean received");
-        	r.finish();
+    
+        boolean end = false;
+        while(!end) {
+            System.out.print("boolean received -> ");
+            r.finish();
             //System.out.print("Bound now:");
             if(toDo.isEmpty()) {
                 //System.out.println("EmptyWorkQueueWait");
-                
+
             }
             if(first) {
                 //System.out.println("First");
@@ -280,7 +284,7 @@ public class Rubiks{
             int result = 0;
             Cube[] children = cube.generateChildren(cache);
             //System.out.println("ComputeMyPart"+myIbisId+": ["+displs[id]+","+(displs[id]+cubes_per_proc[id])+"]");
-            toDo = new ArrayList<Cube>(Arrays.asList(Arrays.copyOfRange(children, displs[id], displs[id]+cubes_per_proc[id])));
+            toDo = new ArrayList<Cube>(Arrays.asList(Arrays.copyOfRange(children, displs[id], displs[id] + cubes_per_proc[id])));
             while(!toDo.isEmpty()) {
                 result += solutions(toDo.remove(0), cache, "");
             }
@@ -290,8 +294,10 @@ public class Rubiks{
             resultMessage.writeInt(result);
             resultMessage.finish();
             r = taskReceiver.receive();
+            end=r.readBoolean();
         }
         System.out.print("FINE");
+        myIbis.registry().waitUntilTerminated();
         //taskReceiver.close();
         //sender.close();
     }
@@ -382,12 +388,12 @@ public class Rubiks{
         }
 
         System.out.println("DISPL");
-        for(i=0;i<nodes;i++){
-        	System.out.print(displs[i]+" ");
+        for(i = 0; i < nodes; i++) {
+            System.out.print(displs[i] + " ");
         }
         System.out.println("CUBESPERPROC");
-        for(i=0;i<nodes;i++){
-        	System.out.print(cubes_per_proc[i]+" ");
+        for(i = 0; i < nodes; i++) {
+            System.out.print(cubes_per_proc[i] + " ");
         }
 
         // If I am the server, run server, else run client.
@@ -400,7 +406,7 @@ public class Rubiks{
             // NOTE: this is printed to standard error! The rest of the output is
             // constant for each set of parameters. Printing this to standard error
             // makes the output of standard out comparable with "diff"
-            
+
             //terminate all workers
             // terminate the pool
             //System.out.println("Terminating pool");
