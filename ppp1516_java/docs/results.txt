@@ -37,6 +37,6 @@ size 3 (twist 12)
 6 -> 37267	5.04
 12 -> 23332	8.06
 
-size 5
+size 3 (twist 13)
 2 ways of 7 steps
 1-> 
