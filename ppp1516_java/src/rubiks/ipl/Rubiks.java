@@ -159,7 +159,7 @@ public class Rubiks implements RegistryEventHandler {
 
         System.out.println("ChildrenGenerated");
         //work distribution
-        machines = new ArrayList<ArrayList<Cube>>();
+        machines = new ArrayList<Cube[]>();
         int last_displs = 0;
         int i = -1;
         for (IbisIdentifier joinedIbis : joinedIbises) {
@@ -169,7 +169,7 @@ public class Rubiks implements RegistryEventHandler {
                 last_displs = displs[i];
                 continue;
             }
-            machines.add(new ArrayList<Cube>(Arrays.asList((Arrays.copyOfRange(children, last_displs, displs[i])))));
+            machines.add(Arrays.copyOfRange(children, last_displs, displs[i]));
             last_displs = displs[i];
         }
         System.out.println("MachinesNumber: " + machines.size());
@@ -185,7 +185,7 @@ public class Rubiks implements RegistryEventHandler {
                 taskSender.connect(joinedIbis, "" + joinedIbis);
                 // create a reply message
                 WriteMessage task = taskSender.newMessage();
-                task.writeArray(machines.get(i).toArray(new Cube[machines.get(i).size()]));
+                task.writeArray(machines.get(i));
                 task.finish();
                 System.out.println("Sent");
             }
