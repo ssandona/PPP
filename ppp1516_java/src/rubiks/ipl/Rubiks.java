@@ -18,7 +18,7 @@ public class Rubiks implements RegistryEventHandler {
                                      PortType.CONNECTION_ONE_TO_ONE);*/
 
     static PortType portType2 = new PortType(PortType.COMMUNICATION_RELIABLE,
-            PortType.SERIALIZATION_DATA, PortType.SERIALIZATION_OBJECT, PortType.RECEIVE_EXPLICIT,
+            PortType.SERIALIZATION_OBJECT, PortType.RECEIVE_EXPLICIT,
             PortType.CONNECTION_MANY_TO_ONE);
 
 
