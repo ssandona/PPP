@@ -232,6 +232,7 @@ public class Rubiks {
             }
         }
 
+        System.out.println("FINISH");
         task = taskSender.newMessage();
         task.writeBoolean(true);
         task.finish();
@@ -270,11 +271,6 @@ public class Rubiks {
         boolean end = false;
         while(!end) {
             System.out.println("boolean received -> "+end);
-            //System.out.print("Bound now:");
-            if(toDo.isEmpty()) {
-                //System.out.println("EmptyWorkQueueWait");
-
-            }
             if(first) {
                 //System.out.println("First");
                 cache = new CubeCache(cube.getSize());
@@ -287,11 +283,12 @@ public class Rubiks {
             while(!toDo.isEmpty()) {
                 result += solutions(toDo.remove(0), cache, "");
             }
-            //System.out.println("CalculatedResult: " + result);
+            System.out.println("CalculatedResult: " + result);
             // create a message
             WriteMessage resultMessage = sender.newMessage();
             resultMessage.writeInt(result);
             resultMessage.finish();
+            //wait if end
             r = taskReceiver.receive();
             end=r.readBoolean();
             r.finish();
