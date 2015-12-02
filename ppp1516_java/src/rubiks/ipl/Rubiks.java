@@ -169,7 +169,17 @@ public class Rubiks implements RegistryEventHandler {
                 last_displs = displs[i];
                 continue;
             }
-            machines.add(Arrays.copyOfRange(children, last_displs, displs[i]));
+            Cube[] cubes=new Cube[12];
+            Cube[] others=Arrays.copyOfRange(children, last_displs, displs[i])
+            for(j=0;j<12;j++){
+            	if(j<others.length){
+            		cubes[j]=others[j];
+            	}
+            	else{
+            		cubes[j]=null;
+            	}
+            }
+            machines.add(cubes);
             last_displs = displs[i];
         }
         System.out.println("MachinesNumber: " + machines.size());
