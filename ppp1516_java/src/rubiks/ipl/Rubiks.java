@@ -263,9 +263,9 @@ public class Rubiks{
         r.finish();
         System.out.print("cube received");
         r = taskReceiver.receive();   
-        System.out.print("boolean received");   
 
         while(!r.readBoolean()) {
+        	System.out.print("boolean received");
         	r.finish();
             //System.out.print("Bound now:");
             if(toDo.isEmpty()) {
