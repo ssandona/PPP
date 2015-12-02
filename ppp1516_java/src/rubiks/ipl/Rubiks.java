@@ -41,6 +41,7 @@ public class Rubiks implements RegistryEventHandler {
     static Integer[] cubes_per_proc;
     static Integer[] displs;
     static Ibis myIbis;
+    static Cube cube = null;
 
     public void joined(IbisIdentifier joinedIbis) {
         System.err.println("Got event from registry: " + joinedIbis
@@ -350,6 +351,7 @@ public class Rubiks implements RegistryEventHandler {
 
         // If I am the server, run server, else run client.
         if (server.equals(ibis.identifier())) {
+        	toDo.add(cube);
             long start = System.currentTimeMillis();
             solveServer(ibis);
             long end = System.currentTimeMillis();
@@ -377,8 +379,6 @@ public class Rubiks implements RegistryEventHandler {
     }
 
     public static void main(String[] arguments) {
-
-        Cube cube = null;
 
         // default parameters of puzzle
         int size = 3;
@@ -437,8 +437,7 @@ public class Rubiks implements RegistryEventHandler {
         //done = new ArrayList<String>();
         toDo = new ArrayList<Cube>();
 
-        //if beginner
-        toDo.add(cube);
+
 
         try {
             System.out.println("run");
