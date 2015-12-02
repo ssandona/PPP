@@ -147,64 +147,6 @@ public class Rubiks{
         if (cube.isSolved()) {
             return 1;
         }
-
-        /*if(counter <= 1) {
-                System.out.println(s+"AAA: GenerateChildren");
-            }*/
-        // generate all possible cubes from this one by twisting it in
-        // every possible way. Gets new objects from the cache
-        /*Cube[] children = cube.generateChildren(cache);
-
-        System.out.println("ChildrenGenerated");
-        //work distribution
-        machines = new ArrayList<Cube[]>();
-        int last_displs = 0;
-        int i = -1; int j;
-        for (IbisIdentifier joinedIbis : joinedIbises) {
-            i++;
-            if(joinedIbis.equals(myIbisId)) {
-                toDo = new ArrayList<Cube>(Arrays.asList(Arrays.copyOfRange(children, last_displs, displs[i])));
-                last_displs = displs[i];
-                continue;
-            }
-            Cube[] cubes=new Cube[12];
-            Cube[] others=Arrays.copyOfRange(children, last_displs, displs[i])
-            for(j=0;j<12;j++){
-            	if(j<others.length){
-            		cubes[j]=others[j];
-            	}
-            	else{
-            		cubes[j]=null;
-            	}
-            }
-            machines.add(cubes);
-            last_displs = displs[i];
-        }
-        System.out.println("MachinesNumber: " + machines.size());
-        Thread.sleep(5000);
-        System.out.println("SendTasks");
-        i = 0;
-        /*for (IbisIdentifier joinedIbis : joinedIbises) {
-            if(joinedIbis.equals(myIbisId)) {
-                continue;
-            }
-                System.out.println("SendTaskToMachine");
-                taskSender.connect(joinedIbis, "" + joinedIbis);
-                // create a reply message
-                WriteMessage task = taskSender.newMessage();
-                task.writeArray(machines.get(i));
-                task.finish();
-                System.out.println("Sent");
-        }*/
-        
-
-        /*for (IbisIdentifier joinedIbis : joinedIbises) {
-            if(joinedIbis.equals(myIbisId)) {
-                continue;
-            }
-            System.out.println("SendTaskToMachine");
-            taskSender.connect(joinedIbis, "" + joinedIbis);*/
-            // create a reply message
             WriteMessage task = taskSender.newMessage();
             task.writeObject(cube);
             task.finish();
