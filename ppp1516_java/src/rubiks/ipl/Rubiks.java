@@ -240,9 +240,10 @@ public class Rubiks {
         long end = System.currentTimeMillis();
         System.err.println("Solving cube took " + (end - start)
                            + " milliseconds");
-        ibis.registry().terminate();
-        myIbis.registry().waitUntilTerminated();
+       
         System.out.println("TERMINATE");
+        resultsReceiver.close();
+        taskSender.close();
 
     }
 
@@ -292,10 +293,11 @@ public class Rubiks {
             end=r.readBoolean();
             r.finish();
         }
+
+
         System.out.println("FINE");
-        myIbis.registry().waitUntilTerminated();
-        //taskReceiver.close();
-        //sender.close();
+        taskReceiver.close();
+        sender.close();
     }
 
 
