@@ -142,7 +142,7 @@ public class Rubiks implements RegistryEventHandler {
 
 
     public static int solutionsServer(Ibis ibis, Cube cube, CubeCache cache) throws Exception {
-    	System.out.println("SolutionsServer");
+        System.out.println("SolutionsServer");
         ReceivePort resultsReceiver = ibis.createReceivePort(portType2, "results");
         resultsReceiver.enableConnections();
         SendPort taskSender = ibis.createSendPort(portType2);
@@ -172,7 +172,7 @@ public class Rubiks implements RegistryEventHandler {
             machines.add(new ArrayList<Cube>(Arrays.asList((Arrays.copyOfRange(children, last_displs, displs[i])))));
             last_displs = displs[i];
         }
-        System.out.println("MachinesNumber: "+machines.size());
+        System.out.println("MachinesNumber: " + machines.size());
         Thread.sleep(5000);
         System.out.println("SendTasks");
         i = 0;
@@ -181,11 +181,11 @@ public class Rubiks implements RegistryEventHandler {
                 continue;
             }
             if(!machines.get(i).isEmpty()) {
-            	System.out.println("SendTaskToMachine");
+                System.out.println("SendTaskToMachine");
                 taskSender.connect(joinedIbis, "" + joinedIbis);
                 // create a reply message
                 WriteMessage task = taskSender.newMessage();
-                task.writeArray(machines.get(i).toArray(new Cube[machine.get(i).size()]));
+                task.writeArray(machines.get(i).toArray(new Cube[12]));
                 task.finish();
                 System.out.println("Sent");
             }
@@ -197,7 +197,7 @@ public class Rubiks implements RegistryEventHandler {
         while(!toDo.isEmpty()) {
             result += solutions(toDo.remove(0), cache, "");
         }
-        System.out.println("CollectResults of "+nodes+" nodes");
+        System.out.println("CollectResults of " + nodes + " nodes");
         //collect results from other nodes
         for(i = 0; i < nodes - 1; i++) {
             ReadMessage r = resultsReceiver.receive();
@@ -241,7 +241,7 @@ public class Rubiks implements RegistryEventHandler {
         System.out.println("ConnectedToServerPort");
         boolean first = true;
 
-
+        Object[12] myCubes;
         CubeCache cache = null;
         while(!ibis.registry().hasTerminated()) {
             //System.out.print("Bound now:");
@@ -249,19 +249,25 @@ public class Rubiks implements RegistryEventHandler {
                 System.out.println("EmptyWorkQueueWait");
                 ReadMessage r = taskReceiver.receive();
                 System.out.println("ReceivedMyWork");
-                r.readArray(toDo);
+                r.readArray(myCubes);
                 r.finish();
+
+                for(i = 0; i < 12; i++) {
+                    if(myCubes[i] != null) {
+                        toDo.add((Cube)myCubes[i]);
+                    }
+                }
             }
             if(first) {
-            	System.out.println("First");
+                System.out.println("First");
                 cache = new CubeCache(toDo.get(0).getSize());
                 first = false;
             }
             int result = 0;
-            while(!toDo.isEmpty()){
+            while(!toDo.isEmpty()) {
                 result += solutions(toDo.remove(0), cache, "");
             }
-            System.out.println("CalculatedResult: "+result);
+            System.out.println("CalculatedResult: " + result);
             // create a message
             WriteMessage resultMessage = sender.newMessage();
             resultMessage.writeInt(result);
@@ -319,9 +325,8 @@ public class Rubiks implements RegistryEventHandler {
                 try {
                     //myIbis.registry().terminate();
                     myIbis.end();
-                }
-                catch(IOException e){
-                	System.err.println("Error");
+                } catch(IOException e) {
+                    System.err.println("Error");
                 }
             }
         });
@@ -355,7 +360,7 @@ public class Rubiks implements RegistryEventHandler {
 
         // If I am the server, run server, else run client.
         if (server.equals(ibis.identifier())) {
-        	toDo.add(cube);
+            toDo.add(cube);
             long start = System.currentTimeMillis();
             solveServer(ibis);
             long end = System.currentTimeMillis();
