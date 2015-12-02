@@ -225,7 +225,7 @@ public class Rubiks implements RegistryEventHandler {
 
 
         //compute my part
-        int result = 0;
+        int result = 0; int i;
         while(!toDo.isEmpty()) {
             result += solutions(toDo.remove(0), cache, "");
         }
