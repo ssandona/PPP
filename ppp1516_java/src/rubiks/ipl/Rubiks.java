@@ -145,7 +145,6 @@ public class Rubiks implements RegistryEventHandler {
         ReceivePort resultsReceiver = ibis.createReceivePort(portType2, "results");
         resultsReceiver.enableConnections();
         SendPort taskSender = ibis.createSendPort(portType2);
-        Thread.sleep(1000);
         if (cube.isSolved()) {
             return 1;
         }
@@ -173,6 +172,7 @@ public class Rubiks implements RegistryEventHandler {
             last_displs = displs[i];
         }
 
+        Thread.sleep(5000);
         System.out.println("SendTask");
         i = 0;
         for (IbisIdentifier joinedIbis : joinedIbises) {
