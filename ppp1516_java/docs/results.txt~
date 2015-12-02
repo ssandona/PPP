@@ -26,4 +26,10 @@ Solving cube possible in 2 ways of 7 steps
 3 -> 73370	2.63
 4 -> 73591
 6 -> 55917 	3.45
-9 -> 38976 
+9 -> 38976 	4.96
+
+
+size 3 (twist 12)
+4 ways of 8 steps
+
+1 -> 188134
