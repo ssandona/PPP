@@ -196,7 +196,7 @@ public class Rubiks{
                 task.finish();
                 System.out.println("Sent");
         }*/
-        Thread.sleep(5000);
+        
 
         /*for (IbisIdentifier joinedIbis : joinedIbises) {
             if(joinedIbis.equals(myIbisId)) {
@@ -260,7 +260,7 @@ public class Rubiks{
             }
             taskSender.connect(joinedIbis, "" + joinedIbis);
         }
-
+        Thread.sleep(5000);
         while (result == 0) {
             bound++;
             cube.setBound(bound);
@@ -431,10 +431,10 @@ public class Rubiks{
             
             //terminate all workers
             // terminate the pool
-            System.out.println("Terminating pool");
-            ibis.registry().terminate();
+            //System.out.println("Terminating pool");
+            //ibis.registry().terminate();
             // wait for this termination to propagate through the system
-            ibis.registry().waitUntilTerminated();
+            //ibis.registry().waitUntilTerminated();
 
 
         } else {
@@ -442,7 +442,7 @@ public class Rubiks{
         }
 
         // End ibis.
-        ibis.registry().terminate();
+        //ibis.registry().terminate();
         ibis.end();
     }
 
