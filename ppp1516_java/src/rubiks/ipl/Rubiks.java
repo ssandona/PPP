@@ -161,7 +161,7 @@ public class Rubiks implements RegistryEventHandler {
         //work distribution
         machines = new ArrayList<Cube[]>();
         int last_displs = 0;
-        int i = -1;
+        int i = -1; int j;
         for (IbisIdentifier joinedIbis : joinedIbises) {
             i++;
             if(joinedIbis.equals(myIbisId)) {
@@ -170,7 +170,7 @@ public class Rubiks implements RegistryEventHandler {
                 continue;
             }
             Cube[] cubes=new Cube[12];
-            Cube[] others=Arrays.copyOfRange(children, last_displs, displs[i])
+            Cube[] others=Arrays.copyOfRange(children, last_displs, displs[i]);
             for(j=0;j<12;j++){
             	if(j<others.length){
             		cubes[j]=others[j];
