@@ -230,6 +230,7 @@ public class Rubiks implements RegistryEventHandler {
         while(!toDo.isEmpty()) {
             result += solutions(toDo.remove(0), cache, "");
         }
+        System.out.println("MyResult: " + result);
         System.out.println("CollectResults of " + nodes + " nodes");
         //collect results from other nodes
         for(i = 0; i < nodes - 1; i++) {
@@ -238,6 +239,7 @@ public class Rubiks implements RegistryEventHandler {
             r.finish();
             System.out.println("YEAH");
         }
+        System.out.println("EndFor, Result= "+result);
 
         resultsReceiver.close();
         taskSender.close();
