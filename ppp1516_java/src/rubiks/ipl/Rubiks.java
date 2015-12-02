@@ -214,10 +214,11 @@ public class Rubiks {
         task.writeObject(cube);
         task.finish();
         //System.out.println("cube sent");
+        System.out.println("Bound:");
         while (result == 0) {
             bound++;
             cube.setBound(bound);
-            //System.out.println("BOUND: " + bound);
+            System.out.println(" " + bound);
             result = solutionsServer(ibis, cube, cache, resultsReceiver, taskSender);
             //System.out.println("Result: " + result);
             if(result == 0) {
