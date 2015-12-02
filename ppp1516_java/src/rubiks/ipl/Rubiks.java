@@ -147,9 +147,21 @@ public class Rubiks{
         if (cube.isSolved()) {
             return 1;
         }
-            WriteMessage task = taskSender.newMessage();
+
+
+        //new part
+        WriteMessage task = taskSender.newMessage();
+        task.writeBoolean(false);
+        task.finish();
+
+
+        //end new part
+
+
+
+            /*WriteMessage task = taskSender.newMessage();
             task.writeObject(cube);
-            task.finish();
+            task.finish();*/
             //System.out.println("Sent");
         //}
 
@@ -203,6 +215,9 @@ public class Rubiks{
             taskSender.connect(joinedIbis, "" + joinedIbis);
         }
         Thread.sleep(5000);
+        WriteMessage task = taskSender.newMessage();
+        task.writeObject(cube);
+        task.finish();
         while (result == 0) {
             bound++;
             cube.setBound(bound);
@@ -210,6 +225,10 @@ public class Rubiks{
             result = solutionsServer(ibis, cube, cache,resultsReceiver,taskSender);
             //System.out.println("Result: "+result);
         }
+
+        WriteMessage task = taskSender.newMessage();
+        task.writeBoolean(true);
+        task.finish();
 
         System.out.println();
         System.out.println("Solving cube possible in " + result + " ways of "
@@ -235,14 +254,20 @@ public class Rubiks{
 
         Cube cube = null;
         CubeCache cache = null;
-        while(!ibis.registry().hasTerminated()) {
+
+        ReadMessage r = taskReceiver.receive();
+                //System.out.println("ReceivedMyWork");
+        cube=(Cube)r.readObject();
+        r.finish();
+
+        r = taskReceiver.receive();      
+
+        while(!r.readBoolean()) {
+        	r.finish();
             //System.out.print("Bound now:");
             if(toDo.isEmpty()) {
                 //System.out.println("EmptyWorkQueueWait");
-                ReadMessage r = taskReceiver.receive();
-                //System.out.println("ReceivedMyWork");
-                cube=(Cube)r.readObject();
-                r.finish();
+                
             }
             if(first) {
                 //System.out.println("First");
@@ -261,6 +286,7 @@ public class Rubiks{
             WriteMessage resultMessage = sender.newMessage();
             resultMessage.writeInt(result);
             resultMessage.finish();
+            r = taskReceiver.receive();
         }
         taskReceiver.close();
         sender.close();
