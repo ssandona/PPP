@@ -345,11 +345,6 @@ public class Cube implements Serializable {
         Cube result = cache.get();
         this.copyTo(result);
 
-        if(Rubiks.counter <= 1) {
-            System.out.println("AAA: CubeToTwist:");
-            result.print(System.out);
-        }
-
         switch (axis) {
         case X:
             result.twistX(row, direction);
