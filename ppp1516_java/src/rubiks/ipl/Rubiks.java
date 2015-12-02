@@ -225,7 +225,7 @@ public class Rubiks{
             cube.setBound(bound);
             System.out.print("BOUND: " + bound);
             result = solutionsServer(ibis, cube, cache,resultsReceiver,taskSender);
-            //System.out.println("Result: "+result);
+            System.out.println("Result: "+result);
         }
 
       	task = taskSender.newMessage();
@@ -291,8 +291,9 @@ public class Rubiks{
             resultMessage.finish();
             r = taskReceiver.receive();
         }
-        taskReceiver.close();
-        sender.close();
+        System.out.print("FINE");
+        //taskReceiver.close();
+        //sender.close();
     }
 
 
