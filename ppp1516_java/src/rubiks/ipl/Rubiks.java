@@ -236,6 +236,7 @@ public class Rubiks implements RegistryEventHandler {
             ReadMessage r = resultsReceiver.receive();
             result += r.readInt();
             r.finish();
+            System.out.println("YEAH");
         }
 
         resultsReceiver.close();
@@ -257,6 +258,7 @@ public class Rubiks implements RegistryEventHandler {
             cube.setBound(bound);
             System.out.print(" " + bound);
             result = solutionsServer(ibis, cube, cache);
+            System.out.println("Result: "+result);
         }
 
         System.out.println();
