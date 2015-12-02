@@ -149,9 +149,6 @@ public class Rubiks {
         }
 
 
-
-
-
         //end new part
 
 
@@ -170,7 +167,7 @@ public class Rubiks {
         } else {
             last_displs = 0;
         }
-        //System.out.println("ComputeMyPart"+myIbisId+": ["+displs[id]+","+(displs[id]+cubes_per_proc[id])+"]");
+        System.out.println("ComputeMyPart"+myIbisId+": ["+displs[id]+","+(displs[id]+cubes_per_proc[id])+"]");
         toDo = new ArrayList<Cube>(Arrays.asList(Arrays.copyOfRange(children, displs[id], displs[id] + cubes_per_proc[id])));
 
 
@@ -258,7 +255,7 @@ public class Rubiks {
         //System.out.println("ConnectedToServerPort");
         boolean first = true;
         int i;
-
+        int bound=0;
         Cube cube = null;
         CubeCache cache = null;
 
@@ -270,6 +267,8 @@ public class Rubiks {
     
         boolean end = false;
         while(!end) {
+        	bound++;
+            cube.setBound(bound);
             System.out.println("boolean received -> "+end);
             if(first) {
                 //System.out.println("First");
