@@ -180,7 +180,7 @@ public class Rubiks implements RegistryEventHandler {
             if(joinedIbis.equals(myIbisId)) {
                 continue;
             }
-            if(!machines.get(i).isEmpty()) {
+            //if(machines.get(i).length!=0) {
                 System.out.println("SendTaskToMachine");
                 taskSender.connect(joinedIbis, "" + joinedIbis);
                 // create a reply message
@@ -188,7 +188,7 @@ public class Rubiks implements RegistryEventHandler {
                 task.writeArray(machines.get(i));
                 task.finish();
                 System.out.println("Sent");
-            }
+            //}
         }
 
         System.out.println("ComputeMyPart");
