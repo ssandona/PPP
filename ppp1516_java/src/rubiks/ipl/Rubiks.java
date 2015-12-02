@@ -44,6 +44,7 @@ public class Rubiks {
     static Ibis myIbis;
     static Cube cube = null;
     static int id;
+    static int size;
 
     /*public void joined(IbisIdentifier joinedIbis) {
         System.err.println("Got event from registry: " + joinedIbis
@@ -375,8 +376,8 @@ public class Rubiks {
         }
         cubes_per_proc = new Integer[nodes];
         displs = new Integer[nodes];
-        int avarage_cubes_per_proc = 12 / nodes;
-        int rem = 12 % nodes;
+        int avarage_cubes_per_proc = (6 * (size - 1)) / nodes;
+        int rem = (6 * (size - 1)) % nodes;
         int sum = 0;
         for (i = 0; i < nodes; i++) {
             cubes_per_proc[i] = avarage_cubes_per_proc;
@@ -428,7 +429,7 @@ public class Rubiks {
     public static void main(String[] arguments) {
 
         // default parameters of puzzle
-        int size = 3;
+        size = 3;
         int twists = 11;
         int seed = 0;
         String fileName = null;
