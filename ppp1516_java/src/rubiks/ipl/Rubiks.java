@@ -410,6 +410,12 @@ public class Rubiks implements RegistryEventHandler {
             sum += cubes_per_proc[i];
         }
 
+        System.out.printn("DISPL");
+        for(i=0;i<nodes;i++){
+        	System.out.print(displs[i]+" ");
+        }
+        System.out.printn("");
+
         // If I am the server, run server, else run client.
         if (server.equals(ibis.identifier())) {
             toDo.add(cube);
