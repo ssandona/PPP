@@ -218,8 +218,8 @@ public class Rubiks implements RegistryEventHandler {
         } else {
             last_displs = 0;
         }
-        System.out.println("ComputeMyPart"+myIbisId+": ["+last_displs+","+displs[id]+"]");
-        toDo = new ArrayList<Cube>(Arrays.asList(Arrays.copyOfRange(children, last_displs, displs[id])));
+        System.out.println("ComputeMyPart"+myIbisId+": ["+displs[id]+","+displs[id]+cubes_per_proc[id]+"]");
+        toDo = new ArrayList<Cube>(Arrays.asList(Arrays.copyOfRange(children, displs[id], displs[id]+cubes_per_proc[id])));
 
 
         //compute my part
@@ -304,14 +304,8 @@ public class Rubiks implements RegistryEventHandler {
             }
             int result = 0;
             Cube[] children = cube.generateChildren(cache);
-            int last_displs;
-            if(id != 0) {
-                last_displs = displs[id - 1];
-            } else {
-                last_displs = 0;
-            }
-            System.out.println("ComputeMyPart"+myIbisId+": ["+displs[id]+","+displs[id+1]+"]");
-            toDo = new ArrayList<Cube>(Arrays.asList(Arrays.copyOfRange(children, last_displs, displs[id])));
+            System.out.println("ComputeMyPart"+myIbisId+": ["+displs[id]+","+displs[id]+cubes_per_proc[id]+"]");
+            toDo = new ArrayList<Cube>(Arrays.asList(Arrays.copyOfRange(children, displs[id], displs[id]+cubes_per_proc[id])));
             while(!toDo.isEmpty()) {
                 result += solutions(toDo.remove(0), cache, "");
             }
@@ -414,7 +408,10 @@ public class Rubiks implements RegistryEventHandler {
         for(i=0;i<nodes;i++){
         	System.out.print(displs[i]+" ");
         }
-        System.out.println("");
+        System.out.println("CUBESPERPROC");
+        for(i=0;i<nodes;i++){
+        	System.out.print(cubes_per_proc[i]+" ");
+        }
 
         // If I am the server, run server, else run client.
         if (server.equals(ibis.identifier())) {
