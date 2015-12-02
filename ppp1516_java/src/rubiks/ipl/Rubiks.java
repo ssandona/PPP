@@ -270,7 +270,7 @@ public class Rubiks implements RegistryEventHandler {
     }
 
     public static void solveWorkers(Ibis ibis, IbisIdentifier server) throws Exception {
-        ReceivePort taskReceiver = ibis.createReceivePort(portType2, "" + myIbisId);
+        ReceivePort taskReceiver = ibis.createReceivePort(portType1, "" + myIbisId);
         taskReceiver.enableConnections();
         SendPort sender = ibis.createSendPort(portType2);
         Thread.sleep(1000);
