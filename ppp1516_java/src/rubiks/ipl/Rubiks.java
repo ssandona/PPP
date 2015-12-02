@@ -253,10 +253,10 @@ public class Rubiks implements RegistryEventHandler {
                 first = false;
             }
             int result = 0;
-            for(Cube cube : toDo) {
-                result += solutions(cube, cache, "");
+            while(!toDo.isEmpty()){
+                result += solutions(toDo.remove(0), cache, "");
             }
-            System.out.println("CalculatdResult");
+            System.out.println("CalculatedResult: "+result);
             // create a message
             WriteMessage resultMessage = sender.newMessage();
             resultMessage.writeInt(result);
