@@ -13,9 +13,9 @@ import java.io.IOException;
  */
 public class Rubiks implements RegistryEventHandler {
 
-    /*static PortType portType1 = new PortType(PortType.COMMUNICATION_RELIABLE,
+    static PortType portType1 = new PortType(PortType.COMMUNICATION_RELIABLE,
                                      PortType.SERIALIZATION_DATA, PortType.RECEIVE_EXPLICIT,
-                                     PortType.CONNECTION_ONE_TO_ONE);*/
+                                     PortType.CONNECTION_ONE_TO_MANY);
 
     static PortType portType2 = new PortType(PortType.COMMUNICATION_RELIABLE,
             PortType.SERIALIZATION_OBJECT, PortType.RECEIVE_EXPLICIT,
@@ -251,7 +251,7 @@ public class Rubiks implements RegistryEventHandler {
         System.out.println("SolutionsServer");
         ReceivePort resultsReceiver = ibis.createReceivePort(portType2, "results");
         resultsReceiver.enableConnections();
-        SendPort taskSender = ibis.createSendPort(portType2);
+        SendPort taskSender = ibis.createSendPort(portType1);
 
         while (result == 0) {
             bound++;
@@ -354,7 +354,7 @@ public class Rubiks implements RegistryEventHandler {
     private void run() throws Exception {
         System.out.println("done");
         // Create an ibis instance.
-        Ibis ibis = IbisFactory.createIbis(ibisCapabilities, null, portType2);
+        Ibis ibis = IbisFactory.createIbis(ibisCapabilities, null, portType2, portType1);
         Thread.sleep(5000);
         System.out.println("Ibis created");
         myIbisId = ibis.identifier();
