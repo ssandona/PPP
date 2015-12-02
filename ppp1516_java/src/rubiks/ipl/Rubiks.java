@@ -181,7 +181,7 @@ public class Rubiks {
             result += solutions(toDo.remove(0), cache, "");
         }
         System.out.println("MyResult: " + result);
-        System.out.println("CollectResults of " + nodes-1 + " nodes");
+        System.out.println("CollectResults of " + (nodes-1) + " nodes");
         //collect results from other nodes
         for(i = 0; i < nodes - 1; i++) {
             ReadMessage r = resultsReceiver.receive();
