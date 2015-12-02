@@ -208,14 +208,14 @@ public class Rubiks implements RegistryEventHandler {
             taskSender.connect(joinedIbis, "" + joinedIbis);
             // create a reply message
             WriteMessage task = taskSender.newMessage();
-            task.writeArray(cube);
+            task.writeObject(cube);
             task.finish();
             System.out.println("Sent");
         }
 
         System.out.println("ComputeMyPart");
         Cube[] children = cube.generateChildren(cache);
-
+        int last_displs;
         if(id != 0) {
             last_displs = displs[id - 1];
         } else {
@@ -282,7 +282,7 @@ public class Rubiks implements RegistryEventHandler {
                 System.out.println("EmptyWorkQueueWait");
                 ReadMessage r = taskReceiver.receive();
                 System.out.println("ReceivedMyWork");
-                r.readArray(cube);
+                cube=(Cube)r.readObject();
                 r.finish();
             }
             if(first) {
