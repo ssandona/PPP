@@ -241,8 +241,9 @@ public class Rubiks implements RegistryEventHandler {
         }
         System.out.println("EndFor, Result= "+result);
 
-        resultsReceiver.close();
-        taskSender.close();
+        //resultsReceiver.close();
+        //taskSender.close();
+        System.out.println("return");
         return result;
     }
 
