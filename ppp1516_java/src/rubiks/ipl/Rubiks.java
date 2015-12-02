@@ -164,7 +164,7 @@ public class Rubiks implements RegistryEventHandler {
         int i = -1;
         for (IbisIdentifier joinedIbis : joinedIbises) {
             i++;
-            if(joinedIbis == myIbisId) {
+            if(joinedIbis.equals(myIbisId)) {
                 toDo = new ArrayList<Cube>(Arrays.asList(Arrays.copyOfRange(children, last_displs, displs[i])));
                 last_displs = displs[i];
                 continue;
@@ -174,10 +174,10 @@ public class Rubiks implements RegistryEventHandler {
         }
         System.out.println("MachinesNumber: "+machines.size());
         Thread.sleep(5000);
-        System.out.println("SendTask");
+        System.out.println("SendTasks");
         i = 0;
         for (IbisIdentifier joinedIbis : joinedIbises) {
-            if(joinedIbis == myIbisId) {
+            if(joinedIbis.equals(myIbisId)) {
                 continue;
             }
             if(machines.get(i).isEmpty()) {
