@@ -218,7 +218,7 @@ public class Rubiks implements RegistryEventHandler {
         } else {
             last_displs = 0;
         }
-        System.out.println("ComputeMyPart"+myIbisId+": ["+displs[id]+","+displs[id]+cubes_per_proc[id]+"]");
+        System.out.println("ComputeMyPart"+myIbisId+": ["+displs[id]+","+(displs[id]+cubes_per_proc[id])+"]");
         toDo = new ArrayList<Cube>(Arrays.asList(Arrays.copyOfRange(children, displs[id], displs[id]+cubes_per_proc[id])));
 
 
@@ -304,7 +304,7 @@ public class Rubiks implements RegistryEventHandler {
             }
             int result = 0;
             Cube[] children = cube.generateChildren(cache);
-            System.out.println("ComputeMyPart"+myIbisId+": ["+displs[id]+","+displs[id]+cubes_per_proc[id]+"]");
+            System.out.println("ComputeMyPart"+myIbisId+": ["+displs[id]+","+(displs[id]+cubes_per_proc[id])+"]");
             toDo = new ArrayList<Cube>(Arrays.asList(Arrays.copyOfRange(children, displs[id], displs[id]+cubes_per_proc[id])));
             while(!toDo.isEmpty()) {
                 result += solutions(toDo.remove(0), cache, "");
