@@ -241,7 +241,7 @@ public class Rubiks implements RegistryEventHandler {
         System.out.println("ConnectedToServerPort");
         boolean first = true;
 
-        Object myCubes[12];
+        Cube[] myCubes=new Cube[12];
         CubeCache cache = null;
         while(!ibis.registry().hasTerminated()) {
             //System.out.print("Bound now:");
