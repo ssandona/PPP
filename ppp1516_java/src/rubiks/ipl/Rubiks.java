@@ -153,6 +153,7 @@ public class Rubiks{
         WriteMessage task = taskSender.newMessage();
         task.writeBoolean(false);
         task.finish();
+        System.out.print("boolean sent");
 
 
         //end new part
@@ -218,6 +219,7 @@ public class Rubiks{
         WriteMessage task = taskSender.newMessage();
         task.writeObject(cube);
         task.finish();
+        System.out.print("cube sent");
         while (result == 0) {
             bound++;
             cube.setBound(bound);
@@ -259,8 +261,9 @@ public class Rubiks{
                 //System.out.println("ReceivedMyWork");
         cube=(Cube)r.readObject();
         r.finish();
-
-        r = taskReceiver.receive();      
+        System.out.print("cube received");
+        r = taskReceiver.receive();   
+        System.out.print("boolean received");   
 
         while(!r.readBoolean()) {
         	r.finish();
