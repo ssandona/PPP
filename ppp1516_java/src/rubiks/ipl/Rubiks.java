@@ -141,6 +141,7 @@ public class Rubiks implements RegistryEventHandler {
 
 
     public static int solutionsServer(Ibis ibis, Cube cube, CubeCache cache) throws Exception {
+    	System.out.println("SolutionsServer");
         ReceivePort resultsReceiver = ibis.createReceivePort(portType2, "results");
         resultsReceiver.enableConnections();
         SendPort taskSender = ibis.createSendPort(portType2);
@@ -156,7 +157,7 @@ public class Rubiks implements RegistryEventHandler {
         // every possible way. Gets new objects from the cache
         Cube[] children = cube.generateChildren(cache);
 
-
+        System.out.println("ChildrenGenerated");
         //work distribution
         machines = new ArrayList<ArrayList<Cube>>();
         int last_displs = 0;
@@ -172,6 +173,7 @@ public class Rubiks implements RegistryEventHandler {
             last_displs = displs[i];
         }
 
+        System.out.println("SendTask");
         i = 0;
         for (IbisIdentifier joinedIbis : joinedIbises) {
             if(joinedIbis == myIbisId) {
@@ -233,6 +235,7 @@ public class Rubiks implements RegistryEventHandler {
         SendPort sender = ibis.createSendPort(portType2);
         Thread.sleep(1000);
         sender.connect(server, "results");
+        System.out.println("ConnectedToServerPort");
         boolean first = true;
 
         CubeCache cache = null;
