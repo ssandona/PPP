@@ -310,6 +310,7 @@ public class Rubiks implements RegistryEventHandler {
             } else {
                 last_displs = 0;
             }
+            System.out.println("ComputeMyPart"+myIbisId+": ["+last_displs+","+displs[id]+"]");
             toDo = new ArrayList<Cube>(Arrays.asList(Arrays.copyOfRange(children, last_displs, displs[id])));
             while(!toDo.isEmpty()) {
                 result += solutions(toDo.remove(0), cache, "");
