@@ -244,6 +244,7 @@ public class Rubiks {
         System.out.println("TERMINATE");
         resultsReceiver.close();
         taskSender.close();
+        System.out.println("PortClosed");
 
     }
 
@@ -298,6 +299,7 @@ public class Rubiks {
         System.out.println("FINE");
         taskReceiver.close();
         sender.close();
+        System.out.println("PortClosed");
     }
 
 
