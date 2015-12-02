@@ -185,7 +185,7 @@ public class Rubiks implements RegistryEventHandler {
                 taskSender.connect(joinedIbis, "" + joinedIbis);
                 // create a reply message
                 WriteMessage task = taskSender.newMessage();
-                task.writeObject(machines.get(i));
+                task.writeArray(machines.get(i).toArray(new Cube[machine.get(i).size()]));
                 task.finish();
                 System.out.println("Sent");
             }
@@ -241,6 +241,7 @@ public class Rubiks implements RegistryEventHandler {
         System.out.println("ConnectedToServerPort");
         boolean first = true;
 
+
         CubeCache cache = null;
         while(!ibis.registry().hasTerminated()) {
             //System.out.print("Bound now:");
@@ -248,7 +249,7 @@ public class Rubiks implements RegistryEventHandler {
                 System.out.println("EmptyWorkQueueWait");
                 ReadMessage r = taskReceiver.receive();
                 System.out.println("ReceivedMyWork");
-                toDo = (ArrayList<Cube>)r.readObject();
+                r.readArray(toDo);
                 r.finish();
             }
             if(first) {
