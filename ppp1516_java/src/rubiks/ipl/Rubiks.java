@@ -185,7 +185,7 @@ public class Rubiks implements RegistryEventHandler {
                 taskSender.connect(joinedIbis, "" + joinedIbis);
                 // create a reply message
                 WriteMessage task = taskSender.newMessage();
-                task.writeArray(machines.get(i).toArray(new Cube[12]));
+                task.writeArray(machines.get(i).toArray(new Cube[machine.get(i).size()]));
                 task.finish();
                 System.out.println("Sent");
             }
