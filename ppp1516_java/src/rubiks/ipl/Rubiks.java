@@ -213,23 +213,23 @@ public class Rubiks {
         WriteMessage task = taskSender.newMessage();
         task.writeObject(cube);
         task.finish();
-        System.out.println("cube sent");
+        //System.out.println("cube sent");
         while (result == 0) {
             bound++;
             cube.setBound(bound);
-            System.out.println("BOUND: " + bound);
+            //System.out.println("BOUND: " + bound);
             result = solutionsServer(ibis, cube, cache, resultsReceiver, taskSender);
-            System.out.println("Result: " + result);
+            //System.out.println("Result: " + result);
             if(result == 0) {
                 //new part
                 task = taskSender.newMessage();
                 task.writeBoolean(false);
                 task.finish();
-                System.out.println("boolean sent");
+                //System.out.println("boolean sent");
             }
         }
 
-        System.out.println("FINISH");
+        //System.out.println("FINISH");
         task = taskSender.newMessage();
         task.writeBoolean(true);
         task.finish();
@@ -263,13 +263,13 @@ public class Rubiks {
         //System.out.println("ReceivedMyWork");
         cube = (Cube)r.readObject();
         r.finish();
-        System.out.println("cube received");
+        //System.out.println("cube received");
     
         boolean end = false;
         while(!end) {
         	bound++;
             cube.setBound(bound);
-            System.out.println("boolean received -> "+end);
+            //System.out.println("boolean received -> "+end);
             if(first) {
                 //System.out.println("First");
                 cache = new CubeCache(cube.getSize());
@@ -282,7 +282,7 @@ public class Rubiks {
             while(!toDo.isEmpty()) {
                 result += solutions(toDo.remove(0), cache, "");
             }
-            System.out.println("CalculatedResult: " + result);
+            //System.out.println("CalculatedResult: " + result);
             // create a message
             WriteMessage resultMessage = sender.newMessage();
             resultMessage.writeInt(result);
