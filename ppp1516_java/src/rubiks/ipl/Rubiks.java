@@ -14,7 +14,7 @@ import java.io.IOException;
 public class Rubiks implements RegistryEventHandler {
 
     static PortType portType1 = new PortType(PortType.COMMUNICATION_RELIABLE,
-                                     PortType.SERIALIZATION_DATA, PortType.RECEIVE_EXPLICIT,
+                                     PortType.SERIALIZATION_OBJECT, PortType.RECEIVE_EXPLICIT,
                                      PortType.CONNECTION_ONE_TO_MANY);
 
     static PortType portType2 = new PortType(PortType.COMMUNICATION_RELIABLE,
