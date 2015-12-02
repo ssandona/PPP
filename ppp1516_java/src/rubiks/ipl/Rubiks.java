@@ -225,7 +225,7 @@ public class Rubiks {
             System.out.println("Result: " + result);
             if(result == 0) {
                 //new part
-                WriteMessage task = taskSender.newMessage();
+                task = taskSender.newMessage();
                 task.writeBoolean(false);
                 task.finish();
                 System.out.print("boolean sent");
