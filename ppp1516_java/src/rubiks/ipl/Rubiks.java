@@ -18,7 +18,7 @@ public class Rubiks implements RegistryEventHandler {
                                      PortType.CONNECTION_ONE_TO_ONE);*/
 
     static PortType portType2 = new PortType(PortType.COMMUNICATION_RELIABLE,
-            PortType.SERIALIZATION_DATA, PortType.RECEIVE_EXPLICIT,
+            PortType.SERIALIZATION_DATA, PortType.SERIALIZATION_OBJECT, PortType.RECEIVE_EXPLICIT,
             PortType.CONNECTION_MANY_TO_ONE);
 
 
@@ -199,6 +199,7 @@ public class Rubiks implements RegistryEventHandler {
                 task.finish();
                 System.out.println("Sent");
         }*/
+        Thread.sleep(5000);
 
         for (IbisIdentifier joinedIbis : joinedIbises) {
             if(joinedIbis.equals(myIbisId)) {
