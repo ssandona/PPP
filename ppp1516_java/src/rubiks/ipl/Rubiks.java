@@ -167,7 +167,7 @@ public class Rubiks {
         } else {
             last_displs = 0;
         }
-        System.out.println("ComputeMyPart"+myIbisId+": ["+displs[id]+","+(displs[id]+cubes_per_proc[id])+"]");
+        //System.out.println("ComputeMyPart"+myIbisId+": ["+displs[id]+","+(displs[id]+cubes_per_proc[id])+"]");
         toDo = new ArrayList<Cube>(Arrays.asList(Arrays.copyOfRange(children, displs[id], displs[id] + cubes_per_proc[id])));
 
 
@@ -177,17 +177,17 @@ public class Rubiks {
         while(!toDo.isEmpty()) {
             result += solutions(toDo.remove(0), cache, "");
         }
-        System.out.println("MyResult: " + result);
-        System.out.println("CollectResults of " + (nodes-1) + " nodes");
+        //System.out.println("MyResult: " + result);
+        //System.out.println("CollectResults of " + (nodes-1) + " nodes");
         //collect results from other nodes
         for(i = 0; i < nodes - 1; i++) {
             ReadMessage r = resultsReceiver.receive();
             result += r.readInt();
             r.finish();
-            System.out.println("YEAH");
+            //System.out.println("YEAH");
         }
-        System.out.println("EndFor, Result= "+result);
-        System.out.println("return");
+        //System.out.println("EndFor, Result= "+result);
+        //System.out.println("return");
         return result;
     }
 
