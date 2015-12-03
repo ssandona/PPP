@@ -119,7 +119,7 @@ public class Rubiks {
         //function invokable from both actual worker or another one, if invoked by the actual worker
         //and the queue i(toDo) is empty, the function askForWork is invoked (that invoke the workRequest function
         //on the other nodes
-        public synchronized static ArrayList<Cube> getWork(boolean sameNode) throws Exception {
+        public synchronized static ArrayList<Cube> getWork(boolean sameNode) throws IOException {
             System.out.println("Ibis[" + myIntIbisId + "] -> getWork");
             ArrayList<Cube> workToReturn = new ArrayList<Cube>();
             if(sameNode) {
@@ -219,7 +219,7 @@ public class Rubiks {
 
 
         /*After a token is received, to propagate it to the next node*/
-        public static  void propagateToken(Token t) {
+        public static  void propagateToken(Token t) throws IOException {
             System.out.println("Ibis[" + myIntIbisId + "] -> propagateToken");
             int tokenId = t.id;
             //if the token is black it is propagated as it is
@@ -236,13 +236,8 @@ public class Rubiks {
 
         public void upcall(ReadMessage message) throws IOException,
             ClassNotFoundException {
-            try {
                 propagateToken((Token)message.readObject());
                 message.finish();
-            } catch(Exception e) {
-                System.err.println("Error");
-            }
-
         }
     }
 
