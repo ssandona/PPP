@@ -244,7 +244,7 @@ public class Rubiks {
             ClassNotFoundException {
             Token t = (Token)message.readObject();
             message.finish();
-            if(t.id == myIbisId) {
+            if(t.id == myIntIbisId) {
                 sync.arrivedToken(t);
             } else {
                 propagateToken((Token)message.readObject());
