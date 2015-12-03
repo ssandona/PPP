@@ -227,7 +227,7 @@ public class Rubiks {
             term.finish();
 
             while(!tokenComeBack) {
-                wait();
+                this.wait();
             }
             tokenComeBack=false;
             return receivedToken.white;
@@ -272,7 +272,7 @@ public class Rubiks {
             if(t.id == myIbisId) {
                 receivedToken = t;
                 tokenComeBack=true;
-                notifyAll();
+                this.notifyAll();
             } else {
                 propagateToken((Token)message.readObject());
             }
