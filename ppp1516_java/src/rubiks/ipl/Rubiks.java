@@ -147,7 +147,7 @@ public class Rubiks {
         int i;
         //add childrens on the toDo pool
         for(i = 0; i < children.length; i++) {
-            child = children[children.length - i];
+            child = children[(children.length-1) - i];
             toDo.add(child);
             cache.put(cube);
         }
