@@ -81,20 +81,20 @@ public class Rubiks {
             this.id = id;
         }
 
-        public void setId(int id){
-        	this.id=id;
+        public void setId(int id) {
+            this.id = id;
         }
 
-        public void setWhite(boolean white){
-        	this.white=white;
+        public void setWhite(boolean white) {
+            this.white = white;
         }
 
-        public int getId(){
-        	return id;
+        public int getId() {
+            return id;
         }
 
-        public boolean getWhite(){
-        	return white;
+        public boolean getWhite() {
+            return white;
         }
     }
 
@@ -124,7 +124,7 @@ public class Rubiks {
                     r.readArray(receivedWork);
                     r.finish();
                     workRequestSender.disconnect(doner, "WorkReq");
-                    if(receivedWork!=null && receivedWork.length!=0) {
+                    if(receivedWork != null && receivedWork.length != 0) {
                         toDo = new ArrayList<Cube>(Arrays.asList(receivedWork));
                         return true;
                     }
@@ -175,7 +175,7 @@ public class Rubiks {
             // create a sendport for the reply
             SendPort replyPort = myIbis.createSendPort(portType1to1);
             ArrayList<Cube> subPool;
-            Cube[] subPoolToSend=new Cube[0];
+            Cube[] subPoolToSend = new Cube[0];
             if(toDo.size() == 0) {
                 subPool = null;
             } else {
@@ -203,7 +203,7 @@ public class Rubiks {
             // send the work to him
             WriteMessage reply = replyPort.newMessage();
             if(subPool != null) {
-            	subPoolToSend=subPool.toArray(new Cube[subPool.size()]);
+                subPoolToSend = subPool.toArray(new Cube[subPool.size()]);
             }
             reply.writeArray(subPoolToSend);
             reply.finish();
@@ -212,6 +212,10 @@ public class Rubiks {
     }
 
     static class TokenManager implements MessageUpcall {
+
+        boolean tokenComeBack = false;
+        Token receivedToken;
+
         public static boolean checkTermination () throws Exception {
             System.out.println("Ibis[" + myIntIbisId + "] -> checkTermination");
             //create a new token
@@ -222,8 +226,14 @@ public class Rubiks {
             term.writeObject(t);
             term.finish();
 
+            while(!tokenComeBack) {
+                wait();
+            }
+            tokenComeBack=false;
+            return receivedToken.white;
+
             //wait the token comes back
-            boolean myToken = false;
+            /*boolean myToken = false;
             while(!myToken) {
                 ReadMessage r = tokenRequestReceiver.receive();
                 t = (Token)r.readObject();
@@ -234,8 +244,8 @@ public class Rubiks {
                 }
                 //if the received token is not the one expected, it is propagated
                 propagateToken(t);
-            }
-            return false;
+            }*/
+            //return false;
         }
 
 
@@ -257,8 +267,16 @@ public class Rubiks {
 
         public void upcall(ReadMessage message) throws IOException,
             ClassNotFoundException {
-            propagateToken((Token)message.readObject());
+            Token t = (Token)message.readObject();
             message.finish();
+            if(t.id == myIbisId) {
+                receivedToken = t;
+                tokenComeBack=true;
+                notifyAll();
+            } else {
+                propagateToken((Token)message.readObject());
+            }
+
         }
     }
 
