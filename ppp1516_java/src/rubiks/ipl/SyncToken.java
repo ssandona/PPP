@@ -1,3 +1,6 @@
+package rubiks.ipl;
+import ibis.ipl.*;
+
 public class SyncToken {
     boolean tokenComeBack = false;
     Token receivedToken;
