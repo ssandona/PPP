@@ -219,7 +219,7 @@ public class Rubiks {
 
 
         /*After a token is received, to propagate it to the next node*/
-        public static  void propagateToken(Token t) throws Exception {
+        public static  void propagateToken(Token t) {
             System.out.println("Ibis[" + myIntIbisId + "] -> propagateToken");
             int tokenId = t.id;
             //if the token is black it is propagated as it is
@@ -236,8 +236,12 @@ public class Rubiks {
 
         public void upcall(ReadMessage message) throws IOException,
             ClassNotFoundException {
-            propagateToken((Token)message.readObject());
-            message.finish();
+            try {
+                propagateToken((Token)message.readObject());
+                message.finish();
+            } catch(Exception e) {
+                System.err.println("Error");
+            }
 
         }
     }
@@ -315,7 +319,7 @@ public class Rubiks {
         int bound = 0;
         int result = 0;
         ArrayList<Cube> work = workManager.getWork(true);
-        Cube cube=work.get(0);
+        Cube cube = work.get(0);
         //System.out.println("SolutionsServer");
         ReceivePort resultsReceiver = ibis.createReceivePort(portTypeMto1, "results");
         resultsReceiver.enableConnections();
