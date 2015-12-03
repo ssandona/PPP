@@ -89,7 +89,7 @@ public class Rubiks {
         }
 
 
-        public static boolean askForWork() throws Exception {
+        public static boolean askForWork() throws IOException {
             System.out.println("Ibis[" + myIntIbisId + "] -> askForWork");
             int i;
             Cube[] receivedWork = null;
