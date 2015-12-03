@@ -5,7 +5,7 @@ public class SyncToken {
     boolean tokenComeBack = false;
     Token receivedToken;
 
-    public Token waitToken() throws InterruptedException{
+    synchronized public Token waitToken() throws InterruptedException{
         while(!tokenComeBack) {
             wait();
         }
@@ -13,7 +13,7 @@ public class SyncToken {
         return receivedToken;
     }
 
-    public void arrivedToken(Token t) {
+    synchronized public void arrivedToken(Token t) {
         receivedToken = t;
         tokenComeBack = true;
         notifyAll();
