@@ -89,7 +89,7 @@ public class Rubiks {
         }
 
 
-        public static boolean askForWork() throws IOException {
+        public static boolean askForWork() throws IOException, ClassNotFoundException {
             System.out.println("Ibis[" + myIntIbisId + "] -> askForWork");
             int i;
             Cube[] receivedWork = null;
@@ -119,7 +119,7 @@ public class Rubiks {
         //function invokable from both actual worker or another one, if invoked by the actual worker
         //and the queue i(toDo) is empty, the function askForWork is invoked (that invoke the workRequest function
         //on the other nodes
-        public synchronized static ArrayList<Cube> getWork(boolean sameNode) throws IOException {
+        public synchronized static ArrayList<Cube> getWork(boolean sameNode) throws IOException, ClassNotFoundException {
             System.out.println("Ibis[" + myIntIbisId + "] -> getWork");
             ArrayList<Cube> workToReturn = new ArrayList<Cube>();
             if(sameNode) {
