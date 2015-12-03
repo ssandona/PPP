@@ -151,6 +151,7 @@ public class Rubiks {
             toDo.add(child);
             cache.put(cube);
         }
+        return 0;
     }
 
 
@@ -176,6 +177,7 @@ public class Rubiks {
             //if the received token is not the one expected, it is propagated
             propagateToken(t);
         }
+        return false;
     }
 
 
@@ -195,7 +197,7 @@ public class Rubiks {
     }
 
 /*A request of work from another Ibis instance*/
-    public static void workRequest(int otherIbisId) throws IOException, ClassNotFoundException {
+    public static void workRequest(int otherIbisId) throws Exception {
     	//get ibisIdentifier of the requestor
         IbisIdentifier requestor = joinedIbises[otherIbisId];
         int i;
@@ -249,7 +251,7 @@ public class Rubiks {
                     cache = new CubeCache(cube.getSize());
                     first = false;
                 }
-                result += solution(cube, cache);
+                result += solution();
 
                 //check for pending work requests
                 ReadMessage r= workRequestReceiver.poll();
