@@ -225,7 +225,7 @@ public class Rubiks {
 
         /*After a token is received, to propagate it to the next node*/
         public static  void propagateToken(Token t) throws IOException {
-            System.out.println("Ibis[" + myIntIbisId + "] -> propagateToken");
+            //System.out.println("Ibis[" + myIntIbisId + "] -> propagateToken");
             int tokenId = t.id;
             //if the token is black it is propagated as it is
             if(t.white) {
@@ -302,7 +302,7 @@ public class Rubiks {
             //System.out.println("Ibis[" + myIntIbisId + "] -> solutionsWorkers -> No work");
             end = tokenManager.checkTermination();
         }
-        System.out.println("Ibis[" + myIntIbisId + "] -> solutionsWorkers -> return");
+        System.out.println("Ibis[" + myIntIbisId + "] -> solutionsWorkers -> FIrstTermination");
         return result;
     }
 
@@ -346,6 +346,7 @@ public class Rubiks {
             cube.setBound(bound);
             System.out.println(" " + bound);
             result = solutionsServer(resultsReceiver);
+            System.out.println("Result :" +result);
             //say to all to continue
             if(result == 0) {
                 task = terminationSender.newMessage();
