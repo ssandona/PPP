@@ -147,7 +147,7 @@ public class Rubiks {
         }
 
         /*A request of work from another Ibis instance*/
-        public static void upcall(ReadMessage message) throws Exception {
+        public void upcall(ReadMessage message) throws Exception {
             int otherIbisId = r.readInt();
             message.finish();
             System.out.println("Ibis[" + myIntIbisId + "] -> workrequest");
@@ -189,7 +189,7 @@ public class Rubiks {
         }
     }
 
-    static class TerminationManager implements MessageUpcall {
+    static class TokenManager implements MessageUpcall {
         public static boolean checkTermination () throws Exception {
             System.out.println("Ibis[" + myIntIbisId + "] -> checkTermination");
             //create a new token
@@ -233,7 +233,7 @@ public class Rubiks {
             term.finish();
         }
 
-        public static void upcall(ReadMessage message) throws Exception {
+        public void upcall(ReadMessage message) throws Exception {
             propagateToken((Token)message.readObject());
             message.finish();
 
