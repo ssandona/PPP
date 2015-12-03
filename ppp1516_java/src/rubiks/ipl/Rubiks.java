@@ -149,7 +149,7 @@ public class Rubiks {
         /*A request of work from another Ibis instance*/
         public void upcall(ReadMessage message) throws IOException,
             ClassNotFoundException {
-            int otherIbisId = r.readInt();
+            int otherIbisId = message.readInt();
             message.finish();
             System.out.println("Ibis[" + myIntIbisId + "] -> workrequest");
             //get ibisIdentifier of the requestor
@@ -243,11 +243,6 @@ public class Rubiks {
     }
 
 
-
-
-
-
-
     public static int solution(Cube cube, CubeCache cache) {
         System.out.println("Ibis[" + myIntIbisId + "] -> solution");
         if (cube.isSolved()) {
@@ -285,7 +280,7 @@ public class Rubiks {
         Cube cube;
         boolean end = false;
         while(!end) {
-            while((actual = getWork(true)) != null) {
+            while((actual = workManager.getWork(true)) != null) {
                 cube = actual.remove(0);
                 if(first) {
                     cache = new CubeCache(cube.getSize());
