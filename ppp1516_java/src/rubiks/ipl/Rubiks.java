@@ -46,13 +46,13 @@ public class Rubiks {
     static int nodes = 1;
     static ArrayList<Cube[]> machines;
     static IbisIdentifier[] joinedIbises;
+    static int myIntIbisId;
     static boolean[] white;
     static IbisIdentifier myIbisId;
     static Integer[] cubes_per_proc;
     static Integer[] displs;
     static Ibis myIbis;
     static Cube cube = null;
-    static int id;
     static int size;
     static int level;
     static int target;
@@ -77,6 +77,7 @@ public class Rubiks {
 
 
     public static boolean askForWork() {
+    	int i;
         Cube[] receivedWork = null;
         IbisIdentifier doner;
         for(i = 0; i < nodes; i++) {
@@ -84,7 +85,7 @@ public class Rubiks {
             if(!doner.equals(myIbisId)) {
                 workRequestSender.connect(doner, "WorkReq");
                 WriteMessage task = workRequestSender.newMessage();
-                task.writeObject(myIbisId);
+                task.writeInt(myIntIbisId);
                 task.finish();
 
                 ReadMessage r = workReceiver.receive();
@@ -106,7 +107,7 @@ public class Rubiks {
     //function invokable from both actual worker or another one, if invoked by the actual worker
     //and the queue i(toDo) is empty, the function askForWork is invoked (that invoke the workRequest function
     //on the other nodes
-    synchronized public ArrayList<Cube> getWork(boolean sameNode) throws InterruptedException {
+    synchronized public static ArrayList<Cube> getWork(boolean sameNode) throws InterruptedException {
         ArrayList<Cube> workToReturn = new ArrayList<Cube>();
         if(sameNode) {
             if(toDo.size() == 0) {
@@ -143,32 +144,33 @@ public class Rubiks {
         //generate childrens
         Cube[] children = cube.generateChildren(cache);
         Cube child;
+        int i;
         //add childrens on the toDo pool
-        for(i = 0; i < children.size(); i++) {
-            child = children[children.size() - i];
+        for(i = 0; i < children.length; i++) {
+            child = children[children.length - i];
             toDo.add(child);
             cache.put(cube);
         }
     }
 
 
-    public boolean checkTermination () throws IOException {
+    public static boolean checkTermination () throws IOException {
     	//create a new token
-        Token t = new Token(myIbisId);
+        Token t = new Token(myIntIbisId);
         //already connected with the next ibis instance
         //send the token to the next ibis instance
         WriteMessage term = tokenRequestSender.newMessage();
-        term.writeArray(t);
-        reply.finish();
+        term.writeObject(t);
+        term.finish();
 
         //wait the token comes back
         boolean myToken = false;
         while(!myToken) {
-            ReadMessage r = tokenRequestSender.receive();
+            ReadMessage r = tokenRequestReceiver.receive();
             t = (Token)r.readObject();
             r.finish();
             //if the received token is the one expected, its value is returned 
-            if(t.id == myToken) {
+            if(t.id == myIntIbisId) {
                 return t.white;
             }
             //if the received token is not the one expected, it is propagated
@@ -178,44 +180,45 @@ public class Rubiks {
 
 
 /*After a token is received, to propagate it to the next node*/
-    public void propagateToken(Token t) {
+    public static  void propagateToken(Token t) {
         int tokenId = t.id;
         //if the token is black it is propagated as it is
         if(t.white) {
-            t.color = white[tokenId];
+            t.white = white[tokenId];
         }
         white[tokenId] = true;
         //already connected with the next ibis instance
         //send the token to the next ibis instance
         WriteMessage term = tokenRequestSender.newMessage();
-        term.writeArray(t);
-        reply.finish();
+        term.writeObject(t);
+        term.finish();
     }
 
 /*A request of work from another Ibis instance*/
-    public void workRequest(int otherIbisId) throws IOException, ClassNotFoundException {
+    public static void workRequest(int otherIbisId) throws IOException, ClassNotFoundException {
     	//get ibisIdentifier of the requestor
         IbisIdentifier requestor = joinedIbises[otherIbisId];
+        int i;
         // create a sendport for the reply
         SendPort replyPort = myIbis.createSendPort(replyPortType);
-
+        ArrayList<Cube> subpool;
         if(toDo.size() == 0) {
             subPool = null;
         } else {
-            ArrayList<Cube> subPool = getWork(false);
+            subPool = getWork(false);
         }
         //update node color in the eyes of every other node
         if(subPool != null) {
-            if(myIbisId>otherIbisId){
+            if(myIntIbisId>otherIbisId){
             	for(i=0;i<=otherIbisId;i++){
             		white[i]=false;
             	}
-            	for(i=myIbisId+1;i<nodes;i++){
+            	for(i=myIntIbisId+1;i<nodes;i++){
             		white[i]=false;
             	}
             }
             else{
-            	for(i=myIbisId+1;i<=otherIbisId;i++){
+            	for(i=myIntIbisId+1;i<=otherIbisId;i++){
             		white[i]=false;
             	}
             }
@@ -240,7 +243,7 @@ public class Rubiks {
         Cube cube;
         boolean end = false;
         while(!end) {
-            while(actual = getWork(true) != null) {
+            while((actual = getWork(true)) != null) {
                 cube = actual.remove(0);
                 if(first) {
                     cache = new CubeCache(cube.getSize());
@@ -288,7 +291,7 @@ public class Rubiks {
         ReceivePort resultsReceiver = ibis.createReceivePort(portTypeMto1, "results");
         resultsReceiver.enableConnections();
 
-        SendPort terminationSender = ibis.createReceivePort(portType1toM);
+        SendPort terminationSender = ibis.createSendPort(portType1toM);
         for (IbisIdentifier joinedIbis : joinedIbises) {
             if(joinedIbis.equals(myIbisId)) {
                 continue;
@@ -297,7 +300,7 @@ public class Rubiks {
         }
 
         Thread.sleep(1000);
-
+        WriteMessage task;
         System.out.println("Bound:");
         while (result == 0) {
             bound++;
@@ -326,7 +329,7 @@ public class Rubiks {
 
         System.out.println("TERMINATE");
         resultsReceiver.close();
-        taskSender.close();
+        terminationSender.close();
         System.out.println("PortClosed");
 
     }
@@ -352,7 +355,7 @@ public class Rubiks {
 
         boolean end = false;
         while(!end) {
-            result = solutionsWorkers(ibis, cube, cache, resultsReceiver, taskSender);
+            result = solutionsWorkers();
 
             //communicate my results
             WriteMessage resultMessage = resultsSender.newMessage();
@@ -360,15 +363,15 @@ public class Rubiks {
             resultMessage.finish();
 
             //check if I have to continue
-            r = terminationReceiver.receive();
+            ReadMessage r = terminationReceiver.receive();
             end = r.readBoolean();
             r.finish();
         }
 
 
         System.out.println("FINE");
-        taskReceiver.close();
-        sender.close();
+        terminationReceiver.close();
+        resultsSender.close();
         System.out.println("PortClosed");
     }
 
@@ -422,7 +425,7 @@ public class Rubiks {
         workRequestReceiver.enableConnections();
        
        	//port in which new work requests will be sent
-        workRequestSender = ibis.createReceivePort(portTypeMto1);
+        workRequestSender = ibis.createSendPort(portTypeMto1);
 
         //port in which new tokens will be received
         tokenRequestReceiver = ibis.createReceivePort(portType1to1, "TokenReq");
@@ -431,7 +434,7 @@ public class Rubiks {
         // enable upcalls
 
         //port in which new tokens will be sent (the next ibis instance)
-        tokenRequestSender = ibis.createReceivePort(portType1to1);
+        tokenRequestSender = ibis.createSendPort(portType1to1);
         tokenRequestSender.connect(joinedIbises[(myIbisId+1)%nodes],"TokenReq");
 
         //port in which new work is received
@@ -465,7 +468,7 @@ public class Rubiks {
         for (IbisIdentifier joinedIbis : joinedIbises) {
             System.err.println("Ibis joined: " + joinedIbis);
             if(joinedIbis.equals(myIbisId)) {
-                id = i;
+                myIntIbisId = i;
             }
             white[i] = true;
             i++;
