@@ -7,9 +7,10 @@ public class SyncToken {
 
     public Token waitToken() {
         while(!tokenComeBack) {
-            this.wait();
+            wait();
         }
         tokenComeBack = false;
+        return receivedToken;
     }
 
     public void arrivedToken(Token t) {
