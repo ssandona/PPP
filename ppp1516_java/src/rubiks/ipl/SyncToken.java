@@ -5,7 +5,7 @@ public class SyncToken {
     boolean tokenComeBack = false;
     Token receivedToken;
 
-    public Token waitToken() {
+    public Token waitToken() throws InterruptedException{
         while(!tokenComeBack) {
             wait();
         }
