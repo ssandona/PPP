@@ -20,11 +20,11 @@ public class Rubiks {
 
     static PortType portTypeMto1 = new PortType(PortType.COMMUNICATION_RELIABLE,
             PortType.SERIALIZATION_OBJECT, PortType.RECEIVE_EXPLICIT,
-            PortType.CONNECTION_MANY_TO_ONE);
+            PortType.CONNECTION_MANY_TO_ONE, PortType.RECEIVE_POLL);
 
     static PortType portType1to1 = new PortType(PortType.COMMUNICATION_RELIABLE,
             PortType.SERIALIZATION_OBJECT, PortType.RECEIVE_EXPLICIT,
-            PortType.CONNECTION_ONE_TO_ONE);
+            PortType.CONNECTION_ONE_TO_ONE, PortType.RECEIVE_POLL);
 
     static PortType requestWorkPortType = new PortType(PortType.COMMUNICATION_RELIABLE,
             PortType.SERIALIZATION_OBJECT, PortType.RECEIVE_AUTO_UPCALLS,
@@ -472,7 +472,7 @@ public class Rubiks {
 
         //port in which new work is received
         workReceiver = ibis.createReceivePort(portType1to1, "Work");
-        workRequestReceiver.enableConnections();
+        workReceiver.enableConnections();
 
 
         cubes_per_proc = new Integer[nodes];
