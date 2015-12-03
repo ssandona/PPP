@@ -71,7 +71,7 @@ public class Rubiks {
     static WorkManager workManager;
     static TokenManager tokenManager;
 
-    static Sync sync;
+    static SyncToken sync;
 
 
     public static final boolean PRINT_SOLUTION = false;

@@ -1,4 +1,4 @@
-public class Sync {
+public class SyncToken {
     boolean tokenComeBack = false;
     Token receivedToken;
 
