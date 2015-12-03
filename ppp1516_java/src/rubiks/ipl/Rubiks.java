@@ -158,6 +158,7 @@ public class Rubiks {
             // create a sendport for the reply
             SendPort replyPort = myIbis.createSendPort(portType1to1);
             ArrayList<Cube> subPool;
+            Cube[] subPoolToSend;
             if(toDo.size() == 0) {
                 subPool = null;
             } else {
@@ -185,11 +186,12 @@ public class Rubiks {
             // send the work to him
             WriteMessage reply = replyPort.newMessage();
             if(subPool != null) {
-                reply.writeArray(subPool.toArray(new Cube[subPool.size()]));
+            	subPoolToSend=subPool.toArray(new Cube[subPool.size()]);
             }
             else{
-            	reply.writeArray(subPool);
+            	subPoolToSend=null;
             }
+            reply.writeArray(subPoolToSend);
             reply.finish();
             replyPort.close();
         }
