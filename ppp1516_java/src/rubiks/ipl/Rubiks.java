@@ -82,7 +82,7 @@ public class Rubiks {
 
 
         public static boolean askForWork() throws IOException, ClassNotFoundException {
-            System.out.println("Ibis[" + myIntIbisId + "] -> askForWork");
+            //System.out.println("Ibis[" + myIntIbisId + "] -> askForWork");
             int i;
             Cube[] receivedWork = new Cube[0];
             IbisIdentifier doner;
@@ -112,7 +112,7 @@ public class Rubiks {
         //and the queue i(toDo) is empty, the function askForWork is invoked (that invoke the workRequest function
         //on the other nodes
         public synchronized static ArrayList<Cube> getWork(boolean sameNode) throws IOException, ClassNotFoundException {
-            System.out.println("Ibis[" + myIntIbisId + "] -> getWork");
+            //System.out.println("Ibis[" + myIntIbisId + "] -> getWork");
             ArrayList<Cube> workToReturn = new ArrayList<Cube>();
             if(sameNode) {
                 if(toDo.size() == 0) {
@@ -143,7 +143,7 @@ public class Rubiks {
             ClassNotFoundException {
             int otherIbisId = message.readInt();
             message.finish();
-            System.out.println("Ibis[" + myIntIbisId + "] -> workrequest");
+            //System.out.println("Ibis[" + myIntIbisId + "] -> workrequest");
             //get ibisIdentifier of the requestor
             IbisIdentifier requestor = joinedIbises[otherIbisId];
             int i;
@@ -193,7 +193,7 @@ public class Rubiks {
         static SyncToken sync = new SyncToken();
 
         public static boolean checkTermination () throws Exception {
-            System.out.println("Ibis[" + myIntIbisId + "] -> checkTermination");
+            //System.out.println("Ibis[" + myIntIbisId + "] -> checkTermination");
             //create a new token
             Token t = new Token(myIntIbisId);
             //already connected with the next ibis instance
@@ -254,7 +254,7 @@ public class Rubiks {
 
 
     public static int solution(Cube cube, CubeCache cache) {
-        System.out.println("Ibis[" + myIntIbisId + "] -> solution");
+        //System.out.println("Ibis[" + myIntIbisId + "] -> solution");
         if (cube.isSolved()) {
             return 1;
         }
@@ -281,7 +281,7 @@ public class Rubiks {
 
 
     public static int solutionsWorkers() throws Exception {
-        System.out.println("Ibis[" + myIntIbisId + "] -> solutionsWorkers");
+        //System.out.println("Ibis[" + myIntIbisId + "] -> solutionsWorkers");
         ArrayList<Cube> actual;
         CubeCache cache = null;
         boolean first = true;
@@ -299,7 +299,7 @@ public class Rubiks {
                 result += solution(cube, cache);
 
             }
-            System.out.println("Ibis[" + myIntIbisId + "] -> solutionsWorkers -> No work");
+            //System.out.println("Ibis[" + myIntIbisId + "] -> solutionsWorkers -> No work");
             end = tokenManager.checkTermination();
         }
         System.out.println("Ibis[" + myIntIbisId + "] -> solutionsWorkers -> return");
@@ -307,7 +307,7 @@ public class Rubiks {
     }
 
     public static int solutionsServer(ReceivePort resultsReceiver) throws Exception {
-        System.out.println("Ibis[" + myIntIbisId + "] -> SolutionsServer");
+        //System.out.println("Ibis[" + myIntIbisId + "] -> SolutionsServer");
         int i;
         result = solutionsWorkers();
         for(i = 0; i < nodes - 1; i++) {
