@@ -148,7 +148,7 @@ public class Rubiks {
 
         /*A request of work from another Ibis instance*/
         public static void upcall(ReadMessage message) throws Exception {
-            int otherIbisId = r.readInt());
+            int otherIbisId = r.readInt();
             message.finish();
             System.out.println("Ibis[" + myIntIbisId + "] -> workrequest");
             //get ibisIdentifier of the requestor
