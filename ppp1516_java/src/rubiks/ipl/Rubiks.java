@@ -77,6 +77,7 @@ public class Rubiks {
 
 
     public static boolean askForWork() throws Exception {
+    	System.out.println("Ibis["+myIntIbisId+"] -> askForWork");
     	int i;
         Cube[] receivedWork = null;
         IbisIdentifier doner;
@@ -108,6 +109,7 @@ public class Rubiks {
     //and the queue i(toDo) is empty, the function askForWork is invoked (that invoke the workRequest function
     //on the other nodes
     public static ArrayList<Cube> getWork(boolean sameNode) throws Exception {
+    	System.out.println("Ibis["+myIntIbisId+"] -> getWork");
         ArrayList<Cube> workToReturn = new ArrayList<Cube>();
         if(sameNode) {
             if(toDo.size() == 0) {
@@ -134,6 +136,7 @@ public class Rubiks {
     }
 
     public static int solution(Cube cube, CubeCache cache) {
+    	System.out.println("Ibis["+myIntIbisId+"] -> solution");
         if (cube.isSolved()) {
             return 1;
         }
@@ -156,6 +159,7 @@ public class Rubiks {
 
 
     public static boolean checkTermination () throws Exception {
+    	System.out.println("Ibis["+myIntIbisId+"] -> checkTermination");
     	//create a new token
         Token t = new Token(myIntIbisId);
         //already connected with the next ibis instance
@@ -183,6 +187,7 @@ public class Rubiks {
 
 /*After a token is received, to propagate it to the next node*/
     public static  void propagateToken(Token t) throws Exception {
+    	System.out.println("Ibis["+myIntIbisId+"] -> propagateToken");
         int tokenId = t.id;
         //if the token is black it is propagated as it is
         if(t.white) {
@@ -198,6 +203,7 @@ public class Rubiks {
 
 /*A request of work from another Ibis instance*/
     public static void workRequest(int otherIbisId) throws Exception {
+    	System.out.println("Ibis["+myIntIbisId+"] -> workrequest");
     	//get ibisIdentifier of the requestor
         IbisIdentifier requestor = joinedIbises[otherIbisId];
         int i;
@@ -237,6 +243,7 @@ public class Rubiks {
     }
 
     public static int solutionsWorkers() throws Exception {
+    	System.out.println("Ibis["+myIntIbisId+"] -> solutionsWorkers");
         ArrayList<Cube> actual;
         CubeCache cache=null;
         boolean first = true;
@@ -267,12 +274,15 @@ public class Rubiks {
                 	r.finish();
                 }
             }
+            System.out.println("Ibis["+myIntIbisId+"] -> solutionsWorkers -> No work");
             end = checkTermination();
         }
+        System.out.println("Ibis["+myIntIbisId+"] -> solutionsWorkers -> return");
         return result;
     }
 
     public static int solutionsServer(ReceivePort resultsReceiver) throws Exception {
+    	System.out.println("Ibis["+myIntIbisId+"] -> SolutionsServer");
         int i;
         result = solutionsWorkers();
         for(i = 0; i < nodes - 1; i++) {
