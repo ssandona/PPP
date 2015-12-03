@@ -302,7 +302,7 @@ public class Rubiks {
             //System.out.println("Ibis[" + myIntIbisId + "] -> solutionsWorkers -> No work");
             end = tokenManager.checkTermination();
         }
-        System.out.println("Ibis[" + myIntIbisId + "] -> solutionsWorkers -> FIrstTermination");
+        //System.out.println("Ibis[" + myIntIbisId + "] -> solutionsWorkers -> FIrstTermination");
         return result;
     }
 
@@ -340,13 +340,14 @@ public class Rubiks {
 
         Thread.sleep(1000);
         WriteMessage task;
-        System.out.println("Bound:");
+        System.out.println("");
+        System.out.print("Bound:");
         while (result == 0) {
             bound++;
             cube.setBound(bound);
-            System.out.println(" " + bound);
+            System.out.print(" " + bound);
             result = solutionsServer(resultsReceiver);
-            System.out.println("Result :" +result);
+            //System.out.println("Result :" +result);
             //say to all to continue
             if(result == 0) {
                 task = terminationSender.newMessage();
