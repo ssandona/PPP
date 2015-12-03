@@ -76,7 +76,7 @@ public class Rubiks {
     }
 
 
-    public static boolean askForWork() {
+    public static boolean askForWork() throws Exception {
     	int i;
         Cube[] receivedWork = null;
         IbisIdentifier doner;
@@ -107,7 +107,7 @@ public class Rubiks {
     //function invokable from both actual worker or another one, if invoked by the actual worker
     //and the queue i(toDo) is empty, the function askForWork is invoked (that invoke the workRequest function
     //on the other nodes
-    synchronized public static ArrayList<Cube> getWork(boolean sameNode) throws InterruptedException {
+    public static ArrayList<Cube> getWork(boolean sameNode) throws Exception {
         ArrayList<Cube> workToReturn = new ArrayList<Cube>();
         if(sameNode) {
             if(toDo.size() == 0) {
@@ -154,7 +154,7 @@ public class Rubiks {
     }
 
 
-    public static boolean checkTermination () throws IOException {
+    public static boolean checkTermination () throws Exception {
     	//create a new token
         Token t = new Token(myIntIbisId);
         //already connected with the next ibis instance
@@ -180,7 +180,7 @@ public class Rubiks {
 
 
 /*After a token is received, to propagate it to the next node*/
-    public static  void propagateToken(Token t) {
+    public static  void propagateToken(Token t) throws Exception {
         int tokenId = t.id;
         //if the token is black it is propagated as it is
         if(t.white) {
@@ -234,7 +234,7 @@ public class Rubiks {
         replyPort.close();
     }
 
-    public static int solutionsWorkers() {
+    public static int solutionsWorkers() throws Exception {
         ArrayList<Cube> actual;
         CubeCache cache;
         boolean first = true;
