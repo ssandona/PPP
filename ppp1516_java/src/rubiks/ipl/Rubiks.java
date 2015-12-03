@@ -107,7 +107,7 @@ public class Rubiks {
                     r.readArray(receivedWork);
                     r.finish();
                     workRequestSender.disconnect(doner, "WorkReq");
-                    if(receivedWork.length != 0) {
+                    if(receivedWork!=null && receivedWork.length!=0) {
                         toDo = new ArrayList<Cube>(Arrays.asList(receivedWork));
                         return true;
                     }
@@ -184,7 +184,12 @@ public class Rubiks {
 
             // send the work to him
             WriteMessage reply = replyPort.newMessage();
-            reply.writeArray(subPool.toArray(new Cube[subPool.size()]));
+            if(subpool != null) {
+                reply.writeArray(subPool.toArray(new Cube[subPool.size()]));
+            }
+            else{
+            	reply.writeArray(null);
+            }
             reply.finish();
             replyPort.close();
         }
@@ -236,8 +241,8 @@ public class Rubiks {
 
         public void upcall(ReadMessage message) throws IOException,
             ClassNotFoundException {
-                propagateToken((Token)message.readObject());
-                message.finish();
+            propagateToken((Token)message.readObject());
+            message.finish();
         }
     }
 
