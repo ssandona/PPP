@@ -246,7 +246,7 @@ public class Rubiks {
             if(t.id == myIntIbisId) {
                 sync.arrivedToken(t);
             } else {
-                propagateToken((Token)message.readObject());
+                propagateToken(t);
             }
 
         }
