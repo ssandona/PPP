@@ -88,11 +88,11 @@ public class Rubiks {
         	this.white=white;
         }
 
-        public void getId(){
+        public int getId(){
         	return id;
         }
 
-        public void getWhite(){
+        public boolean getWhite(){
         	return white;
         }
     }
