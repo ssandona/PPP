@@ -71,6 +71,8 @@ public class Rubiks {
     static WorkManager workManager;
     static TokenManager tokenManager;
 
+    static Sync sync;
+
 
     public static final boolean PRINT_SOLUTION = false;
 
@@ -225,11 +227,9 @@ public class Rubiks {
             WriteMessage term = tokenRequestSender.newMessage();
             term.writeObject(t);
             term.finish();
+            Token receivedToken=null;
 
-            while(!tokenComeBack) {
-                this.wait();
-            }
-            tokenComeBack=false;
+            receivedToken=sync.waitToken();
             return receivedToken.white;
 
             //wait the token comes back
@@ -270,9 +270,7 @@ public class Rubiks {
             Token t = (Token)message.readObject();
             message.finish();
             if(t.id == myIbisId) {
-                receivedToken = t;
-                tokenComeBack=true;
-                this.notifyAll();
+                sync.arrivedToken(t);
             } else {
                 propagateToken((Token)message.readObject());
             }
