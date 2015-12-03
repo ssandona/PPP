@@ -67,7 +67,7 @@ public class Rubiks {
 
     public static final boolean PRINT_SOLUTION = false;
 
-    class Token {
+    static class Token {
         public int id;
         public boolean white = true;
         public Token(int id) {
@@ -200,8 +200,8 @@ public class Rubiks {
         IbisIdentifier requestor = joinedIbises[otherIbisId];
         int i;
         // create a sendport for the reply
-        SendPort replyPort = myIbis.createSendPort(replyPortType);
-        ArrayList<Cube> subpool;
+        SendPort replyPort = myIbis.createSendPort(portType1to1);
+        ArrayList<Cube> subPool;
         if(toDo.size() == 0) {
             subPool = null;
         } else {
