@@ -70,8 +70,6 @@ public class Rubiks {
     static WorkManager workManager;
     static TokenManager tokenManager;
 
-    static SyncToken sync;
-
 
     public static final boolean PRINT_SOLUTION = false;
 
@@ -192,6 +190,7 @@ public class Rubiks {
 
         boolean tokenComeBack = false;
         Token receivedToken;
+        static SyncToken sync = new SyncToken();
 
         public static boolean checkTermination () throws Exception {
             System.out.println("Ibis[" + myIntIbisId + "] -> checkTermination");
@@ -492,7 +491,7 @@ public class Rubiks {
 
         workManager = new WorkManager();
         tokenManager = new TokenManager();
-        sync = new SyncToken();
+
 
         //port in which new work requests will be received
         workRequestReceiver = ibis.createReceivePort(portTypeMto1Up, "WorkReq", workManager);
