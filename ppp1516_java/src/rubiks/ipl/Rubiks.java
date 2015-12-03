@@ -492,6 +492,7 @@ public class Rubiks {
 
         workManager = new WorkManager();
         tokenManager = new TokenManager();
+        sync = new SyncToken();
 
         //port in which new work requests will be received
         workRequestReceiver = ibis.createReceivePort(portTypeMto1Up, "WorkReq", workManager);
