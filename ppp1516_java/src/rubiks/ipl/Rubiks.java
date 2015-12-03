@@ -238,7 +238,7 @@ public class Rubiks {
 
     public static int solutionsWorkers() throws Exception {
         ArrayList<Cube> actual;
-        CubeCache cache;
+        CubeCache cache=null;
         boolean first = true;
         int result = 0;
         int i;
@@ -251,7 +251,7 @@ public class Rubiks {
                     cache = new CubeCache(cube.getSize());
                     first = false;
                 }
-                result += solution();
+                result += solution(cube, cache);
 
                 //check for pending work requests
                 ReadMessage r= workRequestReceiver.poll();
