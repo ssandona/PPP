@@ -1,5 +1,6 @@
 package rubiks.ipl;
 import ibis.ipl.*;
+import java.io.Serializable;
 
 public class Token implements Serializable {
     public int id;

@@ -4,7 +4,6 @@ import ibis.ipl.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.io.IOException;
-import java.io.Serializable;
 
 /**
  * Solver for rubik's cube puzzle.
