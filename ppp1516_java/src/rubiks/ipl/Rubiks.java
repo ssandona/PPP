@@ -257,14 +257,15 @@ public class Rubiks {
                 ReadMessage r= workRequestReceiver.poll();
                 if(r!=null){
                 	workRequest(r.readInt());
+                	r.finish();
                 }
-                r.finish();
+         
                 //check for pending token requests
                 r= tokenRequestReceiver.poll();
                 if(r!=null){
                 	propagateToken((Token)r.readObject());
+                	r.finish();
                 }
-                r.finish();
             }
             end = checkTermination();
         }
