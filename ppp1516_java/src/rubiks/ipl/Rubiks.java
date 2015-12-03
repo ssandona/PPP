@@ -73,11 +73,27 @@ public class Rubiks {
 
     public static final boolean PRINT_SOLUTION = false;
 
-    static class Token {
+    static class Token implements Serializable {
         public int id;
         public boolean white = true;
         public Token(int id) {
             this.id = id;
+        }
+
+        public void setId(int id){
+        	this.id=id;
+        }
+
+        public void setWhite(boolean white){
+        	this.white=white;
+        }
+
+        public void getId(){
+        	return id;
+        }
+
+        public void getWhite(){
+        	return white;
         }
     }
 
