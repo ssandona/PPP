@@ -82,11 +82,11 @@ public class Rubiks {
     }
 
     static class WorkManager implements MessageUpcall {
-    	ArrayList<Cube> toDo = new ArrayList<Cube>();
+        static ArrayList<Cube> toDo = new ArrayList<Cube>();
 
-    	public static void add(Cube cube){
-    		toDo.add(cube);
-    	}
+        public static void add(Cube cube) {
+            toDo.add(cube);
+        }
 
 
         public static boolean askForWork() throws Exception {
@@ -147,7 +147,8 @@ public class Rubiks {
         }
 
         /*A request of work from another Ibis instance*/
-        public void upcall(ReadMessage message) throws Exception {
+        public void upcall(ReadMessage message) throws IOException,
+            ClassNotFoundException {
             int otherIbisId = r.readInt();
             message.finish();
             System.out.println("Ibis[" + myIntIbisId + "] -> workrequest");
@@ -164,7 +165,7 @@ public class Rubiks {
             }
             //update node color in the eyes of every other node
             if(subPool != null) {
-            if(myIntIbisId > otherIbisId) {
+                if(myIntIbisId > otherIbisId) {
                     for(i = 0; i <= otherIbisId; i++) {
                         white[i] = false;
                     }
@@ -233,7 +234,8 @@ public class Rubiks {
             term.finish();
         }
 
-        public void upcall(ReadMessage message) throws Exception {
+        public void upcall(ReadMessage message) throws IOException,
+            ClassNotFoundException {
             propagateToken((Token)message.readObject());
             message.finish();
 
@@ -481,14 +483,14 @@ public class Rubiks {
             i++;
         }
 
-        workManager=new WorkManager();
-        tokenManager=new TokenManager();
+        workManager = new WorkManager();
+        tokenManager = new TokenManager();
 
         //port in which new work requests will be received
         workRequestReceiver = ibis.createReceivePort(portTypeMto1Up, "WorkReq", workManager);
         // enable connections
         workRequestReceiver.enableConnections();
-      	// enable upcalls
+        // enable upcalls
         workRequestReceiver.enableMessageUpcalls();
 
         //port in which new work requests will be sent
