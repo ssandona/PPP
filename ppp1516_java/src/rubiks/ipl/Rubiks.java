@@ -184,11 +184,11 @@ public class Rubiks {
 
             // send the work to him
             WriteMessage reply = replyPort.newMessage();
-            if(subpool != null) {
+            if(subPool != null) {
                 reply.writeArray(subPool.toArray(new Cube[subPool.size()]));
             }
             else{
-            	reply.writeArray(null);
+            	reply.writeArray(subPool);
             }
             reply.finish();
             replyPort.close();
