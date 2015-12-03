@@ -421,30 +421,6 @@ public class Rubiks {
         myIbis = ibis;
 
 
-        //port in which new work requests will be received
-        workRequestReceiver = ibis.createReceivePort(portTypeMto1, "WorkReq");
-        // enable connections
-        workRequestReceiver.enableConnections();
-       
-       	//port in which new work requests will be sent
-        workRequestSender = ibis.createSendPort(portTypeMto1);
-
-        //port in which new tokens will be received
-        tokenRequestReceiver = ibis.createReceivePort(portType1to1, "TokenReq");
-        // enable connections
-        tokenRequestReceiver.enableConnections();
-        // enable upcalls
-
-        //port in which new tokens will be sent (the next ibis instance)
-        tokenRequestSender = ibis.createSendPort(portType1to1);
-        tokenRequestSender.connect(joinedIbises[(myIntIbisId+1)%nodes],"TokenReq");
-
-        //port in which new work is received
-        workReceiver = ibis.createReceivePort(portType1to1, "Work");
-        workRequestReceiver.enableConnections();
-
-
-
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
                 try {
@@ -475,6 +451,30 @@ public class Rubiks {
             white[i] = true;
             i++;
         }
+
+        //port in which new work requests will be received
+        workRequestReceiver = ibis.createReceivePort(portTypeMto1, "WorkReq");
+        // enable connections
+        workRequestReceiver.enableConnections();
+       
+       	//port in which new work requests will be sent
+        workRequestSender = ibis.createSendPort(portTypeMto1);
+
+        //port in which new tokens will be received
+        tokenRequestReceiver = ibis.createReceivePort(portType1to1, "TokenReq");
+        // enable connections
+        tokenRequestReceiver.enableConnections();
+        // enable upcalls
+
+        //port in which new tokens will be sent (the next ibis instance)
+        tokenRequestSender = ibis.createSendPort(portType1to1);
+        tokenRequestSender.connect(joinedIbises[(myIntIbisId+1)%nodes],"TokenReq");
+
+        //port in which new work is received
+        workReceiver = ibis.createReceivePort(portType1to1, "Work");
+        workRequestReceiver.enableConnections();
+
+
         cubes_per_proc = new Integer[nodes];
         displs = new Integer[nodes];
         int avarage_cubes_per_proc = (6 * (size - 1)) / nodes;
