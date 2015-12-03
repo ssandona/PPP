@@ -290,7 +290,7 @@ public class Rubiks {
 
             }
             System.out.println("Ibis[" + myIntIbisId + "] -> solutionsWorkers -> No work");
-            end = checkTermination();
+            end = tokenManager.checkTermination();
         }
         System.out.println("Ibis[" + myIntIbisId + "] -> solutionsWorkers -> return");
         return result;
@@ -314,7 +314,8 @@ public class Rubiks {
         long start = System.currentTimeMillis();
         int bound = 0;
         int result = 0;
-        Cube cube = workManager.getWork(true);
+        ArrayList<Cube> work = workManager.getWork(true);
+        Cube cube=work.get(0);
         //System.out.println("SolutionsServer");
         ReceivePort resultsReceiver = ibis.createReceivePort(portTypeMto1, "results");
         resultsReceiver.enableConnections();
