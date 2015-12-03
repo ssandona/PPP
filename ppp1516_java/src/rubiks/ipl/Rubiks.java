@@ -481,6 +481,9 @@ public class Rubiks {
             i++;
         }
 
+        workManager=new WorkManager();
+        tokenManager=new TokenManager();
+
         //port in which new work requests will be received
         workRequestReceiver = ibis.createReceivePort(portTypeMto1Up, "WorkReq", workManager);
         // enable connections
