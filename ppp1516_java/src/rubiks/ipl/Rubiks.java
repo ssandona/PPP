@@ -435,7 +435,7 @@ public class Rubiks {
 
         //port in which new tokens will be sent (the next ibis instance)
         tokenRequestSender = ibis.createSendPort(portType1to1);
-        tokenRequestSender.connect(joinedIbises[(myIbisId+1)%nodes],"TokenReq");
+        tokenRequestSender.connect(joinedIbises[(myIntIbisId+1)%nodes],"TokenReq");
 
         //port in which new work is received
         workReceiver = ibis.createReceivePort(portType1to1, "Work");
@@ -462,8 +462,8 @@ public class Rubiks {
 
         joinedIbises = ibis.registry().joinedIbises();
         nodes = joinedIbises.length;
-        target = (myIbisId + 1) % nodes;
-        white = new Boolean[nodes];
+        target = (myIntIbisId + 1) % nodes;
+        white = new boolean[nodes];
         int i = 0;
         for (IbisIdentifier joinedIbis : joinedIbises) {
             System.err.println("Ibis joined: " + joinedIbis);
