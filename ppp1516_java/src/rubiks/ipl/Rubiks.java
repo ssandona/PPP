@@ -85,6 +85,9 @@ public class Rubiks {
         }
 
         public static void add(Cube cube) {
+        	if(cube==null){
+        		System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAH 6");
+        	}
             toDo.add(cube);
             //System.out.println("Ibis[" + myIntIbisId + "] -> added cube");
         }
