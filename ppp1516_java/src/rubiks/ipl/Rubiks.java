@@ -23,8 +23,7 @@ public class Rubiks {
             PortType.CONNECTION_MANY_TO_ONE, PortType.RECEIVE_POLL);
 
     static PortType portTypeMto1Up = new PortType(PortType.COMMUNICATION_RELIABLE,
-            PortType.SERIALIZATION_OBJECT, PortType.RECEIVE_AUTO_UPCALLS,
-            PortType.CONNECTION_MANY_TO_ONE);
+            PortType.SERIALIZATION_OBJECT, PortType.CONNECTION_MANY_TO_ONE, PortType.RECEIVE_AUTO_UPCALLS);
 
     static PortType portType1to1 = new PortType(PortType.COMMUNICATION_RELIABLE,
             PortType.SERIALIZATION_OBJECT, PortType.RECEIVE_EXPLICIT,
@@ -463,7 +462,7 @@ public class Rubiks {
     private void run() throws Exception {
         //System.out.println("done");
         // Create an ibis instance.
-        Ibis ibis = IbisFactory.createIbis(ibisCapabilities, null, portTypeMto1, portTypeMto1Up, portType1toM, portType1to1, portType1to1Up);
+        Ibis ibis = IbisFactory.createIbis(ibisCapabilities, null, portTypeMto1, portTypeMto1Up, portType1toM, portType1to1);
         Thread.sleep(5000);
         System.out.println("Ibis created");
         myIbisId = ibis.identifier();
