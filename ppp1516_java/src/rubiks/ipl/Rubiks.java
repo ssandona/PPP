@@ -334,7 +334,7 @@ public class Rubiks {
         Cube cube;
         boolean end = false;
         while(!end) {
-            while((actual = workManager.getWork(true)) != null) {
+            while((actual = workManager.getWork(true)) != null && actual.size()!=0) {
                 cube = actual.remove(0);
                 System.out.println("Ibis[" + myIntIbisId + "] -> ReceivedWork, twists: " + cube.getTwists() + ", bound: " + cube.getBound());
                 if(first) {
