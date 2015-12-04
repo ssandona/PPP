@@ -80,7 +80,7 @@ public class Rubiks {
     static class WorkManager implements MessageUpcall {
         static ArrayList<Cube> toDo = new ArrayList<Cube>();
 
-        public static int printSize() {
+        public static void printSize() {
             System.out.println("Ibis[" + myIntIbisId + "] -> SIZE: "+toDo.size());
         }
 
