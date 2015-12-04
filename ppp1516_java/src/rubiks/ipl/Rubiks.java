@@ -100,6 +100,8 @@ public class Rubiks {
                     ReadMessage r = workReceiver.receive();
                     //System.out.println("ReceivedMyWork");
                     r.readArray(receivedWork);
+                    int n=r.readInt();
+                    System.out.println("received n");
                     r.finish();
                     workRequestSender.disconnect(doner, "WorkReq");
                     if(receivedWork != null && receivedWork.length != 0) {
@@ -187,7 +189,8 @@ public class Rubiks {
             if(subPool != null) {
                 subPoolToSend = subPool.toArray(new Cube[subPool.size()]);
             }
-            reply.writeArray(subPoolToSend);
+            //reply.writeArray(subPoolToSend);
+            reply.writeInt(4);
             reply.finish();
             replyPort.close();
         }
