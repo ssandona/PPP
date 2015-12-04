@@ -155,8 +155,9 @@ public class Rubiks {
             }
             if(sameNode) {
                 int n = toDo.size() - 1;
+                Cube c=null;
                 synchronized(lock) {
-                    Cube c = toDo.remove(n);
+                    c = toDo.remove(n);
                 }
                 if(c == null) {
                     //System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 1, index -> "+n);
