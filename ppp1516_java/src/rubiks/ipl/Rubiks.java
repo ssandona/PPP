@@ -99,9 +99,9 @@ public class Rubiks {
 
                     ReadMessage r = workReceiver.receive();
                     //System.out.println("ReceivedMyWork");
-                    //r.readArray(receivedWork);
-                    int n=r.readInt();
-                    System.out.println("received n");
+                    r.readArray(receivedWork);
+                    /*int n=r.readInt();
+                    System.out.println("received n");*/
                     r.finish();
                     workRequestSender.disconnect(doner, "WorkReq");
                     if(receivedWork != null && receivedWork.length != 0) {
@@ -158,7 +158,8 @@ public class Rubiks {
             // create a sendport for the reply
             SendPort replyPort = myIbis.createSendPort(portType1to1);
             ArrayList<Cube> subPool;
-            Cube[] subPoolToSend = new Cube[0];
+            //Cube[] subPoolToSend = new Cube[0];
+            Cube[] subPoolToSend = new Cube[1];
             if(toDo.size() == 0) {
                 subPool = null;
             } else {
@@ -187,10 +188,11 @@ public class Rubiks {
             // send the work to him
             WriteMessage reply = replyPort.newMessage();
             if(subPool != null) {
+            	System.out.println("Ibis[" + myIntIbisId + "] -> pool to send not empty");
                 subPoolToSend = subPool.toArray(new Cube[subPool.size()]);
             }
-            //reply.writeArray(subPoolToSend);
-            reply.writeInt(4);
+            reply.writeArray(subPoolToSend);
+            //reply.writeInt(4);
             reply.finish();
             replyPort.close();
         }
