@@ -452,7 +452,7 @@ public class Rubiks {
             bound++;
             initialCube.setBound(bound);
             workManager.add(initialCube);
-            System.out.println(" "++bound);
+            System.out.println(" "+bound);
             result = solutionsServer(resultsReceiver);
             //System.out.println("Result :" + result);
 
