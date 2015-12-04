@@ -327,6 +327,9 @@ public class Rubiks {
             workManager.add(child);
             cache.put(cube);
         }
+        if(bound <= 8) {
+                System.out.println(System.out.println("Ibis[" + myIntIbisId + "] -> add 12 childs");
+        }
         return 0;
     }
 
@@ -401,6 +404,9 @@ public class Rubiks {
         WriteMessage task;
         System.out.println("");
         while (result == 0) {
+        	if(bound <= 8) {
+                System.out.println("BeginCube -> bound: " + cube.getBound()+ " twists: "+cube.getTwists());
+            }
             bound++;
             cube.setBound(bound);
             workManager.add(cube);
