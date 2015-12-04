@@ -462,7 +462,7 @@ public class Rubiks {
     private void run() throws Exception {
         //System.out.println("done");
         // Create an ibis instance.
-        Ibis ibis = IbisFactory.createIbis(ibisCapabilities, null, portTypeMto1, portTypeMto1Up, portType1toM, portType1to1);
+        Ibis ibis = IbisFactory.createIbis(ibisCapabilities, null, portTypeMto1, portTypeMto1Up, portType1toM, portType1to1, portType1to1Up);
         Thread.sleep(5000);
         System.out.println("Ibis created");
         myIbisId = ibis.identifier();
