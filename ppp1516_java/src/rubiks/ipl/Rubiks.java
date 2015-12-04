@@ -448,7 +448,7 @@ public class Rubiks {
             terminationSender.connect(joinedIbis, "continue");
         }
 
-        Thread.sleep(1000);
+        //Thread.sleep(1000);
         WriteMessage task;
         System.out.println("");
         while (result == 0) {
@@ -466,7 +466,7 @@ public class Rubiks {
                 System.out.println("Result :" + result);
             }
             if(bound > 8) {
-                Thread.sleep(11000);
+                //Thread.sleep(11000);
             }
             //say to all to continue
             if(result == 0) {
@@ -505,7 +505,7 @@ public class Rubiks {
         SendPort resultsSender = ibis.createSendPort(portTypeMto1);
         resultsSender.connect(server, "results");
 
-        Thread.sleep(1000);
+        //Thread.sleep(1000);
         //sender.connect(server, "results");
         //System.out.println("ConnectedToServerPort");
         boolean first = true;
