@@ -388,6 +388,7 @@ public class Rubiks {
                 cube = actual.remove(0);
                 if(cube == null) {
                     System.out.println("Ibis[" + myIntIbisId + "] -> NULLCUBE");
+                    continue;
                 }
                 //System.out.println("Ibis[" + myIntIbisId + "] -> ReceivedWork, twists: " + cube.getTwists() + ", bound: " + cube.getBound());
                 if(first) {
