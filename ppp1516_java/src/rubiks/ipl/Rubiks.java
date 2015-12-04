@@ -741,7 +741,7 @@ public class Rubiks {
 
         // print cube info
         System.out.println("Searching for solution for cube of size "
-                           + cube.getSize() + ", twists = " + twists + ", seed = " + seed);
+                           + initialCube.getSize() + ", twists = " + twists + ", seed = " + seed);
         initialCube.print(System.out);
         System.out.flush();
 
