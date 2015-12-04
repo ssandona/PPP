@@ -299,10 +299,16 @@ public class Rubiks {
     public static int solution(Cube cube, CubeCache cache) {
         //System.out.println("Ibis[" + myIntIbisId + "] -> solution");
         if (cube.isSolved()) {
+        	if(cube.bound<=10){
+        		System.out.println("SOLVED");
+        	}
             return 1;
         }
 
         if (cube.getTwists() >= cube.getBound()) {
+        	if(cube.bound<=10){
+        		System.out.println("Twists: "+cube.getTwists()+" Bound: "+cube.getBound());
+        	}
             return 0;
         }
         //generate childrens
