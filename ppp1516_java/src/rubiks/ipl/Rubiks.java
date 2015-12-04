@@ -426,8 +426,8 @@ public class Rubiks {
         long start = System.currentTimeMillis();
         int bound = 0;
         int result = 0;
-        ArrayList<Cube> work = workManager.getWork(true);
-        Cube cube = work.get(0);
+        /*ArrayList<Cube> work = workManager.getWork(true);
+        Cube cube = work.get(0);*/
         //System.out.println("SolutionsServer");
         ReceivePort resultsReceiver = ibis.createReceivePort(portTypeMto1, "results");
         resultsReceiver.enableConnections();
@@ -661,7 +661,12 @@ public class Rubiks {
 
         // If I am the server, run server, else run client.
         if (server.equals(ibis.identifier())) {
-            workManager.add(cube);
+        	if(cube==null){
+        		System.out.println("CUBE NULL FROM THE BEGIN");
+        	}
+        	else{
+        		System.out.println("CUBE ok");
+        	}
             //long start = System.currentTimeMillis();
             solveServer(ibis);
             //long end = System.currentTimeMillis();
