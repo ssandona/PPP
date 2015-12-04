@@ -77,6 +77,7 @@ public class Rubiks {
 
         public static void add(Cube cube) {
             toDo.add(cube);
+            System.out.println("Ibis[" + myIntIbisId + "] -> added cube");
         }
 
 
@@ -124,6 +125,7 @@ public class Rubiks {
                 workToReturn.add(toDo.remove(toDo.size() - 1));
                 System.out.println("Ibis[" + myIntIbisId + "] -> return work");
             } else {
+            	System.out.println("Ibis[" + myIntIbisId + "] -> split work");
                 int amount = toDo.size() / 2;
                 boolean even = toDo.size() % 2 == 0;
                 int index = even ? toDo.size() / 2 : toDo.size() / 2 + 1;
