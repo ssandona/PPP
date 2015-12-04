@@ -328,7 +328,7 @@ public class Rubiks {
             //cache.put(child);
         }
         if(cube.getBound() <= 8) {
-                System.out.println("Ibis[" + myIntIbisId + "] -> add 12 childs");
+                //System.out.println("Ibis[" + myIntIbisId + "] -> add 12 childs");
         }
         return 0;
     }
