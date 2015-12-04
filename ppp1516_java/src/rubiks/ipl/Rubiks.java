@@ -226,6 +226,10 @@ public class Rubiks {
             //return false;
         }
 
+        public TokenManager(){
+        	tokenRequestSender.connect(joinedIbises[(myIntIbisId + 1) % nodes], "TokenReq");
+        }
+
 
         /*After a token is received, to propagate it to the next node*/
         public static  void propagateToken(Token t) throws IOException {
@@ -496,10 +500,6 @@ public class Rubiks {
             i++;
         }
 
-        workManager = new WorkManager();
-        tokenManager = new TokenManager();
-
-
         //port in which new work requests will be received
         workRequestReceiver = ibis.createReceivePort(portTypeMto1Up, "WorkReq", workManager);
         // enable connections
@@ -519,7 +519,7 @@ public class Rubiks {
 
         //port in which new tokens will be sent (the next ibis instance)
         tokenRequestSender = ibis.createSendPort(portType1to1Up);
-        tokenRequestSender.connect(joinedIbises[(myIntIbisId + 1) % nodes], "TokenReq");
+        
 
         //port in which new work is received
         workReceiver = ibis.createReceivePort(portType1to1, "Work");
@@ -549,6 +549,9 @@ public class Rubiks {
         for(i = 0; i < nodes; i++) {
             System.out.print(cubes_per_proc[i] + " ");
         }
+
+        workManager = new WorkManager();
+        tokenManager = new TokenManager();
 
         // If I am the server, run server, else run client.
         if (server.equals(ibis.identifier())) {
