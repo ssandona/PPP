@@ -159,7 +159,7 @@ public class Rubiks {
                     Cube c = toDo.remove(index);
                     workToReturn.add(c);
                     if(c == null) {
-                        System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 2");
+                        System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 2, (amount, even, index) -> ("+amount+","+even+","+index+")";
 
                     }
                     if(workToReturn.size() == 0) {
