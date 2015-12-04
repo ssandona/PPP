@@ -80,6 +80,10 @@ public class Rubiks {
     static class WorkManager implements MessageUpcall {
         static ArrayList<Cube> toDo = new ArrayList<Cube>();
 
+        public static int printSize() {
+            System.out.println("Ibis[" + myIntIbisId + "] -> SIZE: "+toDO.getSize());
+        }
+
         public static void add(Cube cube) {
             toDo.add(cube);
             //System.out.println("Ibis[" + myIntIbisId + "] -> added cube");
@@ -363,6 +367,7 @@ public class Rubiks {
         int i;
         result = solutionsWorkers();
         System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
+        workManager.printSize();
         valuatedCubes = 0;
         for(i = 0; i < nodes - 1; i++) {
             ReadMessage r = resultsReceiver.receive();
@@ -459,6 +464,7 @@ public class Rubiks {
         while(!end) {
             result = solutionsWorkers();
             System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
+            workManager.printSize();
             valuatedCubes = 0;
             //communicate my results
             WriteMessage resultMessage = resultsSender.newMessage();
