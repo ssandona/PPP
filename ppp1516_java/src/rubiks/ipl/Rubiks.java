@@ -126,6 +126,11 @@ public class Rubiks {
                     if(receivedWork != null && receivedWork.length != 0) {
                         //System.out.println("Ibis[" + myIntIbisId + "] -> received " + receivedWork.length + " cubes");
                         toDo = new ArrayList<Cube>(Arrays.asList(receivedWork));
+                        for(i=0;i<toDo.size();i++){
+                        	if(toDo.get(i) == null){
+                        		System.out.println("Ibis[" + myIntIbisId + "] -> AHAHHA 5");
+                        	}
+                        }
                         return true;
                     }
                 }
