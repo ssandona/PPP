@@ -26,6 +26,10 @@ public class Rubiks {
             PortType.SERIALIZATION_OBJECT, PortType.CONNECTION_MANY_TO_ONE, PortType.RECEIVE_AUTO_UPCALLS);
 
     static PortType portType1to1 = new PortType(PortType.COMMUNICATION_RELIABLE,
+            PortType.SERIALIZATION_OBJECT, PortType.RECEIVE_EXPLICIT,
+            PortType.CONNECTION_ONE_TO_ONE);
+
+    static PortType portType1to1Up = new PortType(PortType.COMMUNICATION_RELIABLE,
             PortType.SERIALIZATION_OBJECT, PortType.CONNECTION_ONE_TO_ONE, PortType.RECEIVE_AUTO_UPCALLS);
 
     static PortType requestWorkPortType = new PortType(PortType.COMMUNICATION_RELIABLE,
@@ -507,14 +511,14 @@ public class Rubiks {
         workRequestSender = ibis.createSendPort(portTypeMto1Up);
 
         //port in which new tokens will be received
-        tokenRequestReceiver = ibis.createReceivePort(portType1to1, "TokenReq", tokenManager);
+        tokenRequestReceiver = ibis.createReceivePort(portType1to1Up, "TokenReq", tokenManager);
         // enable connections
         tokenRequestReceiver.enableConnections();
         // enable upcalls
         tokenRequestReceiver.enableMessageUpcalls();
 
         //port in which new tokens will be sent (the next ibis instance)
-        tokenRequestSender = ibis.createSendPort(portType1to1);
+        tokenRequestSender = ibis.createSendPort(portType1to1Up);
         tokenRequestSender.connect(joinedIbises[(myIntIbisId + 1) % nodes], "TokenReq");
 
         //port in which new work is received
