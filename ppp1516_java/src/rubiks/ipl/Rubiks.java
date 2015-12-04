@@ -218,7 +218,7 @@ public class Rubiks {
             // create a sendport for the reply
             //SendPort replyPort = myIbis.createSendPort(portType1to1);
             SendPort replyPort = myIbis.createSendPort(portTypeMto1);
-            
+
             ArrayList<Cube> subPool;
             Cube[] subPoolToSend = new Cube[0];
             //Cube[] subPoolToSend = null;
@@ -350,9 +350,6 @@ public class Rubiks {
         }
 
         if (cube.getTwists() >= cube.getBound()) {
-            if(cube.getBound() <= 8) {
-                //System.out.println("Twists: "+cube.getTwists()+" Bound: "+cube.getBound());
-            }
             return 0;
         }
         //generate childrens
@@ -368,9 +365,6 @@ public class Rubiks {
 
             workManager.add(child);
             //cache.put(child);
-        }
-        if(cube.getBound() <= 8) {
-            //System.out.println("Ibis[" + myIntIbisId + "] -> add 12 childs");
         }
         return 0;
     }
@@ -453,23 +447,15 @@ public class Rubiks {
         //Thread.sleep(1000);
         WriteMessage task;
         System.out.println("");
+        System.out.print("bound");
         while (result == 0) {
             bound++;
             initialCube.setBound(bound);
-            if(bound <= 8) {
-                System.out.println("BeginCube -> bound: " + initialCube.getBound() + " twists: " + initialCube.getTwists());
-            }
             workManager.add(initialCube);
-            if(bound <= 8) {
-                System.out.println("Bound" + bound);
-            }
+            System.out.println(" "++bound);
             result = solutionsServer(resultsReceiver);
-            if(bound <= 8) {
-                System.out.println("Result :" + result);
-            }
-            if(bound > 8) {
-                //Thread.sleep(11000);
-            }
+            //System.out.println("Result :" + result);
+
             //say to all to continue
             if(result == 0) {
                 task = terminationSender.newMessage();
