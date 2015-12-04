@@ -40,7 +40,7 @@ public class Rubiks {
 
 
     static IbisCapabilities ibisCapabilities = new IbisCapabilities(
-        IbisCapabilities.ELECTIONS_STRICT, IbisCapabilities.MEMBERSHIP_TOTALLY_ORDERED);
+        IbisCapabilities.ELECTIONS_STRICT);
 
     /*static IbisCapabilities ibisCapabilities = new IbisCapabilities(
         IbisCapabilities.ELECTIONS_STRICT);*/
