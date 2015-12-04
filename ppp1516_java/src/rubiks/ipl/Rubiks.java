@@ -425,7 +425,7 @@ public class Rubiks {
         //System.out.println("Ibis[" + myIntIbisId + "] -> SolutionsServer");
         int i;
         result = solutionsWorkers();
-        System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes + " workRequests: " + requestsForWork);
+        //System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes + " workRequests: " + requestsForWork);
         //workManager.printSize();
         valuatedCubes = 0;
         requestsForWork = 0;
@@ -463,7 +463,7 @@ public class Rubiks {
         while (result == 0) {
             bound++;
             initialCube.setBound(bound);
-            System.out.println("InitialCube : (" + initialCube.getBound() + ", " + initialCube.getTwists() + ")");
+            //System.out.println("InitialCube : (" + initialCube.getBound() + ", " + initialCube.getTwists() + ")");
             workManager.add(initialCube);
             System.out.println(" " + bound);
             result = solutionsServer(resultsReceiver);
