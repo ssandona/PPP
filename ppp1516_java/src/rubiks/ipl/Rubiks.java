@@ -88,9 +88,9 @@ public class Rubiks {
 
         public static void add(Cube cube) {
             synchronized(lock) {        //Only one PrintThread at a time can call syn1.display()
-                if(cube == null) {
+                /*if(cube == null) {
                     System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAH 6");
-                }
+                }*/
                 toDo.add(cube);
                 toDoWeight += (cube.getBound() - cube.getTwists());
             }
@@ -162,9 +162,9 @@ public class Rubiks {
                     c = toDo.remove(n);
                     toDoWeight -= (c.getBound() - c.getTwists());
                 }
-                if(c == null) {
-                    //System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 1, index -> "+n);
-                }
+                /*if(c == null) {
+                    System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 1, index -> "+n);
+                }*/
                 workToReturn.add(c);
             } else {
                 synchronized(lock) {
@@ -179,10 +179,10 @@ public class Rubiks {
                         workToReturn.add(c);
                         toDoWeight -= (c.getBound() - c.getTwists());
                         distributed += (c.getBound() - c.getTwists());
-                        if(c == null) {
+                        /*if(c == null) {
                             System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 2, (amount, even, index) -> (" + amount + "," + even + "," + index + ")");
 
-                        }
+                        }*/
                     }
                     if(workToReturn.size() == 0) {
                         workToReturn = null;
@@ -256,11 +256,11 @@ public class Rubiks {
             WriteMessage reply = replyPort.newMessage();
             if(subPool != null && subPool.size() != 0) {
 
-                for(i = 0; i < subPool.size(); i++) {
+                /*for(i = 0; i < subPool.size(); i++) {
                     if(subPool.get(i) == null) {
                         System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 3");
                     }
-                }
+                }*/
 
                 subPoolToSend = subPool.toArray(new Cube[subPool.size()]);
                 //System.out.println("Ibis[" + myIntIbisId + "] -> pool to send not empty => " + subPoolToSend.length);
@@ -364,9 +364,9 @@ public class Rubiks {
         //add childrens on the toDo pool
         for(i = 0; i < children.length; i++) {
             child = children[(children.length - 1) - i];
-            if(child == null) {
+            /*if(child == null) {
                 System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 4");
-            }
+            }*/
 
             workManager.add(child);
             //cache.put(child);
