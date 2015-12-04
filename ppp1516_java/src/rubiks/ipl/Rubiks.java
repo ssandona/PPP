@@ -105,6 +105,7 @@ public class Rubiks {
                     	System.out.println("Ibis[" + myIntIbisId + "] -> no work");
                     }
                     else{
+                    	r = workReceiver.receive();
                     	System.out.println("Ibis[" + myIntIbisId + "] -> work!!! "+cubes+" cubes");
                     	receivedWork = new Cube[cubes];
                     	r.readArray(receivedWork);
