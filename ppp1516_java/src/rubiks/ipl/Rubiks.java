@@ -89,7 +89,7 @@ public class Rubiks {
         		System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAH 6");
         	}
             toDo.add(cube);
-            //System.out.println("Ibis[" + myIntIbisId + "] -> added cube");
+            System.out.println("Ibis[" + myIntIbisId + "] -> added cube");
         }
 
 
