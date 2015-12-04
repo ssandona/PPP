@@ -81,7 +81,7 @@ public class Rubiks {
         static ArrayList<Cube> toDo = new ArrayList<Cube>();
 
         public static int printSize() {
-            System.out.println("Ibis[" + myIntIbisId + "] -> SIZE: "+toDO.getSize());
+            System.out.println("Ibis[" + myIntIbisId + "] -> SIZE: "+toDo.getSize());
         }
 
         public static void add(Cube cube) {
