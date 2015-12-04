@@ -228,6 +228,13 @@ public class Rubiks {
             // send the work to him
             WriteMessage reply = replyPort.newMessage();
             if(subPool != null) {
+
+                for(i = 0; i < subPool.size(); i++) {
+                    if(subPool.get(i) == null) {
+                        System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 3");
+                    }
+                }
+
                 subPoolToSend = subPool.toArray(new Cube[subPool.size()]);
                 System.out.println("Ibis[" + myIntIbisId + "] -> pool to send not empty => " + subPoolToSend.length);
                 reply.writeInt(subPoolToSend.length);
@@ -333,6 +340,10 @@ public class Rubiks {
         //add childrens on the toDo pool
         for(i = 0; i < children.length; i++) {
             child = children[(children.length - 1) - i];
+            if(child == null) {
+                System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 4");
+            }
+
             workManager.add(child);
             //cache.put(child);
         }
