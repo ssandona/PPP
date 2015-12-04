@@ -226,7 +226,7 @@ public class Rubiks {
             //return false;
         }
 
-        public TokenManager(){
+        public TokenManager() throws Exception{
         	tokenRequestSender.connect(joinedIbises[(myIntIbisId + 1) % nodes], "TokenReq");
         }
 
