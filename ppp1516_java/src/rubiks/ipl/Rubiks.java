@@ -191,6 +191,9 @@ public class Rubiks {
             	System.out.println("Ibis[" + myIntIbisId + "] -> pool to send not empty");
                 subPoolToSend = subPool.toArray(new Cube[subPool.size()]);
             }
+            else{
+            	System.out.println("Ibis[" + myIntIbisId + "] -> pool to send empty");
+            }
             reply.writeArray(subPoolToSend);
             //reply.writeInt(4);
             reply.finish();
