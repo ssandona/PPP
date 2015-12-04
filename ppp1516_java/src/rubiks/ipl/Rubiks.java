@@ -477,8 +477,9 @@ public class Rubiks {
                            + " milliseconds");
 
         System.out.println("TERMINATE");
-        resultsReceiver.close();
         terminationSender.close();
+        Thread.wait(1000);
+        resultsReceiver.close();
         System.out.println("PortClosed");
 
     }
@@ -520,8 +521,9 @@ public class Rubiks {
 
 
         System.out.println("FINE");
-        terminationReceiver.close();
         resultsSender.close();
+        Thread.wait(1000);
+        terminationReceiver.close();
         System.out.println("PortClosed");
     }
 
@@ -682,8 +684,12 @@ public class Rubiks {
             solveWorkers(ibis, server);
         }
 
-        // End ibis.
-        //ibis.registry().terminate();
+        workRequestSender.close();
+        tokenRequestSender.close();
+        Thread.sleep(1000);
+        workRequestReceiver.close();
+        tokenRequestReceiver.close();
+        workReceiver.close();
         ibis.end();
     }
 
