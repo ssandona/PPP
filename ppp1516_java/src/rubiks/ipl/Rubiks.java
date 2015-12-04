@@ -148,9 +148,10 @@ public class Rubiks {
                 return null;
             }
             if(sameNode) {
-                Cube c = toDo.remove(toDo.size() - 1);
+            	int n=toDo.size() - 1;
+                Cube c = toDo.remove(n);
                 if(c == null) {
-                    System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 1");
+                    System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 1, index -> "+n);
                 }
                 workToReturn.add(c);
             } else {
