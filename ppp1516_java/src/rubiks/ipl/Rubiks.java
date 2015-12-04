@@ -638,7 +638,8 @@ public class Rubiks {
         tokenRequestSender.connect(joinedIbises[(myIntIbisId + 1) % nodes], "TokenReq");
 
         //port in which new work is received
-        workReceiver = ibis.createReceivePort(portType1to1, "Work");
+        //workReceiver = ibis.createReceivePort(portType1to1, "Work");
+        workReceiver = ibis.createReceivePort(portTypeMto1, "Work");
         workReceiver.enableConnections();
 
 
