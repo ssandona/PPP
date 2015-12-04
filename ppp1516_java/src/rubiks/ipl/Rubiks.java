@@ -80,7 +80,7 @@ public class Rubiks {
 
         public static void add(Cube cube) {
             toDo.add(cube);
-            System.out.println("Ibis[" + myIntIbisId + "] -> added cube");
+            //System.out.println("Ibis[" + myIntIbisId + "] -> added cube");
         }
 
 
@@ -99,24 +99,23 @@ public class Rubiks {
                     task.finish();
 
                     ReadMessage r = workReceiver.receive();
-                    int cubes=r.readInt();
+                    int cubes = r.readInt();
                     r.finish();
-                    if(cubes==0){
-                    	//System.out.println("Ibis[" + myIntIbisId + "] -> no work");
-                    }
-                    else{
-                    	r = workReceiver.receive();
-                    	//System.out.println("Ibis[" + myIntIbisId + "] -> work!!! "+cubes+" cubes");
-                    	receivedWork = new Cube[cubes];
-                    	r.readArray(receivedWork);
-                    	r.finish();
+                    if(cubes == 0) {
+                        //System.out.println("Ibis[" + myIntIbisId + "] -> no work");
+                    } else {
+                        r = workReceiver.receive();
+                        //System.out.println("Ibis[" + myIntIbisId + "] -> work!!! "+cubes+" cubes");
+                        receivedWork = new Cube[cubes];
+                        r.readArray(receivedWork);
+                        r.finish();
                     }
                     //System.out.println("ReceivedMyWork");
-                    
-                    
+
+
                     /*int n=r.readInt();
                     System.out.println("received n");*/
-                    
+
                     workRequestSender.disconnect(doner, "WorkReq");
                     if(receivedWork != null && receivedWork.length != 0) {
                         //System.out.println("Ibis[" + myIntIbisId + "] -> received " + receivedWork.length + " cubes");
@@ -216,15 +215,15 @@ public class Rubiks {
             if(subPool != null) {
                 subPoolToSend = subPool.toArray(new Cube[subPool.size()]);
                 //System.out.println("Ibis[" + myIntIbisId + "] -> pool to send not empty => "+ subPoolToSend.length);
-            	reply.writeInt(subPoolToSend.length);
-            	reply.finish();
-            	reply = replyPort.newMessage();
-            	reply.writeArray(subPoolToSend);
-            	reply.finish();
+                reply.writeInt(subPoolToSend.length);
+                reply.finish();
+                reply = replyPort.newMessage();
+                reply.writeArray(subPoolToSend);
+                reply.finish();
             } else {
                 //System.out.println("Ibis[" + myIntIbisId + "] -> pool to send empty");
                 reply.writeInt(0);
-            	reply.finish();
+                reply.finish();
             }
             replyPort.close();
         }
@@ -334,7 +333,7 @@ public class Rubiks {
         Cube cube;
         boolean end = false;
         while(!end) {
-            while((actual = workManager.getWork(true)) != null && actual.size()!=0) {
+            while((actual = workManager.getWork(true)) != null && actual.size() != 0) {
                 cube = actual.remove(0);
                 //System.out.println("Ibis[" + myIntIbisId + "] -> ReceivedWork, twists: " + cube.getTwists() + ", bound: " + cube.getBound());
                 if(first) {
@@ -390,9 +389,13 @@ public class Rubiks {
             bound++;
             cube.setBound(bound);
             workManager.add(cube);
-            System.out.println("Bound" + bound);
+            if(bound < 10) {
+                System.out.println("Bound" + bound);
+            }
             result = solutionsServer(resultsReceiver);
-            System.out.println("Result :" +result);
+            if(bound < 10) {
+                System.out.println("Result :" + result);
+            }
             //say to all to continue
             if(result == 0) {
                 task = terminationSender.newMessage();
