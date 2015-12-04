@@ -115,7 +115,7 @@ public class Rubiks {
             ArrayList<Cube> workToReturn = new ArrayList<Cube>();
             if(sameNode) {
                 if(toDo.size() == 0) {
-                	System.out.println("Ibis[" + myIntIbisId + "] -> toDo Empty");
+                	//System.out.println("Ibis[" + myIntIbisId + "] -> toDo Empty");
                     boolean b = askForWork();
                     if(!b) {
                         return null;
