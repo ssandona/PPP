@@ -292,6 +292,7 @@ public class Rubiks {
         while(!end) {
             while((actual = workManager.getWork(true)) != null) {
                 cube = actual.remove(0);
+                System.out.println("Ibis[" + myIntIbisId + "] -> ReceivedWork, twists: "+cube.getTwists+", bound: "+cube.getBound());
                 if(first) {
                     cache = new CubeCache(cube.getSize());
                     first = false;
