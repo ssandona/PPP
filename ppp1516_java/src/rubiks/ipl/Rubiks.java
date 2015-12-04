@@ -202,8 +202,8 @@ public class Rubiks {
             // send the work to him
             WriteMessage reply = replyPort.newMessage();
             if(subPool != null) {
-                System.out.println("Ibis[" + myIntIbisId + "] -> pool to send not empty => "+ subPoolToSend.length);
                 subPoolToSend = subPool.toArray(new Cube[subPool.size()]);
+                System.out.println("Ibis[" + myIntIbisId + "] -> pool to send not empty => "+ subPoolToSend.length);
             } else {
                 System.out.println("Ibis[" + myIntIbisId + "] -> pool to send empty");
             }
