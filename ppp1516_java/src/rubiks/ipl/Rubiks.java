@@ -423,7 +423,7 @@ public class Rubiks {
         System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes+" workRequests: "+requestsForWork);
         //workManager.printSize();
         valuatedCubes = 0;
-        workRequests=0;
+        requestsForWork=0;
         for(i = 0; i < nodes - 1; i++) {
             ReadMessage r = resultsReceiver.receive();
             result += r.readInt();
@@ -516,7 +516,7 @@ public class Rubiks {
             System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: "  + valuatedCubes+" workRequests: "+requestsForWork);
             //workManager.printSize();
             valuatedCubes = 0;
-            workRequests=0;
+            requestsForWork=0;
             //communicate my results
             WriteMessage resultMessage = resultsSender.newMessage();
             resultMessage.writeInt(result);
