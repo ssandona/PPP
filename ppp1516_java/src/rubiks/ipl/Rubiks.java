@@ -27,7 +27,10 @@ public class Rubiks {
 
     static PortType portType1to1 = new PortType(PortType.COMMUNICATION_RELIABLE,
             PortType.SERIALIZATION_OBJECT, PortType.RECEIVE_EXPLICIT,
-            PortType.CONNECTION_ONE_TO_ONE, PortType.RECEIVE_AUTO_UPCALLS);
+            PortType.CONNECTION_ONE_TO_ONE);
+
+    static PortType portType1to1Up = new PortType(PortType.COMMUNICATION_RELIABLE,
+            PortType.SERIALIZATION_OBJECT, PortType.CONNECTION_ONE_TO_ONE, PortType.RECEIVE_AUTO_UPCALLS);
 
     static PortType requestWorkPortType = new PortType(PortType.COMMUNICATION_RELIABLE,
             PortType.SERIALIZATION_OBJECT, PortType.RECEIVE_AUTO_UPCALLS,
@@ -459,7 +462,7 @@ public class Rubiks {
     private void run() throws Exception {
         //System.out.println("done");
         // Create an ibis instance.
-        Ibis ibis = IbisFactory.createIbis(ibisCapabilities, null, portTypeMto1, portTypeMto1Up, portType1toM, portType1to1);
+        Ibis ibis = IbisFactory.createIbis(ibisCapabilities, null, portTypeMto1, portType1to1Up, portTypeMto1Up, portType1toM, portType1to1);
         Thread.sleep(5000);
         System.out.println("Ibis created");
         myIbisId = ibis.identifier();
@@ -512,14 +515,14 @@ public class Rubiks {
         workRequestSender = ibis.createSendPort(portTypeMto1Up);
 
         //port in which new tokens will be received
-        tokenRequestReceiver = ibis.createReceivePort(portType1to1, "TokenReq", tokenManager);
+        tokenRequestReceiver = ibis.createReceivePort(portType1to1Up, "TokenReq", tokenManager);
         // enable connections
         tokenRequestReceiver.enableConnections();
         // enable upcalls
         tokenRequestReceiver.enableMessageUpcalls();
 
         //port in which new tokens will be sent (the next ibis instance)
-        tokenRequestSender = ibis.createSendPort(portType1to1);
+        tokenRequestSender = ibis.createSendPort(portType1to1Up);
         tokenRequestSender.connect(joinedIbises[(myIntIbisId + 1) % nodes], "TokenReq");
 
         //port in which new work is received
