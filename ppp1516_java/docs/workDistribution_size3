@@ -1,0 +1,38 @@
+ 1
+Ibis[1] -> valuatedCubes: 0 workRequests: 3
+Ibis[2] -> valuatedCubes: 0 workRequests: 3
+Ibis[0] -> valuatedCubes: 13 workRequests: 3
+Ibis[3] -> valuatedCubes: 0 workRequests: 3
+ 2
+Ibis[1] -> valuatedCubes: 0 workRequests: 3
+Ibis[2] -> valuatedCubes: 0 workRequests: 3
+Ibis[0] -> valuatedCubes: 157 workRequests: 3
+Ibis[3] -> valuatedCubes: 0 workRequests: 3
+ 3
+Ibis[3] -> valuatedCubes: 0 workRequests: 3
+Ibis[0] -> valuatedCubes: 1506 workRequests: 3
+Ibis[2] -> valuatedCubes: 26 workRequests: 9
+Ibis[1] -> valuatedCubes: 353 workRequests: 9
+ 4
+Ibis[1] -> valuatedCubes: 5250 workRequests: 15
+Ibis[3] -> valuatedCubes: 3403 workRequests: 13
+Ibis[0] -> valuatedCubes: 9675 workRequests: 16
+Ibis[2] -> valuatedCubes: 4293 workRequests: 13
+ 5
+Ibis[3] -> valuatedCubes: 34455 workRequests: 27
+Ibis[0] -> valuatedCubes: 110959 workRequests: 27
+Ibis[2] -> valuatedCubes: 35542 workRequests: 31
+Ibis[1] -> valuatedCubes: 90497 workRequests: 31
+ 6
+Ibis[0] -> valuatedCubes: 978411 workRequests: 106
+Ibis[2] -> valuatedCubes: 602723 workRequests: 103
+Ibis[1] -> valuatedCubes: 1040607 workRequests: 98
+Ibis[3] -> valuatedCubes: 635696 workRequests: 100
+ 7
+SOLVED
+SOLVED
+Ibis[2] -> valuatedCubes: 7843873 workRequests: 223
+Ibis[0] -> valuatedCubes: 11503416 workRequests: 282
+Ibis[1] -> valuatedCubes: 11783369 workRequests: 258
+Ibis[3] -> valuatedCubes: 7958587 workRequests: 233
+
