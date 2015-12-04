@@ -239,7 +239,7 @@ public class Rubiks {
 
             // send the work to him
             WriteMessage reply = replyPort.newMessage();
-            if(subPool != null && subPool.length!=0) {
+            if(subPool != null && subPool.size()!=0) {
 
                 for(i = 0; i < subPool.size(); i++) {
                     if(subPool.get(i) == null) {
