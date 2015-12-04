@@ -518,7 +518,7 @@ public class Rubiks {
         boolean end = false;
         while(!end) {
             result = solutionsWorkers();
-            System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: "  + valuatedCubes + " workRequests: " + requestsForWork);
+            //System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: "  + valuatedCubes + " workRequests: " + requestsForWork);
             //workManager.printSize();
             valuatedCubes = 0;
             requestsForWork = 0;
