@@ -113,24 +113,16 @@ public class Rubiks {
             }
             return false;
         }
-        //function invokable from both actual worker or another one, if invoked by the actual worker
-        //and the queue i(toDo) is empty, the function askForWork is invoked (that invoke the workRequest function
-        //on the other nodes
-        public synchronized static ArrayList<Cube> getWork(boolean sameNode) throws IOException, ClassNotFoundException {
-            //System.out.println("Ibis[" + myIntIbisId + "] -> getWork");
+
+        synchronized public static ArrayList<Cube> getFromPool (boolean sameNode) {
             ArrayList<Cube> workToReturn = new ArrayList<Cube>();
+            if(toDo.size() == 0) {
+                return null;
+            }
             if(sameNode) {
-                if(toDo.size() == 0) {
-                	//System.out.println("Ibis[" + myIntIbisId + "] -> toDo Empty");
-                    boolean b = askForWork();
-                    if(!b) {
-                        return null;
-                    }
-                }
                 workToReturn.add(toDo.remove(toDo.size() - 1));
-                //System.out.println("Ibis[" + myIntIbisId + "] -> return work");
             } else {
-            	System.out.println("Ibis[" + myIntIbisId + "] -> split work");
+                System.out.println("Ibis[" + myIntIbisId + "] -> split work");
                 int amount = toDo.size() / 2;
                 boolean even = toDo.size() % 2 == 0;
                 int index = even ? toDo.size() / 2 : toDo.size() / 2 + 1;
@@ -141,9 +133,25 @@ public class Rubiks {
                 if(workToReturn.size() == 0) {
                     workToReturn = null;
                 }
-
             }
             return workToReturn;
+        }
+        //function invokable from both actual worker or another one, if invoked by the actual worker
+        //and the queue i(toDo) is empty, the function askForWork is invoked (that invoke the workRequest function
+        //on the other nodes
+        public static ArrayList<Cube> getWork(boolean sameNode) throws IOException, ClassNotFoundException {
+            //System.out.println("Ibis[" + myIntIbisId + "] -> getWork");
+            if(sameNode) {
+                if(toDo.size() == 0) {
+                    //System.out.println("Ibis[" + myIntIbisId + "] -> toDo Empty");
+                    boolean b = askForWork();
+                    if(!b) {
+                        return null;
+                    }
+                }
+            }
+            return getFromPool(sameNode);
+
         }
 
         /*A request of work from another Ibis instance*/
@@ -188,11 +196,10 @@ public class Rubiks {
             // send the work to him
             WriteMessage reply = replyPort.newMessage();
             if(subPool != null) {
-            	System.out.println("Ibis[" + myIntIbisId + "] -> pool to send not empty");
+                System.out.println("Ibis[" + myIntIbisId + "] -> pool to send not empty");
                 subPoolToSend = subPool.toArray(new Cube[subPool.size()]);
-            }
-            else{
-            	System.out.println("Ibis[" + myIntIbisId + "] -> pool to send empty");
+            } else {
+                System.out.println("Ibis[" + myIntIbisId + "] -> pool to send empty");
             }
             reply.writeArray(subPoolToSend);
             //reply.writeInt(4);
@@ -216,9 +223,9 @@ public class Rubiks {
             WriteMessage term = tokenRequestSender.newMessage();
             term.writeObject(t);
             term.finish();
-            Token receivedToken=null;
+            Token receivedToken = null;
 
-            receivedToken=sync.waitToken();
+            receivedToken = sync.waitToken();
             return receivedToken.white;
 
             //wait the token comes back
@@ -307,7 +314,7 @@ public class Rubiks {
         while(!end) {
             while((actual = workManager.getWork(true)) != null) {
                 cube = actual.remove(0);
-                System.out.println("Ibis[" + myIntIbisId + "] -> ReceivedWork, twists: "+cube.getTwists()+", bound: "+cube.getBound());
+                System.out.println("Ibis[" + myIntIbisId + "] -> ReceivedWork, twists: " + cube.getTwists() + ", bound: " + cube.getBound());
                 if(first) {
                     cache = new CubeCache(cube.getSize());
                     first = false;
