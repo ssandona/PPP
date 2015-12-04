@@ -99,12 +99,23 @@ public class Rubiks {
                     task.finish();
 
                     ReadMessage r = workReceiver.receive();
+                    int cubes=r.readInt();
+                    r.finish();
+                    if(cubes==0){
+                    	System.out.println("Ibis[" + myIntIbisId + "] -> no work");
+                    }
+                    else{
+                    	System.out.println("Ibis[" + myIntIbisId + "] -> work!!! "+cubes+" cubes");
+                    	receivedWork = new Cube[cubes];
+                    	r.readArray(receivedWork);
+                    	r.finish();
+                    }
                     //System.out.println("ReceivedMyWork");
-                    System.out.println("Ibis[" + myIntIbisId + "] -> message size: "+r.size());
-                    r.readArray(receivedWork);
+                    
+                    
                     /*int n=r.readInt();
                     System.out.println("received n");*/
-                    r.finish();
+                    
                     workRequestSender.disconnect(doner, "WorkReq");
                     if(receivedWork != null && receivedWork.length != 0) {
                         System.out.println("Ibis[" + myIntIbisId + "] -> received " + receivedWork.length + " cubes");
@@ -204,12 +215,16 @@ public class Rubiks {
             if(subPool != null) {
                 subPoolToSend = subPool.toArray(new Cube[subPool.size()]);
                 System.out.println("Ibis[" + myIntIbisId + "] -> pool to send not empty => "+ subPoolToSend.length);
+            	reply.writeInt(subPoolToSend.length);
+            	reply.finish();
+            	reply = replyPort.newMessage();
+            	reply.writeArray(subPoolToSend);
+            	reply.finish();
             } else {
                 System.out.println("Ibis[" + myIntIbisId + "] -> pool to send empty");
+                reply.writeInt(0);
+            	reply.finish();
             }
-            reply.writeArray(subPoolToSend);
-            //reply.writeInt(4);
-            reply.finish();
             replyPort.close();
         }
     }
