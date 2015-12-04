@@ -100,7 +100,7 @@ public class Rubiks {
 
                     ReadMessage r = workReceiver.receive();
                     //System.out.println("ReceivedMyWork");
-                    System.out.println("Ibis[" + myIntIbisId + "] -> message size: "+r.size()+" cube size: "+sizeof(Cube));
+                    System.out.println("Ibis[" + myIntIbisId + "] -> message size: "+r.size());
                     r.readArray(receivedWork);
                     /*int n=r.readInt();
                     System.out.println("received n");*/
