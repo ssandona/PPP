@@ -128,11 +128,14 @@ public class Rubiks {
                     workRequestSender.disconnect(doner, "WorkReq");
                     if(receivedWork != null && receivedWork.length != 0) {
                         //System.out.println("Ibis[" + myIntIbisId + "] -> received " + receivedWork.length + " cubes");
-                        toDo = new ArrayList<Cube>(Arrays.asList(receivedWork));
-                        for(i=0;i<toDo.size();i++){
-                        	if(toDo.get(i) == null){
+                        //toDo = new ArrayList<Cube>(Arrays.asList(receivedWork));
+                        int j;
+                        for(j=0;j<receivedWork.length;j++){
+                        	Cube c=receivedWork[j];
+                        	if(c == null){
                         		System.out.println("Ibis[" + myIntIbisId + "] -> AHAHHA 5");
                         	}
+                        	workManager.add(c);
                         }
                         return true;
                     }
