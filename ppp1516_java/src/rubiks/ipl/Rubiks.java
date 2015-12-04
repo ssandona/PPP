@@ -409,7 +409,9 @@ public class Rubiks {
                 result += solution(cube, cache);
 
                 /*------------------ADD HERE---------------------------------------*/
-                cache.put(cube);
+                if(cube != initialCube) {
+                    cache.put(cube);
+                }
 
             }
             //System.out.println("Ibis[" + myIntIbisId + "] -> solutionsWorkers -> No work");
@@ -461,7 +463,7 @@ public class Rubiks {
         while (result == 0) {
             bound++;
             initialCube.setBound(bound);
-            System.out.println("InitialCube : (" + initialCube.getBound() + ", "+initialCube.getTwists()+")");
+            System.out.println("InitialCube : (" + initialCube.getBound() + ", " + initialCube.getTwists() + ")");
             workManager.add(initialCube);
             System.out.println(" " + bound);
             result = solutionsServer(resultsReceiver);
