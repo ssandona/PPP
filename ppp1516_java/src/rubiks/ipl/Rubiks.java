@@ -105,6 +105,7 @@ public class Rubiks {
                     r.finish();
                     workRequestSender.disconnect(doner, "WorkReq");
                     if(receivedWork != null && receivedWork.length != 0) {
+                        System.out.println("Ibis[" + myIntIbisId + "] -> received " + receivedWork.length + " cubes");
                         toDo = new ArrayList<Cube>(Arrays.asList(receivedWork));
                         return true;
                     }
@@ -122,7 +123,6 @@ public class Rubiks {
             if(sameNode) {
                 workToReturn.add(toDo.remove(toDo.size() - 1));
             } else {
-                System.out.println("Ibis[" + myIntIbisId + "] -> split work");
                 int amount = toDo.size() / 2;
                 boolean even = toDo.size() % 2 == 0;
                 int index = even ? toDo.size() / 2 : toDo.size() / 2 + 1;
@@ -132,6 +132,10 @@ public class Rubiks {
                 }
                 if(workToReturn.size() == 0) {
                     workToReturn = null;
+                    System.out.println("Ibis[" + myIntIbisId + "] -> send to the other null");
+                } else {
+                    System.out.println("Ibis[" + myIntIbisId + "] -> send to the other " + workToReturn.size() + " cubes");
+
                 }
             }
             return workToReturn;
@@ -167,7 +171,7 @@ public class Rubiks {
             SendPort replyPort = myIbis.createSendPort(portType1to1);
             ArrayList<Cube> subPool;
             //Cube[] subPoolToSend = new Cube[0];
-            Cube[] subPoolToSend = new Cube[1];
+            Cube[] subPoolToSend = null;
             if(toDo.size() == 0) {
                 subPool = null;
             } else {
