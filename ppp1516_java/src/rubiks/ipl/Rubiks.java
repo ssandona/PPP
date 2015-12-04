@@ -144,7 +144,7 @@ public class Rubiks {
                 if(c == null) {
                     System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 1");
                 }
-                workToReturn.add(C);
+                workToReturn.add(c);
             } else {
                 int amount = toDo.size() / 2;
                 boolean even = toDo.size() % 2 == 0;
