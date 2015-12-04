@@ -23,7 +23,8 @@ public class Rubiks {
             PortType.CONNECTION_MANY_TO_ONE, PortType.RECEIVE_POLL);
 
     static PortType portTypeMto1Up = new PortType(PortType.COMMUNICATION_RELIABLE,
-            PortType.SERIALIZATION_OBJECT, PortType.CONNECTION_MANY_TO_ONE, PortType.RECEIVE_AUTO_UPCALLS);
+            PortType.SERIALIZATION_OBJECT, PortType.RECEIVE_AUTO_UPCALLS,
+            PortType.CONNECTION_MANY_TO_ONE);
 
     static PortType portType1to1 = new PortType(PortType.COMMUNICATION_RELIABLE,
             PortType.SERIALIZATION_OBJECT, PortType.RECEIVE_EXPLICIT,
