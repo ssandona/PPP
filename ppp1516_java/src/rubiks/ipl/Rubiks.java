@@ -62,6 +62,8 @@ public class Rubiks {
     static int level;
     static int target;
 
+    static int valuatedCubes = 0;
+
     static ReceivePort workRequestReceiver;
     static SendPort workRequestSender;
     static ReceivePort workReceiver;
@@ -297,18 +299,18 @@ public class Rubiks {
 
 
     public static int solution(Cube cube, CubeCache cache) {
+        valuatedCubes++;
         //System.out.println("Ibis[" + myIntIbisId + "] -> solution");
         if (cube.isSolved()) {
-        	if(cube.getBound()<=10){
-        		System.out.println("SOLVED");
-        	}
+            System.out.println("SOLVED");
+
             return 1;
         }
 
         if (cube.getTwists() >= cube.getBound()) {
-        	if(cube.getBound()<=10){
-        		System.out.println("Twists: "+cube.getTwists()+" Bound: "+cube.getBound());
-        	}
+            if(cube.getBound() <= 8) {
+                //System.out.println("Twists: "+cube.getTwists()+" Bound: "+cube.getBound());
+            }
             return 0;
         }
         //generate childrens
@@ -360,6 +362,8 @@ public class Rubiks {
         //System.out.println("Ibis[" + myIntIbisId + "] -> SolutionsServer");
         int i;
         result = solutionsWorkers();
+        System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
+        valuatedCubes = 0;
         for(i = 0; i < nodes - 1; i++) {
             ReadMessage r = resultsReceiver.receive();
             result += r.readInt();
@@ -395,12 +399,15 @@ public class Rubiks {
             bound++;
             cube.setBound(bound);
             workManager.add(cube);
-            if(bound < 10) {
+            if(bound <= 8) {
                 System.out.println("Bound" + bound);
             }
             result = solutionsServer(resultsReceiver);
-            if(bound < 10) {
+            if(bound <= 8) {
                 System.out.println("Result :" + result);
+            }
+            if(bound > 8) {
+                Thread.sleep(11000);
             }
             //say to all to continue
             if(result == 0) {
@@ -451,7 +458,8 @@ public class Rubiks {
         boolean end = false;
         while(!end) {
             result = solutionsWorkers();
-
+            System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
+            valuatedCubes = 0;
             //communicate my results
             WriteMessage resultMessage = resultsSender.newMessage();
             resultMessage.writeInt(result);
