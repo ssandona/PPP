@@ -123,7 +123,7 @@ public class Rubiks {
                     }
                 }
                 workToReturn.add(toDo.remove(toDo.size() - 1));
-                System.out.println("Ibis[" + myIntIbisId + "] -> return work");
+                //System.out.println("Ibis[" + myIntIbisId + "] -> return work");
             } else {
             	System.out.println("Ibis[" + myIntIbisId + "] -> split work");
                 int amount = toDo.size() / 2;
@@ -175,6 +175,7 @@ public class Rubiks {
                 }
             }
 
+            System.out.println("Ibis[" + myIntIbisId + "] -> send to requestor");
             // connect to the requestor's receive port
             replyPort.connect(requestor, "Work");
 
