@@ -27,10 +27,7 @@ public class Rubiks {
 
     static PortType portType1to1 = new PortType(PortType.COMMUNICATION_RELIABLE,
             PortType.SERIALIZATION_OBJECT, PortType.RECEIVE_EXPLICIT,
-            PortType.CONNECTION_ONE_TO_ONE);
-
-    static PortType portType1to1Up = new PortType(PortType.COMMUNICATION_RELIABLE,
-            PortType.SERIALIZATION_OBJECT, PortType.CONNECTION_ONE_TO_ONE, PortType.RECEIVE_AUTO_UPCALLS);
+            PortType.CONNECTION_ONE_TO_ONE, PortType.RECEIVE_AUTO_UPCALLS);
 
     static PortType requestWorkPortType = new PortType(PortType.COMMUNICATION_RELIABLE,
             PortType.SERIALIZATION_OBJECT, PortType.RECEIVE_AUTO_UPCALLS,
@@ -224,10 +221,6 @@ public class Rubiks {
                 propagateToken(t);
             }*/
             //return false;
-        }
-
-        public TokenManager() throws Exception{
-        	tokenRequestSender.connect(joinedIbises[(myIntIbisId + 1) % nodes], "TokenReq");
         }
 
 
@@ -500,6 +493,10 @@ public class Rubiks {
             i++;
         }
 
+        workManager = new WorkManager();
+        tokenManager = new TokenManager();
+
+
         //port in which new work requests will be received
         workRequestReceiver = ibis.createReceivePort(portTypeMto1Up, "WorkReq", workManager);
         // enable connections
@@ -511,15 +508,15 @@ public class Rubiks {
         workRequestSender = ibis.createSendPort(portTypeMto1Up);
 
         //port in which new tokens will be received
-        tokenRequestReceiver = ibis.createReceivePort(portType1to1Up, "TokenReq", tokenManager);
+        tokenRequestReceiver = ibis.createReceivePort(portType1to1, "TokenReq", tokenManager);
         // enable connections
         tokenRequestReceiver.enableConnections();
         // enable upcalls
         tokenRequestReceiver.enableMessageUpcalls();
 
         //port in which new tokens will be sent (the next ibis instance)
-        tokenRequestSender = ibis.createSendPort(portType1to1Up);
-        
+        tokenRequestSender = ibis.createSendPort(portType1to1);
+        tokenRequestSender.connect(joinedIbises[(myIntIbisId + 1) % nodes], "TokenReq");
 
         //port in which new work is received
         workReceiver = ibis.createReceivePort(portType1to1, "Work");
@@ -549,9 +546,6 @@ public class Rubiks {
         for(i = 0; i < nodes; i++) {
             System.out.print(cubes_per_proc[i] + " ");
         }
-
-        workManager = new WorkManager();
-        tokenManager = new TokenManager();
 
         // If I am the server, run server, else run client.
         if (server.equals(ibis.identifier())) {
