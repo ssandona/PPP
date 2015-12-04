@@ -107,7 +107,7 @@ public class Rubiks {
                         //System.out.println("Ibis[" + myIntIbisId + "] -> no work");
                     } else {
                         r = workReceiver.receive();
-                        //System.out.println("Ibis[" + myIntIbisId + "] -> work!!! "+cubes+" cubes");
+                        System.out.println("Ibis[" + myIntIbisId + "] -> work!!! "+cubes+" cubes");
                         receivedWork = new Cube[cubes];
                         r.readArray(receivedWork);
                         r.finish();
@@ -216,7 +216,7 @@ public class Rubiks {
             WriteMessage reply = replyPort.newMessage();
             if(subPool != null) {
                 subPoolToSend = subPool.toArray(new Cube[subPool.size()]);
-                //System.out.println("Ibis[" + myIntIbisId + "] -> pool to send not empty => "+ subPoolToSend.length);
+                System.out.println("Ibis[" + myIntIbisId + "] -> pool to send not empty => "+ subPoolToSend.length);
                 reply.writeInt(subPoolToSend.length);
                 reply.finish();
                 reply = replyPort.newMessage();
