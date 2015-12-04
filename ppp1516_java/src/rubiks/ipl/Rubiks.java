@@ -57,7 +57,7 @@ public class Rubiks {
     static Integer[] cubes_per_proc;
     static Integer[] displs;
     static Ibis myIbis;
-    static Cube cube = null;
+    static Cube initialCube = null;
     static int size;
     static int level;
     static int target;
@@ -444,12 +444,12 @@ public class Rubiks {
         WriteMessage task;
         System.out.println("");
         while (result == 0) {
-            if(bound <= 8) {
-                System.out.println("BeginCube -> bound: " + cube.getBound() + " twists: " + cube.getTwists());
-            }
             bound++;
-            cube.setBound(bound);
-            workManager.add(cube);
+            initialCube.setBound(bound);
+            if(bound <= 8) {
+                System.out.println("BeginCube -> bound: " + initialCube.getBound() + " twists: " + initialCube.getTwists());
+            }
+            workManager.add(initialCube);
             if(bound <= 8) {
                 System.out.println("Bound" + bound);
             }
@@ -503,7 +503,6 @@ public class Rubiks {
         boolean first = true;
         int i;
         int bound = 0;
-        Cube cube = null;
         CubeCache cache = null;
 
         boolean end = false;
@@ -661,7 +660,7 @@ public class Rubiks {
 
         // If I am the server, run server, else run client.
         if (server.equals(ibis.identifier())) {
-        	if(cube==null){
+        	if(initialCube==null){
         		System.out.println("CUBE NULL FROM THE BEGIN");
         	}
         	else{
@@ -730,10 +729,10 @@ public class Rubiks {
 
         // create cube
         if (fileName == null) {
-            cube = new Cube(size, twists, seed);
+            initialCube = new Cube(size, twists, seed);
         } else {
             try {
-                cube = new Cube(fileName);
+                initialCube = new Cube(fileName);
             } catch (Exception e) {
                 System.err.println("Cannot load cube from file: " + e);
                 System.exit(1);
@@ -743,7 +742,7 @@ public class Rubiks {
         // print cube info
         System.out.println("Searching for solution for cube of size "
                            + cube.getSize() + ", twists = " + twists + ", seed = " + seed);
-        cube.print(System.out);
+        initialCube.print(System.out);
         System.out.flush();
 
 
