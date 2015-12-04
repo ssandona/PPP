@@ -148,15 +148,16 @@ public class Rubiks {
             return false;
         }
 
-        public static ArrayList<Cube> getFromPool (boolean sameNode) {
+        synchronized public static ArrayList<Cube> getFromPool (boolean sameNode) {
             ArrayList<Cube> workToReturn = new ArrayList<Cube>();
             if(toDo.size() == 0) {
                 return null;
             }
             if(sameNode) {
-                int n = toDo.size() - 1;
-                Cube c=null;
                 synchronized(lock) {
+                    int n = toDo.size() - 1;
+                    Cube c = null;
+
                     c = toDo.remove(n);
                 }
                 if(c == null) {
@@ -164,11 +165,11 @@ public class Rubiks {
                 }
                 workToReturn.add(c);
             } else {
+            	synchronized(lock) {
                 int amount = toDo.size() / 2;
                 boolean even = toDo.size() % 2 == 0;
                 int index = even ? toDo.size() / 2 : toDo.size() / 2 + 1;
                 int i;
-                synchronized(lock) {
                     for(i = 0; i < amount; i++) {
                         Cube c = toDo.remove(index);
                         workToReturn.add(c);
