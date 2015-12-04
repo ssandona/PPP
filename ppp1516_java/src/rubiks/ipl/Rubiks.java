@@ -454,8 +454,7 @@ public class Rubiks {
 
         //Thread.sleep(1000);
         WriteMessage task;
-        System.out.println("");
-        System.out.print("bound");
+        System.out.println("bound");
         while (result == 0) {
             bound++;
             initialCube.setBound(bound);
