@@ -378,6 +378,10 @@ public class Rubiks {
         boolean end = false;
         while(!end) {
             while((actual = workManager.getWork(true)) != null && actual.size() != 0) {
+            	if(actual.size()!=1){
+            		System.out.println("Ibis[" + myIntIbisId + "] -> ActualSize PROBLEMS");
+            	}
+            	
                 cube = actual.remove(0);
                 if(cube == null) {
                     System.out.println("Ibis[" + myIntIbisId + "] -> NULLCUBE");
