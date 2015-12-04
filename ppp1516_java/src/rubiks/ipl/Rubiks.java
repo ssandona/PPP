@@ -87,7 +87,8 @@ public class Rubiks {
         public static boolean askForWork() throws IOException, ClassNotFoundException {
             //System.out.println("Ibis[" + myIntIbisId + "] -> askForWork");
             int i;
-            Cube[] receivedWork = new Cube[0];
+            //Cube[] receivedWork = new Cube[0];
+            Cube[] receivedWork;
             IbisIdentifier doner;
             for(i = 0; i < nodes; i++) {
                 doner = joinedIbises[target];
@@ -132,7 +133,7 @@ public class Rubiks {
                 }
                 if(workToReturn.size() == 0) {
                     workToReturn = null;
-                    System.out.println("Ibis[" + myIntIbisId + "] -> send to the other null");
+                    System.out.println("Ibis[" + myIntIbisId + "] -> send to the other 0 cubes");
                 } else {
                     System.out.println("Ibis[" + myIntIbisId + "] -> send to the other " + workToReturn.size() + " cubes");
 
@@ -170,8 +171,8 @@ public class Rubiks {
             // create a sendport for the reply
             SendPort replyPort = myIbis.createSendPort(portType1to1);
             ArrayList<Cube> subPool;
-            //Cube[] subPoolToSend = new Cube[0];
-            Cube[] subPoolToSend = null;
+            Cube[] subPoolToSend = new Cube[0];
+            //Cube[] subPoolToSend = null;
             if(toDo.size() == 0) {
                 subPool = null;
             } else {
