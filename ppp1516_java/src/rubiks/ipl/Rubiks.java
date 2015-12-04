@@ -87,8 +87,8 @@ public class Rubiks {
         public static boolean askForWork() throws IOException, ClassNotFoundException {
             //System.out.println("Ibis[" + myIntIbisId + "] -> askForWork");
             int i;
-            //Cube[] receivedWork = new Cube[0];
-            Cube[] receivedWork;
+            Cube[] receivedWork = new Cube[0];
+            //Cube[] receivedWork;
             IbisIdentifier doner;
             for(i = 0; i < nodes; i++) {
                 doner = joinedIbises[target];
@@ -100,6 +100,7 @@ public class Rubiks {
 
                     ReadMessage r = workReceiver.receive();
                     //System.out.println("ReceivedMyWork");
+                    System.out.println("Ibis[" + myIntIbisId + "] -> message size: "+r.size()+" cube size: "+sizeof(Cube));
                     r.readArray(receivedWork);
                     /*int n=r.readInt();
                     System.out.println("received n");*/
