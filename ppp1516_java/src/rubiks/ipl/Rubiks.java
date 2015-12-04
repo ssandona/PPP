@@ -99,7 +99,7 @@ public class Rubiks {
 
                     ReadMessage r = workReceiver.receive();
                     //System.out.println("ReceivedMyWork");
-                    r.readArray(receivedWork);
+                    //r.readArray(receivedWork);
                     int n=r.readInt();
                     System.out.println("received n");
                     r.finish();
