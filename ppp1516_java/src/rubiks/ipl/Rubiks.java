@@ -23,8 +23,7 @@ public class Rubiks {
             PortType.CONNECTION_MANY_TO_ONE, PortType.RECEIVE_POLL);
 
     static PortType portTypeMto1Up = new PortType(PortType.COMMUNICATION_RELIABLE,
-            PortType.SERIALIZATION_OBJECT, PortType.RECEIVE_EXPLICIT,
-            PortType.CONNECTION_MANY_TO_ONE, PortType.RECEIVE_AUTO_UPCALLS);
+            PortType.SERIALIZATION_OBJECT, PortType.CONNECTION_MANY_TO_ONE, PortType.RECEIVE_AUTO_UPCALLS);
 
     static PortType portType1to1 = new PortType(PortType.COMMUNICATION_RELIABLE,
             PortType.SERIALIZATION_OBJECT, PortType.RECEIVE_EXPLICIT,
@@ -116,12 +115,14 @@ public class Rubiks {
             ArrayList<Cube> workToReturn = new ArrayList<Cube>();
             if(sameNode) {
                 if(toDo.size() == 0) {
+                	System.out.println("Ibis[" + myIntIbisId + "] -> toDo Empty");
                     boolean b = askForWork();
                     if(!b) {
                         return null;
                     }
                 }
                 workToReturn.add(toDo.remove(toDo.size() - 1));
+                System.out.println("Ibis[" + myIntIbisId + "] -> return work");
             } else {
                 int amount = toDo.size() / 2;
                 boolean even = toDo.size() % 2 == 0;
