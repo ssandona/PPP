@@ -63,6 +63,7 @@ public class Rubiks {
     static int target;
 
     static int valuatedCubes = 0;
+    static int requestsForWork=0;
 
     static ReceivePort workRequestReceiver;
     static SendPort workRequestSender;
@@ -107,6 +108,7 @@ public class Rubiks {
             for(i = 0; i < nodes; i++) {
                 doner = joinedIbises[target];
                 if(!doner.equals(myIbisId)) {
+                	requestsForWork++;
                     workRequestSender.connect(doner, "WorkReq");
                     WriteMessage task = workRequestSender.newMessage();
                     task.writeInt(myIntIbisId);
@@ -418,9 +420,10 @@ public class Rubiks {
         //System.out.println("Ibis[" + myIntIbisId + "] -> SolutionsServer");
         int i;
         result = solutionsWorkers();
-        System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
+        System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes+" workRequests: "+requestsForWork);
         //workManager.printSize();
         valuatedCubes = 0;
+        workRequests=0;
         for(i = 0; i < nodes - 1; i++) {
             ReadMessage r = resultsReceiver.receive();
             result += r.readInt();
@@ -510,9 +513,10 @@ public class Rubiks {
         boolean end = false;
         while(!end) {
             result = solutionsWorkers();
-            System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
+            System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: "  + valuatedCubes+" workRequests: "+requestsForWork);
             //workManager.printSize();
             valuatedCubes = 0;
+            workRequests=0;
             //communicate my results
             WriteMessage resultMessage = resultsSender.newMessage();
             resultMessage.writeInt(result);
