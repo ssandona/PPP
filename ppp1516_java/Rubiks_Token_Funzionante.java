@@ -79,7 +79,6 @@ public class Rubiks {
 
     static class WorkManager implements MessageUpcall {
         static ArrayList<Cube> toDo = new ArrayList<Cube>();
-        static int toDoWeight = 0;
         static Object lock = new Object();
 
         public static void printSize() {
@@ -92,7 +91,6 @@ public class Rubiks {
                     System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAH 6");
                 }
                 toDo.add(cube);
-                toDoWeight += (cube.getBound() - cube.getTwists());
             }
             //System.out.println("Ibis[" + myIntIbisId + "] -> added cube");
         }
@@ -160,7 +158,6 @@ public class Rubiks {
                 synchronized(lock) {
                     int n = toDo.size() - 1;
                     c = toDo.remove(n);
-                    toDoWeight -= (c.getBound() - c.getTwists());
                 }
                 if(c == null) {
                     //System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 1, index -> "+n);
@@ -168,27 +165,25 @@ public class Rubiks {
                 workToReturn.add(c);
             } else {
                 synchronized(lock) {
-                    /*int amount = toDo.size() / 2;
+                    int amount = toDo.size() / 2;
                     boolean even = toDo.size() % 2 == 0;
                     int index = even ? toDo.size() / 2 : toDo.size() / 2 + 1;
-                    int i;*/
-                    int weightToDistribute = toDoWeight / 2;
-                    int distributed = 0;
-                    while(distributed < weightToDistribute) {
-                        Cube c = toDo.remove(0);
+                    int i;
+                    for(i = 0; i < amount; i++) {
+                        Cube c = toDo.remove(index);
                         workToReturn.add(c);
-                        toDoWeight -= (c.getBound() - c.getTwists());
-                        distributed += (c.getBound() - c.getTwists());
                         if(c == null) {
                             System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 2, (amount, even, index) -> (" + amount + "," + even + "," + index + ")");
 
                         }
-                    }
-                    if(workToReturn.size() == 0) {
-                        workToReturn = null;
-                        //System.out.println("Ibis[" + myIntIbisId + "] -> send to the other 0 cubes");
-                    } 
+                        if(workToReturn.size() == 0) {
+                            workToReturn = null;
+                            //System.out.println("Ibis[" + myIntIbisId + "] -> send to the other 0 cubes");
+                        } else {
+                            //System.out.println("Ibis[" + myIntIbisId + "] -> send to the other " + workToReturn.size() + " cubes");
 
+                        }
+                    }
                 }
             }
             return workToReturn;
@@ -418,7 +413,7 @@ public class Rubiks {
         //System.out.println("Ibis[" + myIntIbisId + "] -> SolutionsServer");
         int i;
         result = solutionsWorkers();
-        System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
+        //System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
         //workManager.printSize();
         valuatedCubes = 0;
         for(i = 0; i < nodes - 1; i++) {
@@ -457,7 +452,7 @@ public class Rubiks {
             bound++;
             initialCube.setBound(bound);
             workManager.add(initialCube);
-            System.out.println(" " + bound);
+            System.out.println(" "+bound);
             result = solutionsServer(resultsReceiver);
             //System.out.println("Result :" + result);
 
@@ -510,7 +505,7 @@ public class Rubiks {
         boolean end = false;
         while(!end) {
             result = solutionsWorkers();
-            System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
+            //System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
             //workManager.printSize();
             valuatedCubes = 0;
             //communicate my results
