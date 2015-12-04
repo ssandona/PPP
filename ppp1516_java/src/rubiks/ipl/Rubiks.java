@@ -216,7 +216,9 @@ public class Rubiks {
             IbisIdentifier requestor = joinedIbises[otherIbisId];
             int i;
             // create a sendport for the reply
-            SendPort replyPort = myIbis.createSendPort(portType1to1);
+            //SendPort replyPort = myIbis.createSendPort(portType1to1);
+            SendPort replyPort = myIbis.createSendPort(portTypeMto1);
+            
             ArrayList<Cube> subPool;
             Cube[] subPoolToSend = new Cube[0];
             //Cube[] subPoolToSend = null;
