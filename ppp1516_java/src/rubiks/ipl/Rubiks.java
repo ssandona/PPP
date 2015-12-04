@@ -155,8 +155,9 @@ public class Rubiks {
                 Cube c = toDo.remove(n);
                 if(c == null) {
                     System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 1, index -> "+n);
+                    return null;
                 }
-                workToReturn.add(c);
+                //workToReturn.add(c);
             } else {
                 int amount = toDo.size() / 2;
                 boolean even = toDo.size() % 2 == 0;
