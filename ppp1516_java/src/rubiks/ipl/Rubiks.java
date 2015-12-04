@@ -478,7 +478,7 @@ public class Rubiks {
 
         System.out.println("TERMINATE");
         terminationSender.close();
-        Thread.wait(1000);
+        Thread.sleep(1000);
         resultsReceiver.close();
         System.out.println("PortClosed");
 
@@ -522,7 +522,7 @@ public class Rubiks {
 
         System.out.println("FINE");
         resultsSender.close();
-        Thread.wait(1000);
+        Thread.sleep(1000);
         terminationReceiver.close();
         System.out.println("PortClosed");
     }
