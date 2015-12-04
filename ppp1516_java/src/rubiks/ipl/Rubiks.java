@@ -154,10 +154,9 @@ public class Rubiks {
                 return null;
             }
             if(sameNode) {
+                Cube c = null;
                 synchronized(lock) {
                     int n = toDo.size() - 1;
-                    Cube c = null;
-
                     c = toDo.remove(n);
                 }
                 if(c == null) {
@@ -165,11 +164,11 @@ public class Rubiks {
                 }
                 workToReturn.add(c);
             } else {
-            	synchronized(lock) {
-                int amount = toDo.size() / 2;
-                boolean even = toDo.size() % 2 == 0;
-                int index = even ? toDo.size() / 2 : toDo.size() / 2 + 1;
-                int i;
+                synchronized(lock) {
+                    int amount = toDo.size() / 2;
+                    boolean even = toDo.size() % 2 == 0;
+                    int index = even ? toDo.size() / 2 : toDo.size() / 2 + 1;
+                    int i;
                     for(i = 0; i < amount; i++) {
                         Cube c = toDo.remove(index);
                         workToReturn.add(c);
