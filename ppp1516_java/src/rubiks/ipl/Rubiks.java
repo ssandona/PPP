@@ -350,6 +350,9 @@ public class Rubiks {
         while(!end) {
             while((actual = workManager.getWork(true)) != null && actual.size() != 0) {
                 cube = actual.remove(0);
+                if(cube==null){
+                	System.out.println("Ibis[" + myIntIbisId + "] -> NULLCUBE");
+                }
                 //System.out.println("Ibis[" + myIntIbisId + "] -> ReceivedWork, twists: " + cube.getTwists() + ", bound: " + cube.getBound());
                 if(first) {
                     cache = new CubeCache(cube.getSize());
