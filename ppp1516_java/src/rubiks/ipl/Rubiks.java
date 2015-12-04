@@ -79,16 +79,19 @@ public class Rubiks {
 
     static class WorkManager implements MessageUpcall {
         static ArrayList<Cube> toDo = new ArrayList<Cube>();
+        static Object lock = new Object();
 
         public static void printSize() {
             System.out.println("Ibis[" + myIntIbisId + "] -> SIZE: " + toDo.size());
         }
 
         public static void add(Cube cube) {
-        	if(cube==null){
-        		System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAH 6");
-        	}
-            toDo.add(cube);
+            synchronized(lock) {        //Only one PrintThread at a time can call syn1.display()
+                if(cube == null) {
+                    System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAH 6");
+                }
+                toDo.add(cube);
+            }
             //System.out.println("Ibis[" + myIntIbisId + "] -> added cube");
         }
 
@@ -130,12 +133,12 @@ public class Rubiks {
                         //System.out.println("Ibis[" + myIntIbisId + "] -> received " + receivedWork.length + " cubes");
                         //toDo = new ArrayList<Cube>(Arrays.asList(receivedWork));
                         int j;
-                        for(j=0;j<receivedWork.length;j++){
-                        	Cube c=receivedWork[j];
-                        	if(c == null){
-                        		System.out.println("Ibis[" + myIntIbisId + "] -> AHAHHA 5");
-                        	}
-                        	workManager.add(c);
+                        for(j = 0; j < receivedWork.length; j++) {
+                            Cube c = receivedWork[j];
+                            if(c == null) {
+                                System.out.println("Ibis[" + myIntIbisId + "] -> AHAHHA 5");
+                            }
+                            workManager.add(c);
                         }
                         return true;
                     }
@@ -145,14 +148,16 @@ public class Rubiks {
             return false;
         }
 
-        synchronized public static ArrayList<Cube> getFromPool (boolean sameNode) {
+        public static ArrayList<Cube> getFromPool (boolean sameNode) {
             ArrayList<Cube> workToReturn = new ArrayList<Cube>();
             if(toDo.size() == 0) {
                 return null;
             }
             if(sameNode) {
-            	int n=toDo.size() - 1;
-                Cube c = toDo.remove(n);
+                int n = toDo.size() - 1;
+                synchronized(lock) {
+                    Cube c = toDo.remove(n);
+                }
                 if(c == null) {
                     //System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 1, index -> "+n);
                 }
@@ -162,19 +167,21 @@ public class Rubiks {
                 boolean even = toDo.size() % 2 == 0;
                 int index = even ? toDo.size() / 2 : toDo.size() / 2 + 1;
                 int i;
-                for(i = 0; i < amount; i++) {
-                    Cube c = toDo.remove(index);
-                    workToReturn.add(c);
-                    if(c == null) {
-                        System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 2, (amount, even, index) -> ("+amount+","+even+","+index+")");
+                synchronized(lock) {
+                    for(i = 0; i < amount; i++) {
+                        Cube c = toDo.remove(index);
+                        workToReturn.add(c);
+                        if(c == null) {
+                            System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 2, (amount, even, index) -> (" + amount + "," + even + "," + index + ")");
 
-                    }
-                    if(workToReturn.size() == 0) {
-                        workToReturn = null;
-                        //System.out.println("Ibis[" + myIntIbisId + "] -> send to the other 0 cubes");
-                    } else {
-                        //System.out.println("Ibis[" + myIntIbisId + "] -> send to the other " + workToReturn.size() + " cubes");
+                        }
+                        if(workToReturn.size() == 0) {
+                            workToReturn = null;
+                            //System.out.println("Ibis[" + myIntIbisId + "] -> send to the other 0 cubes");
+                        } else {
+                            //System.out.println("Ibis[" + myIntIbisId + "] -> send to the other " + workToReturn.size() + " cubes");
 
+                        }
                     }
                 }
             }
@@ -239,7 +246,7 @@ public class Rubiks {
 
             // send the work to him
             WriteMessage reply = replyPort.newMessage();
-            if(subPool != null && subPool.size()!=0) {
+            if(subPool != null && subPool.size() != 0) {
 
                 for(i = 0; i < subPool.size(); i++) {
                     if(subPool.get(i) == null) {
@@ -381,10 +388,10 @@ public class Rubiks {
         boolean end = false;
         while(!end) {
             while((actual = workManager.getWork(true)) != null && actual.size() != 0) {
-            	if(actual.size()!=1){
-            		System.out.println("Ibis[" + myIntIbisId + "] -> ActualSize PROBLEMS");
-            	}
-            	
+                if(actual.size() != 1) {
+                    System.out.println("Ibis[" + myIntIbisId + "] -> ActualSize PROBLEMS");
+                }
+
                 cube = actual.remove(0);
                 if(cube == null) {
                     //System.out.println("Ibis[" + myIntIbisId + "] -> NULLCUBE");
@@ -660,12 +667,11 @@ public class Rubiks {
 
         // If I am the server, run server, else run client.
         if (server.equals(ibis.identifier())) {
-        	if(initialCube==null){
-        		System.out.println("CUBE NULL FROM THE BEGIN");
-        	}
-        	else{
-        		System.out.println("CUBE ok");
-        	}
+            if(initialCube == null) {
+                System.out.println("CUBE NULL FROM THE BEGIN");
+            } else {
+                System.out.println("CUBE ok");
+            }
             //long start = System.currentTimeMillis();
             solveServer(ibis);
             //long end = System.currentTimeMillis();
