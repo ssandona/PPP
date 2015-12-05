@@ -318,60 +318,37 @@ public class Rubiks {
             reply.writeObject(cube);
             reply.finish();
             return 0;
-        }
+        } else {
 
-        //create first two levels of the tree
-        cube = getFromPool(true);
-        if((results = solution(cube, cache)) != 0) {
-            return results;
-        }
-        int size = toDo.size();
-        System.out.println(myIbisId + " -> SIZE -> " + size);
-        while(count < size) {
-            cube = getFromPool(true);
-            if(cube == null) {
-                System.out.println(myIbisId + " -> OMG CUBE NULL");
+            //send initial cubes to the slaves
+            for (IbisIdentifier joinedIbis : joinedIbises) {
+                if(joinedIbis.equals(myIbisId)) {
+                    continue;
+                }
+                cube = getFromPool(false);
+                workSender.connect(joinedIbis, "Work");
+                WriteMessage reply = workSender.newMessage();
+                reply.writeObject(cube);
+                reply.finish();
+                workSender.disconnect(joinedIbis, "Work");
+                syncTermination.increaseBusyWorkers();
             }
-            else{
-                System.out.println(myIbisId + " -> CUBE GOOD");
-            }
-            results += solution(cube, cache);
-            count++;
+            System.out.println(myIbisId + " -> initialWorkSent");
+            return 0;
         }
-        if(results != 0) {
-            return results;
-        }
-
-        System.out.println(myIbisId + " -> toDoSIZE -> " + toDo.size());
-
-        //send initial cubes to the slaves
-        for (IbisIdentifier joinedIbis : joinedIbises) {
-            if(joinedIbis.equals(myIbisId)) {
-                continue;
-            }
-            cube = getFromPool(false);
-            workSender.connect(joinedIbis, "Work");
-            WriteMessage reply = workSender.newMessage();
-            reply.writeObject(cube);
-            reply.finish();
-            workSender.disconnect(joinedIbis, "Work");
-            syncTermination.increaseBusyWorkers();
-        }
-        System.out.println(myIbisId + " -> initialWorkSent");
-        return 0;
     }
 
     public int solutionsServer(CubeCache cache) throws InterruptedException, IOException {
         syncTermination.increaseBusyWorkers();
         int results = 0;
         Cube cube;
-
-        if((results = sendInitialWork(false, cache)) != 0) {
-            return results;
-        }
-
+        int twist = 0;
         //while the work pool is not empty, continue to work
         while((cube = getFromPool(true)) != null) {
+            if(cube.getTwists() >= 3) {
+                System.out.println(myIbisId + " -> size " + toDo.getSize() + " cubes")
+                sendInitialWork(false, cache);
+            }
             results += solution(cube, cache);
             if(cube != initialCube) {
                 cache.put(cube);
@@ -424,7 +401,6 @@ public class Rubiks {
         System.out.print("Bound now:");
 
         long start = System.currentTimeMillis();
-        bound++;
         while (result == 0) {
             bound++;
             initialCube.setBound(bound);
