@@ -68,6 +68,7 @@ public class Rubiks {
         }
 
         if (cube.getTwists() >= cube.getBound()) {
+            System.out.println(myIbisId + " -> BOUND");
             return 0;
         }
         //generate childrens
