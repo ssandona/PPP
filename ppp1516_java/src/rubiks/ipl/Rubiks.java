@@ -336,6 +336,7 @@ public class Rubiks {
         int twist = 0;
         cube= getFromPool(true);
         results+=solution(cube,cache);
+        System.out.println(myIbisId + " -> FIRST " + toDo.size() + " cubes");
         if(results!=0){
             return results;
         }
@@ -348,7 +349,7 @@ public class Rubiks {
         if(results!=0){
             return results;
         }
-        System.out.println(myIbisId + " -> size " + toDo.size() + " cubes");
+        System.out.println(myIbisId + " -> SECOND " + toDo.size() + " cubes");
         sendInitialWork(false, cache);
         //while the work pool is not empty, continue to work
         while((cube = getFromPool(true)) != null) {
