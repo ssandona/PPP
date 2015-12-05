@@ -402,13 +402,6 @@ public class Rubiks {
         int bound = 0;
         int result = 0;
 
-        for (IbisIdentifier joinedIbis : joinedIbises) {
-            if(joinedIbis.equals(myIbisId)) {
-                continue;
-            }
-            terminationSender.connect(joinedIbis, "Termination");
-        }
-
         WriteMessage termination;
 
 
@@ -422,10 +415,9 @@ public class Rubiks {
             toDo.add(initialCube);
             System.out.print(" " + bound);
             result = solutionsServer(cache);
-            if(result == 0) {
-                sendInitialWork(true,cache);
-            }
         }
+        long end = System.currentTimeMillis();
+        sendInitialWork(true,cache);
 
         System.out.println();
         System.out.println("Solving cube possible in " + result + " ways of "
