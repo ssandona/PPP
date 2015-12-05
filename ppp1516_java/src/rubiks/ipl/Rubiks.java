@@ -41,9 +41,15 @@ public class Rubiks implements MessageUpcall  {
     static ReceivePort workReceiver;
     //workSender create on demand
     static SendPort resultsSender;
-    static Receiver resultsReceiver;
+    static ReceiverPort resultsReceiver;
     static SendPort terminationSender;
     static ReceivePort terminationReceiver;
+
+    static SyncTermination syncTermination;
+    static int requestsForWork=0;
+    static int valuatedCubes=0;
+
+    static IbisIdentifier server;
 
 
     static String[] arguments;
@@ -165,7 +171,7 @@ public class Rubiks implements MessageUpcall  {
             syncTermination.increaseBusyWorkers();
         }
         // create a reply message
-        WriteMessage reply = replyPort.newMessage();
+        WriteMessage reply = workSender.newMessage();
         reply.writeObject(cube);
         reply.finish();
         workSender.close();
@@ -188,12 +194,10 @@ public class Rubiks implements MessageUpcall  {
     //or if the system can terminate
     public static boolean sendResults(int res) {
         boolean termination;
-        resultsSender.connect(server, "Results");
         //send local work receiving port
         WriteMessage resMsg = resultsSender.newMessage();
         resMsg.writeInt(res);
         resMsg.finish();
-        resultsSender.disconnect(doner, "Results");
 
         //get the work
         ReadMessage r = terminationReceiver.receive();
@@ -206,7 +210,7 @@ public class Rubiks implements MessageUpcall  {
 
         public void upcall(ReadMessage message) throws IOException,
             ClassNotFoundException {
-            int result = message.readInt();
+            int results = message.readInt();
             syncTermination.increaseResults(results);
 
         }
@@ -227,7 +231,7 @@ public class Rubiks implements MessageUpcall  {
             while((cube = getWork()) != null) {
                 //cache initialization with rhe first received cube
                 if(first) {
-                    cache = new CubeCache(cube.size());
+                    cache = new CubeCache(cube.getSize());
                     first = false;
                 }
                 results += solution(cube, cache);
@@ -278,9 +282,9 @@ public class Rubiks implements MessageUpcall  {
         //connect with every receive port*/
 
         Cube cube = generateCube();
-        CubeCache cubeCache = new CubeCache(cube.size());
+        CubeCache cubeCache = new CubeCache(cube.getSize());
 
-        SyncTermination syncTermination = new SyncTermination();
+        syncTermination = new SyncTermination();
 
         int bound = 0;
         int result = 0;
@@ -303,7 +307,7 @@ public class Rubiks implements MessageUpcall  {
             cube.setBound(bound);
             System.out.print(" " + bound);
             result = solutionsServer(cache, syncTermination);
-            if(result==0){
+            if(result == 0) {
                 termination = terminationSender.newMessage();
                 termination.writeBoolean(false);
                 termination.finish();
@@ -328,7 +332,7 @@ public class Rubiks implements MessageUpcall  {
         workRequestReceiver.close();
     }
 
-    public vod solveWorkers(Ibis ibis) {
+    public void solveWorkers(Ibis ibis) {
         //workReceiver = ibis.createReceivePort(portType1to1, "Work");
         workReceiver = ibis.createReceivePort(portType1to1, "Work");
         workReceiver.enableConnections();
@@ -422,7 +426,7 @@ public class Rubiks implements MessageUpcall  {
 
         // Elect a server
         System.out.println("elections");
-        IbisIdentifier server = ibis.registry().elect("Server");
+        server = ibis.registry().elect("Server");
 
         System.out.println("Server is " + server);
 
@@ -455,7 +459,7 @@ public class Rubiks implements MessageUpcall  {
 
 
         } else {
-            solveWorkers(ibis, server);
+            solveWorkers(ibis);
         }
 
         workRequestSender.close();
@@ -475,28 +479,5 @@ public class Rubiks implements MessageUpcall  {
             e.printStackTrace(System.err);
         }
     }
-
-    /**
-     * Main function.
-     *
-     * @param arguments
-     *            list of arguments
-     */
-    public static void main(String[] arguments) {
-
-
-
-        // solve
-        long start = System.currentTimeMillis();
-        solve(cube);
-        long end = System.currentTimeMillis();
-
-        // NOTE: this is printed to standard error! The rest of the output is
-        // constant for each set of parameters. Printing this to standard error
-        // makes the output of standard out comparable with "diff"
-        System.err.println("Solving cube took " + (end - start)
-                           + " milliseconds");
-
-    }
-
 }
+
