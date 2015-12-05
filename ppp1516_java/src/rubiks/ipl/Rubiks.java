@@ -32,6 +32,7 @@ public class Rubiks implements MessageUpcall  {
     static Object lock = new Object();
 
     static IbisIdentifier[] joinedIbises;
+    private final Ibis myIbis;
     static int myIntIbisId;
     static int nodes;
     static Ibis myIbis;
@@ -53,7 +54,7 @@ public class Rubiks implements MessageUpcall  {
     static Cube initialCube;
 
 
-    static String[] argumentsForCube;
+    static String[] arguments;
 
 
     public static int solution(Cube cube, CubeCache cache) {
@@ -265,19 +266,19 @@ public class Rubiks implements MessageUpcall  {
     }
 
 
-    public void solveServer(Ibis ibis) {
+    public void solveServer() {
         ResultsUpdater resultsUpdater = new ResultsUpdater();
         //port in which new work requests will be received
-        workRequestReceiver = ibis.createReceivePort(portTypeMto1Up, "WorkReq", this);
+        workRequestReceiver = myIbis.createReceivePort(portTypeMto1Up, "WorkReq", this);
         // enable connections
         workRequestReceiver.enableConnections();
         // enable upcalls
         workRequestReceiver.enableMessageUpcalls();
 
-        resultsReceiver = ibis.createReceivePort(portTypeMto1Up, "Results", resultsUpdater);
+        resultsReceiver = myIbis.createReceivePort(portTypeMto1Up, "Results", resultsUpdater);
         resultsReceiver.enableConnections();
 
-        terminationSender = ibis.createSendPort(portTypeMto1);
+        terminationSender = myIbis.createSendPort(portTypeMto1);
         //connect with every receive port*/
 
         initialCube = generateCube();
@@ -289,7 +290,7 @@ public class Rubiks implements MessageUpcall  {
         int result = 0;
 
         for (IbisIdentifier joinedIbis : joinedIbises) {
-            if(joinedIbis.equals(ibis)) {
+            if(joinedIbis.equals(myIbisId)) {
                 continue;
             }
             terminationSender.connect(joinedIbis, "Termination");
@@ -332,19 +333,19 @@ public class Rubiks implements MessageUpcall  {
         workRequestReceiver.close();
     }
 
-    public void solveWorkers(Ibis ibis) {
+    public void solveWorkers() {
         //workReceiver = ibis.createReceivePort(portType1to1, "Work");
-        workReceiver = ibis.createReceivePort(portType1to1, "Work");
+        workReceiver = myIbis.createReceivePort(portType1to1, "Work");
         workReceiver.enableConnections();
 
-        terminationReceiver = ibis.createReceivePort(portTypeMto1, "Termination");
+        terminationReceiver = myIbis.createReceivePort(portTypeMto1, "Termination");
         terminationReceiver.enableConnections();
 
         //port in which new work requests will be sent
-        workRequestSender = ibis.createSendPort(portTypeMto1Up);
+        workRequestSender = myIbis.createSendPort(portTypeMto1Up);
         workRequestSender.connect(server, "WorkReq");
 
-        resultsSender = ibis.createSendPort(portTypeMto1Up);
+        resultsSender = myIbis.createSendPort(portTypeMto1Up);
         resultsSender.connect(server, "Results");
 
         solutionsWorkers();
@@ -421,7 +422,7 @@ public class Rubiks implements MessageUpcall  {
         Ibis ibis = IbisFactory.createIbis(ibisCapabilities, null, portTypeMto1Up, portType1to1);
         Thread.sleep(5000);
         System.out.println("Ibis created");
-        myIbisId = ibis.identifier();
+        myIbisId=ibis.identifier();
         myIbis = ibis;
 
         // Elect a server
@@ -435,13 +436,13 @@ public class Rubiks implements MessageUpcall  {
 
 
         // If I am the server, run server, else run client.
-        if (server.equals(ibis.identifier())) {
+        if (server.equals(myIbisId)) {
             if(initialCube == null) {
                 System.out.println("CUBE NULL FROM THE BEGIN");
             } else {
                 System.out.println("CUBE ok");
             }
-            solveServer(ibis);
+            solveServer();
 
 
             //long end = System.currentTimeMillis();
@@ -459,7 +460,7 @@ public class Rubiks implements MessageUpcall  {
 
 
         } else {
-            solveWorkers(ibis);
+            solveWorkers();
         }
 
         workRequestSender.close();
@@ -470,8 +471,8 @@ public class Rubiks implements MessageUpcall  {
     }
 
 
-    public static void main(String[] arguments) {
-        argumentsForCube = arguments;
+    public static void main(String[] argumentsForCube) {
+        arguments = argumentsForCube;
         try {
             System.out.println("run");
             new Rubiks().run();
