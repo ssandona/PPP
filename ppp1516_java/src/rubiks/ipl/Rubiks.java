@@ -149,7 +149,7 @@ public class Rubiks {
         toDo.add(receivedWork);
         if(receivedWork == null) {
             System.out.println(myIbisId + " -> NULLworkReceived");
-            return true
+            return true;
         } else {
             System.out.println(myIbisId + " -> workReceived");
             return false;
