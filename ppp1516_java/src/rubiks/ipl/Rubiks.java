@@ -41,7 +41,7 @@ public class Rubiks implements MessageUpcall  {
     static ReceivePort workReceiver;
     //workSender create on demand
     static SendPort resultsSender;
-    static ReceiverPort resultsReceiver;
+    static ReceivePort resultsReceiver;
     static SendPort terminationSender;
     static ReceivePort terminationReceiver;
 
@@ -50,6 +50,7 @@ public class Rubiks implements MessageUpcall  {
     static int valuatedCubes=0;
 
     static IbisIdentifier server;
+    static Cube initialCube;
 
 
     static String[] arguments;
@@ -218,6 +219,7 @@ public class Rubiks implements MessageUpcall  {
 
     }
 
+
     public void solutionsWorkers() {
         Cube cube = null;
         CubeCache cache;
@@ -236,11 +238,11 @@ public class Rubiks implements MessageUpcall  {
                 }
                 results += solution(cube, cache);
             }
-            end = sendResults(result);
+            end = sendResults(results);
         }
     }
 
-    public void solutionsServer(CubeCache cache, SyncTermination syncTermination) {
+    public int solutionsServer() {
         //increase the number of ibis workes (at least me)
         syncTermination.increaseBusyWorkers();
         int results = 0;
@@ -248,13 +250,10 @@ public class Rubiks implements MessageUpcall  {
 
         //while the work pool is not empty, continue to work
         while((cube = getFromPool(true)) != null) {
-            synchronized(lock) {
-                cube = toDo.remove(toDo.size() - 1);
-            }
-            if(cube != initialCube) {
-                cache.add(cube);
-            }
             results += solution(cube, cache);
+            if(cube != initialCube) {
+                cache.put(cube);
+            }
         }
 
         //add my results to the cumulative results
@@ -281,8 +280,8 @@ public class Rubiks implements MessageUpcall  {
         terminationSender = ibis.createSendPort(portTypeMto1);
         //connect with every receive port*/
 
-        Cube cube = generateCube();
-        CubeCache cubeCache = new CubeCache(cube.getSize());
+        initialCube = generateCube();
+        CubeCache cubeCache = new CubeCache(initialCube.getSize());
 
         syncTermination = new SyncTermination();
 
@@ -304,9 +303,10 @@ public class Rubiks implements MessageUpcall  {
         long start = System.currentTimeMillis();
         while (result == 0) {
             bound++;
-            cube.setBound(bound);
+            initialCube.setBound(bound);
+            toDo.add(initialCube);
             System.out.print(" " + bound);
-            result = solutionsServer(cache, syncTermination);
+            result = solutionsServer();
             if(result == 0) {
                 termination = terminationSender.newMessage();
                 termination.writeBoolean(false);
