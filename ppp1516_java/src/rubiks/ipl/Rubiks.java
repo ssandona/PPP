@@ -445,6 +445,10 @@ public class Rubiks implements MessageUpcall  {
         joinedIbises = ibis.registry().joinedIbises();
         nodes = joinedIbises.length;
 
+        for (IbisIdentifier joinedIbis : joinedIbises) {
+            System.err.println("Ibis joined: " + joinedIbis);
+        }
+
 
         // If I am the server, run server, else run client.
         if (server.equals(myIbisId)) {
