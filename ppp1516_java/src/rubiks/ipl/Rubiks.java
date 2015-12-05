@@ -334,14 +334,23 @@ public class Rubiks {
         int results = 0;
         Cube cube;
         int twist = 0;
-        boolean first=true;
+        cube= cube.getFromPool(true);
+        results+=solution(c,cache);
+        if(results!=0){
+            return results;
+        }
+        int n=toDo.size();
+        for(i=0;i<n;i++){
+            cube=toDo.remove(0);
+            results+=solution(cube,cache);
+        }
+        if(results!=0){
+            return results;
+        }
+        System.out.println(myIbisId + " -> size " + toDo.size() + " cubes");
+        sendInitialWork(false, cache);
         //while the work pool is not empty, continue to work
         while((cube = getFromPool(true)) != null) {
-            if(cube.getTwists() >= 3 && first) {
-                System.out.println(myIbisId + " -> size " + toDo.size() + " cubes");
-                sendInitialWork(false, cache);
-                first=false;
-            }
             results += solution(cube, cache);
             if(cube != initialCube) {
                 cache.put(cube);
