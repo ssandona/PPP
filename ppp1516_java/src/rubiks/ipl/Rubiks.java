@@ -309,7 +309,10 @@ public class Rubiks implements MessageUpcall  {
         workRequestReceiver.enableMessageUpcalls();
 
         resultsReceiver = myIbis.createReceivePort(portTypeMto1Up, "Results", resultsUpdater);
+        // enable connections
         resultsReceiver.enableConnections();
+        // enable upcalls
+        workRequestReceiver.enableMessageUpcalls();
 
         terminationSender = myIbis.createSendPort(portType1toM);
         //connect with every receive port*/
