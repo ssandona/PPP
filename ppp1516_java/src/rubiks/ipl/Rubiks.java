@@ -62,7 +62,7 @@ public class Rubiks implements MessageUpcall  {
 
     public static int solution(Cube cube, CubeCache cache) {
         valuatedCubes++;
-        //System.out.println("Ibis[" + myIntIbisId + "] -> solution");
+        //System.out.println(myIbisId + " -> solution");
         if (cube.isSolved()) {
             return 1;
         }
@@ -115,7 +115,7 @@ public class Rubiks implements MessageUpcall  {
 
     //method called to ask work to the server (local work pool empty)
     public static Cube askForWork() throws IOException, ClassNotFoundException {
-        //System.out.println("Ibis[" + myIntIbisId + "] -> askForWork");
+        System.out.println(myIbisId + " -> askForWork");
         Cube receivedWork = null;
         requestsForWork++;
 
@@ -123,11 +123,13 @@ public class Rubiks implements MessageUpcall  {
         WriteMessage task = workRequestSender.newMessage();
         task.writeObject(workReceiver.identifier());
         task.finish();
+        System.out.println(myIbisId + " -> asked");
 
         //get the work
         ReadMessage r = workReceiver.receive();
         receivedWork = (Cube)r.readObject();
         r.finish();
+        System.out.println(myIbisId + " -> workReceived");
 
         //workRequestSender.disconnect(doner, "WorkReq");
         return receivedWork;
@@ -179,11 +181,13 @@ public class Rubiks implements MessageUpcall  {
                 e.printStackTrace();
             }
         }
+        System.out.println(myIbisId + " -> tryToSendCube");
         // create a reply message
         WriteMessage reply = workSender.newMessage();
         reply.writeObject(cube);
         reply.finish();
         workSender.close();
+        System.out.println(myIbisId + " -> sent");
     }
 
     //method called by Slaves to getWork, if the work queue is empty, some work is asked to the server
@@ -202,6 +206,7 @@ public class Rubiks implements MessageUpcall  {
     //send the actual results, and as response receive if another bound has to be evaluated
     //or if the system can terminate
     public static boolean sendResults(int res) throws IOException {
+        System.out.println(myIbisId + " -> send results to server");
         boolean termination;
         //send local work receiving port
         WriteMessage resMsg = resultsSender.newMessage();
@@ -219,6 +224,7 @@ public class Rubiks implements MessageUpcall  {
 
         public void upcall(ReadMessage message) throws IOException,
             ClassNotFoundException {
+            System.out.println(myIbisId + " -> received results from Slave");
             int results = message.readInt();
             try {
                 syncTermination.increaseResults(results);
