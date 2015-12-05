@@ -131,8 +131,7 @@ public class Rubiks implements MessageUpcall  {
         r.finish();
         if(receivedWork == null) {
             System.out.println(myIbisId + " -> NULLworkReceived");
-        }
-        else{
+        } else {
             System.out.println(myIbisId + " -> workReceived");
         }
 
@@ -159,46 +158,6 @@ public class Rubiks implements MessageUpcall  {
         return cube;
     }
 
-    //method called when a new work request comes from a Slave
-    public void upcall(ReadMessage message) throws IOException,
-        ClassNotFoundException {
-        ReceivePortIdentifier requestor = (ReceivePortIdentifier) message
-                                          .readObject();
-
-        System.err.println("received request from: " + requestor);
-
-        // finish the request message. This MUST be done before sending
-        // the reply message. It ALSO means Ibis may now call this upcall
-        // method agian with the next request message
-        message.finish();
-
-        // create a sendport for the reply
-        SendPort workSender = myIbis.createSendPort(portType1to1);
-
-        // connect to the requestor's receive port
-        workSender.connect(requestor);
-
-        Cube cube = getFromPool(false);
-        if(cube != null) {
-            try {
-                syncTermination.increaseBusyWorkers();
-            } catch(InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        if(cube == null) {
-            System.out.println(myIbisId + " -> tryToSendNULL");
-        } else {
-            System.out.println(myIbisId + " -> tryToSendCube");
-        }
-        // create a reply message
-        WriteMessage reply = workSender.newMessage();
-        reply.writeObject(cube);
-        reply.finish();
-        workSender.close();
-        System.out.println(myIbisId + " -> sent");
-    }
-
     //method called by Slaves to getWork, if the work queue is empty, some work is asked to the server
     //if this method return null, that means that there is no more work to do
     public static Cube getWork() throws IOException, ClassNotFoundException {
@@ -216,8 +175,8 @@ public class Rubiks implements MessageUpcall  {
     //or if the system can terminate
     public static boolean sendResults(int res) throws IOException {
         System.out.println(myIbisId + " -> send results to server");
-        System.out.println(myIbisId + " -> computed "+ valuatedCubes+" cubes");
-        valuatedCubes=0;
+        System.out.println(myIbisId + " -> computed " + valuatedCubes + " cubes");
+        valuatedCubes = 0;
         boolean termination;
         //send local work receiving port
         WriteMessage resMsg = resultsSender.newMessage();
@@ -243,6 +202,51 @@ public class Rubiks implements MessageUpcall  {
                 ie.printStackTrace();
             }
 
+        }
+
+
+    }
+
+    public static class WorkManager implements MessageUpcall {
+
+        //method called when a new work request comes from a Slave
+        public void upcall(ReadMessage message) throws IOException,
+            ClassNotFoundException {
+            ReceivePortIdentifier requestor = (ReceivePortIdentifier) message
+                                              .readObject();
+
+            System.err.println("received request from: " + requestor);
+
+            // finish the request message. This MUST be done before sending
+            // the reply message. It ALSO means Ibis may now call this upcall
+            // method agian with the next request message
+            message.finish();
+
+            // create a sendport for the reply
+            SendPort workSender = myIbis.createSendPort(portType1to1);
+
+            // connect to the requestor's receive port
+            workSender.connect(requestor);
+
+            Cube cube = getFromPool(false);
+            if(cube != null) {
+                try {
+                    syncTermination.increaseBusyWorkers();
+                } catch(InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(cube == null) {
+                System.out.println(myIbisId + " -> tryToSendNULL");
+            } else {
+                System.out.println(myIbisId + " -> tryToSendCube");
+            }
+            // create a reply message
+            WriteMessage reply = workSender.newMessage();
+            reply.writeObject(cube);
+            reply.finish();
+            workSender.close();
+            System.out.println(myIbisId + " -> sent");
         }
 
 
@@ -285,12 +289,12 @@ public class Rubiks implements MessageUpcall  {
                 cache.put(cube);
             }
         }
-        System.out.println(myIbisId + " -> computed "+ valuatedCubes+" cubes");
-        valuatedCubes=0;
+        System.out.println(myIbisId + " -> computed " + valuatedCubes + " cubes");
+        valuatedCubes = 0;
         //add my results to the cumulative results
         System.out.println(myIbisId + " -> increase results");
         syncTermination.increaseResults(results);
-        
+
         System.out.println(myIbisId + " -> wait termination");
         //wait until all the slaves terminate the calculation for this bound and get the cumulative results
         int boundResult = syncTermination.waitTermination();
@@ -301,8 +305,9 @@ public class Rubiks implements MessageUpcall  {
 
     public void solveServer() throws InterruptedException, IOException {
         ResultsUpdater resultsUpdater = new ResultsUpdater();
+        WorkManager workManager=new WorkManager();
         //port in which new work requests will be received
-        workRequestReceiver = myIbis.createReceivePort(portTypeMto1Up, "WorkReq", this);
+        workRequestReceiver = myIbis.createReceivePort(portTypeMto1Up, "WorkReq", workManager);
         // enable connections
         workRequestReceiver.enableConnections();
         // enable upcalls
