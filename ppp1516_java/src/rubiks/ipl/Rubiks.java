@@ -288,11 +288,13 @@ public class Rubiks implements MessageUpcall  {
         System.out.println(myIbisId + " -> computed "+ valuatedCubes+" cubes");
         valuatedCubes=0;
         //add my results to the cumulative results
-        System.out.println(myIbisId + " -> wait termination");
+        System.out.println(myIbisId + " -> increase results");
         syncTermination.increaseResults(results);
-        System.out.println(myIbisId + " -> terminated");
+        
+        System.out.println(myIbisId + " -> wait termination");
         //wait until all the slaves terminate the calculation for this bound and get the cumulative results
         int boundResult = syncTermination.waitTermination();
+        System.out.println(myIbisId + " -> terminated");
         return boundResult;
     }
 
