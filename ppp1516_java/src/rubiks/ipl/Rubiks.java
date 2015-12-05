@@ -12,7 +12,7 @@ import java.io.IOException;
  * @author Niels Drost, Timo van Kessel
  *
  */
-public class Rubiks{
+public class Rubiks {
 
     static PortType portTypeMto1 = new PortType(PortType.COMMUNICATION_RELIABLE,
             PortType.SERIALIZATION_OBJECT, PortType.RECEIVE_EXPLICIT,
@@ -46,8 +46,8 @@ public class Rubiks{
     //workSender create on demand
     static SendPort resultsSender;
     static ReceivePort resultsReceiver;
-    static SendPort terminationSender;
-    static ReceivePort terminationReceiver;
+    static SendPort workSender;
+    //static ReceivePort terminationReceiver;
 
     static SyncTermination syncTermination;
     static int requestsForWork = 0;
@@ -140,18 +140,21 @@ public class Rubiks{
     }
 
     //method called to ask work to the server (local work pool empty)
-    public static void waitForInitialWork() throws IOException, ClassNotFoundException {
+    public static boolean waitForInitialWork() throws IOException, ClassNotFoundException {
         Cube receivedWork = null;
         //get the work
         ReadMessage r = workReceiver.receive();
         receivedWork = (Cube)r.readObject();
         r.finish();
+        toDo.add(receivedWork);
         if(receivedWork == null) {
             System.out.println(myIbisId + " -> NULLworkReceived");
+            return true
         } else {
             System.out.println(myIbisId + " -> workReceived");
+            return false;
         }
-        toDo.add(receivedWork);
+        
 
     }
 
@@ -238,9 +241,6 @@ public class Rubiks{
             // method agian with the next request message
             message.finish();
 
-            // create a sendport for the reply
-            SendPort workSender = myIbis.createSendPort(portType1to1);
-
             // connect to the requestor's receive port
             workSender.connect(requestor);
 
@@ -261,7 +261,7 @@ public class Rubiks{
             WriteMessage reply = workSender.newMessage();
             reply.writeObject(cube);
             reply.finish();
-            workSender.close();
+            //workSender.close();
             System.out.println(myIbisId + " -> sent");
         }
 
@@ -278,7 +278,10 @@ public class Rubiks{
 
         //while there are bounds to evaluate
         while(!end) {
-            waitForInitialWork();
+            if(!(end=waitForInitialWork())){
+                continue;
+            }
+            System.out.println(myIbisId + " -> another round");
             //while there is work for the actual bound
             while((cube = getWork()) != null) {
                 //cache initialization with rhe first received cube
@@ -288,28 +291,39 @@ public class Rubiks{
                 }
                 results += solution(cube, cache);
             }
-            end = sendResults(results);
-            System.out.println(myIbisId + " -> another round");
         }
     }
 
-    public int solutionsServer(CubeCache cache) throws InterruptedException {
-        syncTermination.increaseBusyWorkers();
-        int results = 0;
-        Cube cube;
-        int count=0;
+    public int sendInitialWork(boolean terminated) {
+        Cube cube = null;
+        int count = 0;
+
+        if(terminated) {
+            //send initial cubes to the slaves
+            for (IbisIdentifier joinedIbis : joinedIbises) {
+                if(joinedIbis.equals(myIbisId)) {
+                    continue;
+                }
+                workSender.connect(joinedIbis, "Work");
+            }
+            WriteMessage reply = workSender.newMessage();
+            reply.writeObject(cube);
+            reply.finish();
+            return 0;
+        }
 
         //create first two levels of the tree
         cube = getFromPool(true);
-        if((results=solution(cube,cache))!=0){
+        if((results = solution(cube, cache)) != 0) {
             return results;
         }
-        int size=toDo.size();
-        while(cont<size){
+        int size = toDo.size();
+        while(count < size) {
             cube = getFromPool(true);
-            results+=solution(cube,cache);
+            results += solution(cube, cache);
+            count++;
         }
-        if(results!=0){
+        if(results != 0) {
             return results;
         }
 
@@ -324,6 +338,17 @@ public class Rubiks{
             reply.writeObject(cube);
             reply.finish();
             workSender.disconnect(joinedIbis, "Work");
+        }
+        return 0;
+    }
+
+    public int solutionsServer(CubeCache cache) throws InterruptedException {
+        syncTermination.increaseBusyWorkers();
+        int results = 0;
+        Cube cube;
+
+        if((results=sendInitialWork(false))!=0){
+            return results;
         }
 
         //while the work pool is not empty, continue to work
@@ -349,7 +374,7 @@ public class Rubiks{
 
     public void solveServer() throws InterruptedException, IOException {
         ResultsUpdater resultsUpdater = new ResultsUpdater();
-        WorkManager workManager=new WorkManager();
+        WorkManager workManager = new WorkManager();
         //port in which new work requests will be received
         workRequestReceiver = myIbis.createReceivePort(portTypeMto1Up, "WorkReq", workManager);
         // enable connections
@@ -363,8 +388,8 @@ public class Rubiks{
         // enable upcalls
         workRequestReceiver.enableMessageUpcalls();
 
-        terminationSender = myIbis.createSendPort(portType1toM);
-        //connect with every receive port*/
+        workSender = myIbis.createSendPort(portType1toM);
+
 
         initialCube = generateCube();
         CubeCache cubeCache = new CubeCache(initialCube.getSize());
@@ -395,15 +420,9 @@ public class Rubiks{
             System.out.print(" " + bound);
             result = solutionsServer(cubeCache);
             if(result == 0) {
-                termination = terminationSender.newMessage();
-                termination.writeBoolean(false);
-                termination.finish();
+                sendInitialWork(true);
             }
         }
-        long end = System.currentTimeMillis();
-        termination = terminationSender.newMessage();
-        termination.writeBoolean(true);
-        termination.finish();
 
         System.out.println();
         System.out.println("Solving cube possible in " + result + " ways of "
@@ -413,19 +432,20 @@ public class Rubiks{
                            + " milliseconds");
 
         //close all ports
-        terminationSender.close();
+        //terminationSender.close();
         Thread.sleep(1000);
         resultsReceiver.close();
+        workSender.close();
         workRequestReceiver.close();
     }
 
     public void solveWorkers() throws IOException, InterruptedException, ClassNotFoundException {
         //workReceiver = ibis.createReceivePort(portType1to1, "Work");
-        workReceiver = myIbis.createReceivePort(portType1to1, "Work");
+        workReceiver = myIbis.createReceivePort(portType1toM, "Work");
         workReceiver.enableConnections();
 
-        terminationReceiver = myIbis.createReceivePort(portType1toM, "Termination");
-        terminationReceiver.enableConnections();
+        /*terminationReceiver = myIbis.createReceivePort(portType1toM, "Termination");
+        terminationReceiver.enableConnections();*/
 
         //port in which new work requests will be sent
         workRequestSender = myIbis.createSendPort(portTypeMto1Up);
@@ -441,7 +461,7 @@ public class Rubiks{
         workRequestSender.close();
         Thread.sleep(1000);
         workReceiver.close();
-        terminationReceiver.close();
+        //terminationReceiver.close();
 
 
 
