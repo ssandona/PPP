@@ -141,6 +141,7 @@ public class Rubiks {
 
     //method called to ask work to the server (local work pool empty)
     public static boolean waitForInitialWork() throws IOException, ClassNotFoundException {
+        System.out.println(myIbisId + " -> waitFOrInitialWork");
         Cube receivedWork = null;
         //get the work
         ReadMessage r = workReceiver.receive();
@@ -151,7 +152,7 @@ public class Rubiks {
             System.out.println(myIbisId + " -> NULLworkReceived");
             return true;
         } else {
-            System.out.println(myIbisId + " -> workReceived");
+            System.out.println(myIbisId + " -> InitialWorkReceived");
             return false;
         }
         
@@ -261,6 +262,8 @@ public class Rubiks {
             WriteMessage reply = workSender.newMessage();
             reply.writeObject(cube);
             reply.finish();
+
+            workSender.disconnect(requestor);
             //workSender.close();
             System.out.println(myIbisId + " -> sent");
         }
@@ -342,6 +345,7 @@ public class Rubiks {
             reply.finish();
             workSender.disconnect(joinedIbis, "Work");
         }
+        System.out.println(myIbisId + " -> initialWorkSent");
         return 0;
     }
 
