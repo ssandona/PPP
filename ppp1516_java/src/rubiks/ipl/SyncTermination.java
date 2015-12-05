@@ -2,7 +2,7 @@ package rubiks.ipl;
 import ibis.ipl.*;
 
 public class SyncTermination {
-    boolean busyWorkers=0;
+    int busyWorkers=0;
     int receivedResults=0;
 
     //method called by the Server when it finish its work to wait the termination of all the Slaves

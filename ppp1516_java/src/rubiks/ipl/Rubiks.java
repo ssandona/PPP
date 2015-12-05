@@ -53,7 +53,7 @@ public class Rubiks implements MessageUpcall  {
     static Cube initialCube;
 
 
-    static String[] arguments;
+    static String[] argumentsForCube;
 
 
     public static int solution(Cube cube, CubeCache cache) {
@@ -242,7 +242,7 @@ public class Rubiks implements MessageUpcall  {
         }
     }
 
-    public int solutionsServer() {
+    public int solutionsServer(CubeCache cache) {
         //increase the number of ibis workes (at least me)
         syncTermination.increaseBusyWorkers();
         int results = 0;
@@ -289,7 +289,7 @@ public class Rubiks implements MessageUpcall  {
         int result = 0;
 
         for (IbisIdentifier joinedIbis : joinedIbises) {
-            if(joinedIbis.equals(myIbisId)) {
+            if(joinedIbis.equals(ibis)) {
                 continue;
             }
             terminationSender.connect(joinedIbis, "Termination");
@@ -306,7 +306,7 @@ public class Rubiks implements MessageUpcall  {
             initialCube.setBound(bound);
             toDo.add(initialCube);
             System.out.print(" " + bound);
-            result = solutionsServer();
+            result = solutionsServer(cubeCache);
             if(result == 0) {
                 termination = terminationSender.newMessage();
                 termination.writeBoolean(false);
@@ -471,7 +471,7 @@ public class Rubiks implements MessageUpcall  {
 
 
     public static void main(String[] arguments) {
-        this.arguments = arguments;
+        argumentsForCube = arguments;
         try {
             System.out.println("run");
             new Rubiks().run();
