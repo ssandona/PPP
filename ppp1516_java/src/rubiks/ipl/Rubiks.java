@@ -334,8 +334,8 @@ public class Rubiks {
         int results = 0;
         Cube cube=null;
         int twist = 0;
-        int bound=cube.getBound();
         cube= getFromPool(true);
+        int bound=cube.getBound();
         results+=solution(cube,cache);
         System.out.println(myIbisId + " -> FIRST " + toDo.size() + " cubes");
         if(results!=0){
