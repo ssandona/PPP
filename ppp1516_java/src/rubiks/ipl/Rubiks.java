@@ -12,7 +12,7 @@ import java.io.IOException;
  * @author Niels Drost, Timo van Kessel
  *
  */
-public class Rubiks implements MessageUpcall  {
+public class Rubiks{
 
     static PortType portTypeMto1 = new PortType(PortType.COMMUNICATION_RELIABLE,
             PortType.SERIALIZATION_OBJECT, PortType.RECEIVE_EXPLICIT,
@@ -36,7 +36,7 @@ public class Rubiks implements MessageUpcall  {
     static Object lock = new Object();
 
     static IbisIdentifier[] joinedIbises;
-    private Ibis myIbis;
+    static Ibis myIbis;
     static IbisIdentifier myIbisId;
     static int nodes;
 
