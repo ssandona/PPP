@@ -193,7 +193,7 @@ public class Rubiks implements MessageUpcall  {
 
     //send the actual results, and as response receive if another bound has to be evaluated
     //or if the system can terminate
-    public static boolean sendResults(int res) {
+    public static boolean sendResults(int res) throws IOException {
         boolean termination;
         //send local work receiving port
         WriteMessage resMsg = resultsSender.newMessage();
@@ -212,7 +212,12 @@ public class Rubiks implements MessageUpcall  {
         public void upcall(ReadMessage message) throws IOException,
             ClassNotFoundException {
             int results = message.readInt();
+            try{
             syncTermination.increaseResults(results);
+            }
+            catch(InterruptedException ie){
+                ie.printStackTrace();
+            }
 
         }
 
@@ -242,7 +247,7 @@ public class Rubiks implements MessageUpcall  {
         }
     }
 
-    public int solutionsServer(CubeCache cache) {
+    public int solutionsServer(CubeCache cache) throws InterruptedException{
         //increase the number of ibis workes (at least me)
         syncTermination.increaseBusyWorkers();
         int results = 0;
@@ -265,7 +270,7 @@ public class Rubiks implements MessageUpcall  {
     }
 
 
-    public void solveServer() {
+    public void solveServer() throws InterruptedException, IOException{
         ResultsUpdater resultsUpdater = new ResultsUpdater();
         //port in which new work requests will be received
         workRequestReceiver = myIbis.createReceivePort(portTypeMto1Up, "WorkReq", this);
@@ -332,7 +337,7 @@ public class Rubiks implements MessageUpcall  {
         workRequestReceiver.close();
     }
 
-    public void solveWorkers() {
+    public void solveWorkers() throws IOException{
         //workReceiver = ibis.createReceivePort(portType1to1, "Work");
         workReceiver = myIbis.createReceivePort(portType1to1, "Work");
         workReceiver.enableConnections();
