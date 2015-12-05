@@ -333,6 +333,8 @@ public class Rubiks {
             return results;
         }
 
+        System.out.println(myIbisId + " -> toSIZE -> "+toDo.size());
+
         //send initial cubes to the slaves
         for (IbisIdentifier joinedIbis : joinedIbises) {
             if(joinedIbis.equals(myIbisId)) {
@@ -344,6 +346,7 @@ public class Rubiks {
             reply.writeObject(cube);
             reply.finish();
             workSender.disconnect(joinedIbis, "Work");
+            syncTermination.increaseBusyWorkers();
         }
         System.out.println(myIbisId + " -> initialWorkSent");
         return 0;

@@ -24,11 +24,13 @@ public class SyncTermination {
     //method called when some work is given to a Slave
     synchronized public void increaseBusyWorkers() throws InterruptedException{
         busyWorkers+=1;
+        System.out.println("BUSY WORKERS: "+busyWorkers);
     }
 
     //method called when a new result is received, so the number of workers decrease
     public void decreaseBusyWorkers() throws InterruptedException{
         busyWorkers-=1;
+        System.out.println("BUSY WORKERS: "+busyWorkers);
         if(busyWorkers==0){
             notifyAll();
         }
