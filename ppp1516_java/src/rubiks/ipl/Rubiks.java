@@ -46,8 +46,8 @@ public class Rubiks implements MessageUpcall  {
     static ReceivePort terminationReceiver;
 
     static SyncTermination syncTermination;
-    static int requestsForWork=0;
-    static int valuatedCubes=0;
+    static int requestsForWork = 0;
+    static int valuatedCubes = 0;
 
     static IbisIdentifier server;
     static Cube initialCube;
@@ -169,7 +169,11 @@ public class Rubiks implements MessageUpcall  {
 
         Cube cube = getFromPool(false);
         if(cube != null) {
-            syncTermination.increaseBusyWorkers();
+            try {
+                syncTermination.increaseBusyWorkers();
+            } catch(InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         // create a reply message
         WriteMessage reply = workSender.newMessage();
@@ -212,10 +216,9 @@ public class Rubiks implements MessageUpcall  {
         public void upcall(ReadMessage message) throws IOException,
             ClassNotFoundException {
             int results = message.readInt();
-            try{
-            syncTermination.increaseResults(results);
-            }
-            catch(InterruptedException ie){
+            try {
+                syncTermination.increaseResults(results);
+            } catch(InterruptedException ie) {
                 ie.printStackTrace();
             }
 
@@ -225,9 +228,9 @@ public class Rubiks implements MessageUpcall  {
     }
 
 
-    public void solutionsWorkers() {
+    public void solutionsWorkers() throws IOException{
         Cube cube = null;
-        CubeCache cache;
+        CubeCache cache=null;
         boolean first = true;
         int results = 0;
         boolean end = false;
@@ -247,7 +250,7 @@ public class Rubiks implements MessageUpcall  {
         }
     }
 
-    public int solutionsServer(CubeCache cache) throws InterruptedException{
+    public int solutionsServer(CubeCache cache) throws InterruptedException {
         //increase the number of ibis workes (at least me)
         syncTermination.increaseBusyWorkers();
         int results = 0;
@@ -270,7 +273,7 @@ public class Rubiks implements MessageUpcall  {
     }
 
 
-    public void solveServer() throws InterruptedException, IOException{
+    public void solveServer() throws InterruptedException, IOException {
         ResultsUpdater resultsUpdater = new ResultsUpdater();
         //port in which new work requests will be received
         workRequestReceiver = myIbis.createReceivePort(portTypeMto1Up, "WorkReq", this);
@@ -337,7 +340,7 @@ public class Rubiks implements MessageUpcall  {
         workRequestReceiver.close();
     }
 
-    public void solveWorkers() throws IOException{
+    public void solveWorkers() throws IOException, InterruptedException {
         //workReceiver = ibis.createReceivePort(portType1to1, "Work");
         workReceiver = myIbis.createReceivePort(portType1to1, "Work");
         workReceiver.enableConnections();
@@ -426,7 +429,7 @@ public class Rubiks implements MessageUpcall  {
         Ibis ibis = IbisFactory.createIbis(ibisCapabilities, null, portTypeMto1Up, portType1to1);
         Thread.sleep(5000);
         System.out.println("Ibis created");
-        myIbisId=ibis.identifier();
+        myIbisId = ibis.identifier();
         myIbis = ibis;
 
         // Elect a server
