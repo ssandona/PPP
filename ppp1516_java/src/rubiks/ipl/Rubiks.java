@@ -296,7 +296,7 @@ public class Rubiks {
         }
     }
 
-    public int sendInitialWork(boolean terminated, CubeCache cache) {
+    public int sendInitialWork(boolean terminated, CubeCache cache) throws IOException, ConnectionFailedException {
         Cube cube = null;
         int count = 0;
         int results=0;
