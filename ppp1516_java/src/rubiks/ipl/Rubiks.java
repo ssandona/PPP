@@ -192,7 +192,7 @@ public class Rubiks {
 
     //send the actual results, and as response receive if another bound has to be evaluated
     //or if the system can terminate
-    public static boolean sendResults(int res) throws IOException {
+    public static void sendResults(int res) throws IOException {
         System.out.println(myIbisId + " -> send results to server");
         System.out.println(myIbisId + " -> computed " + valuatedCubes + " cubes");
         valuatedCubes = 0;
@@ -203,10 +203,10 @@ public class Rubiks {
         resMsg.finish();
 
         //get the work
-        ReadMessage r = terminationReceiver.receive();
+        /*ReadMessage r = terminationReceiver.receive();
         termination = r.readBoolean();
         r.finish();
-        return termination;
+        return termination;*/
     }
 
     public static class ResultsUpdater implements MessageUpcall {
@@ -278,6 +278,7 @@ public class Rubiks {
 
         //while there are bounds to evaluate
         while(!end) {
+            results=0;
             if(!(end=waitForInitialWork())){
                 continue;
             }
@@ -291,12 +292,14 @@ public class Rubiks {
                 }
                 results += solution(cube, cache);
             }
+            sendResults(results);
         }
     }
 
     public int sendInitialWork(boolean terminated) {
         Cube cube = null;
         int count = 0;
+        int results=0;
 
         if(terminated) {
             //send initial cubes to the slaves
