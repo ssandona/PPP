@@ -121,7 +121,7 @@ public class Rubiks implements MessageUpcall  {
 
         //send local work receiving port
         WriteMessage task = workRequestSender.newMessage();
-        task.writeObject(workReceiver);
+        task.writeObject(workReceiver.identifier());
         task.finish();
 
         //get the work
