@@ -228,7 +228,7 @@ public class Rubiks implements MessageUpcall  {
     }
 
 
-    public void solutionsWorkers() throws IOException{
+    public void solutionsWorkers() throws IOException, ClassNotFoundException{
         Cube cube = null;
         CubeCache cache=null;
         boolean first = true;
@@ -340,7 +340,7 @@ public class Rubiks implements MessageUpcall  {
         workRequestReceiver.close();
     }
 
-    public void solveWorkers() throws IOException, InterruptedException {
+    public void solveWorkers() throws IOException, InterruptedException, ClassNotFoundException {
         //workReceiver = ibis.createReceivePort(portType1to1, "Work");
         workReceiver = myIbis.createReceivePort(portType1to1, "Work");
         workReceiver.enableConnections();
