@@ -248,7 +248,6 @@ public class Rubiks {
             Cube cube = getFromPool(false);
             if(cube != null) {
                 try {
-                    syncTermination.increaseBusyWorkers();
                 } catch(InterruptedException e) {
                     e.printStackTrace();
                 }
