@@ -162,7 +162,7 @@ public class Rubiks implements MessageUpcall  {
         message.finish();
 
         // create a sendport for the reply
-        SendPort workSender = myIbis.createSendPort(portTypeMto1);
+        SendPort workSender = myIbis.createSendPort(portType1to1);
 
         // connect to the requestor's receive port
         workSender.connect(requestor);
@@ -285,7 +285,7 @@ public class Rubiks implements MessageUpcall  {
         resultsReceiver = myIbis.createReceivePort(portTypeMto1Up, "Results", resultsUpdater);
         resultsReceiver.enableConnections();
 
-        terminationSender = myIbis.createSendPort(portTypeMto1);
+        terminationSender = myIbis.createSendPort(portType1toM);
         //connect with every receive port*/
 
         initialCube = generateCube();
@@ -345,7 +345,7 @@ public class Rubiks implements MessageUpcall  {
         workReceiver = myIbis.createReceivePort(portType1to1, "Work");
         workReceiver.enableConnections();
 
-        terminationReceiver = myIbis.createReceivePort(portTypeMto1, "Termination");
+        terminationReceiver = myIbis.createReceivePort(portType1toM, "Termination");
         terminationReceiver.enableConnections();
 
         //port in which new work requests will be sent
@@ -426,7 +426,7 @@ public class Rubiks implements MessageUpcall  {
     private void run() throws Exception {
         //System.out.println("done");
         // Create an ibis instance.
-        Ibis ibis = IbisFactory.createIbis(ibisCapabilities, null, portTypeMto1Up, portType1to1);
+        Ibis ibis = IbisFactory.createIbis(ibisCapabilities, null, portTypeMto1Up, portTypeMto1, portType1toM, portType1to1);
         Thread.sleep(5000);
         System.out.println("Ibis created");
         myIbisId = ibis.identifier();
@@ -444,11 +444,6 @@ public class Rubiks implements MessageUpcall  {
 
         // If I am the server, run server, else run client.
         if (server.equals(myIbisId)) {
-            if(initialCube == null) {
-                System.out.println("CUBE NULL FROM THE BEGIN");
-            } else {
-                System.out.println("CUBE ok");
-            }
             solveServer();
 
 
