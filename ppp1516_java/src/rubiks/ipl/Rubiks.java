@@ -81,7 +81,7 @@ public class Rubiks {
                 toDo.add(child);
                 //cache.put(child);
             }
-            System.out.println(myIbisId + " -> childreanAdded, new size -> "+toDo.size());
+            System.out.println(myIbisId + " -> childreanAdded, new size -> " + toDo.size());
         }
         return 0;
     }
@@ -321,15 +321,16 @@ public class Rubiks {
 
         //create first two levels of the tree
         cube = getFromPool(true);
-        if(cube == null) {
-            System.out.println(myIbisId + " -> OMG the first cube is null");
-        }
         if((results = solution(cube, cache)) != 0) {
             return results;
         }
         int size = toDo.size();
+        System.out.println(myIbisId + " -> SIZE -> " + size);
         while(count < size) {
             cube = getFromPool(true);
+            if(cube == null) {
+                System.out.println(myIbisId + " -> OMG CUBE NULL");
+            }
             results += solution(cube, cache);
             count++;
         }
