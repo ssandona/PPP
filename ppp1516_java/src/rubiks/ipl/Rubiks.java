@@ -68,7 +68,6 @@ public class Rubiks {
         }
 
         if (cube.getTwists() >= cube.getBound()) {
-            System.out.println(myIbisId + " -> BOUND");
             return 0;
         }
         //generate childrens
@@ -82,7 +81,6 @@ public class Rubiks {
                 toDo.add(child);
                 //cache.put(child);
             }
-            System.out.println(myIbisId + " -> childreanAdded, new size -> " + toDo.size());
         }
         return 0;
     }
@@ -284,7 +282,7 @@ public class Rubiks {
         //while there are bounds to evaluate
         while(!end) {
             results = 0;
-            if(!(end = waitForInitialWork())) {
+            if((end = waitForInitialWork())) {
                 continue;
             }
             System.out.println(myIbisId + " -> another round");
