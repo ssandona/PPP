@@ -139,6 +139,22 @@ public class Rubiks{
         return receivedWork;
     }
 
+    //method called to ask work to the server (local work pool empty)
+    public static void waitForInitialWork() throws IOException, ClassNotFoundException {
+        Cube receivedWork = null;
+        //get the work
+        ReadMessage r = workReceiver.receive();
+        receivedWork = (Cube)r.readObject();
+        r.finish();
+        if(receivedWork == null) {
+            System.out.println(myIbisId + " -> NULLworkReceived");
+        } else {
+            System.out.println(myIbisId + " -> workReceived");
+        }
+        toDo.add(receivedWork);
+
+    }
+
     //extract the last element of the work pool and return it, null if the work pool is empty
     //method calle directly by the server and indirectly (through getWork()) by the Slaves
     synchronized public static Cube getFromPool (boolean sameNode) {
@@ -262,6 +278,7 @@ public class Rubiks{
 
         //while there are bounds to evaluate
         while(!end) {
+            waitForInitialWork();
             //while there is work for the actual bound
             while((cube = getWork()) != null) {
                 //cache initialization with rhe first received cube
@@ -277,10 +294,37 @@ public class Rubiks{
     }
 
     public int solutionsServer(CubeCache cache) throws InterruptedException {
-        //increase the number of ibis workes (at least me)
         syncTermination.increaseBusyWorkers();
         int results = 0;
         Cube cube;
+        int count=0;
+
+        //create first two levels of the tree
+        cube = getFromPool(true);
+        if((results=solution(cube,cache))!=0){
+            return results;
+        }
+        int size=toDo.size();
+        while(cont<size){
+            cube = getFromPool(true);
+            results+=solution(cube,cache);
+        }
+        if(results!=0){
+            return results;
+        }
+
+        //send initial cubes to the slaves
+        for (IbisIdentifier joinedIbis : joinedIbises) {
+            if(joinedIbis.equals(myIbisId)) {
+                continue;
+            }
+            cube = getFromPool(false);
+            workSender.connect(joinedIbis, "Work");
+            WriteMessage reply = workSender.newMessage();
+            reply.writeObject(cube);
+            reply.finish();
+            workSender.disconnect(joinedIbis, "Work");
+        }
 
         //while the work pool is not empty, continue to work
         while((cube = getFromPool(true)) != null) {
