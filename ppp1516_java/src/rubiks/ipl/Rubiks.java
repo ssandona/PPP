@@ -296,7 +296,7 @@ public class Rubiks {
         }
     }
 
-    public int sendInitialWork(boolean terminated) {
+    public int sendInitialWork(boolean terminated, CubeCache cache) {
         Cube cube = null;
         int count = 0;
         int results=0;
@@ -350,7 +350,7 @@ public class Rubiks {
         int results = 0;
         Cube cube;
 
-        if((results=sendInitialWork(false))!=0){
+        if((results=sendInitialWork(false,cache))!=0){
             return results;
         }
 
@@ -395,7 +395,7 @@ public class Rubiks {
 
 
         initialCube = generateCube();
-        CubeCache cubeCache = new CubeCache(initialCube.getSize());
+        CubeCache cache = new CubeCache(initialCube.getSize());
 
         syncTermination = new SyncTermination();
 
@@ -421,9 +421,9 @@ public class Rubiks {
             System.out.println("InitialCube : (" + initialCube.getBound() + ", " + initialCube.getTwists() + ")");
             toDo.add(initialCube);
             System.out.print(" " + bound);
-            result = solutionsServer(cubeCache);
+            result = solutionsServer(cache);
             if(result == 0) {
-                sendInitialWork(true);
+                sendInitialWork(true,cache);
             }
         }
 
