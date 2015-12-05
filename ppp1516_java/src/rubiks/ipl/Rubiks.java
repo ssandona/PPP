@@ -81,6 +81,7 @@ public class Rubiks {
                 toDo.add(child);
                 //cache.put(child);
             }
+            System.out.println(myIbisId + " -> childreanAdded, new size -> "+toDo.size());
         }
         return 0;
     }
@@ -155,7 +156,7 @@ public class Rubiks {
             System.out.println(myIbisId + " -> InitialWorkReceived");
             return false;
         }
-        
+
 
     }
 
@@ -281,8 +282,8 @@ public class Rubiks {
 
         //while there are bounds to evaluate
         while(!end) {
-            results=0;
-            if(!(end=waitForInitialWork())){
+            results = 0;
+            if(!(end = waitForInitialWork())) {
                 continue;
             }
             System.out.println(myIbisId + " -> another round");
@@ -299,10 +300,10 @@ public class Rubiks {
         }
     }
 
-    public int sendInitialWork(boolean terminated, CubeCache cache) throws IOException, ConnectionFailedException,InterruptedException {
+    public int sendInitialWork(boolean terminated, CubeCache cache) throws IOException, ConnectionFailedException, InterruptedException {
         Cube cube = null;
         int count = 0;
-        int results=0;
+        int results = 0;
 
         if(terminated) {
             //send initial cubes to the slaves
@@ -320,6 +321,9 @@ public class Rubiks {
 
         //create first two levels of the tree
         cube = getFromPool(true);
+        if(cube == null) {
+            System.out.println(myIbisId + " -> OMG the first cube is null");
+        }
         if((results = solution(cube, cache)) != 0) {
             return results;
         }
@@ -333,7 +337,7 @@ public class Rubiks {
             return results;
         }
 
-        System.out.println(myIbisId + " -> toSIZE -> "+toDo.size());
+        System.out.println(myIbisId + " -> toDoSIZE -> " + toDo.size());
 
         //send initial cubes to the slaves
         for (IbisIdentifier joinedIbis : joinedIbises) {
@@ -357,7 +361,7 @@ public class Rubiks {
         int results = 0;
         Cube cube;
 
-        if((results=sendInitialWork(false,cache))!=0){
+        if((results = sendInitialWork(false, cache)) != 0) {
             return results;
         }
 
@@ -424,7 +428,7 @@ public class Rubiks {
             result = solutionsServer(cache);
         }
         long end = System.currentTimeMillis();
-        sendInitialWork(true,cache);
+        sendInitialWork(true, cache);
 
         System.out.println();
         System.out.println("Solving cube possible in " + result + " ways of "
@@ -459,7 +463,6 @@ public class Rubiks {
         solutionsWorkers();
 
         //close all the ports
-        workRequestSender.close();
         workRequestSender.close();
         Thread.sleep(1000);
         workReceiver.close();
