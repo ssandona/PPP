@@ -423,6 +423,7 @@ public class Rubiks {
         System.out.print("Bound now:");
 
         long start = System.currentTimeMillis();
+        bound++;
         while (result == 0) {
             bound++;
             initialCube.setBound(bound);
