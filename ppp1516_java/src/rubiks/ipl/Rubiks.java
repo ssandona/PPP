@@ -332,7 +332,7 @@ public class Rubiks {
     public int solutionsServer(CubeCache cache) throws InterruptedException, IOException {
         syncTermination.increaseBusyWorkers();
         int results = 0;
-        Cube cube;
+        Cube cube=null;
         int twist = 0;
         int bound=cube.getBound();
         cube= getFromPool(true);
