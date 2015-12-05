@@ -29,6 +29,34 @@ Solving cube possible in 2 ways of 7 steps
 9 -> 38976 	4.96
 
 
+size4 - Leiden
+	time	speedup
+1 -> 225311	
+2 -> 127493	1.76
+4 -> 65249	3.45
+8 -> 34590 	6.51
+16 -> 20168 	11.17
+
+twists12 - Leiden
+
+	time	speedup
+1 -> 144476
+2 -> 82597	1.74
+4 -> 41759	3.45
+8 -> 23597	6.12
+16 -> 14983	9.64
+
+standard - Leiden
+
+	time	speedup
+1 -> 12383
+2 -> 7483
+4 -> 4466
+8 -> 3620
+16-> 3697
+
+
+
 size 3 (twist 12)
 4 ways of 8 steps
 
@@ -37,6 +65,6 @@ size 3 (twist 12)
 6 -> 37267	5.04
 12 -> 23332	8.06
 
-size 5
+size 3 (twist 13)
 2 ways of 7 steps
 1-> 
