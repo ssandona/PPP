@@ -346,7 +346,7 @@ public class Rubiks {
         //while the work pool is not empty, continue to work
         while((cube = getFromPool(true)) != null) {
             if(cube.getTwists() >= 3) {
-                System.out.println(myIbisId + " -> size " + toDo.getSize() + " cubes");
+                System.out.println(myIbisId + " -> size " + toDo.size() + " cubes");
                 sendInitialWork(false, cache);
             }
             results += solution(cube, cache);
