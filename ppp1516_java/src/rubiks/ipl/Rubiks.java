@@ -345,7 +345,7 @@ public class Rubiks {
         return 0;
     }
 
-    public int solutionsServer(CubeCache cache) throws InterruptedException {
+    public int solutionsServer(CubeCache cache) throws InterruptedException, IOException {
         syncTermination.increaseBusyWorkers();
         int results = 0;
         Cube cube;
