@@ -129,7 +129,12 @@ public class Rubiks implements MessageUpcall  {
         ReadMessage r = workReceiver.receive();
         receivedWork = (Cube)r.readObject();
         r.finish();
-        System.out.println(myIbisId + " -> workReceived");
+        if(receivedWork == null) {
+            System.out.println(myIbisId + " -> NULLworkReceived");
+        }
+        else{
+            System.out.println(myIbisId + " -> workReceived");
+        }
 
         //workRequestSender.disconnect(doner, "WorkReq");
         return receivedWork;
@@ -181,7 +186,11 @@ public class Rubiks implements MessageUpcall  {
                 e.printStackTrace();
             }
         }
-        System.out.println(myIbisId + " -> tryToSendCube");
+        if(cube == null) {
+            System.out.println(myIbisId + " -> tryToSendNULL");
+        } else {
+            System.out.println(myIbisId + " -> tryToSendCube");
+        }
         // create a reply message
         WriteMessage reply = workSender.newMessage();
         reply.writeObject(cube);
@@ -207,6 +216,8 @@ public class Rubiks implements MessageUpcall  {
     //or if the system can terminate
     public static boolean sendResults(int res) throws IOException {
         System.out.println(myIbisId + " -> send results to server");
+        System.out.println(myIbisId + " -> computed "+ valuatedCubes+" cubes");
+        valuatedCubes=0;
         boolean termination;
         //send local work receiving port
         WriteMessage resMsg = resultsSender.newMessage();
@@ -238,9 +249,9 @@ public class Rubiks implements MessageUpcall  {
     }
 
 
-    public void solutionsWorkers() throws IOException, ClassNotFoundException{
+    public void solutionsWorkers() throws IOException, ClassNotFoundException {
         Cube cube = null;
-        CubeCache cache=null;
+        CubeCache cache = null;
         boolean first = true;
         int results = 0;
         boolean end = false;
@@ -257,6 +268,7 @@ public class Rubiks implements MessageUpcall  {
                 results += solution(cube, cache);
             }
             end = sendResults(results);
+            System.out.println(myIbisId + " -> another round");
         }
     }
 
@@ -273,10 +285,12 @@ public class Rubiks implements MessageUpcall  {
                 cache.put(cube);
             }
         }
-
+        System.out.println(myIbisId + " -> computed "+ valuatedCubes+" cubes");
+        valuatedCubes=0;
         //add my results to the cumulative results
+        System.out.println(myIbisId + " -> wait termination");
         syncTermination.increaseResults(results);
-
+        System.out.println(myIbisId + " -> terminated");
         //wait until all the slaves terminate the calculation for this bound and get the cumulative results
         int boundResult = syncTermination.waitTermination();
         return boundResult;
