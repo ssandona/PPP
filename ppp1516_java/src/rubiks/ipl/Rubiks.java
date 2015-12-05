@@ -32,8 +32,8 @@ public class Rubiks implements MessageUpcall  {
     static Object lock = new Object();
 
     static IbisIdentifier[] joinedIbises;
-    private final Ibis myIbis;
-    static int myIbisId;
+    private Ibis myIbis;
+    static IbisIdentifier myIbisId;
     static int nodes;
 
     static ReceivePort workRequestReceiver;
