@@ -16,7 +16,7 @@ public class Rubiks implements MessageUpcall  {
 
     static PortType portTypeMto1 = new PortType(PortType.COMMUNICATION_RELIABLE,
             PortType.SERIALIZATION_OBJECT, PortType.RECEIVE_EXPLICIT,
-            PortType.CONNECTION_MANY_TO_ONE, PortType.RECEIVE_POLL);
+            PortType.CONNECTION_MANY_TO_ONE);
 
     static PortType portType1to1 = new PortType(PortType.COMMUNICATION_RELIABLE,
             PortType.SERIALIZATION_OBJECT, PortType.RECEIVE_EXPLICIT,
@@ -24,6 +24,10 @@ public class Rubiks implements MessageUpcall  {
 
     static PortType portTypeMto1Up = new PortType(PortType.COMMUNICATION_RELIABLE,
             PortType.SERIALIZATION_OBJECT, PortType.CONNECTION_MANY_TO_ONE, PortType.RECEIVE_AUTO_UPCALLS);
+
+    static PortType portType1toM = new PortType(PortType.COMMUNICATION_RELIABLE,
+            PortType.SERIALIZATION_OBJECT, PortType.RECEIVE_EXPLICIT,
+            PortType.CONNECTION_ONE_TO_MANY);
 
     static IbisCapabilities ibisCapabilities = new IbisCapabilities(
         IbisCapabilities.ELECTIONS_STRICT, IbisCapabilities.MEMBERSHIP_TOTALLY_ORDERED);
