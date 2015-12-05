@@ -334,11 +334,13 @@ public class Rubiks {
         int results = 0;
         Cube cube;
         int twist = 0;
+        boolean first=true;
         //while the work pool is not empty, continue to work
         while((cube = getFromPool(true)) != null) {
-            if(cube.getTwists() >= 3) {
+            if(cube.getTwists() >= 3 && first) {
                 System.out.println(myIbisId + " -> size " + toDo.size() + " cubes");
                 sendInitialWork(false, cache);
+                first=false;
             }
             results += solution(cube, cache);
             if(cube != initialCube) {
