@@ -346,6 +346,7 @@ public class Rubiks{
         while (result == 0) {
             bound++;
             initialCube.setBound(bound);
+            System.out.println("InitialCube : (" + initialCube.getBound() + ", " + initialCube.getTwists() + ")");
             toDo.add(initialCube);
             System.out.print(" " + bound);
             result = solutionsServer(cubeCache);
