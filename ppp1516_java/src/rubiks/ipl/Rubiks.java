@@ -246,12 +246,6 @@ public class Rubiks {
             workSender.connect(requestor);
 
             Cube cube = getFromPool(false);
-            if(cube != null) {
-                try {
-                } catch(InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
             if(cube == null) {
                 System.out.println(myIbisId + " -> tryToSendNULL");
             } else {
