@@ -331,6 +331,9 @@ public class Rubiks {
             if(cube == null) {
                 System.out.println(myIbisId + " -> OMG CUBE NULL");
             }
+            else{
+                System.out.println(myIbisId + " -> CUBE GOOD");
+            }
             results += solution(cube, cache);
             count++;
         }
