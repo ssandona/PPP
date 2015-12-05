@@ -334,12 +334,13 @@ public class Rubiks {
         int results = 0;
         Cube cube;
         int twist = 0;
-        cube= cube.getFromPool(true);
-        results+=solution(c,cache);
+        cube= getFromPool(true);
+        results+=solution(cube,cache);
         if(results!=0){
             return results;
         }
         int n=toDo.size();
+        int i;
         for(i=0;i<n;i++){
             cube=toDo.remove(0);
             results+=solution(cube,cache);
