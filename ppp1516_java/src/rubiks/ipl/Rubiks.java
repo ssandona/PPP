@@ -145,7 +145,7 @@ public class Rubiks {
                         return true;
                     }
                 } catch(Exception e) {
-
+                    System.out.println("il bastardo si è scollegato");
                 }
             }
             target = (target + 1) % nodes;
@@ -380,7 +380,7 @@ public class Rubiks {
 
 
 
-    public static int solutionsWorkers() throws Exception {
+    public static int solutionsWorkers(Ibis ibis) throws Exception {
         //System.out.println("Ibis[" + myIntIbisId + "] -> solutionsWorkers");
         ArrayList<Cube> actual;
         CubeCache cache = null;
@@ -433,10 +433,10 @@ public class Rubiks {
         return result;
     }
 
-    public static int solutionsServer(ReceivePort resultsReceiver) throws Exception {
+    public static int solutionsServer(ReceivePort resultsReceiver, Ibis ibis) throws Exception {
         //System.out.println("Ibis[" + myIntIbisId + "] -> SolutionsServer");
         int i;
-        result = solutionsWorkers();
+        result = solutionsWorkers(ibis);
         //System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes + " workRequests: " + requestsForWork);
         //workManager.printSize();
         valuatedCubes = 0;
@@ -478,7 +478,7 @@ public class Rubiks {
             //System.out.println("InitialCube : (" + initialCube.getBound() + ", " + initialCube.getTwists() + ")");
             add(initialCube);
             System.out.println(" " + bound);
-            result = solutionsServer(resultsReceiver);
+            result = solutionsServer(resultsReceiver, ibis);
             //System.out.println("Result :" + result);
 
             //say to all to continue
@@ -529,7 +529,7 @@ public class Rubiks {
 
         boolean end = false;
         while(!end) {
-            result = solutionsWorkers();
+            result = solutionsWorkers(ibis);
             //System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: "  + valuatedCubes + " workRequests: " + requestsForWork);
             //workManager.printSize();
             valuatedCubes = 0;
