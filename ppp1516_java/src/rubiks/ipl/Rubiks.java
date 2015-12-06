@@ -210,9 +210,6 @@ public class Rubiks {
                     }
                     c = toDoTree.get(actualTreeLevel).remove(n);
                     nodesOnTree--;
-                    if(n == 1) {
-                        actualTreeLevel--;
-                    }
                     printTree();
                     //c = toDo.remove(n);
                     //toDoWeight -= Math.pow(children,(c.getBound() - c.getTwists()));
