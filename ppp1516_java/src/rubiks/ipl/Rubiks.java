@@ -601,18 +601,19 @@ public class Rubiks {
         return cube;
     }
 
-    public int generateFirstLevel(Cube cube, CubeCache cache, ArrayList<Cube> toDo) {
-        results = solutionInitial(cube, cache, toDO);
+    public static int generateFirstLevel(Cube cube, CubeCache cache, ArrayList<Cube> toDo) {
+        results = solutionInitial(cube, cache, toDo);
         System.out.println(myIbisId + " -> FIRST " + toDo.size() + " cubes");
         return results;
     }
 
-    public int generateSecondLevel(CubeCache cache, ArrayList<Cube> toDo) {
+    public static int generateSecondLevel(CubeCache cache, ArrayList<Cube> toDo) {
         int n = toDo.size();
+        int results=0;
         System.out.println(myIbisId + " -> SECOND " + n + " cubes");
         int i;
         for(i = 0; i < n; i++) {
-            cube = toDO.remove(0);
+            Cube cube = toDo.remove(0);
             results += solutionInitial(cube, cache, toDo);
         }
         return results;
@@ -633,6 +634,7 @@ public class Rubiks {
         long start = System.currentTimeMillis();
         int bound = 2;
         int result = 0;
+        int i;
         /*ArrayList<Cube> work = workManager.getWork(true);
         Cube cube = work.get(0);*/
         //System.out.println("SolutionsServer");
@@ -647,7 +649,7 @@ public class Rubiks {
             initialCube.setBound(bound);
             result = generateFirstLevel(initialCube, cache, toDo);
             if(result != 0) {
-                results = generateSecondLevel(cache, toDo);
+                result = generateSecondLevel(cache, toDo);
                 if(result != 0) {
                     bound = 2;
                 }
