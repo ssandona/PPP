@@ -728,6 +728,7 @@ public class Rubiks {
         while(!end) {
             bound++;
             initialCube.setBound(bound);
+            toDo=new ArrayList<Cube>();
             result = generateFirstLevel(initialCube, cache, toDo);
             if(result != 0) {
                 end = true;
