@@ -104,43 +104,48 @@ public class Rubiks {
         for(i = 0; i < nodes; i++) {
             doner = joinedIbises[target];
             if(!doner.equals(myIbisId)) {
-                requestsForWork++;
-                workRequestSender.connect(doner, "WorkReq");
-                WriteMessage task = workRequestSender.newMessage();
-                task.writeInt(myIntIbisId);
-                task.finish();
+                try {
+                    requestsForWork++;
+                    workRequestSender.connect(doner, "WorkReq");
+                    WriteMessage task = workRequestSender.newMessage();
+                    task.writeInt(myIntIbisId);
+                    task.finish();
 
-                ReadMessage r = workReceiver.receive();
-                int cubes = r.readInt();
-                r.finish();
-                if(cubes == 0) {
-                    //System.out.println("Ibis[" + myIntIbisId + "] -> no work");
-                } else {
-                    r = workReceiver.receive();
-                    //System.out.println("Ibis[" + myIntIbisId + "] -> work!!! " + cubes + " cubes");
-                    receivedWork = new Cube[cubes];
-                    r.readArray(receivedWork);
+
+                    ReadMessage r = workReceiver.receive();
+                    int cubes = r.readInt();
                     r.finish();
-                }
-                //System.out.println("ReceivedMyWork");
-
-
-                /*int n=r.readInt();
-                System.out.println("received n");*/
-
-                workRequestSender.disconnect(doner, "WorkReq");
-                if(receivedWork != null && receivedWork.length != 0) {
-                    //System.out.println("Ibis[" + myIntIbisId + "] -> received " + receivedWork.length + " cubes");
-                    //toDo = new ArrayList<Cube>(Arrays.asList(receivedWork));
-                    int j;
-                    for(j = 0; j < receivedWork.length; j++) {
-                        Cube c = receivedWork[j];
-                        if(c == null) {
-                            System.out.println("Ibis[" + myIntIbisId + "] -> AHAHHA 5");
-                        }
-                        add(c);
+                    if(cubes == 0) {
+                        //System.out.println("Ibis[" + myIntIbisId + "] -> no work");
+                    } else {
+                        r = workReceiver.receive();
+                        //System.out.println("Ibis[" + myIntIbisId + "] -> work!!! " + cubes + " cubes");
+                        receivedWork = new Cube[cubes];
+                        r.readArray(receivedWork);
+                        r.finish();
                     }
-                    return true;
+                    //System.out.println("ReceivedMyWork");
+
+
+                    /*int n=r.readInt();
+                    System.out.println("received n");*/
+
+                    workRequestSender.disconnect(doner, "WorkReq");
+                    if(receivedWork != null && receivedWork.length != 0) {
+                        //System.out.println("Ibis[" + myIntIbisId + "] -> received " + receivedWork.length + " cubes");
+                        //toDo = new ArrayList<Cube>(Arrays.asList(receivedWork));
+                        int j;
+                        for(j = 0; j < receivedWork.length; j++) {
+                            Cube c = receivedWork[j];
+                            if(c == null) {
+                                System.out.println("Ibis[" + myIntIbisId + "] -> AHAHHA 5");
+                            }
+                            add(c);
+                        }
+                        return true;
+                    }
+                } catch(Exception e) {
+
                 }
             }
             target = (target + 1) % nodes;
@@ -384,8 +389,16 @@ public class Rubiks {
         int i;
         Cube cube;
         boolean end = false;
+        int elab = 0;
+
+        //port in which new work requests will be received
+        workRequestReceiver = ibis.createReceivePort(portTypeMto1Poll, "WorkReq");
+        // enable connections
+        workRequestReceiver.enableConnections();
+
         while(!end) {
             while((actual = getWork(true)) != null && actual.size() != 0) {
+                elab++;
                 /*if(actual.size() != 1) {
                     System.out.println("Ibis[" + myIntIbisId + "] -> ActualSize PROBLEMS");
                 }*/
@@ -406,12 +419,13 @@ public class Rubiks {
                 if(cube != initialCube) {
                     cache.put(cube);
                 }
-                ReadMessage m=workRequestReceiver.poll();
-                if(m!=null){
+                ReadMessage m = workRequestReceiver.poll();
+                if(m != null) {
                     workRequestFromOthers(m);
                 }
 
             }
+            workRequestReceiver.close();
             //System.out.println("Ibis[" + myIntIbisId + "] -> solutionsWorkers -> No work");
             end = tokenManager.checkTermination();
         }
@@ -617,10 +631,7 @@ public class Rubiks {
         tokenManager = new TokenManager();
 
 
-        //port in which new work requests will be received
-        workRequestReceiver = ibis.createReceivePort(portTypeMto1Poll, "WorkReq");
-        // enable connections
-        workRequestReceiver.enableConnections();
+
 
 
         //port in which new work requests will be sent
