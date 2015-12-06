@@ -208,7 +208,7 @@ public class Rubiks {
                         //toDo=toDoTree.get(actualTreeLevel);
                         n = size[actualTreeLevel] - 1;
                     }
-                    c=toDoTree[actualTreeLevel][size[actualTreeLevel]];
+                    c=toDoTree[actualTreeLevel][n];
                     size[actualTreeLevel]--;
                     //c = toDo.remove(n);
                     nodesOnTree--;
@@ -248,7 +248,7 @@ public class Rubiks {
                         //actual = toDoTree.get(i);
                         int amount = size[i] / 2;
                         for(j = 0; j < amount; j++) {
-                            workToReturn.add(toDoTree[i][size[i]]);
+                            workToReturn.add(toDoTree[i][size[i]-1]);
                             size[i]--;
                             nodesOnTree--;
                         }
