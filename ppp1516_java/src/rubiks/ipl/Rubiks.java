@@ -108,11 +108,12 @@ public class Rubiks {
                 try {
                     requestsForWork++;
                     workRequestSender.connect(doner, "WorkReq");
+                    System.out.println("Ibis[" + myIntIbisId + "] -> send");
                     WriteMessage task = workRequestSender.newMessage();
                     task.writeInt(myIntIbisId);
                     task.finish();
 
-
+                    System.out.println("Ibis[" + myIntIbisId + "] -> receive");
                     ReadMessage r = workReceiver.receive();
                     int cubes = r.readInt();
                     r.finish();
