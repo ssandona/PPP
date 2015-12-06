@@ -210,7 +210,7 @@ public class Rubiks {
                     int i,j;
                     ArrayList<Cube> actual;
                     for(i=0;i<actualTreeLevel;i++){
-                        actual=toDoTree[i];
+                        actual=toDoTree.get(i);
                         int amount=actual.size()/2;
                         for(j=0;j<amount;j++){
                             workToReturn.add(actual.remove(0));
