@@ -102,8 +102,7 @@ public class Rubiks {
             }
             //System.out.println("Ibis[" + myIntIbisId + "] -> added cube");
         }
-
-
+        
         public static boolean askForWork() throws IOException, ClassNotFoundException {
             //System.out.println("Ibis[" + myIntIbisId + "] -> askForWork");
             int i;
