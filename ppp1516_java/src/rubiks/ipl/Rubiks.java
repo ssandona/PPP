@@ -185,8 +185,8 @@ public class Rubiks {
                     while(distributed < weightToDistribute) {
                         Cube c = toDo.remove(0);
                         workToReturn.add(c);
-                        toDoWeight -= Math.pow(6*(children,(c.getBound() - c.getTwists()));
-                        distributed += Math.pow(6*(children,(c.getBound() - c.getTwists()));
+                        toDoWeight -= Math.pow(children,(c.getBound() - c.getTwists()));
+                        distributed += Math.pow(children,(c.getBound() - c.getTwists()));
                         /*if(c == null) {
                             System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 2, (amount, even, index) -> (" + amount + "," + even + "," + index + ")");
 
