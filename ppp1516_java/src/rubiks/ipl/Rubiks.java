@@ -127,7 +127,7 @@ public class Rubiks {
                 }*/
                 //toDo.add(cube);
                 actualTreeLevel = cube.getTwists();
-                toDo=toDoTree.get(actualTreeLevel)
+                toDo=toDoTree.get(actualTreeLevel);
 
                 toDo.add(cube);
                 nodesOnTree++;
