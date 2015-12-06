@@ -610,12 +610,12 @@ public class Rubiks {
     public static int generateSecondLevel(CubeCache cache, ArrayList<Cube> toDo) {
         int n = toDo.size();
         int results=0;
-        System.out.println(myIbisId + " -> SECOND " + n + " cubes");
         int i;
         for(i = 0; i < n; i++) {
             Cube cube = toDo.remove(0);
             results += solutionInitial(cube, cache, toDo);
         }
+        System.out.println(myIbisId + " -> SECOND " + n + " cubes");
         return results;
     }
 
