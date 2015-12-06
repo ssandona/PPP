@@ -4,7 +4,6 @@ import ibis.ipl.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.io.IOException;
-import java.lang.Math;
 
 /**
  * Solver for rubik's cube puzzle.
@@ -63,9 +62,6 @@ public class Rubiks {
     static int level;
     static int target;
 
-    static int children;
-    static boolean first = true;
-
     static int valuatedCubes = 0;
     static int requestsForWork = 0;
 
@@ -97,11 +93,11 @@ public class Rubiks {
                     System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAH 6");
                 }*/
                 toDo.add(cube);
-                //toDoWeight += (cube.getBound() - cube.getTwists());
-                toDoWeight += Math.pow(children, (cube.getBound() - cube.getTwists()));
+                toDoWeight += (cube.getBound() - cube.getTwists());
             }
             //System.out.println("Ibis[" + myIntIbisId + "] -> added cube");
         }
+
 
         public static boolean askForWork() throws IOException, ClassNotFoundException {
             //System.out.println("Ibis[" + myIntIbisId + "] -> askForWork");
@@ -166,7 +162,7 @@ public class Rubiks {
                 synchronized(lock) {
                     int n = toDo.size() - 1;
                     c = toDo.remove(n);
-                    toDoWeight -= Math.pow(children,(c.getBound() - c.getTwists()));
+                    toDoWeight -= (c.getBound() - c.getTwists());
                 }
                 /*if(c == null) {
                     System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 1, index -> "+n);
@@ -183,7 +179,7 @@ public class Rubiks {
                     while(distributed < weightToDistribute) {
                         Cube c = toDo.remove(0);
                         workToReturn.add(c);
-                        toDoWeight -= Math.pow(children,(c.getBound() - c.getTwists()));
+                        toDoWeight -= (c.getBound() - c.getTwists());
                         distributed += (c.getBound() - c.getTwists());
                         /*if(c == null) {
                             System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 2, (amount, even, index) -> (" + amount + "," + even + "," + index + ")");
@@ -389,6 +385,7 @@ public class Rubiks {
         //System.out.println("Ibis[" + myIntIbisId + "] -> solutionsWorkers");
         ArrayList<Cube> actual;
         CubeCache cache = null;
+        boolean first = true;
         int result = 0;
         int i;
         Cube cube;
@@ -407,7 +404,6 @@ public class Rubiks {
                 //System.out.println("Ibis[" + myIntIbisId + "] -> ReceivedWork, twists: " + cube.getTwists() + ", bound: " + cube.getBound());
                 if(first) {
                     cache = new CubeCache(cube.getSize());
-                    children=6*(cube.getSize()-1);
                     first = false;
                 }
                 result += solution(cube, cache);
@@ -460,7 +456,6 @@ public class Rubiks {
             }
             terminationSender.connect(joinedIbis, "continue");
         }
-        children=6*(initialCube.getSize()-1);
 
         //Thread.sleep(1000);
         WriteMessage task;
