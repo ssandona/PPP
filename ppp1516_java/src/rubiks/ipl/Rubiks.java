@@ -602,7 +602,7 @@ public class Rubiks {
     }
 
     public static int generateFirstLevel(Cube cube, CubeCache cache, ArrayList<Cube> toDo) {
-        results = solutionInitial(cube, cache, toDo);
+        int results = solutionInitial(cube, cache, toDo);
         System.out.println(myIbisId + " -> FIRST " + toDo.size() + " cubes");
         return results;
     }
@@ -642,6 +642,7 @@ public class Rubiks {
 
         CubeCache cache = new CubeCache(initialCube.getSize());
         ArrayList<Cube> toDo=new ArrayList<Cube>();
+        WriteMessage task;
 
         System.out.println("bound");
         while(result == 0) {
@@ -669,7 +670,6 @@ public class Rubiks {
             }
 
             //Thread.sleep(1000);
-            WriteMessage task;
             System.out.println(" " + bound);
             result = solutionsServer(resultsReceiver);
             //System.out.println("Result :" + result);
