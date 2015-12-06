@@ -67,6 +67,7 @@ public class Rubiks {
 
     static int valuatedCubes = 0;
     static int requestsForWork = 0;
+    static int terminationChecking=0;
 
     static ReceivePort workRequestReceiver;
     static SendPort workRequestSender;
@@ -371,6 +372,7 @@ public class Rubiks {
         static SyncToken sync = new SyncToken();
 
         public static boolean checkTermination () throws Exception {
+            terminationChecking++;
             //System.out.println("Ibis[" + myIntIbisId + "] -> checkTermination");
             //create a new token
             Token t = new Token(myIntIbisId);
@@ -533,10 +535,11 @@ public class Rubiks {
         //System.out.println("Ibis[" + myIntIbisId + "] -> SolutionsServer");
         int i;
         result = solutionsWorkers();
-        System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes + " workRequests: " + requestsForWork);
+        System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes + " workRequests: " + requestsForWork+ "terminationChecking "+terminationChecking);
         //workManager.printSize();
         valuatedCubes = 0;
         requestsForWork = 0;
+        terminationChecking=0;
         for(i = 0; i < nodes - 1; i++) {
             ReadMessage r = resultsReceiver.receive();
             result += r.readInt();
@@ -751,10 +754,11 @@ public class Rubiks {
             }
 
             result = solutionsWorkers();
-            System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: "  + valuatedCubes + " workRequests: " + requestsForWork);
+            System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: "  + valuatedCubes + " workRequests: " + requestsForWork+ "terminationChecking "+terminationChecking);
             //workManager.printSize();
             valuatedCubes = 0;
             requestsForWork = 0;
+            terminationChecking=0;
             //communicate my results
             WriteMessage resultMessage = resultsSender.newMessage();
             resultMessage.writeInt(result);
