@@ -81,7 +81,7 @@ public class Rubiks {
     static int children;
     static CubeCache cache = null;
 
-    static String arguments;
+    static String[] arguments;
 
 
     public static final boolean PRINT_SOLUTION = false;
