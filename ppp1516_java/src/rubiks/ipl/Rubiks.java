@@ -128,7 +128,7 @@ public class Rubiks {
 
                 //toDo.add(cube);
                 nodesOnTree++;
-                //printTree();
+                printTree();
                 //toDoWeight += Math.pow(children,(cube.getBound() - cube.getTwists()));
             }
             //System.out.println("Ibis[" + myIntIbisId + "] -> added cube");
