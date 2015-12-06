@@ -88,6 +88,7 @@ public class Rubiks {
         //static ArrayList<Cube> toDo = new ArrayList<Cube>();
         static ArrayList<ArrayList<Cube>> toDoTree = new ArrayList<ArrayList<Cube>>();
         static int actualTreeLevel = 0;
+        static int nodesOnTree=0;
         static int toDoWeight = 0;
         static Object lock = new Object();
 
@@ -128,6 +129,7 @@ public class Rubiks {
                 actualTreeLevel = cube.getTwists();
 
                 toDoTree.get(actualTreeLevel).add(cube);
+                nodesOnTree++;
                 printTree();
                 //toDoWeight += Math.pow(children,(cube.getBound() - cube.getTwists()));
             }
@@ -190,7 +192,7 @@ public class Rubiks {
 
         synchronized public static ArrayList<Cube> getFromPool (boolean sameNode) {
             ArrayList<Cube> workToReturn = new ArrayList<Cube>();
-            if(toDoTree.get(1).size() == 0 && actualTreeLevel>0) {
+            if(nodesOnTree == 0) {
                 return null;
             }
             if(sameNode) {
@@ -206,6 +208,7 @@ public class Rubiks {
                         n = toDoTree.get(actualTreeLevel).size() - 1;
                     }
                     c = toDoTree.get(actualTreeLevel).remove(n);
+                    nodesOnTree--;
                     if(n == 1) {
                         actualTreeLevel--;
                     }
@@ -245,6 +248,7 @@ public class Rubiks {
                         int amount = actual.size() / 2;
                         for(j = 0; j < amount; j++) {
                             workToReturn.add(actual.remove(0));
+                            nodesOnTree--;
                         }
                     }
 
