@@ -85,15 +85,15 @@ public class Rubiks {
     public static final boolean PRINT_SOLUTION = false;
 
     static class WorkManager implements MessageUpcall {
-        static ArrayList<Cube> toDo = new ArrayList<Cube>();
+        //static ArrayList<Cube> toDo = new ArrayList<Cube>();
         static ArrayList<Cube>[] toDoTree = new ArrayList<Cube>[20];
-        static actualTreeLevel = 0;
+        static int actualTreeLevel = 0;
         static int toDoWeight = 0;
         static Object lock = new Object();
 
-        public static void printSize() {
+        /*synchronized public static boolean availableWork() {
             System.out.println("Ibis[" + myIntIbisId + "] -> SIZE: " + toDo.size());
-        }
+        }*/
 
         public static void add(Cube cube) {
             synchronized(lock) {        //Only one PrintThread at a time can call syn1.display()
@@ -227,16 +227,20 @@ public class Rubiks {
         //on the other nodes
         public static ArrayList<Cube> getWork(boolean sameNode) throws IOException, ClassNotFoundException {
             //System.out.println("Ibis[" + myIntIbisId + "] -> getWork");
+            ArrayList<Cube> work=getFromPool(sameNode);
             if(sameNode) {
-                if(toDo.size() == 0) {
+                if(w==null) {
                     //System.out.println("Ibis[" + myIntIbisId + "] -> toDo Empty");
                     boolean b = askForWork();
                     if(!b) {
                         return null;
                     }
+                    else{
+                        work=getFromPool(sameNode);
+                    }
                 }
             }
-            return getFromPool(sameNode);
+            return work;
 
         }
 
@@ -256,11 +260,11 @@ public class Rubiks {
             ArrayList<Cube> subPool;
             Cube[] subPoolToSend = new Cube[0];
             //Cube[] subPoolToSend = null;
-            if(toDo.size() == 0) {
+            /*if(toDo.size() == 0) {
                 subPool = null;
-            } else {
+            } else {*/
                 subPool = getWork(false);
-            }
+            //}
             //update node color in the eyes of every other node
             if(subPool != null) {
                 if(myIntIbisId > otherIbisId) {
