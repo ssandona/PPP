@@ -515,6 +515,61 @@ public class Rubiks {
         return result;
     }
 
+    public static Cube generateCube() {
+        Cube cube = null;
+
+        // default parameters of puzzle
+        int size = 3;
+        int twists = 11;
+        int seed = 0;
+        String fileName = null;
+
+        // number of threads used to solve puzzle
+        // (not used in sequential version)
+
+        for (int i = 0; i < arguments.length; i++) {
+            if (arguments[i].equalsIgnoreCase("--size")) {
+                i++;
+                size = Integer.parseInt(arguments[i]);
+            } else if (arguments[i].equalsIgnoreCase("--twists")) {
+                i++;
+                twists = Integer.parseInt(arguments[i]);
+            } else if (arguments[i].equalsIgnoreCase("--seed")) {
+                i++;
+                seed = Integer.parseInt(arguments[i]);
+            } else if (arguments[i].equalsIgnoreCase("--file")) {
+                i++;
+                fileName = arguments[i];
+            } else if (arguments[i].equalsIgnoreCase("--help") || arguments[i].equalsIgnoreCase("-h")) {
+                printUsage();
+                System.exit(0);
+            } else {
+                System.err.println("unknown option : " + arguments[i]);
+                printUsage();
+                System.exit(1);
+            }
+        }
+
+        // create cube
+        if (fileName == null) {
+            cube = new Cube(size, twists, seed);
+        } else {
+            try {
+                cube = new Cube(fileName);
+            } catch (Exception e) {
+                System.err.println("Cannot load cube from file: " + e);
+                System.exit(1);
+            }
+        }
+
+        // print cube info
+        System.out.println("Searching for solution for cube of size "
+                           + cube.getSize() + ", twists = " + twists + ", seed = " + seed);
+        cube.print(System.out);
+        System.out.flush();
+        return cube;
+    }
+
     private static void solveServer(Ibis ibis) throws Exception {
 
         long start = System.currentTimeMillis();
@@ -647,60 +702,7 @@ public class Rubiks {
         System.out.println("");
     }
 
-    public static Cube generateCube() {
-        Cube cube = null;
-
-        // default parameters of puzzle
-        int size = 3;
-        int twists = 11;
-        int seed = 0;
-        String fileName = null;
-
-        // number of threads used to solve puzzle
-        // (not used in sequential version)
-
-        for (int i = 0; i < arguments.length; i++) {
-            if (arguments[i].equalsIgnoreCase("--size")) {
-                i++;
-                size = Integer.parseInt(arguments[i]);
-            } else if (arguments[i].equalsIgnoreCase("--twists")) {
-                i++;
-                twists = Integer.parseInt(arguments[i]);
-            } else if (arguments[i].equalsIgnoreCase("--seed")) {
-                i++;
-                seed = Integer.parseInt(arguments[i]);
-            } else if (arguments[i].equalsIgnoreCase("--file")) {
-                i++;
-                fileName = arguments[i];
-            } else if (arguments[i].equalsIgnoreCase("--help") || arguments[i].equalsIgnoreCase("-h")) {
-                printUsage();
-                System.exit(0);
-            } else {
-                System.err.println("unknown option : " + arguments[i]);
-                printUsage();
-                System.exit(1);
-            }
-        }
-
-        // create cube
-        if (fileName == null) {
-            cube = new Cube(size, twists, seed);
-        } else {
-            try {
-                cube = new Cube(fileName);
-            } catch (Exception e) {
-                System.err.println("Cannot load cube from file: " + e);
-                System.exit(1);
-            }
-        }
-
-        // print cube info
-        System.out.println("Searching for solution for cube of size "
-                           + cube.getSize() + ", twists = " + twists + ", seed = " + seed);
-        cube.print(System.out);
-        System.out.flush();
-        return cube;
-    }
+    
 
     /**
      * Main function.
