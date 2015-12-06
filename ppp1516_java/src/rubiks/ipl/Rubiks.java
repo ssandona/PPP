@@ -193,10 +193,10 @@ public class Rubiks {
             return false;
         }
 
-        synchronized public static ArrayList<Cube> getFromLevel(int level) {
+        /*synchronized public static ArrayList<Cube> getFromLevel(int level) {
             toDo = toDoTree.get(level);
             return toDo.remove(toDo.size() - 1);
-        }
+        }*/
 
         synchronized public static ArrayList<Cube> getFromPool (boolean sameNode) {
             ArrayList<Cube> workToReturn = new ArrayList<Cube>();
@@ -601,13 +601,13 @@ public class Rubiks {
         return cube;
     }
 
-    public int generateFirstLevel(CubeCache cache, ArrayList<Cube> toDo) {
-        results = solutionInitial(initialCube, cache, toDO);
+    public int generateFirstLevel(Cube cube, CubeCache cache, ArrayList<Cube> toDo) {
+        results = solutionInitial(cube, cache, toDO);
         System.out.println(myIbisId + " -> FIRST " + toDo.size() + " cubes");
         return results;
     }
 
-    public int generateSecondLevel(Cube cache, ArrayList<Cube> toDo) {
+    public int generateSecondLevel(CubeCache cache, ArrayList<Cube> toDo) {
         int n = toDo.size();
         System.out.println(myIbisId + " -> SECOND " + n + " cubes");
         int i;
@@ -639,15 +639,15 @@ public class Rubiks {
 
 
         CubeCache cache = new CubeCache(initialCube.getSize());
-
+        ArrayList<Cube> toDo=new ArrayList<Cube>();
 
         System.out.println("bound");
         while(results == 0) {
             bound++;
             initialCube.setBound(bound);
-            results = generateFirstLevel(cache);
+            results = generateFirstLevel(initialCube, cache, toDo);
             if(results != 0) {
-                results = generateSecondLevel(cache);
+                results = generateSecondLevel(cache, toDo);
                 if(results != 0) {
                     bound = 2;
                 }
@@ -720,14 +720,15 @@ public class Rubiks {
         int i;
         int bound = 0;
 
+        ArrayList<Cube> toDo=new ArrayList<Cube>();
 
         while(!end) {
-            results = generateFirstLevel(cache);
+            results = generateFirstLevel(initialCube, cache, toDo);
             if(results != 0) {
                 end = true;
                 continue;
             }
-            results = generateSecondLevel(cache);
+            results = generateSecondLevel(cache, toDo);
             if(results != 0) {
                 end = true;
                 continue;
