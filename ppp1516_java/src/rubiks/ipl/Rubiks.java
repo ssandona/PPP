@@ -243,7 +243,7 @@ public class Rubiks {
 
                     int i, j;
                     int element=0;
-                    int bound=actualTreeLevel < 4 ? actualTreeLevel:4; 
+                    int bound=actualTreeLevel;// < 4 ? actualTreeLevel:4; 
                     for(i = 0; i < bound; i++) {
                         //actual = toDoTree.get(i);
                         int amount = size[i] / 2;
