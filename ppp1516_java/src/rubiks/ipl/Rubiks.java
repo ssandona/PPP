@@ -190,7 +190,7 @@ public class Rubiks {
 
         synchronized public static ArrayList<Cube> getFromPool (boolean sameNode) {
             ArrayList<Cube> workToReturn = new ArrayList<Cube>();
-            if(toDoTree.get(1).size() == 0) {
+            if(toDoTree.get(1).size() == 0 && actualTreeLevel!=0) {
                 return null;
             }
             if(sameNode) {
