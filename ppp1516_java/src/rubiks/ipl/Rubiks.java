@@ -526,6 +526,8 @@ public class Rubiks {
         ReceivePort resultsReceiver = ibis.createReceivePort(portTypeMto1, "results");
         resultsReceiver.enableConnections();
 
+        initialCube = generateCube();
+
         SendPort terminationSender = ibis.createSendPort(portType1toM);
         for (IbisIdentifier joinedIbis : joinedIbises) {
             if(joinedIbis.equals(myIbisId)) {
