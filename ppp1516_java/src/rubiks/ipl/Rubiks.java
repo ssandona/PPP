@@ -85,14 +85,14 @@ public class Rubiks {
     public static final boolean PRINT_SOLUTION = false;
 
     static class WorkManager implements MessageUpcall {
-        static ArrayList<Cube> toDo = null;
+        //static ArrayList<Cube> toDo = null;
         //static ArrayList<ArrayList<Cube>> toDoTree = new ArrayList<ArrayList<Cube>>();
-        Cube[][] toDoTree = new Cube[20][12];
-        int[] size = new int[20];
-        static Cube[]
+        static Cube[][] toDoTree = new Cube[20][12];
+        static int[] size = new int[20];
+        static Cube[];
         static int actualTreeLevel = 0;
         static int nodesOnTree=0;
-        static int toDoWeight = 0;
+        //static int toDoWeight = 0;
         static Object lock = new Object();
 
         public WorkManager() {
