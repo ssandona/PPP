@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.io.IOException;
 
+import java.lang.Math;
+
 
 /**
  * Solver for rubik's cube puzzle.
@@ -94,7 +96,7 @@ public class Rubiks {
                     System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAH 6");
                 }*/
                 toDo.add(cube);
-                toDoWeight += (cube.getBound() - cube.getTwists());
+                toDoWeight += Math.pow(6*(cube.getSize()-1),(cube.getBound() - cube.getTwists()));
             }
             //System.out.println("Ibis[" + myIntIbisId + "] -> added cube");
         }
@@ -163,7 +165,7 @@ public class Rubiks {
                 synchronized(lock) {
                     int n = toDo.size() - 1;
                     c = toDo.remove(n);
-                    toDoWeight -= (c.getBound() - c.getTwists());
+                    toDoWeight -= Math.pow(6*(c.getSize()-1),(c.getBound() - c.getTwists()));
                 }
                 /*if(c == null) {
                     System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 1, index -> "+n);
@@ -180,7 +182,7 @@ public class Rubiks {
                     while(distributed < weightToDistribute) {
                         Cube c = toDo.remove(0);
                         workToReturn.add(c);
-                        toDoWeight -= (c.getBound() - c.getTwists());
+                        toDoWeight -= Math.pow(6*(c.getSize()-1),(c.getBound() - c.getTwists()));
                         distributed += (c.getBound() - c.getTwists());
                         /*if(c == null) {
                             System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 2, (amount, even, index) -> (" + amount + "," + even + "," + index + ")");
