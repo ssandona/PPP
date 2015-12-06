@@ -85,7 +85,7 @@ public class Rubiks {
     public static final boolean PRINT_SOLUTION = false;
 
     static class WorkManager implements MessageUpcall {
-        //static ArrayList<Cube> toDo = new ArrayList<Cube>();
+        static ArrayList<Cube> toDo = null;
         static ArrayList<ArrayList<Cube>> toDoTree = new ArrayList<ArrayList<Cube>>();
         static int actualTreeLevel = 0;
         static int nodesOnTree=0;
@@ -127,8 +127,9 @@ public class Rubiks {
                 }*/
                 //toDo.add(cube);
                 actualTreeLevel = cube.getTwists();
+                toDo=toDoTree.get(actualTreeLevel)
 
-                toDoTree.get(actualTreeLevel).add(cube);
+                toDo.add(cube);
                 nodesOnTree++;
                 //printTree();
                 //toDoWeight += Math.pow(children,(cube.getBound() - cube.getTwists()));
@@ -203,12 +204,13 @@ public class Rubiks {
                     }*/
                     //int n = toDo.size() - 1;
                     //System.out.println("Ibis[" + myIntIbisId + "nodes  on tree -> "+nodesOnTree+ " actual level "+actualTreeLevel);
-                    int n = toDoTree.get(actualTreeLevel).size() - 1;
+                    int n = toDo.size() - 1;
                     while(n<0){
                         actualTreeLevel--;
-                        n = toDoTree.get(actualTreeLevel).size() - 1;
+                        toDo=toDoTree.get(actualTreeLevel);
+                        n = toDo.size() - 1;
                     }
-                    c = toDoTree.get(actualTreeLevel).remove(n);
+                    c = toDo.remove(n);
                     nodesOnTree--;
                     //printTree();
                     //c = toDo.remove(n);
