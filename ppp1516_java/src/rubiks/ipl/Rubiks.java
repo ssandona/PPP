@@ -102,7 +102,7 @@ public class Rubiks {
             }
             //System.out.println("Ibis[" + myIntIbisId + "] -> added cube");
         }
-        
+
         public static boolean askForWork() throws IOException, ClassNotFoundException {
             //System.out.println("Ibis[" + myIntIbisId + "] -> askForWork");
             int i;
@@ -166,7 +166,7 @@ public class Rubiks {
                 synchronized(lock) {
                     int n = toDo.size() - 1;
                     c = toDo.remove(n);
-                    toDoWeight -= Math.pow(children,(c.getBound() - c.getTwists());
+                    toDoWeight -= Math.pow(children,(c.getBound() - c.getTwists()));
                 }
                 /*if(c == null) {
                     System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 1, index -> "+n);
@@ -183,7 +183,7 @@ public class Rubiks {
                     while(distributed < weightToDistribute) {
                         Cube c = toDo.remove(0);
                         workToReturn.add(c);
-                        toDoWeight -= Math.pow(children,(c.getBound() - c.getTwists());
+                        toDoWeight -= Math.pow(children,(c.getBound() - c.getTwists()));
                         distributed += (c.getBound() - c.getTwists());
                         /*if(c == null) {
                             System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 2, (amount, even, index) -> (" + amount + "," + even + "," + index + ")");
