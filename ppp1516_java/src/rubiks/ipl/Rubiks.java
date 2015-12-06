@@ -85,16 +85,20 @@ public class Rubiks {
     public static final boolean PRINT_SOLUTION = false;
 
     static class WorkManager implements MessageUpcall {
-        //static ArrayList<Cube> toDo = null;
-        //static ArrayList<ArrayList<Cube>> toDoTree = new ArrayList<ArrayList<Cube>>();
-        static Cube[][] toDoTree = new Cube[20][12];
-        static int[] size = new int[20];
-        //static Cube[];
+        static ArrayList<Cube> toDo = null;
+        static ArrayList<ArrayList<Cube>> toDoTree = new ArrayList<ArrayList<Cube>>();
         static int actualTreeLevel = 0;
         static int nodesOnTree=0;
-        //static int toDoWeight = 0;
+        static int toDoWeight = 0;
         static Object lock = new Object();
 
+        public WorkManager() {
+            int i;
+            for(i = 0; i < 20; i++) {
+                toDoTree.add(new ArrayList<Cube>());
+            }
+            System.out.println("SIZE OF TREE -> " + toDoTree.size());
+        }
 
         public static void printTree(){
             synchronized(lock){
@@ -102,7 +106,8 @@ public class Rubiks {
                 int i,j;
                 for(i=0;i<20;i++){
                     s+="\n ["+i+"]";
-                    for(j=0;j<size[i];j++){
+                    ArrayList<Cube> actual = toDoTree.get(i);
+                    for(j=0;j<actual.size();j++){
                         s+="* ";
                     }
 
@@ -122,11 +127,9 @@ public class Rubiks {
                 }*/
                 //toDo.add(cube);
                 actualTreeLevel = cube.getTwists();
-                //toDo=toDoTree.get(actualTreeLevel);
-                toDoTree[actualTreeLevel][size[actualTreeLevel]]=cube;
-                size[actualTreeLevel]++;
+                toDo=toDoTree.get(actualTreeLevel);
 
-                //toDo.add(cube);
+                toDo.add(cube);
                 nodesOnTree++;
                 //printTree();
                 //toDoWeight += Math.pow(children,(cube.getBound() - cube.getTwists()));
@@ -200,17 +203,14 @@ public class Rubiks {
                         actualTreeLevel--;
                     }*/
                     //int n = toDo.size() - 1;
-                    int n = size[actualTreeLevel] - 1;
-                    //System.out.println("Ibis[" + myIntIbisId + "nodes  on tree -> "+nodesOnTree+ " actual level "+actualTreeLevel+ "n "+n);
-
+                    //System.out.println("Ibis[" + myIntIbisId + "nodes  on tree -> "+nodesOnTree+ " actual level "+actualTreeLevel);
+                    int n = toDo.size() - 1;
                     while(n<0){
                         actualTreeLevel--;
-                        //toDo=toDoTree.get(actualTreeLevel);
-                        n = size[actualTreeLevel] - 1;
+                        toDo=toDoTree.get(actualTreeLevel);
+                        n = toDo.size() - 1;
                     }
-                    c=toDoTree[actualTreeLevel][n];
-                    size[actualTreeLevel]--;
-                    //c = toDo.remove(n);
+                    c = toDo.remove(n);
                     nodesOnTree--;
                     //printTree();
                     //c = toDo.remove(n);
@@ -240,16 +240,14 @@ public class Rubiks {
                     }*/
 
                     //for each tree level, distribute half of the nodes
-
                     int i, j;
-                    int element=0;
+                    ArrayList<Cube> actual;
                     int bound=actualTreeLevel;// < 4 ? actualTreeLevel:4; 
                     for(i = 0; i < bound; i++) {
-                        //actual = toDoTree.get(i);
-                        int amount = size[i] / 2;
+                        actual = toDoTree.get(i);
+                        int amount = actual.size() / 2;
                         for(j = 0; j < amount; j++) {
-                            workToReturn.add(toDoTree[i][size[i]-1]);
-                            size[i]--;
+                            workToReturn.add(actual.remove(0));
                             nodesOnTree--;
                         }
                     }
