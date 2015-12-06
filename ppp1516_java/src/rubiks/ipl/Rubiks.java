@@ -203,7 +203,7 @@ public class Rubiks {
                     }*/
                     //int n = toDo.size() - 1;
                     int n = toDoTree.get(actualTreeLevel).size() - 1;
-                    while(n==0){
+                    while(n<0){
                         actualTreeLevel--;
                         n = toDoTree.get(actualTreeLevel).size() - 1;
                     }
