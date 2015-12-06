@@ -145,12 +145,13 @@ public class Rubiks {
             //System.out.println("Ibis[" + myIntIbisId + "] -> askForWork");
             int i;
             Cube[] receivedWork = new Cube[0];
+            requestsForWork++;
             //Cube[] receivedWork;
             IbisIdentifier doner;
             for(i = 0; i < nodes; i++) {
                 doner = joinedIbises[target];
                 if(!doner.equals(myIbisId)) {
-                    requestsForWork++;
+                    //requestsForWork++;
                     workRequestSender.connect(doner, "WorkReq");
                     WriteMessage task = workRequestSender.newMessage();
                     task.writeInt(myIntIbisId);
