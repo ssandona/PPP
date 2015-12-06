@@ -111,7 +111,7 @@ public class Rubiks {
                     }
 
                 }
-                System.out.println("---- TREE-----" + s);
+                System.out.println("Ibis[" + myIntIbisId + "] ----- TREE-----" + s);
             }
         }
 
