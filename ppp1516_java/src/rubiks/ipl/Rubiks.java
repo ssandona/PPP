@@ -200,8 +200,9 @@ public class Rubiks {
                         actualTreeLevel--;
                     }*/
                     //int n = toDo.size() - 1;
-                    //System.out.println("Ibis[" + myIntIbisId + "nodes  on tree -> "+nodesOnTree+ " actual level "+actualTreeLevel);
                     int n = size[actualTreeLevel] - 1;
+                    System.out.println("Ibis[" + myIntIbisId + "nodes  on tree -> "+nodesOnTree+ " actual level "+actualTreeLevel+ "n "+n);
+
                     while(n<0){
                         actualTreeLevel--;
                         //toDo=toDoTree.get(actualTreeLevel);
