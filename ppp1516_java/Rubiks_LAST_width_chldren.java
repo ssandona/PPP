@@ -79,15 +79,13 @@ public class Rubiks {
     static TokenManager tokenManager;
 
     static int children;
-    static CubeCache cache = null;
+    static CubeCache cache=null;
 
 
     public static final boolean PRINT_SOLUTION = false;
 
     static class WorkManager implements MessageUpcall {
         static ArrayList<Cube> toDo = new ArrayList<Cube>();
-        static ArrayList<Cube>[] toDoTree = new ArrayList<Cube>[20];
-        static actualTreeLevel = 0;
         static int toDoWeight = 0;
         static Object lock = new Object();
 
@@ -100,11 +98,8 @@ public class Rubiks {
                 /*if(cube == null) {
                     System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAH 6");
                 }*/
-                //toDo.add(cube);
-                actualTreeLevel = cube.getTwists();
-
-                toDoTree[actualTreeLevel].add(cube);
-                //toDoWeight += Math.pow(children,(cube.getBound() - cube.getTwists()));
+                toDo.add(cube);
+                toDoWeight += Math.pow(children,(cube.getBound() - cube.getTwists()));
             }
             //System.out.println("Ibis[" + myIntIbisId + "] -> added cube");
         }
@@ -165,23 +160,15 @@ public class Rubiks {
 
         synchronized public static ArrayList<Cube> getFromPool (boolean sameNode) {
             ArrayList<Cube> workToReturn = new ArrayList<Cube>();
-            if(toDoTree[actualTreeLevel].size() == 0) {
+            if(toDo.size() == 0) {
                 return null;
             }
             if(sameNode) {
                 Cube c = null;
                 synchronized(lock) {
-                    /*if(toDoTree[actualTreeLevel].size() == 0){
-                        actualTreeLevel--;
-                    }*/
-                    //int n = toDo.size() - 1;
-                    int n = toDoTree[actualTreeLevel].size()-1;
-                    c = toDoTree[actualTreeLevel].remove(n);
-                    if(n == 1) {
-                        actualTreeLevel--;
-                    }
-                    //c = toDo.remove(n);
-                    //toDoWeight -= Math.pow(children,(c.getBound() - c.getTwists()));
+                    int n = toDo.size() - 1;
+                    c = toDo.remove(n);
+                    toDoWeight -= Math.pow(children,(c.getBound() - c.getTwists()));
                 }
                 /*if(c == null) {
                     System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 1, index -> "+n);
@@ -193,30 +180,22 @@ public class Rubiks {
                     boolean even = toDo.size() % 2 == 0;
                     int index = even ? toDo.size() / 2 : toDo.size() / 2 + 1;
                     int i;*/
-                    /*int weightToDistribute = toDoWeight / 2;
+                    int weightToDistribute = toDoWeight / 2;
                     int distributed = 0;
                     while(distributed < weightToDistribute) {
                         Cube c = toDo.remove(0);
                         workToReturn.add(c);
                         toDoWeight -= Math.pow(children,(c.getBound() - c.getTwists()));
                         distributed += Math.pow(children,(c.getBound() - c.getTwists()));
+                        /*if(c == null) {
+                            System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 2, (amount, even, index) -> (" + amount + "," + even + "," + index + ")");
+
+                        }*/
                     }
                     if(workToReturn.size() == 0) {
                         workToReturn = null;
                         //System.out.println("Ibis[" + myIntIbisId + "] -> send to the other 0 cubes");
-                    }*/
-
-                    //for each tree level, distribute half of the nodes
-                    int i,j;
-                    ArrayList<Cube> actual;
-                    for(i=0;i<actualTreeLevel;i++){
-                        actual=toDoTree[i];
-                        int amount=actual.size()/2;
-                        for(j=0;j<amount;j++){
-                            workToReturn.add(actual.remove(0));
-                        }
                     }
-
 
                 }
             }
@@ -427,9 +406,9 @@ public class Rubiks {
                     continue;
                 }
                 //System.out.println("Ibis[" + myIntIbisId + "] -> ReceivedWork, twists: " + cube.getTwists() + ", bound: " + cube.getBound());
-                if(cache == null) {
+                if(cache==null) {
                     cache = new CubeCache(cube.getSize());
-                    children = 6 * (cube.getSize() - 1);
+                    children=6*(cube.getSize()-1);
                 }
                 result += solution(cube, cache);
 
@@ -485,7 +464,7 @@ public class Rubiks {
         //Thread.sleep(1000);
         WriteMessage task;
         System.out.println("bound");
-        children = 6 * (initialCube.getSize() - 1);
+        children=6*(initialCube.getSize()-1);
         while (result == 0) {
             bound++;
             initialCube.setBound(bound);
