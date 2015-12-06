@@ -128,7 +128,7 @@ public class Rubiks {
 
                 //toDo.add(cube);
                 nodesOnTree++;
-                printTree();
+                //printTree();
                 //toDoWeight += Math.pow(children,(cube.getBound() - cube.getTwists()));
             }
             //System.out.println("Ibis[" + myIntIbisId + "] -> added cube");
@@ -201,14 +201,14 @@ public class Rubiks {
                     }*/
                     //int n = toDo.size() - 1;
                     int n = size[actualTreeLevel] - 1;
-                    System.out.println("Ibis[" + myIntIbisId + "nodes  on tree -> "+nodesOnTree+ " actual level "+actualTreeLevel+ "n "+n);
+                    //System.out.println("Ibis[" + myIntIbisId + "nodes  on tree -> "+nodesOnTree+ " actual level "+actualTreeLevel+ "n "+n);
 
                     while(n<0){
                         actualTreeLevel--;
                         //toDo=toDoTree.get(actualTreeLevel);
                         n = size[actualTreeLevel] - 1;
                     }
-                    c=toDoTree[actualTreeLevel][n];
+                    c=toDoTree[actualTreeLevel][size[actualTreeLevel]];
                     size[actualTreeLevel]--;
                     //c = toDo.remove(n);
                     nodesOnTree--;
