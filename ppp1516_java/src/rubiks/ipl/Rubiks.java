@@ -642,19 +642,19 @@ public class Rubiks {
         ArrayList<Cube> toDo=new ArrayList<Cube>();
 
         System.out.println("bound");
-        while(results == 0) {
+        while(result == 0) {
             bound++;
             initialCube.setBound(bound);
-            results = generateFirstLevel(initialCube, cache, toDo);
-            if(results != 0) {
+            result = generateFirstLevel(initialCube, cache, toDo);
+            if(result != 0) {
                 results = generateSecondLevel(cache, toDo);
-                if(results != 0) {
+                if(result != 0) {
                     bound = 2;
                 }
             } else {
                 bound = 1;
             }
-            if(results != 0) {
+            if(result != 0) {
                 continue;
             }
 
@@ -715,21 +715,21 @@ public class Rubiks {
 
         CubeCache cache = new CubeCache(initialCube.getSize());
 
-        int results = 0;
-        boolean first = true;
+        int result = 0;
+        boolean end = false;
         int i;
         int bound = 0;
 
         ArrayList<Cube> toDo=new ArrayList<Cube>();
 
         while(!end) {
-            results = generateFirstLevel(initialCube, cache, toDo);
-            if(results != 0) {
+            result = generateFirstLevel(initialCube, cache, toDo);
+            if(result != 0) {
                 end = true;
                 continue;
             }
-            results = generateSecondLevel(cache, toDo);
-            if(results != 0) {
+            result = generateSecondLevel(cache, toDo);
+            if(result != 0) {
                 end = true;
                 continue;
             }
