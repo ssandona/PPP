@@ -641,13 +641,14 @@ public class Rubiks {
 
 
         CubeCache cache = new CubeCache(initialCube.getSize());
-        ArrayList<Cube> toDo=new ArrayList<Cube>();
+        ArrayList<Cube> toDo;
         WriteMessage task;
 
         System.out.println("bound");
         while(result == 0) {
             bound++;
             initialCube.setBound(bound);
+            toDo=new ArrayList<Cube>();
             result = generateFirstLevel(initialCube, cache, toDo);
             if(result == 0) {
                 result = generateSecondLevel(cache, toDo);
