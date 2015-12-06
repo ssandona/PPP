@@ -96,6 +96,7 @@ public class Rubiks {
 
 
     public static boolean askForWork() throws IOException, ClassNotFoundException {
+        System.out.println("Ibis[" + myIntIbisId + "] -> Ask");
         //System.out.println("Ibis[" + myIntIbisId + "] -> askForWork");
         int i;
         Cube[] receivedWork = new Cube[0];
@@ -154,6 +155,7 @@ public class Rubiks {
     }
 
     public static ArrayList<Cube> getFromPool (boolean sameNode) {
+        System.out.println("Ibis[" + myIntIbisId + "] -> getFromPool");
         ArrayList<Cube> workToReturn = new ArrayList<Cube>();
         if(toDo.size() == 0) {
             return null;
@@ -198,6 +200,7 @@ public class Rubiks {
     //and the queue i(toDo) is empty, the function askForWork is invoked (that invoke the workRequest function
     //on the other nodes
     public static ArrayList<Cube> getWork(boolean sameNode) throws IOException, ClassNotFoundException {
+        System.out.println("Ibis[" + myIntIbisId + "] -> getWork");
         //System.out.println("Ibis[" + myIntIbisId + "] -> getWork");
         if(sameNode) {
             if(toDo.size() == 0) {
@@ -419,12 +422,14 @@ public class Rubiks {
                 if(cube != initialCube) {
                     cache.put(cube);
                 }
+                System.out.println("Ibis[" + myIntIbisId + "] -> poll check");
                 ReadMessage m = workRequestReceiver.poll();
                 if(m != null) {
                     workRequestFromOthers(m);
                 }
 
             }
+            System.out.println("Ibis[" + myIntIbisId + "] -> finio");
             workRequestReceiver.close();
             //System.out.println("Ibis[" + myIntIbisId + "] -> solutionsWorkers -> No work");
             end = tokenManager.checkTermination();
