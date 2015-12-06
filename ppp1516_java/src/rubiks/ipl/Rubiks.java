@@ -90,7 +90,7 @@ public class Rubiks {
         static ArrayList<Cube> toDo = null;
         static ArrayList<ArrayList<Cube>> toDoTree = new ArrayList<ArrayList<Cube>>();
         static int actualTreeLevel = 0;
-        static int nodesOnTree=0;
+        static int nodesOnTree = 0;
         static int toDoWeight = 0;
         static Object lock = new Object();
 
@@ -102,15 +102,15 @@ public class Rubiks {
             System.out.println("SIZE OF TREE -> " + toDoTree.size());
         }
 
-        public static void printTree(){
-            synchronized(lock){
-                String s="";
-                int i,j;
-                for(i=0;i<20;i++){
-                    s+="\n ["+i+"]";
+        public static void printTree() {
+            synchronized(lock) {
+                String s = "";
+                int i, j;
+                for(i = 0; i < 20; i++) {
+                    s += "\n [" + i + "]";
                     ArrayList<Cube> actual = toDoTree.get(i);
-                    for(j=0;j<actual.size();j++){
-                        s+="* ";
+                    for(j = 0; j < actual.size(); j++) {
+                        s += "* ";
                     }
 
                 }
@@ -129,7 +129,7 @@ public class Rubiks {
                 }*/
                 //toDo.add(cube);
                 actualTreeLevel = cube.getTwists();
-                toDo=toDoTree.get(actualTreeLevel);
+                toDo = toDoTree.get(actualTreeLevel);
 
                 toDo.add(cube);
                 nodesOnTree++;
@@ -193,6 +193,11 @@ public class Rubiks {
             return false;
         }
 
+        synchronized public static ArrayList<Cube> getFromLevel(int level) {
+            toDo = toDoTree.get(level);
+            return toDo.remove(toDo.size() - 1);
+        }
+
         synchronized public static ArrayList<Cube> getFromPool (boolean sameNode) {
             ArrayList<Cube> workToReturn = new ArrayList<Cube>();
             if(nodesOnTree == 0) {
@@ -207,9 +212,9 @@ public class Rubiks {
                     //int n = toDo.size() - 1;
                     //System.out.println("Ibis[" + myIntIbisId + "nodes  on tree -> "+nodesOnTree+ " actual level "+actualTreeLevel);
                     int n = toDo.size() - 1;
-                    while(n<0){
+                    while(n < 0) {
                         actualTreeLevel--;
-                        toDo=toDoTree.get(actualTreeLevel);
+                        toDo = toDoTree.get(actualTreeLevel);
                         n = toDo.size() - 1;
                     }
                     c = toDo.remove(n);
@@ -244,7 +249,7 @@ public class Rubiks {
                     //for each tree level, distribute half of the nodes
                     int i, j;
                     ArrayList<Cube> actual;
-                    int bound=actualTreeLevel;// < 4 ? actualTreeLevel:4; 
+                    int bound = actualTreeLevel; // < 4 ? actualTreeLevel:4;
                     /*for(i = 0; i < bound; i++) {
                         actual = toDoTree.get(i);
                         int amount = actual.size() / 2;
@@ -255,8 +260,8 @@ public class Rubiks {
                     }*/
                     for(i = 0; i < bound; i++) {
                         actual = toDoTree.get(i);
-                        int amount = actual.size() / 2+1;
-                        if(amount<=1){
+                        int amount = actual.size() / 2 + 1;
+                        if(amount <= 1) {
                             continue;
                         }
                         for(j = 0; j < amount; j++) {
@@ -455,6 +460,32 @@ public class Rubiks {
         return 0;
     }
 
+    public static int solutionInitial(Cube cube, CubeCache cache, ArrayList<Cube> toDo) {
+        valuatedCubes++;
+        //System.out.println("Ibis[" + myIntIbisId + "] -> solution");
+        if (cube.isSolved()) {
+            //System.out.println("SOLVED");
+
+            return 1;
+        }
+
+        //generate childrens
+        Cube[] children = cube.generateChildren(cache);
+        Cube child;
+        int i;
+        //add childrens on the toDo pool
+        for(i = 0; i < children.length; i++) {
+            child = children[(children.length - 1) - i];
+            /*if(child == null) {
+                System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 4");
+            }*/
+
+            toDo.add(child);
+            //cache.put(child);
+        }
+        return 0;
+    }
+
 
 
 
@@ -570,18 +601,26 @@ public class Rubiks {
         return cube;
     }
 
-    private static void solveServer(Ibis ibis) throws Exception {
+    public generateFirstLevel(CubeCache cache, ArrayList<Cube> toDo) {
+        results = solutionInitial(initialCube, cache, toDO);
+        System.out.println(myIbisId + " -> FIRST " + toDo.size() + " cubes");
+        return results;
+    }
 
-        long start = System.currentTimeMillis();
-        int bound = 0;
-        int result = 0;
-        /*ArrayList<Cube> work = workManager.getWork(true);
-        Cube cube = work.get(0);*/
-        //System.out.println("SolutionsServer");
+    public generateSecondLevel(Cube cache, ArrayList<Cube> toDo) {
+        int n = toDo.size();
+        System.out.println(myIbisId + " -> SECOND " + n + " cubes");
+        int i;
+        for(i = 0; i < n; i++) {
+            cube = toDO.remove(0);
+            results += solutionInitial(cube, cache, toDo);
+        }
+        return results;
+    }
+
+    private static void solveServer(Ibis ibis) throws Exception {
         ReceivePort resultsReceiver = ibis.createReceivePort(portTypeMto1, "results");
         resultsReceiver.enableConnections();
-
-        initialCube = generateCube();
 
         SendPort terminationSender = ibis.createSendPort(portType1toM);
         for (IbisIdentifier joinedIbis : joinedIbises) {
@@ -591,15 +630,44 @@ public class Rubiks {
             terminationSender.connect(joinedIbis, "continue");
         }
 
-        //Thread.sleep(1000);
-        WriteMessage task;
+        long start = System.currentTimeMillis();
+        int bound = 2;
+        int result = 0;
+        /*ArrayList<Cube> work = workManager.getWork(true);
+        Cube cube = work.get(0);*/
+        //System.out.println("SolutionsServer");
+
+
+        CubeCache cache = new CubeCache(initialCube.getSize());
+
+
         System.out.println("bound");
-        children = 6 * (initialCube.getSize() - 1);
-        while (result == 0) {
+        while(results == 0) {
             bound++;
             initialCube.setBound(bound);
-            //System.out.println("InitialCube : (" + initialCube.getBound() + ", " + initialCube.getTwists() + ")");
-            workManager.add(initialCube);
+            results = generateFirstLevel(cache);
+            if(results != 0) {
+                results = generateSecondLevel(cache);
+                if(results != 0) {
+                    bound = 2;
+                }
+            } else {
+                bound = 1;
+            }
+            if(results != 0) {
+                continue;
+            }
+
+            int mydisp = displs[myIntIbisId];
+            for(i = 0; i < displs[myIntIbisId]; i++) {
+                toDo.remove(0);
+            }
+            for(i = 0; i < cubes_per_proc[myIntIbisId]; i++) {
+                workManager.add(toDo.remove(0));
+            }
+
+            //Thread.sleep(1000);
+            WriteMessage task;
             System.out.println(" " + bound);
             result = solutionsServer(resultsReceiver);
             //System.out.println("Result :" + result);
@@ -612,10 +680,12 @@ public class Rubiks {
             }
         }
 
-        //say to all that the work is finished
-        task = terminationSender.newMessage();
-        task.writeBoolean(true);
-        task.finish();
+        if(bound > 2) {
+            //say to all that the work is finished
+            task = terminationSender.newMessage();
+            task.writeBoolean(true);
+            task.finish();
+        }
 
         System.out.println();
         System.out.println("Solving cube possible in " + result + " ways of "
@@ -632,6 +702,7 @@ public class Rubiks {
 
     }
 
+
     public static void solveWorkers(Ibis ibis, IbisIdentifier server) throws Exception {
 
         //1 sender and many receivers
@@ -642,16 +713,34 @@ public class Rubiks {
         SendPort resultsSender = ibis.createSendPort(portTypeMto1);
         resultsSender.connect(server, "results");
 
-        //Thread.sleep(1000);
-        //sender.connect(server, "results");
-        //System.out.println("ConnectedToServerPort");
+        CubeCache cache = new CubeCache(initialCube.getSize());
+
+        int results = 0;
         boolean first = true;
         int i;
         int bound = 0;
-        CubeCache cache = null;
 
-        boolean end = false;
+
         while(!end) {
+            results = generateFirstLevel(cache);
+            if(results != 0) {
+                end = true;
+                continue;
+            }
+            results = generateSecondLevel(cache);
+            if(results != 0) {
+                end = true;
+                continue;
+            }
+
+            int mydisp = displs[myIntIbisId];
+            for(i = 0; i < displs[myIntIbisId]; i++) {
+                toDo.remove(0);
+            }
+            for(i = 0; i < cubes_per_proc[myIntIbisId]; i++) {
+                workManager.add(toDo.remove(0));
+            }
+
             result = solutionsWorkers();
             System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: "  + valuatedCubes + " workRequests: " + requestsForWork);
             //workManager.printSize();
@@ -702,7 +791,7 @@ public class Rubiks {
         System.out.println("");
     }
 
-    
+
 
     /**
      * Main function.
@@ -783,11 +872,13 @@ public class Rubiks {
         workReceiver = ibis.createReceivePort(portTypeMto1, "Work");
         workReceiver.enableConnections();
 
+        initialCube = generateCube();
 
         cubes_per_proc = new Integer[nodes];
         displs = new Integer[nodes];
-        int avarage_cubes_per_proc = (6 * (size - 1)) / nodes;
-        int rem = (6 * (size - 1)) % nodes;
+        int jobs = (6 * (initialCube.getSize() - 1)) * (6 * (initialCube.getSize() - 1));
+        int avarage_cubes_per_proc = jobs / nodes;
+        int rem = jobs % nodes;
         int sum = 0;
         for (i = 0; i < nodes; i++) {
             cubes_per_proc[i] = avarage_cubes_per_proc;
@@ -798,6 +889,8 @@ public class Rubiks {
             displs[i] = sum;
             sum += cubes_per_proc[i];
         }
+
+
 
         System.out.println("DISPL");
         for(i = 0; i < nodes; i++) {
