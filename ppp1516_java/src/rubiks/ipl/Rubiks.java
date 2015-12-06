@@ -86,14 +86,17 @@ public class Rubiks {
 
     static class WorkManager implements MessageUpcall {
         //static ArrayList<Cube> toDo = new ArrayList<Cube>();
-        static ArrayList<ArrayList<Cube>> toDoTree = new ArrayList<ArrayList<Cube>>(20);
+        static ArrayList<ArrayList<Cube>> toDoTree = new ArrayList<ArrayList<Cube>>();
         static int actualTreeLevel = 0;
         static int toDoWeight = 0;
         static Object lock = new Object();
 
-        public WorkManager(){
-            toDoTree.add(new ArrayList<Cube>());
-            System.out.println("SIZE OF TREE -> "+toDoTree.size());
+        public WorkManager() {
+            int i;
+            for(i = 0; i < 20; i++) {
+                toDoTree.add(new ArrayList<Cube>());
+            }
+            System.out.println("SIZE OF TREE -> " + toDoTree.size());
         }
 
         /*synchronized public static boolean availableWork() {
@@ -180,7 +183,7 @@ public class Rubiks {
                         actualTreeLevel--;
                     }*/
                     //int n = toDo.size() - 1;
-                    int n = toDoTree.get(actualTreeLevel).size()-1;
+                    int n = toDoTree.get(actualTreeLevel).size() - 1;
                     c = toDoTree.get(actualTreeLevel).remove(n);
                     if(n == 1) {
                         actualTreeLevel--;
@@ -212,12 +215,12 @@ public class Rubiks {
                     }*/
 
                     //for each tree level, distribute half of the nodes
-                    int i,j;
+                    int i, j;
                     ArrayList<Cube> actual;
-                    for(i=0;i<actualTreeLevel;i++){
-                        actual=toDoTree.get(i);
-                        int amount=actual.size()/2;
-                        for(j=0;j<amount;j++){
+                    for(i = 0; i < actualTreeLevel; i++) {
+                        actual = toDoTree.get(i);
+                        int amount = actual.size() / 2;
+                        for(j = 0; j < amount; j++) {
                             workToReturn.add(actual.remove(0));
                         }
                     }
@@ -232,16 +235,15 @@ public class Rubiks {
         //on the other nodes
         public static ArrayList<Cube> getWork(boolean sameNode) throws IOException, ClassNotFoundException {
             //System.out.println("Ibis[" + myIntIbisId + "] -> getWork");
-            ArrayList<Cube> work=getFromPool(sameNode);
+            ArrayList<Cube> work = getFromPool(sameNode);
             if(sameNode) {
-                if(work==null) {
+                if(work == null) {
                     //System.out.println("Ibis[" + myIntIbisId + "] -> toDo Empty");
                     boolean b = askForWork();
                     if(!b) {
                         return null;
-                    }
-                    else{
-                        work=getFromPool(sameNode);
+                    } else {
+                        work = getFromPool(sameNode);
                     }
                 }
             }
@@ -268,7 +270,7 @@ public class Rubiks {
             /*if(toDo.size() == 0) {
                 subPool = null;
             } else {*/
-                subPool = getWork(false);
+            subPool = getWork(false);
             //}
             //update node color in the eyes of every other node
             if(subPool != null) {
