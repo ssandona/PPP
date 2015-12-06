@@ -95,13 +95,6 @@ public class Rubiks {
         //static int toDoWeight = 0;
         static Object lock = new Object();
 
-        public WorkManager() {
-            int i;
-            /*for(i = 0; i < 20; i++) {
-                toDoTree.add(new ArrayList<Cube>());
-            }*/
-            System.out.println("SIZE OF TREE -> " + toDoTree.size());
-        }
 
         public static void printTree(){
             synchronized(lock){
@@ -130,7 +123,7 @@ public class Rubiks {
                 //toDo.add(cube);
                 actualTreeLevel = cube.getTwists();
                 //toDo=toDoTree.get(actualTreeLevel);
-                toDo[actualTreeLevel][size[actualTreeLevel]]=cube;
+                toDoTree[actualTreeLevel][size[actualTreeLevel]]=cube;
                 size[actualTreeLevel]++;
 
                 //toDo.add(cube);
