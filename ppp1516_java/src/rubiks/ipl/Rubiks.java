@@ -601,13 +601,13 @@ public class Rubiks {
         return cube;
     }
 
-    public generateFirstLevel(CubeCache cache, ArrayList<Cube> toDo) {
+    public int generateFirstLevel(CubeCache cache, ArrayList<Cube> toDo) {
         results = solutionInitial(initialCube, cache, toDO);
         System.out.println(myIbisId + " -> FIRST " + toDo.size() + " cubes");
         return results;
     }
 
-    public generateSecondLevel(Cube cache, ArrayList<Cube> toDo) {
+    public int generateSecondLevel(Cube cache, ArrayList<Cube> toDo) {
         int n = toDo.size();
         System.out.println(myIbisId + " -> SECOND " + n + " cubes");
         int i;
