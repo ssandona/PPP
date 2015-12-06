@@ -726,6 +726,7 @@ public class Rubiks {
 
         while(!end) {
             bound++;
+            initialCube.setBound(bound);
             result = generateFirstLevel(initialCube, cache, toDo);
             if(result != 0) {
                 end = true;
