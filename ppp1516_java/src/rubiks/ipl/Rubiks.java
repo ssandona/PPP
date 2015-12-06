@@ -78,6 +78,9 @@ public class Rubiks {
     static WorkManager workManager;
     static TokenManager tokenManager;
 
+    static int children;
+    static CubeCache cache=null;
+
 
     public static final boolean PRINT_SOLUTION = false;
 
@@ -96,7 +99,7 @@ public class Rubiks {
                     System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAH 6");
                 }*/
                 toDo.add(cube);
-                toDoWeight += Math.pow(6*(cube.getSize()-1),(cube.getBound() - cube.getTwists()));
+                toDoWeight += Math.pow(children,(cube.getBound() - cube.getTwists()));
             }
             //System.out.println("Ibis[" + myIntIbisId + "] -> added cube");
         }
@@ -165,7 +168,7 @@ public class Rubiks {
                 synchronized(lock) {
                     int n = toDo.size() - 1;
                     c = toDo.remove(n);
-                    toDoWeight -= Math.pow(6*(c.getSize()-1),(c.getBound() - c.getTwists()));
+                    toDoWeight -= Math.pow(children,(c.getBound() - c.getTwists()));
                 }
                 /*if(c == null) {
                     System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 1, index -> "+n);
@@ -182,8 +185,8 @@ public class Rubiks {
                     while(distributed < weightToDistribute) {
                         Cube c = toDo.remove(0);
                         workToReturn.add(c);
-                        toDoWeight -= Math.pow(6*(c.getSize()-1),(c.getBound() - c.getTwists()));
-                        distributed += Math.pow(6*(c.getSize()-1),(c.getBound() - c.getTwists()));
+                        toDoWeight -= Math.pow(6*(children,(c.getBound() - c.getTwists()));
+                        distributed += Math.pow(6*(children,(c.getBound() - c.getTwists()));
                         /*if(c == null) {
                             System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 2, (amount, even, index) -> (" + amount + "," + even + "," + index + ")");
 
@@ -387,8 +390,6 @@ public class Rubiks {
     public static int solutionsWorkers() throws Exception {
         //System.out.println("Ibis[" + myIntIbisId + "] -> solutionsWorkers");
         ArrayList<Cube> actual;
-        CubeCache cache = null;
-        boolean first = true;
         int result = 0;
         int i;
         Cube cube;
@@ -405,8 +406,9 @@ public class Rubiks {
                     continue;
                 }
                 //System.out.println("Ibis[" + myIntIbisId + "] -> ReceivedWork, twists: " + cube.getTwists() + ", bound: " + cube.getBound());
-                if(first) {
+                if(cache==null) {
                     cache = new CubeCache(cube.getSize());
+                    children=6*(cube.getSize()-1);
                     first = false;
                 }
                 result += solution(cube, cache);
