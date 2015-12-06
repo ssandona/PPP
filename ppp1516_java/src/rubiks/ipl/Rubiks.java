@@ -191,7 +191,6 @@ public class Rubiks {
         }
 
         synchronized public static ArrayList<Cube> getFromPool (boolean sameNode) {
-            System.out.println("Ibis[" + myIntIbisId + "nodes  on tree -> "+nodesOnTree);
             ArrayList<Cube> workToReturn = new ArrayList<Cube>();
             if(nodesOnTree == 0) {
                 return null;
@@ -203,6 +202,7 @@ public class Rubiks {
                         actualTreeLevel--;
                     }*/
                     //int n = toDo.size() - 1;
+                    System.out.println("Ibis[" + myIntIbisId + "nodes  on tree -> "+nodesOnTree);
                     int n = toDoTree.get(actualTreeLevel).size() - 1;
                     while(n<0){
                         actualTreeLevel--;
