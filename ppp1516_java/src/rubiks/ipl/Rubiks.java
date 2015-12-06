@@ -99,6 +99,22 @@ public class Rubiks {
             System.out.println("SIZE OF TREE -> " + toDoTree.size());
         }
 
+        public printTree(){
+            synchronized(lock){
+                String s="";
+                int i,j;
+                for(i=0;i<20;i++){
+                    s+="\n ["+i+"]";
+                    ArrayList<Cube> actual = toDoTree.get(i);
+                    for(j=0;j<actual.size();j++){
+                        s+="* ";
+                    }
+
+                }
+                System.out.println("---- TREE-----" + s);
+            }
+        }
+
         /*synchronized public static boolean availableWork() {
             System.out.println("Ibis[" + myIntIbisId + "] -> SIZE: " + toDo.size());
         }*/
@@ -112,6 +128,7 @@ public class Rubiks {
                 actualTreeLevel = cube.getTwists();
 
                 toDoTree.get(actualTreeLevel).add(cube);
+                printTree();
                 //toDoWeight += Math.pow(children,(cube.getBound() - cube.getTwists()));
             }
             //System.out.println("Ibis[" + myIntIbisId + "] -> added cube");
@@ -188,6 +205,7 @@ public class Rubiks {
                     if(n == 1) {
                         actualTreeLevel--;
                     }
+                    printTree();
                     //c = toDo.remove(n);
                     //toDoWeight -= Math.pow(children,(c.getBound() - c.getTwists()));
                 }
