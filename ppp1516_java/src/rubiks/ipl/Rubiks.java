@@ -86,12 +86,13 @@ public class Rubiks {
 
     static class WorkManager implements MessageUpcall {
         //static ArrayList<Cube> toDo = new ArrayList<Cube>();
-        static ArrayList<ArrayList<Cube>> toDoTree = new ArrayList<ArrayList<Cube>>(20);
+        static ArrayList<ArrayList<Cube>> toDoTree;
         static int actualTreeLevel = 0;
         static int toDoWeight = 0;
         static Object lock = new Object();
 
         public WorkManager(){
+            toDoTree = new ArrayList<ArrayList<Cube>>(20);
             System.out.println("SIZE OF TREE -> "+toDoTree.size());
         }
 
