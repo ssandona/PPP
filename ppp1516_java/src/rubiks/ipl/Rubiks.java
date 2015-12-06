@@ -615,7 +615,7 @@ public class Rubiks {
             Cube cube = toDo.remove(0);
             results += solutionInitial(cube, cache, toDo);
         }
-        System.out.println(myIbisId + " -> SECOND " + n + " cubes");
+        System.out.println(myIbisId + " -> SECOND " + toDo.size() + " cubes");
         return results;
     }
 
