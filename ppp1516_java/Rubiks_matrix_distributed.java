@@ -81,26 +81,20 @@ public class Rubiks {
     static int children;
     static CubeCache cache = null;
 
-    static String arguments;
-
 
     public static final boolean PRINT_SOLUTION = false;
 
     static class WorkManager implements MessageUpcall {
-        static ArrayList<Cube> toDo = null;
-        static ArrayList<ArrayList<Cube>> toDoTree = new ArrayList<ArrayList<Cube>>();
+        //static ArrayList<Cube> toDo = null;
+        //static ArrayList<ArrayList<Cube>> toDoTree = new ArrayList<ArrayList<Cube>>();
+        static Cube[][] toDoTree = new Cube[20][12];
+        static int[] size = new int[20];
+        //static Cube[];
         static int actualTreeLevel = 0;
         static int nodesOnTree=0;
-        static int toDoWeight = 0;
+        //static int toDoWeight = 0;
         static Object lock = new Object();
 
-        public WorkManager() {
-            int i;
-            for(i = 0; i < 20; i++) {
-                toDoTree.add(new ArrayList<Cube>());
-            }
-            System.out.println("SIZE OF TREE -> " + toDoTree.size());
-        }
 
         public static void printTree(){
             synchronized(lock){
@@ -108,8 +102,7 @@ public class Rubiks {
                 int i,j;
                 for(i=0;i<20;i++){
                     s+="\n ["+i+"]";
-                    ArrayList<Cube> actual = toDoTree.get(i);
-                    for(j=0;j<actual.size();j++){
+                    for(j=0;j<size[i];j++){
                         s+="* ";
                     }
 
@@ -129,9 +122,11 @@ public class Rubiks {
                 }*/
                 //toDo.add(cube);
                 actualTreeLevel = cube.getTwists();
-                toDo=toDoTree.get(actualTreeLevel);
+                //toDo=toDoTree.get(actualTreeLevel);
+                toDoTree[actualTreeLevel][size[actualTreeLevel]]=cube;
+                size[actualTreeLevel]++;
 
-                toDo.add(cube);
+                //toDo.add(cube);
                 nodesOnTree++;
                 //printTree();
                 //toDoWeight += Math.pow(children,(cube.getBound() - cube.getTwists()));
@@ -205,14 +200,17 @@ public class Rubiks {
                         actualTreeLevel--;
                     }*/
                     //int n = toDo.size() - 1;
-                    //System.out.println("Ibis[" + myIntIbisId + "nodes  on tree -> "+nodesOnTree+ " actual level "+actualTreeLevel);
-                    int n = toDo.size() - 1;
+                    int n = size[actualTreeLevel] - 1;
+                    //System.out.println("Ibis[" + myIntIbisId + "nodes  on tree -> "+nodesOnTree+ " actual level "+actualTreeLevel+ "n "+n);
+
                     while(n<0){
                         actualTreeLevel--;
-                        toDo=toDoTree.get(actualTreeLevel);
-                        n = toDo.size() - 1;
+                        //toDo=toDoTree.get(actualTreeLevel);
+                        n = size[actualTreeLevel] - 1;
                     }
-                    c = toDo.remove(n);
+                    c=toDoTree[actualTreeLevel][n];
+                    size[actualTreeLevel]--;
+                    //c = toDo.remove(n);
                     nodesOnTree--;
                     //printTree();
                     //c = toDo.remove(n);
@@ -242,28 +240,18 @@ public class Rubiks {
                     }*/
 
                     //for each tree level, distribute half of the nodes
+
                     int i, j;
-                    ArrayList<Cube> actual;
+                    int element=0;
                     int bound=actualTreeLevel;// < 4 ? actualTreeLevel:4; 
-                    /*for(i = 0; i < bound; i++) {
-                        actual = toDoTree.get(i);
-                        int amount = actual.size() / 2;
-                        for(j = 0; j < amount; j++) {
-                            workToReturn.add(actual.remove(0));
-                            nodesOnTree--;
-                        }
-                    }*/
                     for(i = 0; i < bound; i++) {
-                        actual = toDoTree.get(i);
-                        int amount = actual.size() / 2+1;
-                        if(amount<=1){
-                            continue;
-                        }
+                        //actual = toDoTree.get(i);
+                        int amount = size[i] / 2;
                         for(j = 0; j < amount; j++) {
-                            workToReturn.add(actual.remove(0));
+                            workToReturn.add(toDoTree[i][size[i]-1]);
+                            size[i]--;
                             nodesOnTree--;
                         }
-                        break;
                     }
 
 
@@ -645,61 +633,6 @@ public class Rubiks {
         System.out.println("");
     }
 
-    public static Cube generateCube() {
-        Cube cube = null;
-
-        // default parameters of puzzle
-        int size = 3;
-        int twists = 11;
-        int seed = 0;
-        String fileName = null;
-
-        // number of threads used to solve puzzle
-        // (not used in sequential version)
-
-        for (int i = 0; i < arguments.length; i++) {
-            if (arguments[i].equalsIgnoreCase("--size")) {
-                i++;
-                size = Integer.parseInt(arguments[i]);
-            } else if (arguments[i].equalsIgnoreCase("--twists")) {
-                i++;
-                twists = Integer.parseInt(arguments[i]);
-            } else if (arguments[i].equalsIgnoreCase("--seed")) {
-                i++;
-                seed = Integer.parseInt(arguments[i]);
-            } else if (arguments[i].equalsIgnoreCase("--file")) {
-                i++;
-                fileName = arguments[i];
-            } else if (arguments[i].equalsIgnoreCase("--help") || arguments[i].equalsIgnoreCase("-h")) {
-                printUsage();
-                System.exit(0);
-            } else {
-                System.err.println("unknown option : " + arguments[i]);
-                printUsage();
-                System.exit(1);
-            }
-        }
-
-        // create cube
-        if (fileName == null) {
-            cube = new Cube(size, twists, seed);
-        } else {
-            try {
-                cube = new Cube(fileName);
-            } catch (Exception e) {
-                System.err.println("Cannot load cube from file: " + e);
-                System.exit(1);
-            }
-        }
-
-        // print cube info
-        System.out.println("Searching for solution for cube of size "
-                           + cube.getSize() + ", twists = " + twists + ", seed = " + seed);
-        cube.print(System.out);
-        System.out.flush();
-        return cube;
-    }
-
     /**
      * Main function.
      *
@@ -840,14 +773,68 @@ public class Rubiks {
         ibis.end();
     }
 
-    public static void main(String[] argumentsForCube) {
-        arguments = argumentsForCube;
+    public static void main(String[] arguments) {
+
+        // default parameters of puzzle
+        size = 3;
+        int twists = 11;
+        int seed = 0;
+        String fileName = null;
+
+
+
+        // number of threads used to solve puzzle
+        // (not used in sequential version)
+
+        for (int i = 0; i < arguments.length; i++) {
+            if (arguments[i].equalsIgnoreCase("--size")) {
+                i++;
+                size = Integer.parseInt(arguments[i]);
+            } else if (arguments[i].equalsIgnoreCase("--twists")) {
+                i++;
+                twists = Integer.parseInt(arguments[i]);
+            } else if (arguments[i].equalsIgnoreCase("--seed")) {
+                i++;
+                seed = Integer.parseInt(arguments[i]);
+            } else if (arguments[i].equalsIgnoreCase("--file")) {
+                i++;
+                fileName = arguments[i];
+            } else if (arguments[i].equalsIgnoreCase("--help") || arguments[i].equalsIgnoreCase("-h")) {
+                printUsage();
+                System.exit(0);
+            } else {
+                System.err.println("unknown option : " + arguments[i]);
+                printUsage();
+                System.exit(1);
+            }
+        }
+
+        // create cube
+        if (fileName == null) {
+            initialCube = new Cube(size, twists, seed);
+        } else {
+            try {
+                initialCube = new Cube(fileName);
+            } catch (Exception e) {
+                System.err.println("Cannot load cube from file: " + e);
+                System.exit(1);
+            }
+        }
+
+        // print cube info
+        System.out.println("Searching for solution for cube of size "
+                           + initialCube.getSize() + ", twists = " + twists + ", seed = " + seed);
+        initialCube.print(System.out);
+        System.out.flush();
+
+
         try {
             System.out.println("run");
             new Rubiks().run();
         } catch (Exception e) {
             e.printStackTrace(System.err);
         }
+
     }
 
 }

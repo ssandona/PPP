@@ -538,7 +538,6 @@ public class Rubiks {
             System.err.println("Ibis joined: " + joinedIbis);
         }
 
-
         // If I am the server, run server, else run client.
         if (server.equals(myIbisId)) {
             solveServer();

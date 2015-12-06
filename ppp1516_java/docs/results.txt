@@ -46,6 +46,9 @@ twists12 - Leiden
 8 -> 23597	6.12
 16 -> 14983	9.64
 
+88449 2
+
+
 standard - Leiden
 
 	time	speedup
