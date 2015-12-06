@@ -670,6 +670,8 @@ public class Rubiks {
                 workManager.add(toDo.remove(0));
             }
 
+            System.out.println("SIZE -> "+workManager.nodesOnTree);
+
             //Thread.sleep(1000);
             System.out.println(" " + bound);
             result = solutionsServer(resultsReceiver);
