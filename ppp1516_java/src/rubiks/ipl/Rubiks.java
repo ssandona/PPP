@@ -620,7 +620,7 @@ public class Rubiks {
         //port in which new work requests will be received
         workRequestReceiver = ibis.createReceivePort(portTypeMto1Poll, "WorkReq");
         // enable connections
-        tokenRequestReceiver.enableConnections();
+        workRequestReceiver.enableConnections();
 
 
         //port in which new work requests will be sent
