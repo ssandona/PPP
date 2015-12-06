@@ -409,7 +409,6 @@ public class Rubiks {
                 if(cache==null) {
                     cache = new CubeCache(cube.getSize());
                     children=6*(cube.getSize()-1);
-                    first = false;
                 }
                 result += solution(cube, cache);
 
