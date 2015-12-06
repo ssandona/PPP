@@ -249,7 +249,7 @@ public class Rubiks {
                     //for each tree level, distribute half of the nodes
                     int i, j;
                     ArrayList<Cube> actual;
-                    int bound = actualTreeLevel; // < 4 ? actualTreeLevel:4;
+                    int bound = actualTreeLevel < 4 ? actualTreeLevel:4;
                     /*for(i = 0; i < bound; i++) {
                         actual = toDoTree.get(i);
                         int amount = actual.size() / 2;
