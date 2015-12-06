@@ -250,15 +250,15 @@ public class Rubiks {
                     int i, j;
                     ArrayList<Cube> actual;
                     int bound = actualTreeLevel < 4 ? actualTreeLevel:4;
-                    /*for(i = 0; i < bound; i++) {
+                    for(i = 0; i < bound; i++) {
                         actual = toDoTree.get(i);
                         int amount = actual.size() / 2;
                         for(j = 0; j < amount; j++) {
                             workToReturn.add(actual.remove(0));
                             nodesOnTree--;
                         }
-                    }*/
-                    for(i = 0; i < bound; i++) {
+                    }
+                    /*for(i = 0; i < bound; i++) {
                         actual = toDoTree.get(i);
                         int amount = actual.size() / 2 + 1;
                         if(amount <= 1) {
@@ -269,7 +269,7 @@ public class Rubiks {
                             nodesOnTree--;
                         }
                         break;
-                    }
+                    }*/
 
 
                 }
