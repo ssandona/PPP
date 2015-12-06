@@ -86,7 +86,10 @@ public class Rubiks {
 
     static class WorkManager implements MessageUpcall {
         static ArrayList<Cube> toDo = null;
-        static ArrayList<ArrayList<Cube>> toDoTree = new ArrayList<ArrayList<Cube>>();
+        //static ArrayList<ArrayList<Cube>> toDoTree = new ArrayList<ArrayList<Cube>>();
+        Cube[][] toDoTree = new Cube[20][12];
+        int[] size = new int[20];
+        static Cube[]
         static int actualTreeLevel = 0;
         static int nodesOnTree=0;
         static int toDoWeight = 0;
@@ -94,9 +97,9 @@ public class Rubiks {
 
         public WorkManager() {
             int i;
-            for(i = 0; i < 20; i++) {
+            /*for(i = 0; i < 20; i++) {
                 toDoTree.add(new ArrayList<Cube>());
-            }
+            }*/
             System.out.println("SIZE OF TREE -> " + toDoTree.size());
         }
 
@@ -106,8 +109,7 @@ public class Rubiks {
                 int i,j;
                 for(i=0;i<20;i++){
                     s+="\n ["+i+"]";
-                    ArrayList<Cube> actual = toDoTree.get(i);
-                    for(j=0;j<actual.size();j++){
+                    for(j=0;j<size[i];j++){
                         s+="* ";
                     }
 
@@ -127,9 +129,11 @@ public class Rubiks {
                 }*/
                 //toDo.add(cube);
                 actualTreeLevel = cube.getTwists();
-                toDo=toDoTree.get(actualTreeLevel);
+                //toDo=toDoTree.get(actualTreeLevel);
+                toDo[actualTreeLevel][size[actualTreeLevel]]=cube;
+                size[actualTreeLevel]++;
 
-                toDo.add(cube);
+                //toDo.add(cube);
                 nodesOnTree++;
                 //printTree();
                 //toDoWeight += Math.pow(children,(cube.getBound() - cube.getTwists()));
@@ -204,13 +208,15 @@ public class Rubiks {
                     }*/
                     //int n = toDo.size() - 1;
                     //System.out.println("Ibis[" + myIntIbisId + "nodes  on tree -> "+nodesOnTree+ " actual level "+actualTreeLevel);
-                    int n = toDo.size() - 1;
+                    int n = size[actualTreeLevel] - 1;
                     while(n<0){
                         actualTreeLevel--;
-                        toDo=toDoTree.get(actualTreeLevel);
-                        n = toDo.size() - 1;
+                        //toDo=toDoTree.get(actualTreeLevel);
+                        n = size[actualTreeLevel] - 1;
                     }
-                    c = toDo.remove(n);
+                    c=toDoTree[actualTreeLevel][n];
+                    size[actualTreeLevel]--;
+                    //c = toDo.remove(n);
                     nodesOnTree--;
                     //printTree();
                     //c = toDo.remove(n);
@@ -240,14 +246,16 @@ public class Rubiks {
                     }*/
 
                     //for each tree level, distribute half of the nodes
+
                     int i, j;
-                    ArrayList<Cube> actual;
+                    int element=0;
                     int bound=actualTreeLevel < 4 ? actualTreeLevel:4; 
                     for(i = 0; i < bound; i++) {
-                        actual = toDoTree.get(i);
-                        int amount = actual.size() / 2;
+                        //actual = toDoTree.get(i);
+                        int amount = size[i] / 2;
                         for(j = 0; j < amount; j++) {
-                            workToReturn.add(actual.remove(0));
+                            workToReturn.add(toDoTree[i][size[i]]);
+                            size[i]--;
                             nodesOnTree--;
                         }
                     }
