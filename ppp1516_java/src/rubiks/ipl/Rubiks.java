@@ -191,6 +191,7 @@ public class Rubiks {
         }
 
         synchronized public static ArrayList<Cube> getFromPool (boolean sameNode) {
+            System.out.println("Ibis[" + myIntIbisId + "nodes  on tree -> "+nodesOnTree);
             ArrayList<Cube> workToReturn = new ArrayList<Cube>();
             if(nodesOnTree == 0) {
                 return null;
