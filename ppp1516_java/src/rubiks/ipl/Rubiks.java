@@ -500,7 +500,8 @@ public class Rubiks {
         int i;
         Cube cube;
         boolean end = false;
-        while(!end) {
+        int chance = 2;
+        while(chance>0) {
             while((actual = workManager.getWork(true)) != null && actual.size() != 0) {
                 /*if(actual.size() != 1) {
                     System.out.println("Ibis[" + myIntIbisId + "] -> ActualSize PROBLEMS");
@@ -524,8 +525,10 @@ public class Rubiks {
                 }
 
             }
+            chance--;
+            //if(chance==0)
             //System.out.println("Ibis[" + myIntIbisId + "] -> solutionsWorkers -> No work");
-            end = tokenManager.checkTermination();
+            //end = tokenManager.checkTermination();
         }
         //System.out.println("Ibis[" + myIntIbisId + "] -> solutionsWorkers -> FIrstTermination");
         return result;
