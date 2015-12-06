@@ -91,6 +91,10 @@ public class Rubiks {
         static int toDoWeight = 0;
         static Object lock = new Object();
 
+        public WorkManager(){
+            System.out.println("SIZE OF TREE -> "+toDoTree.size());
+        }
+
         /*synchronized public static boolean availableWork() {
             System.out.println("Ibis[" + myIntIbisId + "] -> SIZE: " + toDo.size());
         }*/
