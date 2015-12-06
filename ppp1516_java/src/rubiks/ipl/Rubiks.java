@@ -190,7 +190,7 @@ public class Rubiks {
 
         synchronized public static ArrayList<Cube> getFromPool (boolean sameNode) {
             ArrayList<Cube> workToReturn = new ArrayList<Cube>();
-            if(toDoTree.get(actualTreeLevel).size() == 0) {
+            if(toDoTree.get(1).size() == 0) {
                 return null;
             }
             if(sameNode) {
@@ -201,6 +201,10 @@ public class Rubiks {
                     }*/
                     //int n = toDo.size() - 1;
                     int n = toDoTree.get(actualTreeLevel).size() - 1;
+                    while(n==0){
+                        actualTreeLevel--;
+                        n = toDoTree.get(actualTreeLevel).size() - 1;
+                    }
                     c = toDoTree.get(actualTreeLevel).remove(n);
                     if(n == 1) {
                         actualTreeLevel--;
@@ -235,7 +239,8 @@ public class Rubiks {
                     //for each tree level, distribute half of the nodes
                     int i, j;
                     ArrayList<Cube> actual;
-                    for(i = 0; i < actualTreeLevel; i++) {
+                    int bound=actualTreeLevel < 4 ? actualTreeLevel:4; 
+                    for(i = 0; i < bound; i++) {
                         actual = toDoTree.get(i);
                         int amount = actual.size() / 2;
                         for(j = 0; j < amount; j++) {
