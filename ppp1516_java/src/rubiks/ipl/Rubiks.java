@@ -649,7 +649,7 @@ public class Rubiks {
             bound++;
             initialCube.setBound(bound);
             result = generateFirstLevel(initialCube, cache, toDo);
-            if(result != 0) {
+            if(result == 0) {
                 result = generateSecondLevel(cache, toDo);
                 if(result != 0) {
                     bound = 2;
