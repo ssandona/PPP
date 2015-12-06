@@ -99,7 +99,7 @@ public class Rubiks {
             System.out.println("SIZE OF TREE -> " + toDoTree.size());
         }
 
-        public void printTree(){
+        public static void printTree(){
             synchronized(lock){
                 String s="";
                 int i,j;
