@@ -465,6 +465,7 @@ public class Rubiks {
         //Thread.sleep(1000);
         WriteMessage task;
         System.out.println("bound");
+        children=6*(initialCube.getSize()-1);
         while (result == 0) {
             bound++;
             initialCube.setBound(bound);
