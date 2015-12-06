@@ -86,7 +86,7 @@ public class Rubiks {
 
     static class WorkManager implements MessageUpcall {
         //static ArrayList<Cube> toDo = new ArrayList<Cube>();
-        static ArrayList<Cube>[] toDoTree = new ArrayList<Cube>[20];
+        static ArrayList<ArrayList<Cube>> toDoTree = new ArrayList<ArrayList<Cube>>(20);
         static int actualTreeLevel = 0;
         static int toDoWeight = 0;
         static Object lock = new Object();
@@ -103,7 +103,7 @@ public class Rubiks {
                 //toDo.add(cube);
                 actualTreeLevel = cube.getTwists();
 
-                toDoTree[actualTreeLevel].add(cube);
+                toDoTree.get(actualTreeLevel).add(cube);
                 //toDoWeight += Math.pow(children,(cube.getBound() - cube.getTwists()));
             }
             //System.out.println("Ibis[" + myIntIbisId + "] -> added cube");
@@ -165,7 +165,7 @@ public class Rubiks {
 
         synchronized public static ArrayList<Cube> getFromPool (boolean sameNode) {
             ArrayList<Cube> workToReturn = new ArrayList<Cube>();
-            if(toDoTree[actualTreeLevel].size() == 0) {
+            if(toDoTree.get(actualTreeLevel).size() == 0) {
                 return null;
             }
             if(sameNode) {
@@ -175,8 +175,8 @@ public class Rubiks {
                         actualTreeLevel--;
                     }*/
                     //int n = toDo.size() - 1;
-                    int n = toDoTree[actualTreeLevel].size()-1;
-                    c = toDoTree[actualTreeLevel].remove(n);
+                    int n = toDoTree.get(actualTreeLevel).size()-1;
+                    c = toDoTree.get(actualTreeLevel).remove(n);
                     if(n == 1) {
                         actualTreeLevel--;
                     }
@@ -229,7 +229,7 @@ public class Rubiks {
             //System.out.println("Ibis[" + myIntIbisId + "] -> getWork");
             ArrayList<Cube> work=getFromPool(sameNode);
             if(sameNode) {
-                if(w==null) {
+                if(work==null) {
                     //System.out.println("Ibis[" + myIntIbisId + "] -> toDo Empty");
                     boolean b = askForWork();
                     if(!b) {
