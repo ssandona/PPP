@@ -89,7 +89,7 @@ public class Rubiks {
         //static ArrayList<ArrayList<Cube>> toDoTree = new ArrayList<ArrayList<Cube>>();
         static Cube[][] toDoTree = new Cube[20][12];
         static int[] size = new int[20];
-        static Cube[];
+        //static Cube[];
         static int actualTreeLevel = 0;
         static int nodesOnTree=0;
         //static int toDoWeight = 0;
