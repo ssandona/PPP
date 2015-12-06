@@ -208,7 +208,7 @@ public class Rubiks {
     }
 
     /*A request of work from another Ibis instance*/
-    public void workRequestFromOthers(ReadMessage message) throws IOException,
+    public static void workRequestFromOthers(ReadMessage message) throws IOException,
         ClassNotFoundException {
         int otherIbisId = message.readInt();
         message.finish();
@@ -622,7 +622,7 @@ public class Rubiks {
 
 
         //port in which new work requests will be sent
-        workRequestSender = ibis.createSendPort(portTypeMto1Up);
+        workRequestSender = ibis.createSendPort(portTypeMto1Poll);
 
         //port in which new tokens will be received
         tokenRequestReceiver = ibis.createReceivePort(portType1to1Up, "TokenReq", tokenManager);
