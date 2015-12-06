@@ -720,11 +720,12 @@ public class Rubiks {
         int result = 0;
         boolean end = false;
         int i;
-        int bound = 0;
+        int bound = 2;
 
         ArrayList<Cube> toDo=new ArrayList<Cube>();
 
         while(!end) {
+            bound++;
             result = generateFirstLevel(initialCube, cache, toDo);
             if(result != 0) {
                 end = true;
