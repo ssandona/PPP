@@ -34,12 +34,12 @@ public class Rubiks {
                 cont++;
             }
         }
+
+        long end = System.currentTimeMillis();
+        System.out.println("SUM -> " + sum + " count -> " + cont);
+        System.err.println("Solving cube took " + (end - start)
+                           + " milliseconds");
     }
-    long end = System.currentTimeMillis();
-    System.out.println("SUM -> " + sum + " count -> " + cont);
-    System.err.println("Solving cube took " + (end - start)
-                       + " milliseconds");
-}
 
 
 }
