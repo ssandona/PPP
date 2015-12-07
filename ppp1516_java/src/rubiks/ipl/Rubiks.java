@@ -334,10 +334,7 @@ public class Rubiks {
 
             System.out.println(myIbisId + "-> SIZE2: " + initialToDo.size());
 
-            for(j = 0; j < 4; j++) {
-
-
-
+            for(j = 0; j < 3; j++) {
                 int m = initialToDo.size() / nodes;
                 int r = initialToDo.size() % nodes;
 
@@ -430,8 +427,10 @@ public class Rubiks {
             initialCube.setBound(bound);
             initialToDo = new ArrayList<Cube>();
             result = generateFirstLevel(initialCube, cache, initialToDo);
+            System.out.println(myIbisId + "-> SIZE1: " + initialToDo.size());
             if(result == 0) {
                 result = generateSecondLevel(cache, initialToDo);
+                System.out.println(myIbisId + "-> SIZE2: " + initialToDo.size());
                 if(result != 0) {
                     end = true;
                     continue;
@@ -444,10 +443,7 @@ public class Rubiks {
                 continue;
             }
 
-            for(j = 0; j < 4; j++) {
-
-
-
+            for(j = 0; j < 3; j++) {
                 int m = initialToDo.size() / nodes;
                 int r = initialToDo.size() % nodes;
 
@@ -475,11 +471,11 @@ public class Rubiks {
                 }
             }
 
-            //System.out.println(myIbisId + "-> SIZE: " + nodesOnTree);
+            System.out.println(myIbisId + "-> SIZE3: " + nodesOnTree);
             //printTree();
 
             result = solutionsWorkers();
-            //System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: "  + valuatedCubes);
+            System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: "  + valuatedCubes);
 
             //workManager.printSize();
             valuatedCubes = 0;
