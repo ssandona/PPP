@@ -20,9 +20,12 @@ public class Rubiks {
         int i;
         Object lock = new Object();
         int sum=0;
-        for(i=0;i<1000000;i++){
+        int cont=0;
+        for(i=0;i<1000000000;i++){
             sum+=i;
+            cont++;
         }
+        System.out.println("SUM -> "+sum+" count -> "+cont);
     }
 
 
