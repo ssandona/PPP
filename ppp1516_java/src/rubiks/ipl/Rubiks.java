@@ -110,6 +110,49 @@ public class Rubiks {
         return toDo.remove(0);
     }
 
+    private static int solutions(Cube cube, CubeCache cache, String s) {
+        /*if(counter <= 1) {
+            System.out.println(s+"AAA: Solutions -> cache size:" + cache.getSize());
+        }*/
+        if (cube.isSolved()) {
+            return 1;
+        }
+
+        if (cube.getTwists() >= cube.getBound()) {
+            /*if(counter <= 1) {
+                System.out.println(s+"AAA: Twist>=Bound");
+            }*/
+            return 0;
+        }
+
+        /*if(counter <= 1) {
+                System.out.println(s+"AAA: GenerateChildren");
+            }*/
+        // generate all possible cubes from this one by twisting it in
+        // every possible way. Gets new objects from the cache
+        Cube[] children = cube.generateChildren(cache);
+
+        int result = 0;
+
+        for (Cube child : children) {
+            /*if(counter <= 1) {
+                System.out.println(s+"AAA: Child");
+            }*/
+            // recursion step
+            int childSolutions = solutions(child, cache, s+" ");
+            if (childSolutions > 0) {
+                result += childSolutions;
+                if (PRINT_SOLUTION) {
+                    child.print(System.err);
+                }
+            }
+            // put child object in cache
+            cache.put(child);
+        }
+
+        return result;
+    }
+
 
     public static int solution(Cube cube, CubeCache cache) {
         valuatedCubes++;
@@ -176,6 +219,15 @@ public class Rubiks {
 
     public static int solutionsWorkers() throws Exception {
         //System.out.println("Ibis[" + myIntIbisId + "] -> solutionsWorkers");
+
+        /*while (result == 0) {
+            bound++;
+            cube.setBound(bound);
+
+            System.out.print(" " + bound);
+            result = solutions(cube, cache,"");
+            counter++;
+        }*/
         ArrayList<Cube> actual;
         int result = 0;
         int i;
@@ -183,7 +235,7 @@ public class Rubiks {
         boolean end = false;
         System.out.println("Ibis[" + myIntIbisId + "] -> size before: " + toDo.size());
         while((cube = getFromPool()) != null) {
-            result += solution(cube, cache);
+            result += solutions(cube, cache);
             //System.out.println("Ibis[" + myIntIbisId + "] -> size: " + toDo.size());
 
             /*------------------ADD HERE---------------------------------------*/
