@@ -461,7 +461,7 @@ public class Rubiks {
             initialCube.setBound(bound);
             initialToDo = new ArrayList<Cube>();
             result = generateFirstLevel(initialCube, cache, initialToDo);
-            System.out.println(myIbisId + "-> INITIAL CUBE: " + cube.getTwists()+" "+cube.getBound());
+            System.out.println(myIbisId + "-> INITIAL CUBE: " + initialCube.getTwists()+" "+initialCube.getBound());
             if(result == 0) {
                 result = generateSecondLevel(cache, initialToDo);
                 //System.out.println(myIbisId + "-> SIZE2: " + initialToDo.size());
