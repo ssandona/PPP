@@ -197,10 +197,10 @@ public class Rubiks {
         //System.out.println("Ibis[" + myIntIbisId + "] -> SolutionsServer");
         int i;
         int result = solutionsWorkers();
-        System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
+        //System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
         //workManager.printSize();
         valuatedCubes = 0;
-        System.out.println("Ibis[" + myIntIbisId + "] -> Wait results from other cubes");
+        //System.out.println("Ibis[" + myIntIbisId + "] -> Wait results from other cubes");
         for(i = 0; i < nodes - 1; i++) {
             ReadMessage r = resultsReceiver.receive();
             result += r.readInt();
@@ -323,7 +323,7 @@ public class Rubiks {
             result = generateFirstLevel(initialCube, cache, initialToDo);
             //System.out.println(myIbisId + "-> SIZE1: " + initialToDo.size());
             if(result == 0) {
-                System.out.println(myIbisId + "generateSecondLevel");
+                //System.out.println(myIbisId + "generateSecondLevel");
                 result = generateSecondLevel(cache, initialToDo);
                 if(result != 0) {
                     bound = 2;
@@ -508,7 +508,7 @@ public class Rubiks {
             }
 
             result = solutionsWorkers();
-            System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: "  + valuatedCubes);
+            //System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: "  + valuatedCubes);
 
             //workManager.printSize();
             valuatedCubes = 0;
@@ -517,7 +517,7 @@ public class Rubiks {
             resultMessage.writeInt(result);
             resultMessage.finish();
 
-            System.out.println("Ibis[" + myIntIbisId + "] -> Wait continue from server");
+            //System.out.println("Ibis[" + myIntIbisId + "] -> Wait continue from server");
             //check if I have to continue
             ReadMessage r = terminationReceiver.receive();
             end = r.readBoolean();
