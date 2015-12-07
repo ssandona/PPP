@@ -75,7 +75,7 @@ public class Rubiks {
         String s = "";
         int i, j;
         int level = 2;
-        s += "["2"]";
+        s += "[2]";
         for(i = 0; i < toDO.size(); i++) {
             int actual = toDo.get(i).getTwists();
             if(actual != level) {
