@@ -399,11 +399,76 @@ public class Rubiks {
             }
             System.out.println("TODO: " + s);*/
 
+             /*correct
             for(j = 0; j < 3; j++) {
-                int m = initialToDo.size() / nodes;
-                int r = initialToDo.size() % nodes;
-
                 if(j != 2) {
+                    int m = initialToDo.size() / nodes;
+                    int r = initialToDo.size() % nodes;
+
+
+                    int startIndex = m * myIntIbisId;
+
+                    for(i = 0; i < startIndex; i++) {
+                        initialToDo.remove(0);
+                    }
+
+                    for(i = 0; i < m; i++) {
+                        add(initialToDo.remove(0));
+                    }
+
+                    for(i = 0; i < (nodes - 1 - myIntIbisId) * m; i++) {
+                        initialToDo.remove(0);
+                    }
+
+                    if(r != 0) {
+                        for(i = 0; i < r; i++) {
+                            generateAnotherLevel(initialToDo.remove(0), cache, initialToDo);
+                        }
+                    } else {
+                        break;
+                    }
+                }
+                else {
+                    int[] cubes_per_proc = new int[nodes];
+                    int[] displs = new int[nodes];
+                    int avarage_cubes_per_proc = initialToDo.size() / nodes;
+                    int rem = initialToDo.size() % nodes;
+                    int sum = 0;
+                    for (i = 0; i < nodes; i++) {
+                        cubes_per_proc[i] = avarage_cubes_per_proc;
+                        if (rem > 0) {
+                            cubes_per_proc[i]++;
+                            rem--;
+                        }
+                        displs[i] = sum;
+                        sum += cubes_per_proc[i];
+                    }
+                    int mydisp = displs[myIntIbisId];
+                    for(i = 0; i < displs[myIntIbisId]; i++) {
+                        initialToDo.remove(0);
+                    }
+                    for(i = 0; i < cubes_per_proc[myIntIbisId]; i++) {
+                        add(initialToDo.remove(0));
+                    }
+                }
+            }
+
+            end correct */
+
+            /*sub*/ /*try with only this no generate first and second*/
+            for(j = 0; j < 4; j++) {
+                if(j != 3) {
+                    int m = initialToDo.size() / nodes;
+                    int r = initialToDo.size() % nodes;
+
+                    if(m == 0) {
+                        for(i = 0; i < initialToDo.size(); i++) {
+                            generateAnotherLevel(initialToDo.remove(0), cache, initialToDo);
+                        }
+                        continue;
+                    }
+
+
                     int startIndex = m * myIntIbisId;
 
                     for(i = 0; i < startIndex; i++) {
@@ -449,6 +514,8 @@ public class Rubiks {
                     }
                 }
             }
+
+            /*end sub*/
 
 
 
