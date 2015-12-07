@@ -89,7 +89,7 @@ public class Rubiks {
             ClassNotFoundException {
             int otherIbisId = message.readInt();
             message.finish();
-            //System.out.println("Ibis[" + myIntIbisId + "] -> workrequest");
+            System.out.println("Ibis[" + myIntIbisId + "] -> workrequest UPCALL");
             //get ibisIdentifier of the requestor
             IbisIdentifier requestor = joinedIbises[otherIbisId];
             int i;
@@ -135,7 +135,7 @@ public class Rubiks {
 
     public static boolean askForWork() throws IOException, ClassNotFoundException {
         //System.out.println("Ibis[" + myIntIbisId + "] -> Ask");
-        //System.out.println("Ibis[" + myIntIbisId + "] -> askForWork");
+        System.out.println("Ibis[" + myIntIbisId + "] -> askForWork");
         int i;
         Cube[] receivedWork = new Cube[0];
         //Cube[] receivedWork;
@@ -156,10 +156,10 @@ public class Rubiks {
                     int cubes = r.readInt();
                     r.finish();
                     if(cubes == 0) {
-                        //System.out.println("Ibis[" + myIntIbisId + "] -> no work");
+                        System.out.println("Ibis[" + myIntIbisId + "] -> no work");
                     } else {
                         r = workReceiver.receive();
-                        //System.out.println("Ibis[" + myIntIbisId + "] -> work!!! " + cubes + " cubes");
+                        System.out.println("Ibis[" + myIntIbisId + "] -> work!!! " + cubes + " cubes");
                         receivedWork = new Cube[cubes];
                         r.readArray(receivedWork);
                         r.finish();
@@ -266,7 +266,7 @@ public class Rubiks {
         ClassNotFoundException {
         int otherIbisId = message.readInt();
         message.finish();
-        //System.out.println("Ibis[" + myIntIbisId + "] -> workrequest");
+        System.out.println("Ibis[" + myIntIbisId + "] -> workrequestFromOther");
         //get ibisIdentifier of the requestor
         IbisIdentifier requestor = joinedIbises[otherIbisId];
         int i;
