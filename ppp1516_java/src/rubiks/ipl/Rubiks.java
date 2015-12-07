@@ -22,7 +22,7 @@ public class Rubiks {
         long sum=0;
         int cont=0;
         long start = System.currentTimeMillis();
-        for(i=0;i<99999999999;i++){
+        for(i=0;i<999999999;i++){
             sum+=i;
             cont++;
         }
