@@ -14,20 +14,22 @@ import java.io.IOException;
 //public class Rubiks implements RegistryEventHandler {
 public class Rubiks {
 
-    
+
 
     public static void main(String[] arguments) {
         long i;
         Object lock = new Object();
-        long sum=0;
-        int cont=0;
+        long sum = 0;
+        int cont = 0;
         long start = System.currentTimeMillis();
-        for(i=0;i<999999999;i++){
-            sum+=i;
-            cont++;
+        for(i = 0; i < 999999999; i++) {
+            synchronized(lock) {
+                sum += i;
+                cont++;
+            }
         }
         long end = System.currentTimeMillis();
-        System.out.println("SUM -> "+sum+" count -> "+cont);
+        System.out.println("SUM -> " + sum + " count -> " + cont);
         System.err.println("Solving cube took " + (end - start)
                            + " milliseconds");
     }
