@@ -110,7 +110,7 @@ public class Rubiks {
         return toDo.remove(0);
     }
 
-    private static int solutions(Cube cube, CubeCache cache, String s) {
+    private static int solutions(Cube cube, CubeCache cache) {
         /*if(counter <= 1) {
             System.out.println(s+"AAA: Solutions -> cache size:" + cache.getSize());
         }*/
@@ -139,7 +139,6 @@ public class Rubiks {
                 System.out.println(s+"AAA: Child");
             }*/
             // recursion step
-            int childSolutions = solutions(child, cache, s+" ");
             if (childSolutions > 0) {
                 result += childSolutions;
                 if (PRINT_SOLUTION) {
@@ -233,15 +232,15 @@ public class Rubiks {
         int i;
         Cube cube;
         boolean end = false;
-        System.out.println("Ibis[" + myIntIbisId + "] -> size before: " + toDo.size());
+        //System.out.println("Ibis[" + myIntIbisId + "] -> size before: " + toDo.size());
         while((cube = getFromPool()) != null) {
             result += solutions(cube, cache);
             //System.out.println("Ibis[" + myIntIbisId + "] -> size: " + toDo.size());
 
             /*------------------ADD HERE---------------------------------------*/
-            if(cube != initialCube) {
+            /*if(cube != initialCube) {
                 cache.put(cube);
-            }
+            }*/
 
         }
         //System.out.println("Ibis[" + myIntIbisId + "] -> solutionsWorkers -> FIrstTermination");
