@@ -82,6 +82,7 @@ public class Rubiks {
                 level = actual;
                 s += "\n [" + level + "]";
             }
+            s+="* ";
         }
         System.out.println("Ibis[" + myIntIbisId + "] ----- TREE-----" + s);
 
@@ -317,7 +318,7 @@ public class Rubiks {
             initialCube.setBound(bound);
             initialToDo = new ArrayList<Cube>();
             result = generateFirstLevel(initialCube, cache, initialToDo);
-            System.out.println(myIbisId + "-> SIZE1: " + nodesOnTree);
+            System.out.println(myIbisId + "-> SIZE1: " + initialToDo.size());
             if(result == 0) {
                 System.out.println(myIbisId + "generateSecondLevel");
                 result = generateSecondLevel(cache, initialToDo);
@@ -331,7 +332,7 @@ public class Rubiks {
                 continue;
             }
 
-            System.out.println(myIbisId + "-> SIZE2: " + nodesOnTree);
+            System.out.println(myIbisId + "-> SIZE2: " + initialToDo.size());
 
             for(j = 0; j < 4; j++) {
 
