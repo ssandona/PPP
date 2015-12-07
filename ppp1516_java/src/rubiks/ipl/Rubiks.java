@@ -82,7 +82,7 @@ public class Rubiks {
                 level = actual;
                 s += "\n [" + level + "]";
             }
-            s+=(actual.getTwists() + " ");
+            s+=(toDo.get(i).getTwists() + " ");
         }
         System.out.println("Ibis[" + myIntIbisId + "] ----- TREE-----" + s);
 
