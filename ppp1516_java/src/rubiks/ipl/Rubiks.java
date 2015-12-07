@@ -303,7 +303,7 @@ public class Rubiks {
         }
 
         long start = System.currentTimeMillis();
-        int bound = 2;
+        int bound = 1;
         int result = 0;
         int i,j;
         /*ArrayList<Cube> work = workManager.getWork(true);
@@ -415,7 +415,7 @@ public class Rubiks {
         int result = 0;
         boolean end = false;
         int i,j;
-        int bound = 2;
+        int bound = 1;
 
         ArrayList<Cube> initialToDo = new ArrayList<Cube>();
 
