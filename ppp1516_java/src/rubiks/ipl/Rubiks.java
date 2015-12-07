@@ -462,7 +462,8 @@ public class Rubiks {
                     int r = initialToDo.size() % nodes;
 
                     if(m == 0) {
-                        for(i = 0; i < initialToDo.size(); i++) {
+                        int s=initialToDo.size();
+                        for(i = 0; i < s; i++) {
                             generateAnotherLevel(initialToDo.remove(0), cache, initialToDo);
                         }
                         continue;
@@ -660,7 +661,8 @@ public class Rubiks {
                     int r = initialToDo.size() % nodes;
 
                     if(m == 0) {
-                        for(i = 0; i < initialToDo.size(); i++) {
+                        int s=initialToDo.size();
+                        for(i = 0; i < s; i++) {
                             generateAnotherLevel(initialToDo.remove(0), cache, initialToDo);
                         }
                         continue;
