@@ -443,7 +443,9 @@ public class Rubiks {
 
 
         while(!end) {
+            workRequestReceiver.disableMessageUpcalls();
             while((actual = getWork(true)) != null && actual.size() != 0) {
+
                 elab++;
                 /*if(actual.size() != 1) {
                     System.out.println("Ibis[" + myIntIbisId + "] -> ActualSize PROBLEMS");
