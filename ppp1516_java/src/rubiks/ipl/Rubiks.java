@@ -113,7 +113,7 @@ public class Rubiks {
 
     public static int solution(Cube cube, CubeCache cache) {
         valuatedCubes++;
-        System.out.println("Ibis[" + myIntIbisId + "] -> twists: "+cube.getTwists()+" bound: "+cube.getBound());
+        //System.out.println("Ibis[" + myIntIbisId + "] -> twists: "+cube.getTwists()+" bound: "+cube.getBound());
         if (cube.isSolved()) {
             //System.out.println("SOLVED");
 
@@ -181,10 +181,10 @@ public class Rubiks {
         int i;
         Cube cube;
         boolean end = false;
-        System.out.println("Ibis[" + myIntIbisId + "] -> size before: " + toDo.size());
+        //System.out.println("Ibis[" + myIntIbisId + "] -> size before: " + toDo.size());
         while((cube = getFromPool()) != null) {
             result += solution(cube, cache);
-            System.out.println("Ibis[" + myIntIbisId + "] -> size: " + toDo.size());
+            //System.out.println("Ibis[" + myIntIbisId + "] -> size: " + toDo.size());
 
             /*------------------ADD HERE---------------------------------------*/
             if(cube != initialCube) {
