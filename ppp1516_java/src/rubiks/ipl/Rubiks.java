@@ -150,7 +150,9 @@ public class Rubiks {
         }
 
         //generate childrens
+        System.out.println("Ibis[" + myIntIbisId + "] -> cube: " + cube.getTwists());
         Cube[] children = cube.generateChildren(cache);
+        System.out.println("Ibis[" + myIntIbisId + "] -> child: " + children[0].getTwists());
         Cube child;
         int i;
         //add childrens on the toDo pool
