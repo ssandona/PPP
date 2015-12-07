@@ -94,6 +94,9 @@ public class Rubiks {
         //System.out.println("Ibis[" + myIntIbisId + "] -> added cube");
     }
 
+    /*receive port that I check number of connections, if 0 then all are terminated*/
+    /*when I think that I'm terminated I disconnect from all the other ports*/
+
 
     public static boolean askForWork() throws IOException, ClassNotFoundException {
         System.out.println("Ibis[" + myIntIbisId + "] -> Ask");
