@@ -329,6 +329,8 @@ public class Rubiks {
                 continue;
             }
 
+            System.out.println(myIbisId + "-> SIZE: " + nodesOnTree);
+
             for(j = 0; j < 4; j++) {
 
 
@@ -475,7 +477,7 @@ public class Rubiks {
 
             //result = solutionsWorkers();
             //System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: "  + valuatedCubes);
-            
+
             //workManager.printSize();
             valuatedCubes = 0;
             //communicate my results
