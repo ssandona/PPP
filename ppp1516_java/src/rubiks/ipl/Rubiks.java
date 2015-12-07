@@ -181,7 +181,7 @@ public class Rubiks {
         int i;
         Cube cube;
         boolean end = false;
-        //System.out.println("Ibis[" + myIntIbisId + "] -> size before: " + toDo.size());
+        System.out.println("Ibis[" + myIntIbisId + "] -> size before: " + toDo.size());
         while((cube = getFromPool()) != null) {
             result += solution(cube, cache);
             //System.out.println("Ibis[" + myIntIbisId + "] -> size: " + toDo.size());
