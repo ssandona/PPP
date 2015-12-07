@@ -150,9 +150,9 @@ public class Rubiks {
         }
 
         //generate childrens
-        System.out.println("Ibis[" + myIntIbisId + "] -> cube: " + cube.getTwists());
+        //System.out.println("Ibis[" + myIntIbisId + "] -> cube: " + cube.getTwists());
         Cube[] children = cube.generateChildren(cache);
-        System.out.println("Ibis[" + myIntIbisId + "] -> child: " + children[0].getTwists());
+        //System.out.println("Ibis[" + myIntIbisId + "] -> child: " + children[0].getTwists());
         Cube child;
         int i;
         //add childrens on the toDo pool
@@ -181,8 +181,10 @@ public class Rubiks {
         int i;
         Cube cube;
         boolean end = false;
+        System.out.println("Ibis[" + myIntIbisId + "] -> size before: " + toDo.size());
         while((cube = getFromPool()) != null) {
             result += solution(cube, cache);
+            System.out.println("Ibis[" + myIntIbisId + "] -> size: " + toDo.size());
 
             /*------------------ADD HERE---------------------------------------*/
             if(cube != initialCube) {
