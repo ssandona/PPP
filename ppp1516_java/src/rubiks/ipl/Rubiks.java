@@ -468,8 +468,8 @@ public class Rubiks {
                 }
             }
 
-            System.out.println(myIbisId + "-> SIZE: " + nodesOnTree);
-            printTree();
+            //System.out.println(myIbisId + "-> SIZE: " + nodesOnTree);
+            //printTree();
 
             result = solutionsWorkers();
             System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: "  + valuatedCubes);
