@@ -313,9 +313,9 @@ public class Rubiks {
         ArrayList<Cube> initialToDo;
         WriteMessage task;
 
-        System.out.println("bound");
         while(result == 0) {
             bound++;
+            System.out.println(myIbisId + "-> BOUND: " + bound);
             initialCube.setBound(bound);
             initialToDo = new ArrayList<Cube>();
             result = generateFirstLevel(initialCube, cache, initialToDo);
@@ -421,6 +421,7 @@ public class Rubiks {
 
         while(!end) {
             bound++;
+            System.out.println(myIbisId + "-> BOUND: " + bound);
             initialCube.setBound(bound);
             initialToDo = new ArrayList<Cube>();
             result = generateFirstLevel(initialCube, cache, initialToDo);
