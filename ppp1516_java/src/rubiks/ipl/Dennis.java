@@ -17,6 +17,7 @@ public class Dennis {
     
 
     public static void main(String[] arguments) {
+        
         int i;
         Object lock = new Object();
         int sum=0;
