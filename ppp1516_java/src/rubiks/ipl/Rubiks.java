@@ -74,15 +74,15 @@ public class Rubiks {
     public static void printTree() {
         String s = "\n";
         int i, j;
-        int level = 2;
-        s += "[2]";
+        int level = -1;
+        int nodes=0;
         for(i = 0; i < toDo.size(); i++) {
             int actual = toDo.get(i).getTwists();
             if(actual != level) {
                 level = actual;
                 s += "\n [" + level + "]";
             }
-            s+="* ";
+            s+=(actual.getTwists() + " ");
         }
         System.out.println("Ibis[" + myIntIbisId + "] ----- TREE-----" + s);
 
