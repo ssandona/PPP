@@ -16,7 +16,7 @@ public class Rubiks {
 
     
 
-    public static void main(String[] arguments) {7
+    public static void main(String[] arguments) {
         int i;
         Object lock = new Object();
         int sum=0;
