@@ -139,6 +139,7 @@ public class Rubiks {
                 System.out.println(s+"AAA: Child");
             }*/
             // recursion step
+            int childSolutions = solutions(child, cache);
             if (childSolutions > 0) {
                 result += childSolutions;
                 if (PRINT_SOLUTION) {
