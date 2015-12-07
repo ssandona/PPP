@@ -525,8 +525,7 @@ public class Rubiks {
 
             }
             //System.out.println("Ibis[" + myIntIbisId + "] -> solutionsWorkers -> No work");
-            //end = tokenManager.checkTermination();
-            end=true;
+            end = tokenManager.checkTermination();
         }
         //System.out.println("Ibis[" + myIntIbisId + "] -> solutionsWorkers -> FIrstTermination");
         return result;
