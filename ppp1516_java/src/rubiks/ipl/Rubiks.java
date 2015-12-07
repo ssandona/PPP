@@ -114,6 +114,7 @@ public class Rubiks {
         /*if(counter <= 1) {
             System.out.println(s+"AAA: Solutions -> cache size:" + cache.getSize());
         }*/
+        valuatedCubes++;
         if (cube.isSolved()) {
             return 1;
         }
