@@ -24,12 +24,12 @@ public class Rubiks {
         boolean danger = false;
         long start = System.currentTimeMillis();
         for(i = 0; i < 999999999; i++) {
-            if(danger) {}
-            synchronized(lock) {
-                sum += i;
-                cont++;
-            }
-            else{
+            if(danger) {
+                synchronized(lock) {
+                    sum += i;
+                    cont++;
+                }
+            } else {
                 sum += i;
                 cont++;
             }
