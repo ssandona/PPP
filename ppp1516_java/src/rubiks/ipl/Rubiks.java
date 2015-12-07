@@ -113,7 +113,7 @@ public class Rubiks {
 
     public static int solution(Cube cube, CubeCache cache) {
         valuatedCubes++;
-        //System.out.println("Ibis[" + myIntIbisId + "] -> solution");
+        System.out.println("Ibis[" + myIntIbisId + "] -> twists: "+cube.getTwists()+" bound: "+cube.getBound());
         if (cube.isSolved()) {
             //System.out.println("SOLVED");
 
