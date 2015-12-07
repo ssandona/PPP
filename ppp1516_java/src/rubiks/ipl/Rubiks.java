@@ -372,8 +372,8 @@ public class Rubiks {
 
             //Thread.sleep(1000);
             System.out.println(" " + bound);
-            //result = solutionsServer(resultsReceiver);
-            result=10;
+            result = solutionsServer(resultsReceiver);
+            //result=10;
 
             //System.out.println("Result :" + result);
 
@@ -478,7 +478,7 @@ public class Rubiks {
             //System.out.println(myIbisId + "-> SIZE: " + nodesOnTree);
             //printTree();
 
-            //result = solutionsWorkers();
+            result = solutionsWorkers();
             //System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: "  + valuatedCubes);
 
             //workManager.printSize();
