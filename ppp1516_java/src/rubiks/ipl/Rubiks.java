@@ -367,7 +367,9 @@ public class Rubiks {
 
             //Thread.sleep(1000);
             System.out.println(" " + bound);
-            result = solutionsServer(resultsReceiver);
+            //result = solutionsServer(resultsReceiver);
+            result=10;
+
             //System.out.println("Result :" + result);
 
             //say to all to continue
@@ -471,8 +473,9 @@ public class Rubiks {
             //System.out.println(myIbisId + "-> SIZE: " + nodesOnTree);
             //printTree();
 
-            result = solutionsWorkers();
-            System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: "  + valuatedCubes);
+            //result = solutionsWorkers();
+            //System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: "  + valuatedCubes);
+            
             //workManager.printSize();
             valuatedCubes = 0;
             //communicate my results
