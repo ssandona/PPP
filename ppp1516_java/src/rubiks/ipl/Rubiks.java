@@ -76,7 +76,7 @@ public class Rubiks {
         int i, j;
         int level = 2;
         s += "[2]";
-        for(i = 0; i < toDO.size(); i++) {
+        for(i = 0; i < toDo.size(); i++) {
             int actual = toDo.get(i).getTwists();
             if(actual != level) {
                 level = actual;
@@ -334,7 +334,7 @@ public class Rubiks {
 
 
                 int m = initialToDo.size() / nodes;
-                int r = initialToDo - size() % nodes;
+                int r = initialToDo.size() % nodes;
 
 
                 int startIndex = m * myIntIbisId;
@@ -442,7 +442,7 @@ public class Rubiks {
 
 
                 int m = initialToDo.size() / nodes;
-                int r = initialToDo - size() % nodes;
+                int r = initialToDo.size() % nodes;
 
 
                 int startIndex = m * myIntIbisId;
@@ -558,15 +558,12 @@ public class Rubiks {
 
         joinedIbises = ibis.registry().joinedIbises();
         nodes = joinedIbises.length;
-        target = (myIntIbisId + 1) % nodes;
-        white = new boolean[nodes];
         int i = 0;
         for (IbisIdentifier joinedIbis : joinedIbises) {
             System.err.println("Ibis joined: " + joinedIbis);
             if(joinedIbis.equals(myIbisId)) {
                 myIntIbisId = i;
             }
-            white[i] = true;
             i++;
         }
 
