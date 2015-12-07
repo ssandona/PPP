@@ -72,7 +72,7 @@ public class Rubiks {
     static int nodesOnTree = 0;
 
     public static void printTree() {
-        String s = "";
+        String s = "\n";
         int i, j;
         int level = 2;
         s += "[2]";
