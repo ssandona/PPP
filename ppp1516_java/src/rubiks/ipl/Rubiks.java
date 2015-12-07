@@ -75,14 +75,14 @@ public class Rubiks {
         String s = "\n";
         int i, j;
         int level = -1;
-        int nodes=0;
+        int nodes = 0;
         for(i = 0; i < toDo.size(); i++) {
             int actual = toDo.get(i).getTwists();
             if(actual != level) {
                 level = actual;
                 s += "\n [" + level + "]";
             }
-            s+=(toDo.get(i).getTwists() + " ");
+            s += (toDo.get(i).getTwists() + " ");
         }
         System.out.println("Ibis[" + myIntIbisId + "] ----- TREE-----" + s);
 
@@ -307,7 +307,7 @@ public class Rubiks {
         long start = System.currentTimeMillis();
         int bound = 1;
         int result = 0;
-        int i,j;
+        int i, j;
         /*ArrayList<Cube> work = workManager.getWork(true);
         Cube cube = work.get(0);*/
         //System.out.println("SolutionsServer");
@@ -337,37 +337,60 @@ public class Rubiks {
 
             System.out.println(myIbisId + "-> SIZE2: " + initialToDo.size());
 
-            String s="";
-            for(i=0;i<initialToDo.size();i++){
-                s+=(" "+initialToDo.get(i).getTwists());
+            String s = "";
+            for(i = 0; i < initialToDo.size(); i++) {
+                s += (" " + initialToDo.get(i).getTwists());
             }
-            System.out.println("TODO: "+s);
+            System.out.println("TODO: " + s);
 
             for(j = 0; j < 3; j++) {
                 int m = initialToDo.size() / nodes;
                 int r = initialToDo.size() % nodes;
 
+                if(j != 2) {
+                    int startIndex = m * myIntIbisId;
 
-                int startIndex = m * myIntIbisId;
+                    for(i = 0; i < startIndex; i++) {
+                        initialToDo.remove(0);
+                    }
 
-                for(i = 0; i < startIndex; i++) {
-                    initialToDo.remove(0);
-                }
+                    for(i = 0; i < m; i++) {
+                        add(initialToDo.remove(0));
+                    }
 
-                for(i = 0; i < m; i++) {
-                    add(initialToDo.remove(0));
-                }
+                    for(i = 0; i < (nodes - 1 - myIntIbisId) * m; i++) {
+                        initialToDo.remove(0);
+                    }
 
-                for(i = 0; i < (nodes - 1 - myIntIbisId) * m; i++) {
-                    initialToDo.remove(0);
-                }
-
-                if(r != 0) {
-                    for(i = 0; i < r; i++) {
-                        generateAnotherLevel(initialToDo.remove(0), cache, initialToDo);
+                    if(r != 0) {
+                        for(i = 0; i < r; i++) {
+                            generateAnotherLevel(initialToDo.remove(0), cache, initialToDo);
+                        }
+                    } else {
+                        break;
                     }
                 } else {
-                    break;
+                    int[] cubes_per_proc = new int[nodes];
+                    int[] displs = new int[nodes];
+                    int avarage_cubes_per_proc = initialToDo.size() / nodes;
+                    int rem = initialToDo.size() % nodes;
+                    int sum = 0;
+                    for (i = 0; i < nodes; i++) {
+                        cubes_per_proc[i] = avarage_cubes_per_proc;
+                        if (rem > 0) {
+                            cubes_per_proc[i]++;
+                            rem--;
+                        }
+                        displs[i] = sum;
+                        sum += cubes_per_proc[i];
+                    }
+                    int mydisp = displs[myIntIbisId];
+                    for(i = 0; i < displs[myIntIbisId]; i++) {
+                        initialToDo.remove(0);
+                    }
+                    for(i = 0; i < cubes_per_proc[myIntIbisId]; i++) {
+                        add(initialToDo.remove(0));
+                    }
                 }
             }
 
@@ -379,7 +402,7 @@ public class Rubiks {
             //Thread.sleep(1000);
             System.out.println(" " + bound);
             result = solutionsServer(resultsReceiver);
-            
+
             if(result == 0) {
                 task = terminationSender.newMessage();
                 task.writeBoolean(false);
@@ -422,7 +445,7 @@ public class Rubiks {
 
         int result = 0;
         boolean end = false;
-        int i,j;
+        int i, j;
         int bound = 1;
 
         ArrayList<Cube> initialToDo = new ArrayList<Cube>();
@@ -478,7 +501,7 @@ public class Rubiks {
             }
 
             System.out.println(myIbisId + "-> SIZE3: " + nodesOnTree);
-            //printTree();
+            printTree();
 
             result = solutionsWorkers();
             System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: "  + valuatedCubes);
@@ -581,7 +604,7 @@ public class Rubiks {
         initialCube = generateCube();
         cache = new CubeCache(initialCube.getSize());
 
-        
+
 
         // If I am the server, run server, else run client.
         if (server.equals(ibis.identifier())) {
@@ -610,7 +633,7 @@ public class Rubiks {
             solveWorkers(ibis, server);
         }
 
-       
+
         ibis.end();
     }
 
