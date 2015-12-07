@@ -159,7 +159,7 @@ public class Rubiks {
                 System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 4");
             }*/
 
-            add(child);
+            toDo.add(child);
             //cache.put(child);
         }
         return 0;
@@ -317,7 +317,9 @@ public class Rubiks {
             initialCube.setBound(bound);
             initialToDo = new ArrayList<Cube>();
             result = generateFirstLevel(initialCube, cache, initialToDo);
+            System.out.println(myIbisId + "-> SIZE1: " + nodesOnTree);
             if(result == 0) {
+                System.out.println(myIbisId + "generateSecondLevel");
                 result = generateSecondLevel(cache, initialToDo);
                 if(result != 0) {
                     bound = 2;
@@ -329,7 +331,7 @@ public class Rubiks {
                 continue;
             }
 
-            System.out.println(myIbisId + "-> SIZE: " + nodesOnTree);
+            System.out.println(myIbisId + "-> SIZE2: " + nodesOnTree);
 
             for(j = 0; j < 4; j++) {
 
@@ -364,7 +366,7 @@ public class Rubiks {
 
 
 
-            System.out.println(myIbisId + "-> SIZE: " + nodesOnTree);
+            System.out.println(myIbisId + "-> SIZE3: " + nodesOnTree);
             printTree();
 
             //Thread.sleep(1000);
