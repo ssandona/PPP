@@ -530,8 +530,8 @@ public class Rubiks {
                 continue;
             }
 
-            for(j = 0; j < 3; j++) {
-                if(j != 2) {
+            for(j = 0; j < 4; j++) {
+                if(j != 3) {
                     int m = initialToDo.size() / nodes;
                     int r = initialToDo.size() % nodes;
 
