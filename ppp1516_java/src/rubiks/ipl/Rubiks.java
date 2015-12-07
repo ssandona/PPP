@@ -451,7 +451,7 @@ public class Rubiks {
         int result = 0;
         boolean end = false;
         int i, j;
-        int bound = 1;
+        int bound = 0;
 
         ArrayList<Cube> initialToDo = new ArrayList<Cube>();
 
