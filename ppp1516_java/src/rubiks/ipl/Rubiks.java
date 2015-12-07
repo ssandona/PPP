@@ -252,7 +252,7 @@ public class Rubiks {
         //System.out.println("Ibis[" + myIntIbisId + "] -> SolutionsServer");
         int i;
         int result = solutionsWorkers();
-        //System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
+        System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
         //workManager.printSize();
         valuatedCubes = 0;
         //System.out.println("Ibis[" + myIntIbisId + "] -> Wait results from other cubes");
@@ -372,7 +372,7 @@ public class Rubiks {
 
         while(result == 0) {
             bound++;
-            System.out.println(myIbisId + "-> BOUND: " + bound);
+            //System.out.println(myIbisId + "-> BOUND: " + bound);
             initialCube.setBound(bound);
             initialToDo = new ArrayList<Cube>();
             result = generateFirstLevel(initialCube, cache, initialToDo);
@@ -509,11 +509,11 @@ public class Rubiks {
 
         while(!end) {
             bound++;
-            System.out.println(myIbisId + "-> BOUND: " + bound);
+            //System.out.println(myIbisId + "-> BOUND: " + bound);
             initialCube.setBound(bound);
             initialToDo = new ArrayList<Cube>();
             result = generateFirstLevel(initialCube, cache, initialToDo);
-            System.out.println(myIbisId + "-> INITIAL CUBE: " + initialCube.getTwists()+" "+initialCube.getBound());
+            //System.out.println(myIbisId + "-> INITIAL CUBE: " + initialCube.getTwists()+" "+initialCube.getBound());
             if(result == 0) {
                 result = generateSecondLevel(cache, initialToDo);
                 //System.out.println(myIbisId + "-> SIZE2: " + initialToDo.size());
@@ -588,7 +588,7 @@ public class Rubiks {
             }
 
             result = solutionsWorkers();
-            //System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: "  + valuatedCubes);
+            System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: "  + valuatedCubes);
 
             //workManager.printSize();
             valuatedCubes = 0;
