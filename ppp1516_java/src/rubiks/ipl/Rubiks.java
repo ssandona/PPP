@@ -321,7 +321,7 @@ public class Rubiks {
             initialCube.setBound(bound);
             initialToDo = new ArrayList<Cube>();
             result = generateFirstLevel(initialCube, cache, initialToDo);
-            System.out.println(myIbisId + "-> SIZE1: " + initialToDo.size());
+            //System.out.println(myIbisId + "-> SIZE1: " + initialToDo.size());
             if(result == 0) {
                 System.out.println(myIbisId + "generateSecondLevel");
                 result = generateSecondLevel(cache, initialToDo);
@@ -335,13 +335,13 @@ public class Rubiks {
                 continue;
             }
 
-            System.out.println(myIbisId + "-> SIZE2: " + initialToDo.size());
+            //System.out.println(myIbisId + "-> SIZE2: " + initialToDo.size());
 
-            String s = "";
+            /*String s = "";
             for(i = 0; i < initialToDo.size(); i++) {
                 s += (" " + initialToDo.get(i).getTwists());
             }
-            System.out.println("TODO: " + s);
+            System.out.println("TODO: " + s);*/
 
             for(j = 0; j < 3; j++) {
                 int m = initialToDo.size() / nodes;
@@ -396,8 +396,10 @@ public class Rubiks {
 
 
 
-            System.out.println(myIbisId + "-> SIZE3: " + nodesOnTree);
+            //System.out.println(myIbisId + "-> SIZE3: " + nodesOnTree);
+            if(bound==2){
             printTree();
+            }
 
             //Thread.sleep(1000);
             System.out.println(" " + bound);
@@ -456,10 +458,10 @@ public class Rubiks {
             initialCube.setBound(bound);
             initialToDo = new ArrayList<Cube>();
             result = generateFirstLevel(initialCube, cache, initialToDo);
-            System.out.println(myIbisId + "-> SIZE1: " + initialToDo.size());
+            //System.out.println(myIbisId + "-> SIZE1: " + initialToDo.size());
             if(result == 0) {
                 result = generateSecondLevel(cache, initialToDo);
-                System.out.println(myIbisId + "-> SIZE2: " + initialToDo.size());
+                //System.out.println(myIbisId + "-> SIZE2: " + initialToDo.size());
                 if(result != 0) {
                     end = true;
                     continue;
@@ -500,8 +502,10 @@ public class Rubiks {
                 }
             }
 
-            System.out.println(myIbisId + "-> SIZE3: " + nodesOnTree);
+            //System.out.println(myIbisId + "-> SIZE3: " + nodesOnTree);
+            if(bound==2){
             printTree();
+            }
 
             result = solutionsWorkers();
             System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: "  + valuatedCubes);
