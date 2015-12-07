@@ -679,7 +679,7 @@ public class Rubiks {
         workManager = new WorkManager();
 
 
-        workRequestReceiver = ibis.createReceivePort(portType1to1Up, "WorkReq", workManager);
+        workRequestReceiver = ibis.createReceivePort(portTypeMto1Poll, "WorkReq", workManager);
         // enable connections
         workRequestReceiver.enableConnections();
 
