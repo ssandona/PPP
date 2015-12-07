@@ -338,8 +338,8 @@ public class Rubiks {
             System.out.println(myIbisId + "-> SIZE2: " + initialToDo.size());
 
             String s="";
-            for(i=0;i<toDo.size();i++){
-                s+=(" "+toDo.get(i).getTwists());
+            for(i=0;i<initialToDo.size();i++){
+                s+=(" "+initialToDo.get(i).getTwists());
             }
             System.out.println("TODO: "+s);
 
