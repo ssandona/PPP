@@ -17,15 +17,19 @@ public class Rubiks {
     
 
     public static void main(String[] arguments) {
-        int i;
+        long i;
         Object lock = new Object();
-        int sum=0;
+        long sum=0;
         int cont=0;
-        for(i=0;i<1000000000;i++){
+        long start = System.currentTimeMillis();
+        for(i=0;i<99999999999;i++){
             sum+=i;
             cont++;
         }
+        long end = System.currentTimeMillis();
         System.out.println("SUM -> "+sum+" count -> "+cont);
+        System.err.println("Solving cube took " + (end - start)
+                           + " milliseconds");
     }
 
 
