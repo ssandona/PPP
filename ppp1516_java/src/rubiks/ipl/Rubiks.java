@@ -193,7 +193,7 @@ public class Rubiks {
     public static int solutionsServer(ReceivePort resultsReceiver) throws Exception {
         //System.out.println("Ibis[" + myIntIbisId + "] -> SolutionsServer");
         int i;
-        result = solutionsWorkers();
+        int result = solutionsWorkers();
         System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
         //workManager.printSize();
         valuatedCubes = 0;
