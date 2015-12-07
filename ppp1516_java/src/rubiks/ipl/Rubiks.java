@@ -198,6 +198,7 @@ public class Rubiks {
         System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
         //workManager.printSize();
         valuatedCubes = 0;
+        System.out.println("Ibis[" + myIntIbisId + "] -> Wait results from other cubes");
         for(i = 0; i < nodes - 1; i++) {
             ReadMessage r = resultsReceiver.receive();
             result += r.readInt();
@@ -370,11 +371,7 @@ public class Rubiks {
             //Thread.sleep(1000);
             System.out.println(" " + bound);
             result = solutionsServer(resultsReceiver);
-            //result=10;
-
-            //System.out.println("Result :" + result);
-
-            //say to all to continue
+            
             if(result == 0) {
                 task = terminationSender.newMessage();
                 task.writeBoolean(false);
@@ -484,6 +481,7 @@ public class Rubiks {
             resultMessage.writeInt(result);
             resultMessage.finish();
 
+            System.out.println("Ibis[" + myIntIbisId + "] -> Wait continue from server");
             //check if I have to continue
             ReadMessage r = terminationReceiver.receive();
             end = r.readBoolean();
