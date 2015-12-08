@@ -377,7 +377,7 @@ public class Rubiks {
                 bound = levelOfResult;
                 continue;
             }
-            //Thread.sleep(1000);
+            System.out.println("Tree generated");
             System.out.print(" " + bound);
             result = solutionsServer(resultsReceiver);
 
@@ -438,6 +438,7 @@ public class Rubiks {
                 bound = levelOfResult;
                 break;
             }
+            System.out.println("Tree generated");
             result = solutionsWorkers();
             //System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: "  + valuatedCubes);
 
