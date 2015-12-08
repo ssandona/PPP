@@ -364,7 +364,6 @@ public class Rubiks {
                 bound = levelOfResult;
                 continue;
             }
-            printTree();
             System.out.print(" " + bound);
             result = solutionsServer(resultsReceiver);
             //if the solution found for this bounds are zero, communicate to the ibis instances
@@ -420,7 +419,6 @@ public class Rubiks {
                 result = resultOnFirstPart;
                 break;
             }
-            printTree();
             result = solutionsWorkers();
             //communicate local results to the server
             WriteMessage resultMessage = resultsSender.newMessage();
