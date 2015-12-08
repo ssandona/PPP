@@ -474,9 +474,9 @@ public class Rubiks {
             }
 
             //System.out.println(myIbisId + "-> SIZE3: " + nodesOnTree);
-            if(bound == 2) {
-                printTree();
-            }
+            System.out.println("Ibis[" + myIntIbisId + "] BOUND -> " + bound);
+            printTree();
+
 
             //Thread.sleep(1000);
             System.out.println(" " + bound);
@@ -496,7 +496,7 @@ public class Rubiks {
             task.finish();
         }
 
-        System.out.println("Results on first part "+resultOnFirstPart);
+        System.out.println("Results on first part " + resultOnFirstPart);
         System.out.println("Solving cube possible in " + result + " ways of "
                            + bound + " steps");
         long end = System.currentTimeMillis();
@@ -634,9 +634,8 @@ public class Rubiks {
             }
 
             //System.out.println(myIbisId + "-> SIZE3: " + nodesOnTree);
-            if(bound == 2) {
-                printTree();
-            }
+            System.out.println("Ibis[" + myIntIbisId + "] BOUND -> " + bound);
+            printTree();
 
             result = solutionsWorkers();
             System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: "  + valuatedCubes);
