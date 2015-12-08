@@ -21,8 +21,8 @@ extern double   atan2(double, double);
 #define SEED        27102015
 
 typedef struct {
-    double x[2];        /* Old and new X-axis coordinates */
-    double y[2];        /* Old and new Y-axis coordinates */
+    //double x[2];        /* Old and new X-axis coordinates */
+    //double y[2];        /* Old and new Y-axis coordinates */
     // double xf;          /* force along X-axis */
     // double yf;          /* force along Y-axis */
     double xv;          /* velocity along X-axis */
@@ -52,7 +52,7 @@ int old = 0;    /* Flips between 0 and 1 */
 bodyType *new_bodies;
 bodyPositionType *new_positions;
 bodyType *new_bodies2;
-bodyType *rec_bodies;
+bodyType *rec_positions;
 int *displs;
 int *bodies_per_proc;
 int myid;
@@ -571,6 +571,20 @@ main(int argc, char **argv) {
     MPI_Type_create_struct(nitems2, blocklengths2, offsets2, types2, &mpi_position_type);
     MPI_Type_commit(&mpi_position_type);
 
+    const int nitems3 = 4;
+    int blocklengths3[4] = {1, 1, 1, 1};
+    MPI_Datatype types3[4] = {MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE,};
+    MPI_Datatype mpi_body_type;
+    MPI_Aint     offsets3[4];
+
+    offsets3[0] = offsetof(bodyType, xv);
+    offsets3[1] = offsetof(bodyType, yv);
+    offsets3[2] = offsetof(bodyType, mass);
+    offsets3[3] = offsetof(bodyType, radius);
+
+    MPI_Type_create_struct(nitems3, blocklengths3, offsets3, types3, &mpi_body_type);
+    MPI_Type_commit(&mpi_body_type);
+
 
 
 
@@ -606,7 +620,7 @@ main(int argc, char **argv) {
     // Create a buffer that will hold a subset of the bodies
     //fprintf(stderr, "bufsize: %d\n", bufSize);
 
-    rec_positions = malloc(sizeof(bodyType) * bufSize);
+    rec_positions = malloc(sizeof(bodyPositionType) * bufSize);
 
     //MPI_Scatterv(bodies, bodies_per_proc, displs, mpi_body_type, rec_bodies, bufSize, mpi_body_type, 0, MPI_COMM_WORLD);
 
