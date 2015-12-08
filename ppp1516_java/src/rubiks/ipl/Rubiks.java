@@ -145,7 +145,7 @@ public class Rubiks {
      * @return the number of solutions found for the subtrees rooted in the
      *         cubes of the assigned work queue
      */
-    public static int solutionsWorkers( throws Exception {
+    public static int solutionsWorkers() throws Exception {
         ArrayList<Cube> actual;
         int result = 0;
         int i;
