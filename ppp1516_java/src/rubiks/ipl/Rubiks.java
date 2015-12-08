@@ -635,7 +635,7 @@ public class Rubiks {
 
             //System.out.println(myIbisId + "-> SIZE3: " + nodesOnTree);
             //System.out.println("Ibis[" + myIntIbisId + "] BOUND -> " + bound);
-            printTree();
+            //printTree();
 
             result = solutionsWorkers();
             //System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: "  + valuatedCubes);
