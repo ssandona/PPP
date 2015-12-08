@@ -534,6 +534,7 @@ public class Rubiks {
 
         // If I am the server, run server, else run client.
         if (server.equals(ibis.identifier())) {
+            System.out.println("I'm a fucking server -> " + myIntIbisId);
             //long start = System.currentTimeMillis();
             solveServer(ibis);
             //long end = System.currentTimeMillis();
@@ -551,6 +552,7 @@ public class Rubiks {
 
 
         } else {
+            System.out.println("I'm a fucking client -> " + myIntIbisId);
             solveWorkers(ibis, server);
         }
         ibis.end();
