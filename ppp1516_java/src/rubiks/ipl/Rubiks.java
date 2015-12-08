@@ -258,6 +258,8 @@ public class Rubiks {
         a divisor of N), these are expanded to the next tree level, otherwise we have
         terminated*/
 
+        System.out.println("Begin generateFirstPartOfTree -> " + myIntIbisId);
+
         while(!levelFound) {
             int m = initialToDo.size() / nodes;
             int r = initialToDo.size() % nodes;
@@ -374,13 +376,14 @@ public class Rubiks {
             bound++;
             initialCube.setBound(bound);
             initialToDo = new ArrayList<Cube>();
+            System.out.println("Server Try to generate the Tree -> " + myIntIbisId);
             if(generateFirstPartOfTree(initialToDo)) {
                 result = resultOnFirstPart;
                 bound = levelOfResult;
                 System.out.println("Nine");
                 continue;
             }
-            System.out.println("Tree generated -> " + myIntIbisId);
+            System.out.println("Server Tree generated -> " + myIntIbisId);
             printTree();
             System.out.print(" " + bound);
             result = solutionsServer(resultsReceiver);
