@@ -521,7 +521,7 @@ public class Rubiks {
         int i = 0;
         for (IbisIdentifier joinedIbis : joinedIbises) {
             System.err.println("Ibis joined: " + joinedIbis);
-            if(joinedIbis.equals(ibis)) {
+            if(joinedIbis.equals(ibis.identifier())) {
                 myIntIbisId = i;
             }
             i++;
@@ -530,7 +530,7 @@ public class Rubiks {
         initialCube = generateCube();
         cache = new CubeCache(initialCube.getSize());
 
-
+        System.out.println("My Ibis Id -> " + myIntIbisId);
 
         // If I am the server, run server, else run client.
         if (server.equals(ibis.identifier())) {
