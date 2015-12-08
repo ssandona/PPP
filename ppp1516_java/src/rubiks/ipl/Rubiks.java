@@ -489,14 +489,14 @@ public class Rubiks {
             }
         }
 
-        if(resultOnFirstPart != 0) {
+        if(resultOnFirstPart == 0) {
             //say to all that the work is finished
             task = terminationSender.newMessage();
             task.writeBoolean(true);
             task.finish();
         }
 
-        System.out.println();
+        System.out.println("Results on first part "+resultOnFirstPart);
         System.out.println("Solving cube possible in " + result + " ways of "
                            + bound + " steps");
         long end = System.currentTimeMillis();
