@@ -420,6 +420,7 @@ public class Rubiks {
 
     public static void solveWorkers(Ibis ibis, IbisIdentifier server) throws Exception {
 
+        System.out.println("Try to generate the ports -> " + myIntIbisId);
         //1 sender and many receivers
         ReceivePort terminationReceiver = ibis.createReceivePort(portType1toM, "continue");
         terminationReceiver.enableConnections();
@@ -427,6 +428,8 @@ public class Rubiks {
         //many senders and 1 receiver
         SendPort resultsSender = ibis.createSendPort(portTypeMto1);
         resultsSender.connect(server, "results");
+
+        System.out.println("Ports generated -> " + myIntIbisId);
 
         int result = 0;
         boolean end = false;
