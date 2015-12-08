@@ -401,7 +401,6 @@ public class Rubiks {
                         break;
                     }
                 } else {
-                    System.out.println("M!=0");
                     levelFound = true;
                     int startIndex = m * myIntIbisId;
 
@@ -547,7 +546,6 @@ public class Rubiks {
             while(!levelFound) {
                 int m = initialToDo.size() / nodes;
                 int r = initialToDo.size() % nodes;
-                System.out.println("M= "+m+" -> initial size "+initialToDo.size());
 
                 if(m == 0) {
                     int s = initialToDo.size();
@@ -589,7 +587,6 @@ public class Rubiks {
             /*If a solution is found generating the first levels of the tree we terminate*/
 
             if(resultOnFirstPart != 0) {
-                System.out.println("Found result at level"+bound);
                 break;
             }
 
@@ -657,7 +654,7 @@ public class Rubiks {
 
         System.out.println("FINE");
         resultsSender.close();
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         terminationReceiver.close();
         System.out.println("PortClosed");
     }
