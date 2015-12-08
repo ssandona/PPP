@@ -392,6 +392,7 @@ public class Rubiks {
 
                 if(m == 0) {
                     int s = initialToDo.size();
+                    System.out.println("M==0 -> initial size "+s);
                     for(i = 0; i < s; i++) {
                         resultOnFirstPart += generateAnotherLevel(initialToDo.remove(0), cache, initialToDo);
                     }
