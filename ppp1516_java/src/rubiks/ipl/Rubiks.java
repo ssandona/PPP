@@ -348,6 +348,7 @@ public class Rubiks {
      *            local Ibis instance
      */
     private static void solveServer(Ibis ibis) throws Exception {
+        System.out.println("Try to generate the ports -> " + myIntIbisId);
         ReceivePort resultsReceiver = ibis.createReceivePort(portTypeMto1, "results");
         resultsReceiver.enableConnections();
 
@@ -358,6 +359,7 @@ public class Rubiks {
             }
             terminationSender.connect(joinedIbis, "continue");
         }
+        System.out.println("Ports generated -> " + myIntIbisId);
 
 
         int bound = 0;
