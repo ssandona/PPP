@@ -389,10 +389,9 @@ public class Rubiks {
             while(!levelFound) {
                 int m = initialToDo.size() / nodes;
                 int r = initialToDo.size() % nodes;
-
+                System.out.println("M==0 -> initial size "+initialToDo.size());
                 if(m == 0) {
                     int s = initialToDo.size();
-                    System.out.println("M==0 -> initial size "+s);
                     for(i = 0; i < s; i++) {
                         resultOnFirstPart += generateAnotherLevel(initialToDo.remove(0), cache, initialToDo);
                     }
