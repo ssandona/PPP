@@ -507,7 +507,7 @@ main(int argc, char **argv) {
         bodyCt = numprocs;
     }*/
     new_bodies = malloc(sizeof(bodyType) * bodyCt);
-    new_positions = malloc(sizeof(bodyPosition) * bodyCt);
+    new_positions = malloc(sizeof(bodyPositionType) * bodyCt);
 
     secsup = atoi(argv[2]);
     image = map_P6(argv[3], &xdim, &ydim);
@@ -518,13 +518,13 @@ main(int argc, char **argv) {
     /* Initialize simulation data */
     srand(SEED);
     for (b = 0; b < bodyCt; ++b) {
-        _X(b) = (rand() % xdim);
-        _Y(b) = (rand() % ydim);
-        _R(b) = 1 + ((b * b + 1.0) * sqrt(1.0 * ((xdim * xdim) + (ydim * ydim)))) /
+        X(b) = (rand() % xdim);
+        Y(b) = (rand() % ydim);
+        R(b) = 1 + ((b * b + 1.0) * sqrt(1.0 * ((xdim * xdim) + (ydim * ydim)))) /
                (25.0 * (bodyCt * bodyCt + 1.0));
-        _M(b) = _R(b) * _R(b) * _R(b);
-        _XV(b) = ((rand() % 20000) - 10000) / 2000.0;
-        _YV(b) = ((rand() % 20000) - 10000) / 2000.0;
+        M(b) = R(b) * R(b) * R(b);
+        XV(b) = ((rand() % 20000) - 10000) / 2000.0;
+        YV(b) = ((rand() % 20000) - 10000) / 2000.0;
     }
     //fprintf(stderr, "a\n");
 
@@ -606,9 +606,7 @@ main(int argc, char **argv) {
     // Create a buffer that will hold a subset of the bodies
     //fprintf(stderr, "bufsize: %d\n", bufSize);
 
-
-    rec_bodies = malloc(sizeof(bodyType) * bufSize);
-    rec_positions = ma
+    rec_positions = malloc(sizeof(bodyType) * bufSize);
 
     //MPI_Scatterv(bodies, bodies_per_proc, displs, mpi_body_type, rec_bodies, bufSize, mpi_body_type, 0, MPI_COMM_WORLD);
 
