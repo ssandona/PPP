@@ -172,7 +172,7 @@ public class Rubiks {
         //System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
         //workManager.printSize();
         valuatedCubes = 0;
-        //System.out.println("Ibis[" + myIntIbisId + "] -> Wait results from other cubes");
+        System.out.println("Ibis[" + myIntIbisId + "] -> Wait results from other cubes");
         for(i = 0; i < nodes - 1; i++) {
             ReadMessage r = resultsReceiver.receive();
             result += r.readInt();
@@ -357,7 +357,6 @@ public class Rubiks {
 
         int bound = 0;
         int result = 0;
-        int resultOnFirstPart = 0;
         int i, j;
         /*ArrayList<Cube> work = workManager.getWork(true);
         Cube cube = work.get(0);*/
@@ -423,12 +422,12 @@ public class Rubiks {
         resultsSender.connect(server, "results");
 
         int result = 0;
-        int resultOnFirstPart = 0;
         boolean end = false;
         int i, j;
         int bound = 0;
 
         ArrayList<Cube> initialToDo;
+
 
         while(!end) {
             bound++;
