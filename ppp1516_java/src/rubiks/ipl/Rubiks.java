@@ -238,10 +238,6 @@ public class Rubiks {
         return cube;
     }
 
-    static class Result {
-        static int result;
-        static int level;
-    }
 
     static int resultOnFirstPart;
     static int levelOfResult;
@@ -272,7 +268,7 @@ public class Rubiks {
                 }
                 levelOfResult++;
                 if(resultOnFirstPart != 0) {
-                    break;
+                    return true;
                 }
             } else {
                 levelFound = true;
@@ -298,10 +294,6 @@ public class Rubiks {
                     terminated = true;
                 }
             }
-        }
-
-        if(resultOnFirstPart != 0) {
-            return true;
         }
 
         /*if we have not terminated yet, we try to split the next level nodes. If they are
