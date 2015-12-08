@@ -52,7 +52,7 @@ int old = 0;    /* Flips between 0 and 1 */
 bodyType *new_bodies;
 bodyPositionType *new_positions;
 bodyType *new_bodies2;
-bodyType *rec_positions;
+bodyPositionType *rec_positions;
 int *displs;
 int *bodies_per_proc;
 int myid;
