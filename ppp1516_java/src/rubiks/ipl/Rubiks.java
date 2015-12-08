@@ -389,7 +389,7 @@ public class Rubiks {
             a divisor of N), these are expanded to the next tree level, otherwise we have
             terminated*/
 
-            while(!levelFound && results != 0) {
+            while(!levelFound) {
                 int m = initialToDo.size() / nodes;
                 int r = initialToDo.size() % nodes;
 
@@ -401,6 +401,7 @@ public class Rubiks {
                     levelOfResult++;
                     if(resultOnFirstPart != 0) {
                         bound = levelOfResult;
+                        break;
                     }
                 } else {
                     levelFound = true;
