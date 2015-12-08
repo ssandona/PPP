@@ -78,11 +78,9 @@ public class Rubiks {
      *
      * @param cube
      *            cube to solve
-     * @param cache
-     *            cache of cubes used for new cube objects
      * @return the number of solutions found for the subtree rooted in cube
      */
-    private static int solutions(Cube cube, CubeCache cache) {
+    private static int solutions(Cube cube) {
         valuatedCubes++;
         if (cube.isSolved()) {
             return 1;
@@ -100,7 +98,7 @@ public class Rubiks {
 
         for (Cube child : children) {
             // recursion step
-            int childSolutions = solutions(child, cache);
+            int childSolutions = solutions(child);
             if (childSolutions > 0) {
                 result += childSolutions;
                 if (PRINT_SOLUTION) {
@@ -120,13 +118,11 @@ public class Rubiks {
      *
      * @param cube
      *            cube to solve
-     * @param cache
-     *            cache of cubes used for new cube objects
      * @param initialToDo
      *            initial queue of work
      * @return if the cube was solved or not
      */
-    public static int generateAnotherLevel(Cube cube, CubeCache cache, ArrayList<Cube> initialToDo) {
+    public static int generateAnotherLevel(Cube cube, ArrayList<Cube> initialToDo) {
         valuatedCubes++;
         if (cube.isSolved()) {
             return 1;
@@ -146,19 +142,17 @@ public class Rubiks {
     /**
      * Function called by all the workers sert in the
      * initial queue of work the children of a given cube
-     * @param cache
-     *            cache of cubes used for new cube objects
      * @return the number of solutions found for the subtrees rooted in the
      *         cubes of the assigned work queue
      */
-    public static int solutionsWorkers(CubeCache cache) throws Exception {
+    public static int solutionsWorkers( throws Exception {
         ArrayList<Cube> actual;
         int result = 0;
         int i;
         Cube cube;
         boolean end = false;
         while((cube = getFromPool()) != null) {
-            result += solutions(cube, cache);
+            result += solutions(cube);
 
         }
         return result;
@@ -252,8 +246,7 @@ public class Rubiks {
     static int resultOnFirstPart;
     static int levelOfResult;
 
-    public static boolean generateFirstPartOfTree() {
-        initialToDo = new ArrayList<Cube>();
+    public static boolean generateFirstPartOfTree(ArrayList<Cube> initialToDo) {
         initialToDo.add(initialCube);
 
         int result = 0;
@@ -275,7 +268,7 @@ public class Rubiks {
             if(m == 0) {
                 int s = initialToDo.size();
                 for(i = 0; i < s; i++) {
-                    resultOnFirstPart += generateAnotherLevel(initialToDo.remove(0), cache, initialToDo);
+                    resultOnFirstPart += generateAnotherLevel(initialToDo.remove(0), initialToDo);
                 }
                 levelOfResult++;
                 if(resultOnFirstPart != 0) {
@@ -299,7 +292,7 @@ public class Rubiks {
 
                 if(r != 0) {
                     for(i = 0; i < r; i++) {
-                        generateAnotherLevel(initialToDo.remove(0), cache, initialToDo);
+                        generateAnotherLevel(initialToDo.remove(0), initialToDo);
                     }
                 } else {
                     terminated = true;
@@ -321,7 +314,7 @@ public class Rubiks {
             if(m == 0) {
                 int s = initialToDo.size();
                 for(i = 0; i < s; i++) {
-                    generateAnotherLevel(initialToDo.remove(0), cache, initialToDo);
+                    generateAnotherLevel(initialToDo.remove(0), initialToDo);
                 }
                 continue;
             } else {
@@ -386,7 +379,8 @@ public class Rubiks {
         while(result == 0) {
             bound++;
             initialCube.setBound(bound);
-            if(generateFirstPartOfTree()) {
+            initialToDo = new ArrayList<Cube>();
+            if(generateFirstPartOfTree(initialToDo)) {
                 result = resultOnFirstPart;
                 bound = levelOfResult;
                 continue;
@@ -446,7 +440,8 @@ public class Rubiks {
         while(!end) {
             bound++;
             initialCube.setBound(bound);
-            if(generateFirstPartOfTree()) {
+            initialToDo = new ArrayList<Cube>();
+            if(generateFirstPartOfTree(initialToDo)) {
                 result = resultOnFirstPart;
                 bound = levelOfResult;
                 break;
