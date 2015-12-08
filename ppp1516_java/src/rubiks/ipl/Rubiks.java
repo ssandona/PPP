@@ -18,29 +18,12 @@ import java.lang.Math;
 public class Rubiks {
 
     static PortType portType1toM = new PortType(PortType.COMMUNICATION_RELIABLE,
-            PortType.SERIALIZATION_OBJECT, PortType.RECEIVE_EXPLICIT,
+            PortType.SERIALIZATION_DATA, PortType.RECEIVE_EXPLICIT,
             PortType.CONNECTION_ONE_TO_MANY);
 
     static PortType portTypeMto1 = new PortType(PortType.COMMUNICATION_RELIABLE,
-            PortType.SERIALIZATION_OBJECT, PortType.RECEIVE_EXPLICIT,
+            PortType.SERIALIZATION_DATA, PortType.RECEIVE_EXPLICIT,
             PortType.CONNECTION_MANY_TO_ONE, PortType.RECEIVE_POLL);
-
-    static PortType portTypeMto1Up = new PortType(PortType.COMMUNICATION_RELIABLE,
-            PortType.SERIALIZATION_OBJECT, PortType.CONNECTION_MANY_TO_ONE, PortType.RECEIVE_AUTO_UPCALLS);
-
-    static PortType portType1to1 = new PortType(PortType.COMMUNICATION_RELIABLE,
-            PortType.SERIALIZATION_OBJECT, PortType.RECEIVE_EXPLICIT,
-            PortType.CONNECTION_ONE_TO_ONE);
-
-    static PortType portType1to1Up = new PortType(PortType.COMMUNICATION_RELIABLE,
-            PortType.SERIALIZATION_OBJECT, PortType.CONNECTION_ONE_TO_ONE, PortType.RECEIVE_AUTO_UPCALLS);
-
-    static PortType requestWorkPortType = new PortType(PortType.COMMUNICATION_RELIABLE,
-            PortType.SERIALIZATION_OBJECT, PortType.RECEIVE_AUTO_UPCALLS,
-            PortType.CONNECTION_ONE_TO_ONE);
-
-
-
 
     static IbisCapabilities ibisCapabilities = new IbisCapabilities(
         IbisCapabilities.ELECTIONS_STRICT, IbisCapabilities.MEMBERSHIP_TOTALLY_ORDERED);
@@ -48,7 +31,6 @@ public class Rubiks {
     /*static IbisCapabilities ibisCapabilities = new IbisCapabilities(
         IbisCapabilities.ELECTIONS_STRICT);*/
 
-    static int counter = 0;
     //static ArrayList<String> done;
     static int nodes = 1;
     static IbisIdentifier[] joinedIbises;
@@ -111,24 +93,15 @@ public class Rubiks {
     }
 
     private static int solutions(Cube cube, CubeCache cache) {
-        /*if(counter <= 1) {
-            System.out.println(s+"AAA: Solutions -> cache size:" + cache.getSize());
-        }*/
         valuatedCubes++;
         if (cube.isSolved()) {
             return 1;
         }
 
         if (cube.getTwists() >= cube.getBound()) {
-            /*if(counter <= 1) {
-                System.out.println(s+"AAA: Twist>=Bound");
-            }*/
             return 0;
         }
 
-        /*if(counter <= 1) {
-                System.out.println(s+"AAA: GenerateChildren");
-            }*/
         // generate all possible cubes from this one by twisting it in
         // every possible way. Gets new objects from the cache
         Cube[] children = cube.generateChildren(cache);
@@ -136,9 +109,6 @@ public class Rubiks {
         int result = 0;
 
         for (Cube child : children) {
-            /*if(counter <= 1) {
-                System.out.println(s+"AAA: Child");
-            }*/
             // recursion step
             int childSolutions = solutions(child, cache);
             if (childSolutions > 0) {
@@ -222,14 +192,6 @@ public class Rubiks {
     public static int solutionsWorkers() throws Exception {
         //System.out.println("Ibis[" + myIntIbisId + "] -> solutionsWorkers");
 
-        /*while (result == 0) {
-            bound++;
-            cube.setBound(bound);
-
-            System.out.print(" " + bound);
-            result = solutions(cube, cache,"");
-            counter++;
-        }*/
         ArrayList<Cube> actual;
         int result = 0;
         int i;
@@ -698,11 +660,9 @@ public class Rubiks {
 
 
     private void run() throws Exception {
-        //System.out.println("done");
         // Create an ibis instance.
-        Ibis ibis = IbisFactory.createIbis(ibisCapabilities, null, portTypeMto1, portType1to1Up, portTypeMto1Up, portType1toM, portType1to1);
+        Ibis ibis = IbisFactory.createIbis(ibisCapabilities, null, portTypeMto1, portType1toM);
         Thread.sleep(5000);
-        System.out.println("Ibis created");
         myIbisId = ibis.identifier();
         myIbis = ibis;
 
@@ -742,11 +702,6 @@ public class Rubiks {
 
         // If I am the server, run server, else run client.
         if (server.equals(ibis.identifier())) {
-            if(initialCube == null) {
-                System.out.println("CUBE NULL FROM THE BEGIN");
-            } else {
-                System.out.println("CUBE ok");
-            }
             //long start = System.currentTimeMillis();
             solveServer(ibis);
             //long end = System.currentTimeMillis();
@@ -766,15 +721,12 @@ public class Rubiks {
         } else {
             solveWorkers(ibis, server);
         }
-
-
         ibis.end();
     }
 
     public static void main(String[] argumentsForCube) {
         arguments = argumentsForCube;
         try {
-            System.out.println("run");
             new Rubiks().run();
         } catch (Exception e) {
             e.printStackTrace(System.err);
