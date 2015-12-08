@@ -389,9 +389,7 @@ public class Rubiks {
             while(!levelFound) {
                 int m = initialToDo.size() / nodes;
                 int r = initialToDo.size() % nodes;
-                System.out.println("M= "+m+" -> initial size "+initialToDo.size());
                 if(m == 0) {
-                    System.out.println("M=0");
                     int s = initialToDo.size();
                     for(i = 0; i < s; i++) {
                         resultOnFirstPart += generateAnotherLevel(initialToDo.remove(0), cache, initialToDo);
@@ -505,7 +503,7 @@ public class Rubiks {
 
         System.out.println("TERMINATE");
         terminationSender.close();
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         resultsReceiver.close();
         System.out.println("PortClosed");
 
@@ -549,6 +547,7 @@ public class Rubiks {
             while(!levelFound) {
                 int m = initialToDo.size() / nodes;
                 int r = initialToDo.size() % nodes;
+                System.out.println("M= "+m+" -> initial size "+initialToDo.size());
 
                 if(m == 0) {
                     int s = initialToDo.size();
@@ -590,6 +589,7 @@ public class Rubiks {
             /*If a solution is found generating the first levels of the tree we terminate*/
 
             if(resultOnFirstPart != 0) {
+                System.out.println("Found result at level"+bound);
                 break;
             }
 
