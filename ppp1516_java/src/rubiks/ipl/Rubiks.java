@@ -254,7 +254,7 @@ public class Rubiks {
         //System.out.println("Ibis[" + myIntIbisId + "] -> SolutionsServer");
         int i;
         int result = solutionsWorkers();
-        System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
+        //System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
         //workManager.printSize();
         valuatedCubes = 0;
         //System.out.println("Ibis[" + myIntIbisId + "] -> Wait results from other cubes");
@@ -358,7 +358,7 @@ public class Rubiks {
             terminationSender.connect(joinedIbis, "continue");
         }
 
-        long start = System.currentTimeMillis();
+        
         int bound = 0;
         int result = 0;
         int resultOnFirstPart = 0;
@@ -369,6 +369,8 @@ public class Rubiks {
 
         ArrayList<Cube> initialToDo;
         WriteMessage task;
+        long start = System.currentTimeMillis();
+        System.out.print("Bound");
 
         while(result == 0) {
             bound++;
@@ -397,7 +399,7 @@ public class Rubiks {
                     levelOfResult++;
                     if(resultOnFirstPart != 0) {
                         bound = levelOfResult;
-                        System.out.println("Found result at level -> " + bound);
+                        //System.out.println("Found result at level -> " + bound);
                         break;
                     }
                 } else {
@@ -471,12 +473,12 @@ public class Rubiks {
             }
 
             //System.out.println(myIbisId + "-> SIZE3: " + nodesOnTree);
-            System.out.println("Ibis[" + myIntIbisId + "] BOUND -> " + bound);
-            printTree();
+            //System.out.println("Ibis[" + myIntIbisId + "] BOUND -> " + bound);
+            //printTree();
 
 
             //Thread.sleep(1000);
-            System.out.println(" " + bound);
+            System.out.print(" " + bound);
             result = solutionsServer(resultsReceiver);
 
             if(result == 0) {
@@ -492,11 +494,11 @@ public class Rubiks {
             task.writeBoolean(true);
             task.finish();
         }
-
-        System.out.println("Results on first part " + resultOnFirstPart);
+        long end = System.currentTimeMillis();
+        //System.out.println("Results on first part " + resultOnFirstPart);
         System.out.println("Solving cube possible in " + result + " ways of "
                            + bound + " steps");
-        long end = System.currentTimeMillis();
+        
         System.err.println("Solving cube took " + (end - start)
                            + " milliseconds");
 
@@ -555,7 +557,7 @@ public class Rubiks {
                     levelOfResult++;
                     if(resultOnFirstPart != 0) {
                         bound = levelOfResult;
-                        System.out.println("Found result at level -> " + bound);
+                        //System.out.println("Found result at level -> " + bound);
                         break;
                     }
                 } else {
@@ -632,11 +634,11 @@ public class Rubiks {
             }
 
             //System.out.println(myIbisId + "-> SIZE3: " + nodesOnTree);
-            System.out.println("Ibis[" + myIntIbisId + "] BOUND -> " + bound);
+            //System.out.println("Ibis[" + myIntIbisId + "] BOUND -> " + bound);
             printTree();
 
             result = solutionsWorkers();
-            System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: "  + valuatedCubes);
+            //System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: "  + valuatedCubes);
 
             //workManager.printSize();
             valuatedCubes = 0;
