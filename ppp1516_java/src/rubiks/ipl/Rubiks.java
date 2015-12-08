@@ -375,6 +375,7 @@ public class Rubiks {
             if(generateFirstPartOfTree(initialToDo)) {
                 result = resultOnFirstPart;
                 bound = levelOfResult;
+                System.out.println("Nine");
                 continue;
             }
             System.out.println("Tree generated -> "+myIntIbisId);
@@ -427,15 +428,15 @@ public class Rubiks {
         int i, j;
         int bound = 0;
 
-        ArrayList<Cube> initialToDo = new ArrayList<Cube>();
+        ArrayList<Cube> initialToDo;
 
         while(!end) {
             bound++;
             initialCube.setBound(bound);
             initialToDo = new ArrayList<Cube>();
             if(generateFirstPartOfTree(initialToDo)) {
+                System.out.println("NINE -> "+myIntIbisId);
                 result = resultOnFirstPart;
-                bound = levelOfResult;
                 break;
             }
             System.out.println("Tree generated -> "+myIntIbisId);
