@@ -354,7 +354,7 @@ public class Rubiks {
 
         SendPort terminationSender = ibis.createSendPort(portType1toM);
         for (IbisIdentifier joinedIbis : joinedIbises) {
-            if(joinedIbis.equals(ibis)) {
+            if(joinedIbis.equals(ibis.identifier())) {
                 continue;
             }
             terminationSender.connect(joinedIbis, "continue");
