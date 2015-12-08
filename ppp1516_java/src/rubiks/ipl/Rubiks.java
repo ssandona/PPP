@@ -341,10 +341,7 @@ public class Rubiks {
     }*/
 
     public static int generateAnotherLevel(Cube cube, CubeCache cache, ArrayList<Cube> toDo) {
-        int n = toDo.size();
-        int results = 0;
-        int i;
-        solutionInitial(cube, cache, toDo);
+        int results = solutionInitial(cube, cache, toDo);
         //System.out.println(myIbisId + " -> SECOND " + toDo.size() + " cubes");
         return results;
     }
@@ -401,7 +398,7 @@ public class Rubiks {
                     levelOfResult++;
                     if(resultOnFirstPart != 0) {
                         bound = levelOfResult;
-                        System.out.println("Found result at level -> "+bound);
+                        System.out.println("Found result at level -> " + bound);
                         break;
                     }
                 } else {
@@ -559,7 +556,7 @@ public class Rubiks {
                     levelOfResult++;
                     if(resultOnFirstPart != 0) {
                         bound = levelOfResult;
-                        System.out.println("Found result at level -> "+bound);
+                        System.out.println("Found result at level -> " + bound);
                         break;
                     }
                 } else {
