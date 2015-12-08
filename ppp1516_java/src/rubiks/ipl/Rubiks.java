@@ -296,6 +296,8 @@ public class Rubiks {
             }
         }
 
+        System.out.println("First part OK-> " + myIntIbisId);
+
         /*if we have not terminated yet, we try to split the next level nodes. If they are
         less than the number of ibis instances we generate another level from them,
         otherwise we split them as fairly as possible*/
@@ -334,6 +336,7 @@ public class Rubiks {
                 }
             }
         }
+        System.out.println("Second part OK-> " + myIntIbisId);
         return false;
     }
 
@@ -377,7 +380,7 @@ public class Rubiks {
                 System.out.println("Nine");
                 continue;
             }
-            System.out.println("Tree generated -> "+myIntIbisId);
+            System.out.println("Tree generated -> " + myIntIbisId);
             printTree();
             System.out.print(" " + bound);
             result = solutionsServer(resultsReceiver);
@@ -434,12 +437,13 @@ public class Rubiks {
             bound++;
             initialCube.setBound(bound);
             initialToDo = new ArrayList<Cube>();
+            System.out.println("Try to generate the Tree -> " + myIntIbisId);
             if(generateFirstPartOfTree(initialToDo)) {
-                System.out.println("NINE -> "+myIntIbisId);
+                System.out.println("NINE -> " + myIntIbisId);
                 result = resultOnFirstPart;
                 break;
             }
-            System.out.println("Tree generated -> "+myIntIbisId);
+            System.out.println("Tree generated -> " + myIntIbisId);
             printTree();
             result = solutionsWorkers();
             //System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: "  + valuatedCubes);
