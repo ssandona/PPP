@@ -31,6 +31,7 @@ public class Rubiks {
     static IbisIdentifier[] joinedIbises;   //Ibises that joned the pool
     static int myIntIbisId;                 //Ibis id of the current Ibis instance
     static Cube initialCube = null;         //Initial Rubik Cube
+    static int valuatedCubes = 0;           //number of evaluated cubes per bound
     static CubeCache cache = null;          //CubeCache
 
     static String[] arguments;              //arguments provided by the user to generate the cube
@@ -82,6 +83,7 @@ public class Rubiks {
      * @return the number of solutions found for the subtree rooted in cube
      */
     private static int solutions(Cube cube) {
+        valuatedCubes++;
         if (cube.isSolved()) {
             return 1;
         }
@@ -167,6 +169,8 @@ public class Rubiks {
         int i;
         //calculate the results for the assigned part of the tree
         int result = solutionsWorkers();
+        System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
+        valuatedCubes = 0;
         //wait results from other nodes
         for(i = 0; i < nodes - 1; i++) {
             ReadMessage r = resultsReceiver.receive();
@@ -422,6 +426,8 @@ public class Rubiks {
             }
             printTree();
             result = solutionsWorkers();
+            System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: "  + valuatedCubes);
+            valuatedCubes = 0;
             //communicate local results to the server
             WriteMessage resultMessage = resultsSender.newMessage();
             resultMessage.writeInt(result);
