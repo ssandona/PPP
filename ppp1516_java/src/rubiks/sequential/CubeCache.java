@@ -59,8 +59,4 @@ public class CubeCache {
         return cache[currentSize];
     }
 
-    public int getSize() {
-        return currentSize;
-    }
-
 }

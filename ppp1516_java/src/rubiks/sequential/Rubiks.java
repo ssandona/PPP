@@ -2,44 +2,33 @@ package rubiks.sequential;
 
 /**
  * Solver for rubik's cube puzzle.
- *
+ * 
  * @author Niels Drost, Timo van Kessel
- *
+ * 
  */
 public class Rubiks {
-
-    static int counter = 0;
-
+    
     public static final boolean PRINT_SOLUTION = false;
 
     /**
      * Recursive function to find a solution for a given cube. Only searches to
      * the bound set in the cube object.
-     *
+     * 
      * @param cube
      *            cube to solve
      * @param cache
      *            cache of cubes used for new cube objects
      * @return the number of solutions found
      */
-    private static int solutions(Cube cube, CubeCache cache, String s) {
-        /*if(counter <= 1) {
-            System.out.println(s+"AAA: Solutions -> cache size:" + cache.getSize());
-        }*/
+    private static int solutions(Cube cube, CubeCache cache) {
         if (cube.isSolved()) {
             return 1;
         }
 
         if (cube.getTwists() >= cube.getBound()) {
-            /*if(counter <= 1) {
-                System.out.println(s+"AAA: Twist>=Bound");
-            }*/
             return 0;
         }
 
-        /*if(counter <= 1) {
-                System.out.println(s+"AAA: GenerateChildren");
-            }*/
         // generate all possible cubes from this one by twisting it in
         // every possible way. Gets new objects from the cache
         Cube[] children = cube.generateChildren(cache);
@@ -47,11 +36,8 @@ public class Rubiks {
         int result = 0;
 
         for (Cube child : children) {
-            /*if(counter <= 1) {
-                System.out.println(s+"AAA: Child");
-            }*/
             // recursion step
-            int childSolutions = solutions(child, cache, s+" ");
+            int childSolutions = solutions(child, cache);
             if (childSolutions > 0) {
                 result += childSolutions;
                 if (PRINT_SOLUTION) {
@@ -69,7 +55,7 @@ public class Rubiks {
      * Solves a Rubik's cube by iteratively searching for solutions with a
      * greater depth. This guarantees the optimal solution is found. Repeats all
      * work for the previous iteration each iteration though...
-     *
+     * 
      * @param cube
      *            the cube to solve
      */
@@ -87,42 +73,41 @@ public class Rubiks {
             cube.setBound(bound);
 
             System.out.print(" " + bound);
-            result = solutions(cube, cache,"");
-            counter++;
+            result = solutions(cube, cache);
         }
 
         System.out.println();
         System.out.println("Solving cube possible in " + result + " ways of "
-                           + bound + " steps");
+                + bound + " steps");
     }
 
     public static void printUsage() {
         System.out.println("Rubiks Cube solver");
         System.out.println("");
         System.out
-        .println("Does a number of random twists, then solves the rubiks cube with a simple");
+                .println("Does a number of random twists, then solves the rubiks cube with a simple");
         System.out
-        .println(" brute-force approach. Can also take a file as input");
+                .println(" brute-force approach. Can also take a file as input");
         System.out.println("");
         System.out.println("USAGE: Rubiks [OPTIONS]");
         System.out.println("");
         System.out.println("Options:");
         System.out.println("--size SIZE\t\tSize of cube (default: 3)");
         System.out
-        .println("--twists TWISTS\t\tNumber of random twists (default: 11)");
+                .println("--twists TWISTS\t\tNumber of random twists (default: 11)");
         System.out
-        .println("--seed SEED\t\tSeed of random generator (default: 0");
+                .println("--seed SEED\t\tSeed of random generator (default: 0");
         System.out
-        .println("--threads THREADS\t\tNumber of threads to use (default: 1, other values not supported by sequential version)");
+                .println("--threads THREADS\t\tNumber of threads to use (default: 1, other values not supported by sequential version)");
         System.out.println("");
         System.out
-        .println("--file FILE_NAME\t\tLoad cube from given file instead of generating it");
+                .println("--file FILE_NAME\t\tLoad cube from given file instead of generating it");
         System.out.println("");
     }
 
     /**
      * Main function.
-     *
+     * 
      * @param arguments
      *            list of arguments
      */
@@ -172,14 +157,14 @@ public class Rubiks {
                 System.exit(1);
             }
         }
-
+        
         // print cube info
         System.out.println("Searching for solution for cube of size "
-                           + cube.getSize() + ", twists = " + twists + ", seed = " + seed);
+                + cube.getSize() + ", twists = " + twists + ", seed = " + seed);
         cube.print(System.out);
         System.out.flush();
 
-
+        
         // solve
         long start = System.currentTimeMillis();
         solve(cube);
@@ -189,7 +174,7 @@ public class Rubiks {
         // constant for each set of parameters. Printing this to standard error
         // makes the output of standard out comparable with "diff"
         System.err.println("Solving cube took " + (end - start)
-                           + " milliseconds");
+                + " milliseconds");
 
     }
 

@@ -9,12 +9,11 @@ import java.lang.Math;
 
 
 /**
- * Solver for rubik's cube puzzle.
+ * Parallel solver for rubik's cube puzzle.
  *
- * @author Niels Drost, Timo van Kessel
+ * @author Stefano Sandonà
  *
  */
-//public class Rubiks implements RegistryEventHandler {
 public class Rubiks {
 
     static PortType portType1toM = new PortType(PortType.COMMUNICATION_RELIABLE,
@@ -28,31 +27,23 @@ public class Rubiks {
     static IbisCapabilities ibisCapabilities = new IbisCapabilities(
         IbisCapabilities.ELECTIONS_STRICT, IbisCapabilities.MEMBERSHIP_TOTALLY_ORDERED);
 
-    /*static IbisCapabilities ibisCapabilities = new IbisCapabilities(
-        IbisCapabilities.ELECTIONS_STRICT);*/
+    static int nodes = 1;                   //number of nodes on the Ibis pool
+    static IbisIdentifier[] joinedIbises;   //Ibises that joned the pool
+    static int myIntIbisId;                 //Ibis id of the current Ibis instance
+    static Cube initialCube = null;         //Initial Rubik Cube
+    static int valuatedCubes = 0;           //number of evaluated cubes per bound
+    static CubeCache cache = null;          //CubeCache
 
-    //static ArrayList<String> done;
-    static int nodes = 1;
-    static IbisIdentifier[] joinedIbises;
-    static int myIntIbisId;
-    static IbisIdentifier myIbisId;
-    static Ibis myIbis;
-    static Cube initialCube = null;
-
-
-    static int valuatedCubes = 0;
-
-
-    static CubeCache cache = null;
-
-    static String[] arguments;
+    static String[] arguments;              //arguments provided by the user to generate the cube
 
 
     public static final boolean PRINT_SOLUTION = false;
 
-    static ArrayList<Cube> toDo = new ArrayList<Cube>();
-    static int nodesOnTree = 0;
+    static ArrayList<Cube> toDo = new ArrayList<Cube>();    //List of work to do
 
+    /**
+     * Print the queue of work that remains to do
+     */
     public static void printTree() {
         String s = "\n";
         int i, j;
@@ -70,28 +61,27 @@ public class Rubiks {
 
     }
 
-    /*synchronized public static boolean availableWork() {
-        System.out.println("Ibis[" + myIntIbisId + "] -> SIZE: " + toDo.size());
-    }*/
-
-    public static void add(Cube cube) {
-        toDo.add(cube);
-        nodesOnTree++;
-    }
-
-    /*synchronized public static ArrayList<Cube> getFromLevel(int level) {
-        toDo = toDoTree.get(level);
-        return toDo.remove(toDo.size() - 1);
-    }*/
-
+    /**
+     * Function to get the next job (Rubik's Cube) from the work queue
+     * @return the cube to evaluate or null if the queue is empty
+     */
     public static Cube getFromPool () {
-        if(nodesOnTree == 0) {
+        if(toDo.size() == 0) {
             return null;
         }
-        nodesOnTree--;
         return toDo.remove(0);
     }
 
+    /**
+     * Recursive function to find a solution for a given cube. Only searches to
+     * the bound set in the cube object.
+     *
+     * @param cube
+     *            cube to solve
+     * @param cache
+     *            cache of cubes used for new cube objects
+     * @return the number of solutions found for the subtree rooted in cube
+     */
     private static int solutions(Cube cube, CubeCache cache) {
         valuatedCubes++;
         if (cube.isSolved()) {
@@ -124,94 +114,63 @@ public class Rubiks {
         return result;
     }
 
-
-    public static int solution(Cube cube, CubeCache cache) {
+    /**
+     * Function called at the begin of the computation to insert in the
+     * initial queue of work the children of a given cube
+     *
+     * @param cube
+     *            cube to solve
+     * @param cache
+     *            cache of cubes used for new cube objects
+     * @param initialToDo
+     *            initial queue of work
+     * @return if the cube was solved or not
+     */
+    public static int generateAnotherLevel(Cube cube, CubeCache cache, ArrayList<Cube> initialToDo) {
         valuatedCubes++;
-        //System.out.println("Ibis[" + myIntIbisId + "] -> twists: "+cube.getTwists()+" bound: "+cube.getBound());
         if (cube.isSolved()) {
-            //System.out.println("SOLVED");
-
             return 1;
-        }
-
-        if (cube.getTwists() >= cube.getBound()) {
-            return 0;
         }
         //generate childrens
         Cube[] children = cube.generateChildren(cache);
-        Cube child;
         int i;
         //add childrens on the toDo pool
         for(i = 0; i < children.length; i++) {
-            child = children[(children.length - 1) - i];
-            /*if(child == null) {
-                System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 4");
-            }*/
-
-            add(child);
-            //cache.put(child);
-        }
-        return 0;
-    }
-
-    public static int solutionInitial(Cube cube, CubeCache cache, ArrayList<Cube> toDo) {
-        valuatedCubes++;
-        //System.out.println("Ibis[" + myIntIbisId + "] -> solution");
-        if (cube.isSolved()) {
-            //System.out.println("SOLVED");
-
-            return 1;
-        }
-
-        //generate childrens
-        //System.out.println("Ibis[" + myIntIbisId + "] -> cube: " + cube.getTwists());
-        Cube[] children = cube.generateChildren(cache);
-        //System.out.println("Ibis[" + myIntIbisId + "] -> child: " + children[0].getTwists());
-        Cube child;
-        int i;
-        //add childrens on the toDo pool
-        for(i = 0; i < children.length; i++) {
-            //child = children[(children.length - 1) - i];
-            /*if(child == null) {
-                System.out.println("Ibis[" + myIntIbisId + "] -> AHAHAHA 4");
-            }*/
-
-
-            //toDo.add(child);
-            toDo.add(children[i]);
-            //cache.put(child);
+            initialToDo.add(children[i]);
         }
         return 0;
     }
 
 
 
-
-
-
-    public static int solutionsWorkers() throws Exception {
-        //System.out.println("Ibis[" + myIntIbisId + "] -> solutionsWorkers");
-
+    /**
+     * Function called by all the workers sert in the
+     * initial queue of work the children of a given cube
+     * @param cache
+     *            cache of cubes used for new cube objects
+     * @return the number of solutions found for the subtrees rooted in the
+     *         cubes of the assigned work queue
+     */
+    public static int solutionsWorkers(CubeCache cache) throws Exception {
         ArrayList<Cube> actual;
         int result = 0;
         int i;
         Cube cube;
         boolean end = false;
-        //System.out.println("Ibis[" + myIntIbisId + "] -> size before: " + toDo.size());
         while((cube = getFromPool()) != null) {
             result += solutions(cube, cache);
-            //System.out.println("Ibis[" + myIntIbisId + "] -> size: " + toDo.size());
-
-            /*------------------ADD HERE---------------------------------------*/
-            /*if(cube != initialCube) {
-                cache.put(cube);
-            }*/
 
         }
-        //System.out.println("Ibis[" + myIntIbisId + "] -> solutionsWorkers -> FIrstTermination");
         return result;
     }
 
+    /**
+     * Function called by the server Ibis instance to calculate its part of the solution and
+     * collect results from other nodes
+     * @param resultsReceiver
+     *            port on wich read the results from other nodes
+     * @return the cumulative results
+     */
     public static int solutionsServer(ReceivePort resultsReceiver) throws Exception {
         //System.out.println("Ibis[" + myIntIbisId + "] -> SolutionsServer");
         int i;
@@ -229,6 +188,10 @@ public class Rubiks {
         return result;
     }
 
+    /**
+     * Function called to generate the initial cube from the parameters passed by the user
+     * @return the generated cube
+     */
     public static Cube generateCube() {
         Cube cube = null;
 
@@ -237,9 +200,6 @@ public class Rubiks {
         int twists = 11;
         int seed = 0;
         String fileName = null;
-
-        // number of threads used to solve puzzle
-        // (not used in sequential version)
 
         for (int i = 0; i < arguments.length; i++) {
             if (arguments[i].equalsIgnoreCase("--size")) {
@@ -284,43 +244,132 @@ public class Rubiks {
         return cube;
     }
 
-    /*public static int generateFirstLevel(Cube cube, CubeCache cache, ArrayList<Cube> toDo) {
-        int results = solutionInitial(cube, cache, toDo);
-        //System.out.println(myIbisId + " -> FIRST " + toDo.size() + " cubes");
-        return results;
+    static class Result {
+        static int result;
+        static int level;
     }
 
-    public static int generateSecondLevel(CubeCache cache, ArrayList<Cube> toDo) {
-        int n = toDo.size();
-        int results = 0;
-        int i;
-        for(i = 0; i < n; i++) {
-            Cube cube = toDo.remove(0);
-            results += solutionInitial(cube, cache, toDo);
+    static int resultOnFirstPart;
+    static int levelOfResult;
+
+    public static boolean generateFirstPartOfTree() {
+        initialToDo = new ArrayList<Cube>();
+        initialToDo.add(initialCube);
+
+        int result = 0;
+        resultOnFirstPart = 0;
+        int i, j;
+
+        boolean levelFound = false;
+        boolean terminated = false;
+        levelOfResult = -1;
+
+        /*find the first tree level with more nodes than ibis instances. Split nodes fairly
+        among the N ibis instances. If some nodes have left out (the number of nodes is not
+        a divisor of N), these are expanded to the next tree level, otherwise we have
+        terminated*/
+
+        while(!levelFound) {
+            int m = initialToDo.size() / nodes;
+            int r = initialToDo.size() % nodes;
+            if(m == 0) {
+                int s = initialToDo.size();
+                for(i = 0; i < s; i++) {
+                    resultOnFirstPart += generateAnotherLevel(initialToDo.remove(0), cache, initialToDo);
+                }
+                levelOfResult++;
+                if(resultOnFirstPart != 0) {
+                    break;
+                }
+            } else {
+                levelFound = true;
+                int startIndex = m * myIntIbisId;
+
+                for(i = 0; i < startIndex; i++) {
+                    initialToDo.remove(0);
+                }
+
+                for(i = 0; i < m; i++) {
+                    toDo.add(initialToDo.remove(0));
+                }
+
+                for(i = 0; i < (nodes - 1 - myIntIbisId) * m; i++) {
+                    initialToDo.remove(0);
+                }
+
+                if(r != 0) {
+                    for(i = 0; i < r; i++) {
+                        generateAnotherLevel(initialToDo.remove(0), cache, initialToDo);
+                    }
+                } else {
+                    terminated = true;
+                }
+            }
         }
-        //System.out.println(myIbisId + " -> SECOND " + toDo.size() + " cubes");
-        return results;
-    }*/
 
-    public static int generateAnotherLevel(Cube cube, CubeCache cache, ArrayList<Cube> toDo) {
-        int results = solutionInitial(cube, cache, toDo);
-        //System.out.println(myIbisId + " -> SECOND " + toDo.size() + " cubes");
-        return results;
+        if(resultOnFirstPart != 0) {
+            return true;
+        }
+
+        /*if we have not terminated yet, we try to split the next level nodes. If they are
+        less than the number of ibis instances we generate another level from them,
+        otherwise we split them as fairly as possible*/
+
+        while(!terminated) {
+            int m = initialToDo.size() / nodes;
+            int r = initialToDo.size() % nodes;
+            if(m == 0) {
+                int s = initialToDo.size();
+                for(i = 0; i < s; i++) {
+                    generateAnotherLevel(initialToDo.remove(0), cache, initialToDo);
+                }
+                continue;
+            } else {
+                terminated = true;
+                int[] cubes_per_proc = new int[nodes];
+                int[] displs = new int[nodes];
+                int avarage_cubes_per_proc = initialToDo.size() / nodes;
+                int rem = initialToDo.size() % nodes;
+                int sum = 0;
+                for (i = 0; i < nodes; i++) {
+                    cubes_per_proc[i] = avarage_cubes_per_proc;
+                    if (rem > 0) {
+                        cubes_per_proc[i]++;
+                        rem--;
+                    }
+                    displs[i] = sum;
+                    sum += cubes_per_proc[i];
+                }
+                int mydisp = displs[myIntIbisId];
+                for(i = 0; i < displs[myIntIbisId]; i++) {
+                    initialToDo.remove(0);
+                }
+                for(i = 0; i < cubes_per_proc[myIntIbisId]; i++) {
+                    toDo.add(initialToDo.remove(0));
+                }
+            }
+        }
+        return false;
     }
 
+    /**
+     * Function called by the server Ibis instance to do its part of work
+     * @param ibis
+     *            local Ibis instance
+     */
     private static void solveServer(Ibis ibis) throws Exception {
         ReceivePort resultsReceiver = ibis.createReceivePort(portTypeMto1, "results");
         resultsReceiver.enableConnections();
 
         SendPort terminationSender = ibis.createSendPort(portType1toM);
         for (IbisIdentifier joinedIbis : joinedIbises) {
-            if(joinedIbis.equals(myIbisId)) {
+            if(joinedIbis.equals(ibis)) {
                 continue;
             }
             terminationSender.connect(joinedIbis, "continue");
         }
 
-        
+
         int bound = 0;
         int result = 0;
         int resultOnFirstPart = 0;
@@ -336,109 +385,12 @@ public class Rubiks {
 
         while(result == 0) {
             bound++;
-            //System.out.println(myIbisId + "-> BOUND: " + bound);
             initialCube.setBound(bound);
-            initialToDo = new ArrayList<Cube>();
-            initialToDo.add(initialCube);
-
-            boolean levelFound = false;
-            boolean terminated = false;
-            int levelOfResult = -1;
-
-            /*find the first tree level with more nodes than ibis instances. Split nodes fairly
-            among the N ibis instances. If some nodes have left out (the number of nodes is not
-            a divisor of N), these are expanded to the next tree level, otherwise we have
-            terminated*/
-
-            while(!levelFound) {
-                int m = initialToDo.size() / nodes;
-                int r = initialToDo.size() % nodes;
-                if(m == 0) {
-                    int s = initialToDo.size();
-                    for(i = 0; i < s; i++) {
-                        resultOnFirstPart += generateAnotherLevel(initialToDo.remove(0), cache, initialToDo);
-                    }
-                    levelOfResult++;
-                    if(resultOnFirstPart != 0) {
-                        bound = levelOfResult;
-                        //System.out.println("Found result at level -> " + bound);
-                        break;
-                    }
-                } else {
-                    levelFound = true;
-                    int startIndex = m * myIntIbisId;
-
-                    for(i = 0; i < startIndex; i++) {
-                        initialToDo.remove(0);
-                    }
-
-                    for(i = 0; i < m; i++) {
-                        add(initialToDo.remove(0));
-                    }
-
-                    for(i = 0; i < (nodes - 1 - myIntIbisId) * m; i++) {
-                        initialToDo.remove(0);
-                    }
-
-                    if(r != 0) {
-                        for(i = 0; i < r; i++) {
-                            generateAnotherLevel(initialToDo.remove(0), cache, initialToDo);
-                        }
-                    } else {
-                        terminated = true;
-                    }
-                }
-            }
-
-            if(resultOnFirstPart != 0) {
+            if(generateFirstPartOfTree()) {
                 result = resultOnFirstPart;
+                bound = levelOfResult;
                 continue;
             }
-
-            /*if we have not terminated yet, we try to split the next level nodes. If they are
-            less than the number of ibis instances we generate another level from them,
-            otherwise we split them as fairly as possible*/
-
-            while(!terminated) {
-                int m = initialToDo.size() / nodes;
-                int r = initialToDo.size() % nodes;
-                if(m == 0) {
-                    int s = initialToDo.size();
-                    for(i = 0; i < s; i++) {
-                        generateAnotherLevel(initialToDo.remove(0), cache, initialToDo);
-                    }
-                    continue;
-                } else {
-                    terminated = true;
-                    int[] cubes_per_proc = new int[nodes];
-                    int[] displs = new int[nodes];
-                    int avarage_cubes_per_proc = initialToDo.size() / nodes;
-                    int rem = initialToDo.size() % nodes;
-                    int sum = 0;
-                    for (i = 0; i < nodes; i++) {
-                        cubes_per_proc[i] = avarage_cubes_per_proc;
-                        if (rem > 0) {
-                            cubes_per_proc[i]++;
-                            rem--;
-                        }
-                        displs[i] = sum;
-                        sum += cubes_per_proc[i];
-                    }
-                    int mydisp = displs[myIntIbisId];
-                    for(i = 0; i < displs[myIntIbisId]; i++) {
-                        initialToDo.remove(0);
-                    }
-                    for(i = 0; i < cubes_per_proc[myIntIbisId]; i++) {
-                        add(initialToDo.remove(0));
-                    }
-                }
-            }
-
-            //System.out.println(myIbisId + "-> SIZE3: " + nodesOnTree);
-            //System.out.println("Ibis[" + myIntIbisId + "] BOUND -> " + bound);
-            //printTree();
-
-
             //Thread.sleep(1000);
             System.out.print(" " + bound);
             result = solutionsServer(resultsReceiver);
@@ -460,7 +412,7 @@ public class Rubiks {
         //System.out.println("Results on first part " + resultOnFirstPart);
         System.out.println("Solving cube possible in " + result + " ways of "
                            + bound + " steps");
-        
+
         System.err.println("Solving cube took " + (end - start)
                            + " milliseconds");
 
@@ -493,112 +445,12 @@ public class Rubiks {
 
         while(!end) {
             bound++;
-            //System.out.println(myIbisId + "-> BOUND: " + bound);
             initialCube.setBound(bound);
-            initialToDo = new ArrayList<Cube>();
-            initialToDo.add(initialCube);
-
-            boolean levelFound = false;
-            boolean terminated = false;
-            int levelOfResult = -1;
-
-            /*find the first tree level with more nodes than ibis instances. Split nodes fairly
-            among the N ibis instances. If some nodes have left out (the number of nodes is not
-            a divisor of N), these are expanded to the next tree level, otherwise we have
-            terminated*/
-
-            while(!levelFound) {
-                int m = initialToDo.size() / nodes;
-                int r = initialToDo.size() % nodes;
-
-                if(m == 0) {
-                    int s = initialToDo.size();
-                    for(i = 0; i < s; i++) {
-                        resultOnFirstPart += generateAnotherLevel(initialToDo.remove(0), cache, initialToDo);
-                    }
-                    levelOfResult++;
-                    if(resultOnFirstPart != 0) {
-                        bound = levelOfResult;
-                        //System.out.println("Found result at level -> " + bound);
-                        break;
-                    }
-                } else {
-                    levelFound = true;
-                    int startIndex = m * myIntIbisId;
-
-                    for(i = 0; i < startIndex; i++) {
-                        initialToDo.remove(0);
-                    }
-
-                    for(i = 0; i < m; i++) {
-                        add(initialToDo.remove(0));
-                    }
-
-                    for(i = 0; i < (nodes - 1 - myIntIbisId) * m; i++) {
-                        initialToDo.remove(0);
-                    }
-
-                    if(r != 0) {
-                        for(i = 0; i < r; i++) {
-                            generateAnotherLevel(initialToDo.remove(0), cache, initialToDo);
-                        }
-                    } else {
-                        terminated = true;
-                    }
-                }
-            }
-
-            /*If a solution is found generating the first levels of the tree we terminate*/
-
-            if(resultOnFirstPart != 0) {
+            if(generateFirstPartOfTree()) {
+                result = resultOnFirstPart;
+                bound = levelOfResult;
                 break;
             }
-
-            /*if we have not terminated yet, we try to split the next level nodes. If they are
-            less than the number of ibis instances we generate another level from them,
-            otherwise we split them as fairly as possible*/
-
-            while(!terminated) {
-                int m = initialToDo.size() / nodes;
-                int r = initialToDo.size() % nodes;
-                if(m == 0) {
-                    int s = initialToDo.size();
-                    for(i = 0; i < s; i++) {
-                        generateAnotherLevel(initialToDo.remove(0), cache, initialToDo);
-                    }
-                    continue;
-                } else {
-                    terminated = true;
-                    int[] cubes_per_proc = new int[nodes];
-                    int[] displs = new int[nodes];
-                    int avarage_cubes_per_proc = initialToDo.size() / nodes;
-                    int rem = initialToDo.size() % nodes;
-                    int sum = 0;
-                    for (i = 0; i < nodes; i++) {
-                        cubes_per_proc[i] = avarage_cubes_per_proc;
-                        if (rem > 0) {
-                            cubes_per_proc[i]++;
-                            rem--;
-                        }
-                        displs[i] = sum;
-                        sum += cubes_per_proc[i];
-                    }
-                    int mydisp = displs[myIntIbisId];
-                    for(i = 0; i < displs[myIntIbisId]; i++) {
-                        initialToDo.remove(0);
-                    }
-                    for(i = 0; i < cubes_per_proc[myIntIbisId]; i++) {
-                        add(initialToDo.remove(0));
-                    }
-                }
-
-
-            }
-
-            //System.out.println(myIbisId + "-> SIZE3: " + nodesOnTree);
-            //System.out.println("Ibis[" + myIntIbisId + "] BOUND -> " + bound);
-            //printTree();
-
             result = solutionsWorkers();
             //System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: "  + valuatedCubes);
 
@@ -663,20 +515,6 @@ public class Rubiks {
         // Create an ibis instance.
         Ibis ibis = IbisFactory.createIbis(ibisCapabilities, null, portTypeMto1, portType1toM);
         Thread.sleep(5000);
-        myIbisId = ibis.identifier();
-        myIbis = ibis;
-
-
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            public void run() {
-                try {
-                    //myIbis.registry().terminate();
-                    myIbis.end();
-                } catch(IOException e) {
-                    System.err.println("Error");
-                }
-            }
-        });
 
         // Elect a server
         System.out.println("elections");
@@ -689,7 +527,7 @@ public class Rubiks {
         int i = 0;
         for (IbisIdentifier joinedIbis : joinedIbises) {
             System.err.println("Ibis joined: " + joinedIbis);
-            if(joinedIbis.equals(myIbisId)) {
+            if(joinedIbis.equals(ibis)) {
                 myIntIbisId = i;
             }
             i++;
@@ -724,6 +562,12 @@ public class Rubiks {
         ibis.end();
     }
 
+    /**
+         * Main function.
+         *
+         * @param arguments
+         *            list of arguments
+         */
     public static void main(String[] argumentsForCube) {
         arguments = argumentsForCube;
         try {
