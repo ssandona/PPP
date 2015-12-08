@@ -389,8 +389,9 @@ public class Rubiks {
             while(!levelFound) {
                 int m = initialToDo.size() / nodes;
                 int r = initialToDo.size() % nodes;
-                System.out.println("M==0 -> initial size "+initialToDo.size());
+                System.out.println("M= "+m+" -> initial size "+initialToDo.size());
                 if(m == 0) {
+                    System.out.println("M=0");
                     int s = initialToDo.size();
                     for(i = 0; i < s; i++) {
                         resultOnFirstPart += generateAnotherLevel(initialToDo.remove(0), cache, initialToDo);
@@ -402,6 +403,7 @@ public class Rubiks {
                         break;
                     }
                 } else {
+                    System.out.println("M!=0");
                     levelFound = true;
                     int startIndex = m * myIntIbisId;
 
