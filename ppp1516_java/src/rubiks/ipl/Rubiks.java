@@ -379,84 +379,6 @@ public class Rubiks {
             initialCube.setBound(bound);
             initialToDo = new ArrayList<Cube>();
             initialToDo.add(initialCube);
-            /*result = generateFirstLevel(initialCube, cache, initialToDo);
-            //System.out.println(myIbisId + "-> SIZE1: " + initialToDo.size());
-            if(result == 0) {
-                //System.out.println(myIbisId + "generateSecondLevel");
-                result = generateSecondLevel(cache, initialToDo);
-                if(result != 0) {
-                    bound = 2;
-                }
-            } else {
-                bound = 1;
-            }
-            if(result != 0) {
-                continue;
-            }*/
-
-            //System.out.println(myIbisId + "-> SIZE2: " + initialToDo.size());
-
-            /*String s = "";
-            for(i = 0; i < initialToDo.size(); i++) {
-                s += (" " + initialToDo.get(i).getTwists());
-            }
-            System.out.println("TODO: " + s);*/
-
-            /*correct
-            for(j = 0; j < 3; j++) {
-               if(j != 2) {
-                   int m = initialToDo.size() / nodes;
-                   int r = initialToDo.size() % nodes;
-
-
-                   int startIndex = m * myIntIbisId;
-
-                   for(i = 0; i < startIndex; i++) {
-                       initialToDo.remove(0);
-                   }
-
-                   for(i = 0; i < m; i++) {
-                       add(initialToDo.remove(0));
-                   }
-
-                   for(i = 0; i < (nodes - 1 - myIntIbisId) * m; i++) {
-                       initialToDo.remove(0);
-                   }
-
-                   if(r != 0) {
-                       for(i = 0; i < r; i++) {
-                           generateAnotherLevel(initialToDo.remove(0), cache, initialToDo);
-                       }
-                   } else {
-                       break;
-                   }
-               }
-               else {
-                   int[] cubes_per_proc = new int[nodes];
-                   int[] displs = new int[nodes];
-                   int avarage_cubes_per_proc = initialToDo.size() / nodes;
-                   int rem = initialToDo.size() % nodes;
-                   int sum = 0;
-                   for (i = 0; i < nodes; i++) {
-                       cubes_per_proc[i] = avarage_cubes_per_proc;
-                       if (rem > 0) {
-                           cubes_per_proc[i]++;
-                           rem--;
-                       }
-                       displs[i] = sum;
-                       sum += cubes_per_proc[i];
-                   }
-                   int mydisp = displs[myIntIbisId];
-                   for(i = 0; i < displs[myIntIbisId]; i++) {
-                       initialToDo.remove(0);
-                   }
-                   for(i = 0; i < cubes_per_proc[myIntIbisId]; i++) {
-                       add(initialToDo.remove(0));
-                   }
-               }
-            }
-
-            end correct */
 
             boolean levelFound = false;
             boolean terminated = false;
@@ -613,78 +535,6 @@ public class Rubiks {
             initialCube.setBound(bound);
             initialToDo = new ArrayList<Cube>();
             initialToDo.add(initialCube);
-            /*result = generateFirstLevel(initialCube, cache, initialToDo);
-            //System.out.println(myIbisId + "-> INITIAL CUBE: " + initialCube.getTwists()+" "+initialCube.getBound());
-            if(result == 0) {
-                result = generateSecondLevel(cache, initialToDo);
-                //System.out.println(myIbisId + "-> SIZE2: " + initialToDo.size());
-                if(result != 0) {
-                    end = true;
-                    continue;
-                }
-            } else {
-                end = true;
-                continue;
-            }
-            if(result != 0) {
-                continue;
-            }*/
-
-            /*correct
-            for(j = 0; j < 3; j++) {
-                if(j != 2) {
-                    int m = initialToDo.size() / nodes;
-                    int r = initialToDo.size() % nodes;
-
-
-                    int startIndex = m * myIntIbisId;
-
-                    for(i = 0; i < startIndex; i++) {
-                        initialToDo.remove(0);
-                    }
-
-                    for(i = 0; i < m; i++) {
-                        add(initialToDo.remove(0));
-                    }
-
-                    for(i = 0; i < (nodes - 1 - myIntIbisId) * m; i++) {
-                        initialToDo.remove(0);
-                    }
-
-                    if(r != 0) {
-                        for(i = 0; i < r; i++) {
-                            generateAnotherLevel(initialToDo.remove(0), cache, initialToDo);
-                        }
-                    } else {
-                        break;
-                    }
-                }
-                else {
-                    int[] cubes_per_proc = new int[nodes];
-                    int[] displs = new int[nodes];
-                    int avarage_cubes_per_proc = initialToDo.size() / nodes;
-                    int rem = initialToDo.size() % nodes;
-                    int sum = 0;
-                    for (i = 0; i < nodes; i++) {
-                        cubes_per_proc[i] = avarage_cubes_per_proc;
-                        if (rem > 0) {
-                            cubes_per_proc[i]++;
-                            rem--;
-                        }
-                        displs[i] = sum;
-                        sum += cubes_per_proc[i];
-                    }
-                    int mydisp = displs[myIntIbisId];
-                    for(i = 0; i < displs[myIntIbisId]; i++) {
-                        initialToDo.remove(0);
-                    }
-                    for(i = 0; i < cubes_per_proc[myIntIbisId]; i++) {
-                        add(initialToDo.remove(0));
-                    }
-                }
-            }
-
-            end correct */
 
             boolean levelFound = false;
             boolean terminated = false;
@@ -803,133 +653,132 @@ public class Rubiks {
             end = r.readBoolean();
             r.finish();
         }
+
+        System.out.println("FINE");
+        resultsSender.close();
+        Thread.sleep(1000);
+        terminationReceiver.close();
+        System.out.println("PortClosed");
     }
 
-    System.out.println("FINE");
-    resultsSender.close();
-    Thread.sleep(1000);
-    terminationReceiver.close();
-    System.out.println("PortClosed");
-}
+
+
+    public static void printUsage() {
+        System.out.println("Rubiks Cube solver");
+        System.out.println("");
+        System.out
+        .println("Does a number of random twists, then solves the rubiks cube with a simple");
+        System.out
+        .println(" brute-force approach. Can also take a file as input");
+        System.out.println("");
+        System.out.println("USAGE: Rubiks [OPTIONS]");
+        System.out.println("");
+        System.out.println("Options:");
+        System.out.println("--size SIZE\t\tSize of cube (default: 3)");
+        System.out
+        .println("--twists TWISTS\t\tNumber of random twists (default: 11)");
+        System.out
+        .println("--seed SEED\t\tSeed of random generator (default: 0");
+        System.out
+        .println("--threads THREADS\t\tNumber of threads to use (default: 1, other values not supported by sequential version)");
+        System.out.println("");
+        System.out
+        .println("--file FILE_NAME\t\tLoad cube from given file instead of generating it");
+        System.out.println("");
+    }
 
 
 
-public static void printUsage() {
-    System.out.println("Rubiks Cube solver");
-    System.out.println("");
-    System.out
-    .println("Does a number of random twists, then solves the rubiks cube with a simple");
-    System.out
-    .println(" brute-force approach. Can also take a file as input");
-    System.out.println("");
-    System.out.println("USAGE: Rubiks [OPTIONS]");
-    System.out.println("");
-    System.out.println("Options:");
-    System.out.println("--size SIZE\t\tSize of cube (default: 3)");
-    System.out
-    .println("--twists TWISTS\t\tNumber of random twists (default: 11)");
-    System.out
-    .println("--seed SEED\t\tSeed of random generator (default: 0");
-    System.out
-    .println("--threads THREADS\t\tNumber of threads to use (default: 1, other values not supported by sequential version)");
-    System.out.println("");
-    System.out
-    .println("--file FILE_NAME\t\tLoad cube from given file instead of generating it");
-    System.out.println("");
-}
+    /**
+     * Main function.
+     *
+     * @param arguments
+     *            list of arguments
+     */
 
 
-
-/**
- * Main function.
- *
- * @param arguments
- *            list of arguments
- */
-
-
-private void run() throws Exception {
-    //System.out.println("done");
-    // Create an ibis instance.
-    Ibis ibis = IbisFactory.createIbis(ibisCapabilities, null, portTypeMto1, portType1to1Up, portTypeMto1Up, portType1toM, portType1to1);
-    Thread.sleep(5000);
-    System.out.println("Ibis created");
-    myIbisId = ibis.identifier();
-    myIbis = ibis;
+    private void run() throws Exception {
+        //System.out.println("done");
+        // Create an ibis instance.
+        Ibis ibis = IbisFactory.createIbis(ibisCapabilities, null, portTypeMto1, portType1to1Up, portTypeMto1Up, portType1toM, portType1to1);
+        Thread.sleep(5000);
+        System.out.println("Ibis created");
+        myIbisId = ibis.identifier();
+        myIbis = ibis;
 
 
-    Runtime.getRuntime().addShutdownHook(new Thread() {
-        public void run() {
-            try {
-                //myIbis.registry().terminate();
-                myIbis.end();
-            } catch(IOException e) {
-                System.err.println("Error");
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            public void run() {
+                try {
+                    //myIbis.registry().terminate();
+                    myIbis.end();
+                } catch(IOException e) {
+                    System.err.println("Error");
+                }
             }
+        });
+
+        // Elect a server
+        System.out.println("elections");
+        IbisIdentifier server = ibis.registry().elect("Server");
+
+        System.out.println("Server is " + server);
+
+        joinedIbises = ibis.registry().joinedIbises();
+        nodes = joinedIbises.length;
+        int i = 0;
+        for (IbisIdentifier joinedIbis : joinedIbises) {
+            System.err.println("Ibis joined: " + joinedIbis);
+            if(joinedIbis.equals(myIbisId)) {
+                myIntIbisId = i;
+            }
+            i++;
         }
-    });
 
-    // Elect a server
-    System.out.println("elections");
-    IbisIdentifier server = ibis.registry().elect("Server");
-
-    System.out.println("Server is " + server);
-
-    joinedIbises = ibis.registry().joinedIbises();
-    nodes = joinedIbises.length;
-    int i = 0;
-    for (IbisIdentifier joinedIbis : joinedIbises) {
-        System.err.println("Ibis joined: " + joinedIbis);
-        if(joinedIbis.equals(myIbisId)) {
-            myIntIbisId = i;
-        }
-        i++;
-    }
-
-    initialCube = generateCube();
-    cache = new CubeCache(initialCube.getSize());
+        initialCube = generateCube();
+        cache = new CubeCache(initialCube.getSize());
 
 
 
-    // If I am the server, run server, else run client.
-    if (server.equals(ibis.identifier())) {
-        if(initialCube == null) {
-            System.out.println("CUBE NULL FROM THE BEGIN");
+        // If I am the server, run server, else run client.
+        if (server.equals(ibis.identifier())) {
+            if(initialCube == null) {
+                System.out.println("CUBE NULL FROM THE BEGIN");
+            } else {
+                System.out.println("CUBE ok");
+            }
+            //long start = System.currentTimeMillis();
+            solveServer(ibis);
+            //long end = System.currentTimeMillis();
+
+            // NOTE: this is printed to standard error! The rest of the output is
+            // constant for each set of parameters. Printing this to standard error
+            // makes the output of standard out comparable with "diff"
+
+            //terminate all workers
+            // terminate the pool
+            //System.out.println("Terminating pool");
+            //ibis.registry().terminate();
+            // wait for this termination to propagate through the system
+            //ibis.registry().waitUntilTerminated();
+
+
         } else {
-            System.out.println("CUBE ok");
+            solveWorkers(ibis, server);
         }
-        //long start = System.currentTimeMillis();
-        solveServer(ibis);
-        //long end = System.currentTimeMillis();
-
-        // NOTE: this is printed to standard error! The rest of the output is
-        // constant for each set of parameters. Printing this to standard error
-        // makes the output of standard out comparable with "diff"
-
-        //terminate all workers
-        // terminate the pool
-        //System.out.println("Terminating pool");
-        //ibis.registry().terminate();
-        // wait for this termination to propagate through the system
-        //ibis.registry().waitUntilTerminated();
 
 
-    } else {
-        solveWorkers(ibis, server);
+        ibis.end();
     }
 
-
-    ibis.end();
-}
-
-public static void main(String[] argumentsForCube) {
-    arguments = argumentsForCube;
-    try {
-        System.out.println("run");
-        new Rubiks().run();
-    } catch (Exception e) {
-        e.printStackTrace(System.err);
+    public static void main(String[] argumentsForCube) {
+        arguments = argumentsForCube;
+        try {
+            System.out.println("run");
+            new Rubiks().run();
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+        }
     }
-}
 
 }
