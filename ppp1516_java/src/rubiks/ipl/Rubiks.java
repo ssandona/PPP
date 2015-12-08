@@ -348,7 +348,7 @@ public class Rubiks {
      *            local Ibis instance
      */
     private static void solveServer(Ibis ibis) throws Exception {
-        System.out.println("Try to generate the ports -> " + myIntIbisId);
+        //System.out.println("Try to generate the ports -> " + myIntIbisId);
         ReceivePort resultsReceiver = ibis.createReceivePort(portTypeMto1, "results");
         resultsReceiver.enableConnections();
 
@@ -359,7 +359,7 @@ public class Rubiks {
             }
             terminationSender.connect(joinedIbis, "continue");
         }
-        System.out.println("Ports generated -> " + myIntIbisId);
+        //System.out.println("Ports generated -> " + myIntIbisId);
 
 
         int bound = 0;
@@ -378,14 +378,14 @@ public class Rubiks {
             bound++;
             initialCube.setBound(bound);
             initialToDo = new ArrayList<Cube>();
-            System.out.println("Server Try to generate the Tree -> " + myIntIbisId);
+            //System.out.println("Server Try to generate the Tree -> " + myIntIbisId);
             if(generateFirstPartOfTree(initialToDo)) {
                 result = resultOnFirstPart;
                 bound = levelOfResult;
-                System.out.println("Nine");
+                //System.out.println("Nine");
                 continue;
             }
-            System.out.println("Server Tree generated -> " + myIntIbisId);
+            //System.out.println("Server Tree generated -> " + myIntIbisId);
             printTree();
             System.out.print(" " + bound);
             result = solutionsServer(resultsReceiver);
@@ -422,7 +422,7 @@ public class Rubiks {
 
     public static void solveWorkers(Ibis ibis, IbisIdentifier server) throws Exception {
 
-        System.out.println("Try to generate the ports -> " + myIntIbisId);
+        //System.out.println("Try to generate the ports -> " + myIntIbisId);
         //1 sender and many receivers
         ReceivePort terminationReceiver = ibis.createReceivePort(portType1toM, "continue");
         terminationReceiver.enableConnections();
@@ -431,7 +431,7 @@ public class Rubiks {
         SendPort resultsSender = ibis.createSendPort(portTypeMto1);
         resultsSender.connect(server, "results");
 
-        System.out.println("Ports generated -> " + myIntIbisId);
+        //System.out.println("Ports generated -> " + myIntIbisId);
 
         int result = 0;
         boolean end = false;
@@ -445,13 +445,13 @@ public class Rubiks {
             bound++;
             initialCube.setBound(bound);
             initialToDo = new ArrayList<Cube>();
-            System.out.println("Try to generate the Tree -> " + myIntIbisId);
+            //System.out.println("Try to generate the Tree -> " + myIntIbisId);
             if(generateFirstPartOfTree(initialToDo)) {
                 System.out.println("NINE -> " + myIntIbisId);
                 result = resultOnFirstPart;
                 break;
             }
-            System.out.println("Tree generated -> " + myIntIbisId);
+            //System.out.println("Tree generated -> " + myIntIbisId);
             printTree();
             result = solutionsWorkers();
             //System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: "  + valuatedCubes);
@@ -538,11 +538,11 @@ public class Rubiks {
         initialCube = generateCube();
         cache = new CubeCache(initialCube.getSize());
 
-        System.out.println("My Ibis Id -> " + myIntIbisId);
+        //System.out.println("My Ibis Id -> " + myIntIbisId);
 
         // If I am the server, run server, else run client.
         if (server.equals(ibis.identifier())) {
-            System.out.println("I'm a fucking server -> " + myIntIbisId);
+            //System.out.println("I'm a fucking server -> " + myIntIbisId);
             //long start = System.currentTimeMillis();
             solveServer(ibis);
             //long end = System.currentTimeMillis();
@@ -560,7 +560,7 @@ public class Rubiks {
 
 
         } else {
-            System.out.println("I'm a fucking client -> " + myIntIbisId);
+            //System.out.println("I'm a fucking client -> " + myIntIbisId);
             solveWorkers(ibis, server);
         }
         ibis.end();
