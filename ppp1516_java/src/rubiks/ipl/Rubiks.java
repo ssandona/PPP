@@ -172,7 +172,7 @@ public class Rubiks {
         //System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
         //workManager.printSize();
         valuatedCubes = 0;
-        System.out.println("Ibis[" + myIntIbisId + "] -> Wait results from other cubes");
+        //System.out.println("Ibis[" + myIntIbisId + "] -> Wait results from other cubes");
         for(i = 0; i < nodes - 1; i++) {
             ReadMessage r = resultsReceiver.receive();
             result += r.readInt();
@@ -258,7 +258,7 @@ public class Rubiks {
         a divisor of N), these are expanded to the next tree level, otherwise we have
         terminated*/
 
-        System.out.println("Begin generateFirstPartOfTree -> " + myIntIbisId);
+        //System.out.println("Begin generateFirstPartOfTree -> " + myIntIbisId);
 
         while(!levelFound) {
             int m = initialToDo.size() / nodes;
@@ -298,7 +298,7 @@ public class Rubiks {
             }
         }
 
-        System.out.println("First part OK-> " + myIntIbisId);
+        //System.out.println("First part OK-> " + myIntIbisId);
 
         /*if we have not terminated yet, we try to split the next level nodes. If they are
         less than the number of ibis instances we generate another level from them,
@@ -338,7 +338,7 @@ public class Rubiks {
                 }
             }
         }
-        System.out.println("Second part OK-> " + myIntIbisId);
+        //System.out.println("Second part OK-> " + myIntIbisId);
         return false;
     }
 
