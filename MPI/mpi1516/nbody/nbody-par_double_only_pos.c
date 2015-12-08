@@ -15,7 +15,7 @@ extern double   atan2(double, double);
 
 #define GRAVITY     1.1
 #define FRICTION    0.01
-#define MAXBODIES   1024
+#define MAXBODIES  10000
 #define DELTA_T     (0.025/5000)
 #define BOUNCE      -0.9
 #define SEED        27102015
@@ -23,19 +23,34 @@ extern double   atan2(double, double);
 typedef struct {
     double x[2];        /* Old and new X-axis coordinates */
     double y[2];        /* Old and new Y-axis coordinates */
-    double xf;          /* force along X-axis */
-    double yf;          /* force along Y-axis */
+    // double xf;          /* force along X-axis */
+    // double yf;          /* force along Y-axis */
     double xv;          /* velocity along X-axis */
     double yv;          /* velocity along Y-axis */
     double mass;        /* Mass of the body */
     double radius;      /* width (derived from mass) */
 } bodyType;
 
+typedef struct {
+    double x[2];        /* Old and new X-axis coordinates */
+    double y[2];        /* Old and new Y-axis coordinates */
+} bodyPositionType;
+
+typedef struct {
+    double xf;          /* force along X-axis */
+    double yf;          /* force along Y-axis */
+} forceType;
+
 
 bodyType bodies[MAXBODIES];
+bodyPositionType positions[MAXBODIES];
+forceType *forces;
+forceType *new_forces;
+forceType *new_forces2;
 int bodyCt;
 int old = 0;    /* Flips between 0 and 1 */
 bodyType *new_bodies;
+bodyPositionType *new_positions;
 bodyType *new_bodies2;
 bodyType *rec_bodies;
 int *displs;
@@ -48,12 +63,12 @@ MPI_Op mpi_sum;
 
 /*  Macros to hide memory layout
 */
-#define X(B)        bodies[B].x[old]
-#define XN(B)       bodies[B].x[old^1]
-#define Y(B)        bodies[B].y[old]
-#define YN(B)       bodies[B].y[old^1]
-#define XF(B)       bodies[B].xf
-#define YF(B)       bodies[B].yf
+#define X(B)        positions[B].x[old]
+#define XN(B)       positions[B].x[old^1]
+#define Y(B)        positions[B].y[old]
+#define YN(B)       positions[B].y[old^1]
+#define XF(B)       forces[B].xf
+#define YF(B)       forces[B].yf
 #define XV(B)       bodies[B].xv
 #define YV(B)       bodies[B].yv
 #define R(B)        bodies[B].radius
@@ -61,12 +76,12 @@ MPI_Op mpi_sum;
 
 /*  Macros to hide memory layout
 */
-#define _X(B)       new_bodies[B].x[old]
-#define _XN(B)      new_bodies[B].x[old^1]
-#define _Y(B)       new_bodies[B].y[old]
-#define _YN(B)      new_bodies[B].y[old^1]
-#define _XF(B)      new_bodies[B].xf
-#define _YF(B)      new_bodies[B].yf
+#define _X(B)       new_positions[B].x[old]
+#define _XN(B)      new_positions[B].x[old^1]
+#define _Y(B)       new_positions[B].y[old]
+#define _YN(B)      new_positions[B].y[old^1]
+#define _XF(B)      new_forces[B].xf
+#define _YF(B)      new_forces[B].yf
 #define _XV(B)      new_bodies[B].xv
 #define _YV(B)      new_bodies[B].yv
 #define _R(B)       new_bodies[B].radius
@@ -243,7 +258,6 @@ colored:
 void
 print(void) {
     int b;
-
     for (b = 0; b < bodyCt; ++b) {
         printf("%10.3f %10.3f %10.3f %10.3f %10.3f %10.3f\n", _X(b), _Y(b), _XF(b), _YF(b), _XV(b), _YV(b));
     }
@@ -272,6 +286,14 @@ void compute(int b, int c) {
     double force = _M(b) * _M(c) * GRAVITY / forced;
     double xf = force * cos(angle);
     double yf = force * sin(angle);
+
+    /*if(printed <= 1 && myid == 1) {
+        printf("body: %d, from: %d, INCREMENT FORCE (BEFORE): (XF:%10.3f,YF:%10.3f)\n", b, c, _XF(b), _YF(b));
+         printf("val-> dx:%10.3f, dy:%10.3f, angle:%10.3f, dsqr:%10.3f, mindist:%10.3f\n", dx, dy, angle, dsqr, mindist);
+         printf("mindsqr:%10.3f, forced:%10.3f, force:%10.3f, xf:%10.3f, yf:%10.3f\n", mindsqr, forced, force, xf, yf);
+
+    }*/
+
     _XF(b) += xf;
     _YF(b) += yf;
     _XF(c) -= xf;
@@ -367,7 +389,7 @@ void
 compute_velocities(void) {
     int b;
 
-    for (b = 0; b < bodyCt; ++b) {
+    for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
         //for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
         double xv = _XV(b);
         double yv = _YV(b);
@@ -384,7 +406,7 @@ compute_velocities(void) {
 void
 compute_positions(void) {
     int b;
-    for (b = 0; b < bodyCt; ++b) {
+    for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
         //for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
         double xn = _X(b) + (_XV(b) * DELTA_T);
         double yn = _Y(b) + (_YV(b) * DELTA_T);
@@ -421,7 +443,7 @@ print_mine(void) {
     }
 }
 
-void sumForces(bodyType *in, bodyType *inout, int *len, MPI_Datatype *dtype) {
+void sumForces(forceType *in, forceType *inout, int *len, MPI_Datatype *dtype) {
     int i;
     for (i = 0; i < *len; ++i) {
         inout->xf += in->xf;
@@ -475,9 +497,17 @@ main(int argc, char **argv) {
         fprintf(stderr, "Using two bodies...\n");
         bodyCt = 2;
     }
+
+    forces = malloc(sizeof(forceType) * bodyCt);
+    for(i = 0; i < bodyCt; i++) {
+        forces[i].xf = 0;
+        forces[i].yf = 0;
+    }
     /*if(bodyCt > numprocs) {
         bodyCt = numprocs;
     }*/
+    new_bodies = malloc(sizeof(bodyType) * bodyCt);
+    new_positions = malloc(sizeof(bodyPosition) * bodyCt);
 
     secsup = atoi(argv[2]);
     image = map_P6(argv[3], &xdim, &ydim);
@@ -488,13 +518,13 @@ main(int argc, char **argv) {
     /* Initialize simulation data */
     srand(SEED);
     for (b = 0; b < bodyCt; ++b) {
-        X(b) = (rand() % xdim);
-        Y(b) = (rand() % ydim);
-        R(b) = ((b * b + 1.0) * sqrt(1.0 * ((xdim * xdim) + (ydim * ydim)))) /
+        _X(b) = (rand() % xdim);
+        _Y(b) = (rand() % ydim);
+        _R(b) = 1 + ((b * b + 1.0) * sqrt(1.0 * ((xdim * xdim) + (ydim * ydim)))) /
                (25.0 * (bodyCt * bodyCt + 1.0));
-        M(b) = R(b) * R(b) * R(b);
-        XV(b) = ((rand() % 20000) - 10000) / 2000.0;
-        YV(b) = ((rand() % 20000) - 10000) / 2000.0;
+        _M(b) = _R(b) * _R(b) * _R(b);
+        _XV(b) = ((rand() % 20000) - 10000) / 2000.0;
+        _YV(b) = ((rand() % 20000) - 10000) / 2000.0;
     }
     //fprintf(stderr, "a\n");
 
@@ -516,23 +546,34 @@ main(int argc, char **argv) {
 
     //fprintf(stderr, "b\n");
     /* create a type for struct bodyType */
-    const int nitems = 8;
-    int blocklengths[8] = {2, 2, 1, 1, 1, 1, 1, 1};
-    MPI_Datatype types[8] = {MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE,};
-    MPI_Datatype mpi_body_type;
-    MPI_Aint     offsets[8];
+    const int nitems = 2;
+    int blocklengths[2] = {1, 1};
+    MPI_Datatype types[2] = {MPI_DOUBLE, MPI_DOUBLE};
+    MPI_Datatype mpi_force_type;
+    MPI_Aint     offsets[2];
 
-    offsets[0] = offsetof(bodyType, x);
-    offsets[1] = offsetof(bodyType, y);
-    offsets[2] = offsetof(bodyType, xf);
-    offsets[3] = offsetof(bodyType, yf);
-    offsets[4] = offsetof(bodyType, xv);
-    offsets[5] = offsetof(bodyType, yv);
-    offsets[6] = offsetof(bodyType, mass);
-    offsets[7] = offsetof(bodyType, radius);
+    offsets[0] = offsetof(forceType, xf);
+    offsets[1] = offsetof(forceType, yf);
 
-    MPI_Type_create_struct(nitems, blocklengths, offsets, types, &mpi_body_type);
-    MPI_Type_commit(&mpi_body_type);
+    MPI_Type_create_struct(nitems, blocklengths, offsets, types, &mpi_force_type);
+    MPI_Type_commit(&mpi_force_type);
+
+
+    const int nitems2 = 2;
+    int blocklengths2[2] = {2, 2};
+    MPI_Datatype types2[2] = {MPI_DOUBLE, MPI_DOUBLE};
+    MPI_Datatype mpi_position_type;
+    MPI_Aint     offsets2[4];
+
+    offsets2[0] = offsetof(bodyPositionType, x);
+    offsets2[1] = offsetof(bodyPositionType, y);
+
+    MPI_Type_create_struct(nitems2, blocklengths2, offsets2, types2, &mpi_position_type);
+    MPI_Type_commit(&mpi_position_type);
+
+
+
+
     //fprintf(stderr, "c\n");
 
     MPI_Op_create((MPI_User_function *) sumForces, 1, &mpi_sum);
@@ -552,6 +593,11 @@ main(int argc, char **argv) {
         displs[i] = sum;
         sum += bodies_per_proc[i];
     }
+
+    /*printf("displs and bodies\n");
+    for(i = 0; i < numprocs; i++) {
+        printf("i:%d, displs:%d, numBodies:%d\n", i, displs[i], bodies_per_proc[i]);
+    }*/
     //fprintf(stderr, "e\n");
 
     //printf("bodies_per_proc[%d] = %d\tdispls[%d] = %d\n", 0, bodies_per_proc[0], 0, displs[0]);
@@ -559,7 +605,16 @@ main(int argc, char **argv) {
     int bufSize = bodyCt % numprocs == 0 ? bodyCt / numprocs : (bodyCt / numprocs + 1);
     // Create a buffer that will hold a subset of the bodies
     //fprintf(stderr, "bufsize: %d\n", bufSize);
+
+
     rec_bodies = malloc(sizeof(bodyType) * bufSize);
+    rec_positions = ma
+
+    //MPI_Scatterv(bodies, bodies_per_proc, displs, mpi_body_type, rec_bodies, bufSize, mpi_body_type, 0, MPI_COMM_WORLD);
+
+
+
+
     //fprintf(stderr, "f\n");
 
     // Scatter the bodies to all processes
@@ -579,85 +634,110 @@ main(int argc, char **argv) {
     //fprintf(stderr, "g\n");
 
     // divide the data among processes as described by bodies_per_proc and displs
-    //MPI_Scatterv(&bodies, bodies_per_proc, displs, mpi_body_type, &rec_bodies, bufSize, mpi_body_type, 0, MPI_COMM_WORLD);
-    MPI_Scatterv(bodies, bodies_per_proc, displs, mpi_body_type, rec_bodies, bufSize, mpi_body_type, 0, MPI_COMM_WORLD);
+    //MPI_Scatterv(bodies, bodies_per_proc, displs, mpi_body_type, rec_bodies, bufSize, mpi_body_type, 0, MPI_COMM_WORLD);
+    /*printf("__ID__NEW: %d: ", myid);
+    for (i = 0; i < bodies_per_proc[myid]; i++) {
+        printf("\nbody: %d, mass: %d, pos: (%d,%d)", i, (int)(new_bodies[i].mass), (int)new_bodies[i].x[old], (int)new_bodies[i].y[old]);
+    }*/
+    //MPI_Scatterv(bodies, bodies_per_proc, displs, mpi_body_type, rec_bodies, bufSize, mpi_body_type, 0, MPI_COMM_WORLD);
+
+    //MPI_Scatterv(new_bodies, bodies_per_proc, displs, mpi_body_type, rec_bodies, bufSize, mpi_body_type, 0, MPI_COMM_WORLD);
+    MPI_Bcast(new_bodies, bodyCt, mpi_body_type, 0, MPI_COMM_WORLD);
+    MPI_Bcast(new_positions, bodyCt, mpi_position_type, 0, MPI_COMM_WORLD);
 
     //fprintf(stderr, "h\n");
 
     // print what each process received
-    /*printf("__ID__: %d: ", myid);
-    for (i = 0; i < bodies_per_proc[myid]; i++) {
-        printf("\nbody: %d, mass: %d, pos: (%d,%d)", i, (int)(rec_bodies[i].mass), (int)rec_bodies[i].x[old], (int)rec_bodies[i].y[old]);
-    }*/
+    /* printf("__ID__: %d: ", myid);
+     for (i = 0; i < bodies_per_proc[myid]; i++) {
+         printf("\nbody: %d, mass: %d, pos: (%d,%d)", i, (int)(rec_bodies[i].mass), (int)rec_bodies[i].x[old], (int)rec_bodies[i].y[old]);
+     }*/
     //fprintf(stderr, "i\n");
     //printf("\n");
 
-    /*new_bodies = malloc(sizeof(bodyType) * bodyCt);
+    // new_bodies = malloc(sizeof(bodyType) * bodyCt);
 
-    MPI_Allgatherv(rec_bodies, bodies_per_proc[myid],mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
+    //MPI_Allgatherv(rec_bodies, bodies_per_proc[myid],mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
 
-    printf("__ID__: %d: ", myid);
-    printf("__DIM__: %d: ", bodyCt);
-    for (i = 0; i < bodyCt; i++) {
-        printf("\nbody: %d, mass: %d, pos: (%d,%d)", i, (int)(new_bodies[i].mass), (int)new_bodies[i].x[old], (int)new_bodies[i].y[old]);
-    }*/
+    /* printf("__ID__: %d: ", myid);
+     printf("__DIM__: %d: ", bodyCt);
+     for (i = 0; i < bodyCt; i++) {
+         printf("\nbody: %d, mass: %d, pos: (%d,%d)", i, (int)(new_bodies[i].mass), (int)new_bodies[i].x[old], (int)new_bodies[i].y[old]);
+     }*/
 
     //fprintf(stderr, "k\n");
 
     int cont;
+
+    new_forces = malloc(sizeof(forceType) * bodyCt);
+    for(i = 0; i < bodyCt; i++) {
+        new_forces[i].xf = 0;
+        new_forces[i].yf = 0;
+    }
+    //MPI_Allgatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
+
+    //new_bodies = malloc(sizeof(bodyType) * bodyCt);
+    //MPI_Allgatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
+
 
     if(gettimeofday(&start, 0) != 0) {
         fprintf(stderr, "could not do timing\n");
         exit(1);
     }
     //printf("a\n");
-    new_bodies = malloc(sizeof(bodyType) * bodyCt);
+    //new_bodies = malloc(sizeof(bodyType) * bodyCt);
 
-    MPI_Allgatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
     // printf("b\n");
+
     /* Main Loop */
+
     while (steps--) {
         cont = 0;
-
-        if(printed <= 1) {
-             printf("A -> %d\n", myid);
-             for (i = 0; i < bodyCt; i++) {
-                 printf("\nbody: %d, mass: %d, pos: (%d,%d), forceX: %10.3f, forceY: %10.3f", i, (int)(new_bodies[i].mass), (int)new_bodies[i].x[old], (int)new_bodies[i].y[old], new_bodies[i].xf, new_bodies[i].yf);
-             }
-         }
-
-
         clear_forces();
+        /*if(printed <= 1 && myid == 0) {
+            printf("A -> %d\n", myid);
+            for (i = 0; i < bodyCt; i++) {
+                printf("\nbody: %d, mass: %d, pos: (%d,%d), forceX: %10.3f, forceY: %10.3f", i, (int)(new_bodies[i].mass), (int)new_bodies[i].x[old], (int)new_bodies[i].y[old], _XF(i), _YF(i));
+            }
+        }*/
         compute_forces();
 
-        if(printed <= 1) {
+        /*if(printed <= 1 && myid == 0) {
             printf("B -> %d\n", myid);
             for (i = 0; i < bodyCt; i++) {
-                printf("\nbody: %d, mass: %d, pos: (%d,%d), forceX: %10.3f, forceY: %10.3f", i, (int)(new_bodies[i].mass), (int)new_bodies[i].x[old], (int)new_bodies[i].y[old], new_bodies[i].xf, new_bodies[i].yf);
+                printf("\nbody: %d, mass: %d, pos: (%d,%d), forceX: %10.3f, forceY: %10.3f", i, (int)(new_bodies[i].mass), (int)new_bodies[i].x[old], (int)new_bodies[i].y[old], _XF(i), _YF(i));
             }
-        }
+        }*/
 
-        new_bodies2 = malloc(sizeof(bodyType) * bodyCt);
-        MPI_Allreduce(new_bodies, new_bodies2, bodyCt, mpi_body_type, mpi_sum, MPI_COMM_WORLD);
-        new_bodies = new_bodies2;
+        /*THIS*/
+        new_forces2 = malloc(sizeof(forceType) * bodyCt);
+        MPI_Allreduce(new_forces, new_forces2, bodyCt, mpi_force_type, mpi_sum, MPI_COMM_WORLD);
+        free(new_forces);
+        new_forces = new_forces2;
 
-        if(printed <= 1) {
+
+        /*if(printed <= 1) {
             printf("C -> %d\n", myid);
             for (i = 0; i < bodyCt; i++) {
-                printf("\nbody: %d, mass: %d, pos: (%d,%d), forceX: %10.3f, forceY: %10.3f", i, (int)(new_bodies[i].mass), (int)new_bodies[i].x[old], (int)new_bodies[i].y[old], new_bodies[i].xf, new_bodies[i].yf);
+                printf("\nbody: %d, mass: %d, pos: (%d,%d), forceX: %10.3f, forceY: %10.3f", i, (int)(new_bodies[i].mass), (int)new_bodies[i].x[old], (int)new_bodies[i].y[old], _XF(i), _YF(i));
             }
             printed++;
-        }
+        }*/
         compute_velocities();
         compute_positions();
+        rec_positions = new_positions + displs[myid];
+        new_positions = malloc(sizeof(bodyPositionType) * bodyCt);
+        //MPI_Allgatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
+        MPI_Allgatherv(rec_positions, bodies_per_proc[myid], mpi_position_type, new_positions, bodies_per_proc, displs, mpi_position_type, MPI_COMM_WORLD);
 
         old ^= 1;
-
 
         /*for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
             rec_bodies[cont] = new_bodies[b];
             cont++;
         }*/
+
+        rec_positions = new_positions + displs[myid];
 
         /*if(printed <= 1) {
             printf("__ID__2: %d:\n", myid);
@@ -672,6 +752,7 @@ main(int argc, char **argv) {
             lastup = time(0);
         }*/
     }
+
     if(0 == myid) {
         if(gettimeofday(&end, 0) != 0) {
             fprintf(stderr, "could not do timing\n");
@@ -679,33 +760,32 @@ main(int argc, char **argv) {
         }
         rtime = (end.tv_sec + (end.tv_usec / 1000000.0)) -
                 (start.tv_sec + (start.tv_usec / 1000000.0));
-
-        fprintf(stderr, "N-body took %10.3f seconds\n", rtime);
     }
 
+    new_positions = malloc(sizeof(bodyPositionType) * bodyCt);
+    MPI_Gatherv(rec_positions, bodies_per_proc[myid], mpi_position_type, new_positions, bodies_per_proc, displs, mpi_position_type, 0, MPI_COMM_WORLD);
 
-    for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
+
+    /*for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
         rec_bodies[cont] = new_bodies[b];
         cont++;
     }
     new_bodies = malloc(sizeof(bodyType) * bodyCt);
-    MPI_Gatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, 0, MPI_COMM_WORLD);
-
+    MPI_Gatherv(rec_bodies, bodies_per_proc[myid], mpi_force_type, new_bodies, bodies_per_proc, displs, mpi_force_type, 0, MPI_COMM_WORLD);
+    */
     if(0 == myid) {
         print();
         fprintf(stderr, "fine\n");
+        fprintf(stderr, "N-body took %10.3f seconds\n", rtime);
+
     }
-
-
-
-
 
     MPI_Finalize();
 
     free(bodies_per_proc);
     free(displs);
     free(new_bodies);
-    free(rec_bodies);
+    //free(rec_bodies);
 
     return 0;
 }
