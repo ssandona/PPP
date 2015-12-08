@@ -35,7 +35,9 @@ public class Rubiks {
     static CubeCache cache = null;          //CubeCache
 
     static String[] arguments;              //arguments provided by the user to generate the cube
+    static int resultOnFirstPart;           //variable useful for the work splitting phase
 
+    static int levelOfResult;               //variable useful for the work splitting phase
 
     public static final boolean PRINT_SOLUTION = false;
 
@@ -123,21 +125,19 @@ public class Rubiks {
      * @return if the cube was solved or not
      */
     public static int generateAnotherLevel(Cube cube, ArrayList<Cube> initialToDo) {
-        valuatedCubes++;
         if (cube.isSolved()) {
             return 1;
         }
-        //generate childrens
+        // generate all possible cubes from this one by twisting it in
+        // every possible way. Gets new objects from the cache
         Cube[] children = cube.generateChildren(cache);
         int i;
-        //add childrens on the toDo pool
+        //add childrens on the pool
         for(i = 0; i < children.length; i++) {
             initialToDo.add(children[i]);
         }
         return 0;
     }
-
-
 
     /**
      * Function called by all the workers sert in the
@@ -166,18 +166,16 @@ public class Rubiks {
      * @return the cumulative results
      */
     public static int solutionsServer(ReceivePort resultsReceiver) throws Exception {
-        //System.out.println("Ibis[" + myIntIbisId + "] -> SolutionsServer");
         int i;
+        //calculate the results for the assigned part of the tree
         int result = solutionsWorkers();
-        //System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
-        //workManager.printSize();
+        System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
         valuatedCubes = 0;
-        //System.out.println("Ibis[" + myIntIbisId + "] -> Wait results from other cubes");
+        //wait results from other nodes
         for(i = 0; i < nodes - 1; i++) {
             ReadMessage r = resultsReceiver.receive();
             result += r.readInt();
             r.finish();
-            //System.out.println("YEAH");
         }
         return result;
     }
@@ -238,13 +236,14 @@ public class Rubiks {
         return cube;
     }
 
-
-    static int resultOnFirstPart;
-    static int levelOfResult;
-
-    public static boolean generateFirstPartOfTree(ArrayList<Cube> initialToDo) {
+    /**
+     * Function called at the begin to split the work as fairly as possible among Ibis instances.
+     * @return if the solution of the cube was found during the splitting phase
+     */
+    public static boolean splitTheWork() {
+        ArrayList<Cube> initialToDo = new ArrayList<Cube>();
+        //add the initial cube to the initial work queue (root of the tree)
         initialToDo.add(initialCube);
-
         int result = 0;
         resultOnFirstPart = 0;
         int i, j;
@@ -253,13 +252,10 @@ public class Rubiks {
         boolean terminated = false;
         levelOfResult = -1;
 
-        /*find the first tree level with more nodes than ibis instances. Split nodes fairly
-        among the N ibis instances. If some nodes have left out (the number of nodes is not
-        a divisor of N), these are expanded to the next tree level, otherwise we have
-        terminated*/
-
-        //System.out.println("Begin generateFirstPartOfTree -> " + myIntIbisId);
-
+        /*find the first tree level with more nodes than ibis instances. Split the nodes fairly
+        among the N ibis instances. If some nodes have left out (N is not a divisor of the
+        number of nodes of this level), these are expanded to the next tree level, otherwise
+        the splitting phase is terminated*/
         while(!levelFound) {
             int m = initialToDo.size() / nodes;
             int r = initialToDo.size() % nodes;
@@ -298,12 +294,9 @@ public class Rubiks {
             }
         }
 
-        //System.out.println("First part OK-> " + myIntIbisId);
-
-        /*if we have not terminated yet, we try to split the next level nodes. If they are
-        less than the number of ibis instances we generate another level from them,
-        otherwise we split them as fairly as possible*/
-
+        /*if we have expanded some nodes, we try to split them among the N ibis instances.
+        Until they are less than the number of ibis instances we generate another level of
+        the tree from them, when they are enough, we split them as fairly as possible*/
         while(!terminated) {
             int m = initialToDo.size() / nodes;
             int r = initialToDo.size() % nodes;
@@ -338,7 +331,6 @@ public class Rubiks {
                 }
             }
         }
-        //System.out.println("Second part OK-> " + myIntIbisId);
         return false;
     }
 
@@ -348,10 +340,14 @@ public class Rubiks {
      *            local Ibis instance
      */
     private static void solveServer(Ibis ibis) throws Exception {
-        //System.out.println("Try to generate the ports -> " + myIntIbisId);
+        int bound = 0;
+        int result = 0;
+        int i, j;
+        //port for receive results from other Ibis instances
         ReceivePort resultsReceiver = ibis.createReceivePort(portTypeMto1, "results");
         resultsReceiver.enableConnections();
 
+        //port for send to the other Ibis instances if the work is finish or not
         SendPort terminationSender = ibis.createSendPort(portType1toM);
         for (IbisIdentifier joinedIbis : joinedIbises) {
             if(joinedIbis.equals(ibis.identifier())) {
@@ -359,122 +355,93 @@ public class Rubiks {
             }
             terminationSender.connect(joinedIbis, "continue");
         }
-        //System.out.println("Ports generated -> " + myIntIbisId);
 
-
-        int bound = 0;
-        int result = 0;
-        int i, j;
-        /*ArrayList<Cube> work = workManager.getWork(true);
-        Cube cube = work.get(0);*/
-        //System.out.println("SolutionsServer");
-
-        ArrayList<Cube> initialToDo;
-        WriteMessage task;
         long start = System.currentTimeMillis();
-        System.out.print("Bound");
+        System.out.print("Bound now:");
 
+        //continue to iterate until a solution is found
         while(result == 0) {
             bound++;
             initialCube.setBound(bound);
-            initialToDo = new ArrayList<Cube>();
-            //System.out.println("Server Try to generate the Tree -> " + myIntIbisId);
-            if(generateFirstPartOfTree(initialToDo)) {
+            if(splitTheWork()) {
                 result = resultOnFirstPart;
                 bound = levelOfResult;
-                //System.out.println("Nine");
                 continue;
             }
-            //System.out.println("Server Tree generated -> " + myIntIbisId);
             printTree();
             System.out.print(" " + bound);
             result = solutionsServer(resultsReceiver);
-
+            //if the solution found for this bounds are zero, communicate to the ibis instances
+            //that the next bound has to be evaluated
             if(result == 0) {
-                task = terminationSender.newMessage();
+                WriteMessage task = terminationSender.newMessage();
                 task.writeBoolean(false);
                 task.finish();
             }
         }
 
-        if(resultOnFirstPart == 0) {
-            //say to all that the work is finished
-            task = terminationSender.newMessage();
-            task.writeBoolean(true);
-            task.finish();
-        }
         long end = System.currentTimeMillis();
-        //System.out.println("Results on first part " + resultOnFirstPart);
         System.out.println("Solving cube possible in " + result + " ways of "
                            + bound + " steps");
 
         System.err.println("Solving cube took " + (end - start)
                            + " milliseconds");
 
-        System.out.println("TERMINATE");
-        terminationSender.close();
-        Thread.sleep(2000);
-        resultsReceiver.close();
-        System.out.println("PortClosed");
+        //say to all the ibis instances that the work is finished (if we have not found
+        //a solution splitting the work at the begin, otherwise they already know that
+        //the work is finished)
+        if(resultOnFirstPart == 0) {
+            WriteMessage task = terminationSender.newMessage();
+            task.writeBoolean(true);
+            task.finish();
+        }
 
+        terminationSender.close();
+        Thread.sleep(2000); //wait for safety
+        resultsReceiver.close();
     }
 
 
     public static void solveWorkers(Ibis ibis, IbisIdentifier server) throws Exception {
-
-        //System.out.println("Try to generate the ports -> " + myIntIbisId);
-        //1 sender and many receivers
-        ReceivePort terminationReceiver = ibis.createReceivePort(portType1toM, "continue");
-        terminationReceiver.enableConnections();
-
-        //many senders and 1 receiver
-        SendPort resultsSender = ibis.createSendPort(portTypeMto1);
-        resultsSender.connect(server, "results");
-
-        //System.out.println("Ports generated -> " + myIntIbisId);
 
         int result = 0;
         boolean end = false;
         int i, j;
         int bound = 0;
 
-        ArrayList<Cube> initialToDo;
+        //port for receive if the next bound has to be evaluated or the work is finished
+        ReceivePort terminationReceiver = ibis.createReceivePort(portType1toM, "continue");
+        terminationReceiver.enableConnections();
 
+        //port to send to the server the solutions find for the local assigned subtree
+        SendPort resultsSender = ibis.createSendPort(portTypeMto1);
+        resultsSender.connect(server, "results");
 
         while(!end) {
             bound++;
             initialCube.setBound(bound);
-            initialToDo = new ArrayList<Cube>();
-            //System.out.println("Try to generate the Tree -> " + myIntIbisId);
-            if(generateFirstPartOfTree(initialToDo)) {
-                System.out.println("NINE -> " + myIntIbisId);
+            if(splitTheWork()) {
                 result = resultOnFirstPart;
                 break;
             }
-            //System.out.println("Tree generated -> " + myIntIbisId);
             printTree();
             result = solutionsWorkers();
-            //System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: "  + valuatedCubes);
-
-            //workManager.printSize();
+            System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: "  + valuatedCubes);
             valuatedCubes = 0;
-            //communicate my results
+            //communicate local results to the server
             WriteMessage resultMessage = resultsSender.newMessage();
             resultMessage.writeInt(result);
             resultMessage.finish();
 
-            //System.out.println("Ibis[" + myIntIbisId + "] -> Wait continue from server");
-            //check if I have to continue
+            //check if the work is finished
             ReadMessage r = terminationReceiver.receive();
             end = r.readBoolean();
             r.finish();
         }
 
-        System.out.println("FINE");
         resultsSender.close();
-        Thread.sleep(2000);
+        Thread.sleep(2000); //wait for safety
         terminationReceiver.close();
-        System.out.println("PortClosed");
     }
 
 
@@ -503,27 +470,21 @@ public class Rubiks {
         System.out.println("");
     }
 
-
-
     /**
-     * Main function.
-     *
-     * @param arguments
-     *            list of arguments
+     * Initial called function
      */
-
-
     private void run() throws Exception {
         // Create an ibis instance.
         Ibis ibis = IbisFactory.createIbis(ibisCapabilities, null, portTypeMto1, portType1toM);
-        Thread.sleep(5000);
+        Thread.sleep(5000); //wait for safety that all the ibises join the pool
 
         // Elect a server
-        System.out.println("elections");
         IbisIdentifier server = ibis.registry().elect("Server");
 
         System.out.println("Server is " + server);
 
+        //get the list of the ibises that joined the pool, in order to know the number of Ibis
+        //instances involved in the calculation and the integer id of the local ibis on the pool
         joinedIbises = ibis.registry().joinedIbises();
         nodes = joinedIbises.length;
         int i = 0;
@@ -535,32 +496,14 @@ public class Rubiks {
             i++;
         }
 
+        //generate the initial cube and from this initialize the cache
         initialCube = generateCube();
         cache = new CubeCache(initialCube.getSize());
 
-        //System.out.println("My Ibis Id -> " + myIntIbisId);
-
-        // If I am the server, run server, else run client.
+        // If I am the server, run solveServer, else run solveWorkers.
         if (server.equals(ibis.identifier())) {
-            //System.out.println("I'm a fucking server -> " + myIntIbisId);
-            //long start = System.currentTimeMillis();
             solveServer(ibis);
-            //long end = System.currentTimeMillis();
-
-            // NOTE: this is printed to standard error! The rest of the output is
-            // constant for each set of parameters. Printing this to standard error
-            // makes the output of standard out comparable with "diff"
-
-            //terminate all workers
-            // terminate the pool
-            //System.out.println("Terminating pool");
-            //ibis.registry().terminate();
-            // wait for this termination to propagate through the system
-            //ibis.registry().waitUntilTerminated();
-
-
         } else {
-            //System.out.println("I'm a fucking client -> " + myIntIbisId);
             solveWorkers(ibis, server);
         }
         ibis.end();
