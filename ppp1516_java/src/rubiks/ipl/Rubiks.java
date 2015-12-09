@@ -138,7 +138,6 @@ public class Rubiks {
     }
 
     public static int levelUntilExpand() {
-        int z;
         boolean ok = false;
         int n = initialCube.getSize();
         int z = 0;
@@ -261,7 +260,7 @@ public class Rubiks {
         int n = initialCube.getSize();
         for(i = 0; i < z; i++) {
             resultOnFirstPart = 0;
-            int levelCubes = Math.pow(n, z);
+            int levelCubes = (int)Math.pow(n, z);
             for(j = 0; j < levelCubes; j++) {
                 resultOnFirstPart += generateAnotherLevel(initialToDo.remove(0), initialToDo);
             }
@@ -308,8 +307,8 @@ public class Rubiks {
         Until they are less than the number of ibis instances we generate another level of
         the tree from them, when they are enough, we split them as fairly as possible*/
         while(!terminated) {
-            int m = initialToDo.size() / nodes;
-            int r = initialToDo.size() % nodes;
+            m = initialToDo.size() / nodes;
+            r = initialToDo.size() % nodes;
             if(m == 0) {
                 int s = initialToDo.size();
                 for(i = 0; i < s; i++) {
