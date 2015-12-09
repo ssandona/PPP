@@ -719,6 +719,7 @@ main(int argc, char **argv) {
 
     while (steps--) {
         MPI_Allgatherv(rec_positions, bodies_per_proc[myid], mpi_position_type, new_positions, bodies_per_proc, displs, mpi_position_type, MPI_COMM_WORLD);
+        rec_positions = new_positions + displs[myid];
         cont = 0;
         clear_forces();
         /*if(printed <= 1 && myid == 0) {
@@ -752,7 +753,7 @@ main(int argc, char **argv) {
         }*/
         compute_velocities();
         compute_positions();
-        rec_positions = new_positions + displs[myid];
+        //rec_positions = new_positions + displs[myid];
         new_positions = malloc(sizeof(bodyPositionType) * bodyCt);
         //MPI_Allgatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
         
@@ -764,7 +765,7 @@ main(int argc, char **argv) {
             cont++;
         }*/
 
-        rec_positions = new_positions + displs[myid];
+        
 
         /*if(printed <= 1) {
             printf("__ID__2: %d:\n", myid);
