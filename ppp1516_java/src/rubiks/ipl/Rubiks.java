@@ -37,7 +37,7 @@ public class Rubiks {
     static int resultOnFirstPart;           //variable useful for the work splitting phase
 
     static int levelOfResult;               //variable useful for the work splitting phase
-    static int valuatedCubes=0;
+    //static int valuatedCubes=0;
 
     public static final boolean PRINT_SOLUTION = false;
 
@@ -83,7 +83,7 @@ public class Rubiks {
      * @return the number of solutions found for the subtree rooted in cube
      */
     private static int solutions(Cube cube) {
-        valuatedCubes++;
+        //valuatedCubes++;
         if (cube.isSolved()) {
             return 1;
         }
@@ -182,8 +182,8 @@ public class Rubiks {
         int i;
         //calculate the results for the assigned part of the tree
         int result = solutionsWorkers();
-        System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
-        valuatedCubes = 0;
+        //System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
+        //valuatedCubes = 0;
         //wait results from other nodes
         for(i = 0; i < nodes - 1; i++) {
             ReadMessage r = resultsReceiver.receive();
@@ -442,8 +442,8 @@ public class Rubiks {
             }
             result = solutionsWorkers();
 
-            System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
-            valuatedCubes = 0;
+            //System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
+            //valuatedCubes = 0;
             //communicate local results to the server
             WriteMessage resultMessage = resultsSender.newMessage();
             resultMessage.writeInt(result);
