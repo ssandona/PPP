@@ -563,7 +563,7 @@ main(int argc, char **argv) {
     int blocklengths2[2] = {2, 2};
     MPI_Datatype types2[2] = {MPI_DOUBLE, MPI_DOUBLE};
     MPI_Datatype mpi_position_type;
-    MPI_Aint     offsets2[4];
+    MPI_Aint     offsets2[2];
 
     offsets2[0] = offsetof(bodyPositionType, x);
     offsets2[1] = offsetof(bodyPositionType, y);
@@ -651,11 +651,11 @@ main(int argc, char **argv) {
     for (i = 0; i < bodies_per_proc[myid]; i++) {
         printf("\nbody: %d, mass: %d, pos: (%d,%d)", i, (int)(new_bodies[i].mass), (int)new_bodies[i].x[old], (int)new_bodies[i].y[old]);
     }*/
-    //MPI_Scatterv(bodies, bodies_per_proc, displs, mpi_body_type, rec_bodies, bufSize, mpi_body_type, 0, MPI_COMM_WORLD);
-
+    MPI_Scatterv(bodies, bodies_per_proc, displs, mpi_body_type, rec_bodies, bufSize, mpi_body_type, 0, MPI_COMM_WORLD);
+    MPI_Scatterv(positions, bodies_per_proc, displs, mpi_position_type, rec_positions, bufSize, mpi_position_type, 0, MPI_COMM_WORLD);
     //MPI_Scatterv(new_bodies, bodies_per_proc, displs, mpi_body_type, rec_bodies, bufSize, mpi_body_type, 0, MPI_COMM_WORLD);
-    MPI_Bcast(new_bodies, bodyCt, mpi_body_type, 0, MPI_COMM_WORLD);
-    MPI_Bcast(new_positions, bodyCt, mpi_position_type, 0, MPI_COMM_WORLD);
+    //MPI_Bcast(new_bodies, bodyCt, mpi_body_type, 0, MPI_COMM_WORLD);
+    //MPI_Bcast(new_positions, bodyCt, mpi_position_type, 0, MPI_COMM_WORLD);
 
     //fprintf(stderr, "h\n");
 
@@ -690,6 +690,10 @@ main(int argc, char **argv) {
 
     //new_bodies = malloc(sizeof(bodyType) * bodyCt);
     //MPI_Allgatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
+    new_bodies = malloc(sizeof(bodyType) * bodyCt);
+    new_positions = malloc(sizeof(bodyPositionType) * bodyCt);
+    MPI_Allgatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
+    MPI_Allgatherv(rec_positions, bodies_per_proc[myid], mpi_position_type, new_positions, bodies_per_proc, displs, mpi_position_type, MPI_COMM_WORLD);
 
 
     if(gettimeofday(&start, 0) != 0) {
