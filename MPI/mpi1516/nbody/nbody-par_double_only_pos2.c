@@ -504,7 +504,7 @@ main(int argc, char **argv) {
     int bodyCt = atol(argv[1]);
 
 
-    if ((bodyCt = ) > MAXBODIES ) {
+    if (bodyCt > MAXBODIES ) {
         if(myid == 0) {
             fprintf(stderr, "Using only %d bodies...\n", MAXBODIES);
         }
