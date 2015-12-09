@@ -348,7 +348,7 @@ public class Rubiks {
                 }
             }
         }
-        printTree();
+        //printTree();
         return false;
     }
 
