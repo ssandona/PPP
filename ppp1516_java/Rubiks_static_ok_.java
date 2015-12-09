@@ -137,16 +137,6 @@ public class Rubiks {
         return 0;
     }
 
-    public static int levelUntilExpand() {
-        int z;
-        boolean ok = false;
-        int n = initialCube.getSize();
-        int z = 0;
-        while(Math.pow(n, z) / nodes < 101 && Math.pow(n, z) % nodes != 0) {
-            z = z + 1;
-        }
-    }
-
     /**
      * Function called by all the workers sert in the
      * initial queue of work the children of a given cube
@@ -247,62 +237,58 @@ public class Rubiks {
      * @return if the solution of the cube was found during the splitting phase
      */
     public static boolean splitTheWork() {
-        int z = levelUntilExpand();
-        System.out.println("Level untile expand -> "+z);
         ArrayList<Cube> initialToDo = new ArrayList<Cube>();
         //add the initial cube to the initial work queue (root of the tree)
         initialToDo.add(initialCube);
         int result = 0;
+        resultOnFirstPart = 0;
         int i, j;
 
         boolean levelFound = false;
         boolean terminated = false;
         levelOfResult = -1;
-        int n = initialCube.getSize();
-        for(i = 0; i < z; i++) {
-            resultOnFirstPart = 0;
-            int levelCubes = Math.pow(n, z);
-            for(j = 0; j < levelCubes; j++) {
-                resultOnFirstPart += generateAnotherLevel(initialToDo.remove(0), initialToDo);
-            }
-            levelOfResult = z;
-            if(resultOnFirstPart != 0) {
-                return true;
-            }
-        }
-
 
         /*find the first tree level with more nodes than ibis instances. Split the nodes fairly
         among the N ibis instances. If some nodes have left out (N is not a divisor of the
         number of nodes of this level), these are expanded to the next tree level, otherwise
         the splitting phase is terminated*/
+        while(!levelFound) {
+            int m = initialToDo.size() / nodes;
+            int r = initialToDo.size() % nodes;
+            if(m == 0) {
+                int s = initialToDo.size();
+                for(i = 0; i < s; i++) {
+                    resultOnFirstPart += generateAnotherLevel(initialToDo.remove(0), initialToDo);
+                }
+                levelOfResult++;
+                if(resultOnFirstPart != 0) {
+                    return true;
+                }
+            } else {
+                levelFound = true;
+                int startIndex = m * myIntIbisId;
 
-        int m = initialToDo.size() / nodes;
-        int r = initialToDo.size() % nodes;
+                for(i = 0; i < startIndex; i++) {
+                    initialToDo.remove(0);
+                }
 
-        int startIndex = m * myIntIbisId;
+                for(i = 0; i < m; i++) {
+                    toDo.add(initialToDo.remove(0));
+                }
 
-        for(i = 0; i < startIndex; i++) {
-            initialToDo.remove(0);
-        }
+                for(i = 0; i < (nodes - 1 - myIntIbisId) * m; i++) {
+                    initialToDo.remove(0);
+                }
 
-        for(i = 0; i < m; i++) {
-            toDo.add(initialToDo.remove(0));
-        }
-
-        for(i = 0; i < (nodes - 1 - myIntIbisId) * m; i++) {
-            initialToDo.remove(0);
-        }
-
-        if(r != 0) {
-            for(i = 0; i < r; i++) {
-                generateAnotherLevel(initialToDo.remove(0), initialToDo);
+                if(r != 0) {
+                    for(i = 0; i < r; i++) {
+                        generateAnotherLevel(initialToDo.remove(0), initialToDo);
+                    }
+                } else {
+                    terminated = true;
+                }
             }
-        } else {
-            terminated = true;
         }
-
-
 
         /*if we have expanded some nodes, we try to split them among the N ibis instances.
         Until they are less than the number of ibis instances we generate another level of
