@@ -783,6 +783,8 @@ main(int argc, char **argv) {
     new_positions = malloc(sizeof(bodyPositionType) * bodyCt);
     MPI_Gatherv(rec_positions, bodies_per_proc[myid], mpi_position_type, new_positions, bodies_per_proc, displs, mpi_position_type, 0, MPI_COMM_WORLD);
 
+    new_bodies = malloc(sizeof(bodyType) * bodyCt);
+    MPI_Gatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, 0, MPI_COMM_WORLD);
 
     /*for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
         rec_bodies[cont] = new_bodies[b];
