@@ -264,11 +264,11 @@ public class Rubiks {
         boolean levelFound = false;
         boolean terminated = false;
         levelOfResult = -1;
-        int n = initialCube.getSize();
+        int n = 6*(initialCube.getSize()-1);
         for(i = 0; i < z; i++) {
             resultOnFirstPart = 0;
             int levelCubes = (int)Math.pow(n, z);
-            System.out.println("LEVEL CUBES -> "+levelCubes);
+            System.out.println("LEVEL CUBES -> "+levelCubes+" Z -> "+z);
             for(j = 0; j < levelCubes; j++) {
                 resultOnFirstPart += generateAnotherLevel(initialToDo.remove(0), initialToDo);
             }
