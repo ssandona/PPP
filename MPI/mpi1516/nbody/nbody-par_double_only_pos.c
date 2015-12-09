@@ -622,6 +622,7 @@ main(int argc, char **argv) {
     //fprintf(stderr, "bufsize: %d\n", bufSize);
 
     rec_positions = malloc(sizeof(bodyPositionType) * bufSize);
+    rec_bodies = malloc(sizeof(bodyType) * bufSize);
 
     //MPI_Scatterv(bodies, bodies_per_proc, displs, mpi_body_type, rec_bodies, bufSize, mpi_body_type, 0, MPI_COMM_WORLD);
 
