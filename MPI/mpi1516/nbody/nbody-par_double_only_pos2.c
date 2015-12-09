@@ -501,30 +501,32 @@ main(int argc, char **argv) {
     fprintf(stderr, "3 => %s\n", argv[3]);
     fprintf(stderr, "4 => %s\n", argv[4]);*/
 
-    if(myid == 0) {
-        if ((bodyCt = atol(argv[1])) > MAXBODIES ) {
+    int bodyCt = atol(argv[1]);
+
+
+    if ((bodyCt = ) > MAXBODIES ) {
+        if(myid == 0) {
             fprintf(stderr, "Using only %d bodies...\n", MAXBODIES);
-            bodyCt = MAXBODIES;
-        } else if (bodyCt < 2) {
+        }
+        bodyCt = MAXBODIES;
+    } else if (bodyCt < 2) {
+        if(myid == 0) {
             fprintf(stderr, "Using two bodies...\n");
-            bodyCt = 2;
         }
+        bodyCt = 2;
+    }
 
-        forces = malloc(sizeof(forceType) * bodyCt);
-        for(i = 0; i < bodyCt; i++) {
-            forces[i].xf = 0;
-            forces[i].yf = 0;
-        }
-        /*if(bodyCt > numprocs) {
-            bodyCt = numprocs;
-        }*/
-        
 
+    /*if(bodyCt > numprocs) {
+        bodyCt = numprocs;
+    }*/
+
+    if(myid == 0) {
         secsup = atoi(argv[2]);
         image = map_P6(argv[3], &xdim, &ydim);
         steps = atoi(argv[4]);
 
-        fprintf(stderr, "Running N-body with %i bodies and %i steps\n", bodyCt, steps);
+        fprintf(stderr, "Running N-body with %i bodies and %i steps on %d machines\n", bodyCt, steps,numprocs);
 
         /* Initialize simulation data */
         srand(SEED);
@@ -545,7 +547,11 @@ main(int argc, char **argv) {
 
     fprintf(stderr, "Process %d on %s\n", myid, processor_name);
 
-
+    forces = malloc(sizeof(forceType) * bodyCt);
+    for(i = 0; i < bodyCt; i++) {
+        forces[i].xf = 0;
+        forces[i].yf = 0;
+    }
 
 
     bodies_per_proc = malloc(sizeof(int) * numprocs);
@@ -756,7 +762,7 @@ main(int argc, char **argv) {
         //rec_positions = new_positions + displs[myid];
         new_positions = malloc(sizeof(bodyPositionType) * bodyCt);
         //MPI_Allgatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
-        
+
 
         old ^= 1;
 
@@ -765,7 +771,7 @@ main(int argc, char **argv) {
             cont++;
         }*/
 
-        
+
 
         /*if(printed <= 1) {
             printf("__ID__2: %d:\n", myid);
