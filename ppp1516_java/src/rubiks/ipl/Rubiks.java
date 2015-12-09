@@ -145,7 +145,7 @@ public class Rubiks {
             //System.out.println("Math.pow(n, z) -> "+Math.pow(n, z));
             z = z + 1;
         }
-        return z;
+        return z-1;
     }
 
     /**
