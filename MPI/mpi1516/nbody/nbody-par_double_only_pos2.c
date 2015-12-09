@@ -83,11 +83,10 @@ MPI_Op mpi_sum;
 #define _YN(B)      new_positions[B].y[old^1]
 #define _XF(B)      new_forces[B].xf
 #define _YF(B)      new_forces[B].yf
-#define _XV(B)      rec_bodies[B].xv
-#define _YV(B)      rec_bodies[B].yv
-#define _R(B)       rec_bodies[B].radius
-#define _M(B)       rec_bodies[B].mass
-
+#define _XV(B)      new_bodies[B].xv
+#define _YV(B)      new_bodies[B].yv
+#define _R(B)       new_bodies[B].radius
+#define _M(B)       new_bodies[B].mass
 
 /*  Dimensions of space (very finite, ain't it?)
 */
@@ -698,7 +697,7 @@ main(int argc, char **argv) {
     //MPI_Allgatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
     new_bodies = malloc(sizeof(bodyType) * bodyCt);
     new_positions = malloc(sizeof(bodyPositionType) * bodyCt);
-    //MPI_Allgatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
+    MPI_Allgatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
     MPI_Allgatherv(rec_positions, bodies_per_proc[myid], mpi_position_type, new_positions, bodies_per_proc, displs, mpi_position_type, MPI_COMM_WORLD);
 
 
