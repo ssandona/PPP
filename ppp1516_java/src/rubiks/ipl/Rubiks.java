@@ -142,7 +142,7 @@ public class Rubiks {
         int n = initialCube.getSize();
         int z = 0;
         while(Math.pow(n, z) / nodes < 101 && Math.pow(n, z) % nodes != 0) {
-            System.out.printn("Math.pow(n, z) -> "+Math.pow(n, z));
+            System.out.println("Math.pow(n, z) -> "+Math.pow(n, z));
             z = z + 1;
         }
         return z;
