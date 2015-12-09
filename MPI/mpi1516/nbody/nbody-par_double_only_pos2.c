@@ -473,9 +473,6 @@ main(int argc, char **argv) {
     int  namelen;
     char processor_name[MPI_MAX_PROCESSOR_NAME];
 
-    new_bodies = malloc(sizeof(bodyType) * bodyCt);
-    new_positions = malloc(sizeof(bodyPositionType) * bodyCt);
-
     /* MPI_Init(&argc, &argv);
      MPI_Comm_size(MPI_COMM_WORLD, &numprocs);
      MPI_Comm_rank(MPI_COMM_WORLD, &myid);
@@ -489,69 +486,58 @@ main(int argc, char **argv) {
                 argv[0]);
         exit(1);
     }
-
-    MPI_Init(&argc, &argv);
-    MPI_Comm_size(MPI_COMM_WORLD, &numprocs);
-    MPI_Comm_rank(MPI_COMM_WORLD, &myid);
-    MPI_Get_processor_name(processor_name, &namelen);
-
     /*fprintf(stderr, "0 => %s\n", argv[0]);
     fprintf(stderr, "1 => %s\n", argv[1]);
     fprintf(stderr, "2 => %s\n", argv[2]);
     fprintf(stderr, "3 => %s\n", argv[3]);
     fprintf(stderr, "4 => %s\n", argv[4]);*/
-
-    int bodyCt = atol(argv[1]);
-
-
-    if (bodyCt > MAXBODIES ) {
-        if(myid == 0) {
-            fprintf(stderr, "Using only %d bodies...\n", MAXBODIES);
-        }
+    if ((bodyCt = atol(argv[1])) > MAXBODIES ) {
+        fprintf(stderr, "Using only %d bodies...\n", MAXBODIES);
         bodyCt = MAXBODIES;
     } else if (bodyCt < 2) {
-        if(myid == 0) {
-            fprintf(stderr, "Using two bodies...\n");
-        }
+        fprintf(stderr, "Using two bodies...\n");
         bodyCt = 2;
     }
-
-
-    /*if(bodyCt > numprocs) {
-        bodyCt = numprocs;
-    }*/
-
-    if(myid == 0) {
-        secsup = atoi(argv[2]);
-        image = map_P6(argv[3], &xdim, &ydim);
-        steps = atoi(argv[4]);
-
-        fprintf(stderr, "Running N-body with %i bodies and %i steps on %d machines\n", bodyCt, steps,numprocs);
-
-        /* Initialize simulation data */
-        srand(SEED);
-        for (b = 0; b < bodyCt; ++b) {
-            X(b) = (rand() % xdim);
-            Y(b) = (rand() % ydim);
-            _R(b) = 1 + ((b * b + 1.0) * sqrt(1.0 * ((xdim * xdim) + (ydim * ydim)))) /
-                    (25.0 * (bodyCt * bodyCt + 1.0));
-            _M(b) = _R(b) * _R(b) * _R(b);
-            _XV(b) = ((rand() % 20000) - 10000) / 2000.0;
-            _YV(b) = ((rand() % 20000) - 10000) / 2000.0;
-        }
-        //fprintf(stderr, "a\n");
-    }
-
-
-
-
-    fprintf(stderr, "Process %d on %s\n", myid, processor_name);
 
     forces = malloc(sizeof(forceType) * bodyCt);
     for(i = 0; i < bodyCt; i++) {
         forces[i].xf = 0;
         forces[i].yf = 0;
     }
+    /*if(bodyCt > numprocs) {
+        bodyCt = numprocs;
+    }*/
+    new_bodies = malloc(sizeof(bodyType) * bodyCt);
+    new_positions = malloc(sizeof(bodyPositionType) * bodyCt);
+
+    secsup = atoi(argv[2]);
+    image = map_P6(argv[3], &xdim, &ydim);
+    steps = atoi(argv[4]);
+
+    fprintf(stderr, "Running N-body with %i bodies and %i steps\n", bodyCt, steps);
+
+    /* Initialize simulation data */
+    srand(SEED);
+    for (b = 0; b < bodyCt; ++b) {
+        X(b) = (rand() % xdim);
+        Y(b) = (rand() % ydim);
+        R(b) = 1 + ((b * b + 1.0) * sqrt(1.0 * ((xdim * xdim) + (ydim * ydim)))) /
+               (25.0 * (bodyCt * bodyCt + 1.0));
+        M(b) = R(b) * R(b) * R(b);
+        XV(b) = ((rand() % 20000) - 10000) / 2000.0;
+        YV(b) = ((rand() % 20000) - 10000) / 2000.0;
+    }
+    //fprintf(stderr, "a\n");
+
+
+    MPI_Init(&argc, &argv);
+    MPI_Comm_size(MPI_COMM_WORLD, &numprocs);
+    MPI_Comm_rank(MPI_COMM_WORLD, &myid);
+    MPI_Get_processor_name(processor_name, &namelen);
+
+    fprintf(stderr, "Process %d on %s\n", myid, processor_name);
+
+
 
 
     bodies_per_proc = malloc(sizeof(int) * numprocs);
@@ -667,13 +653,10 @@ main(int argc, char **argv) {
     for (i = 0; i < bodies_per_proc[myid]; i++) {
         printf("\nbody: %d, mass: %d, pos: (%d,%d)", i, (int)(new_bodies[i].mass), (int)new_bodies[i].x[old], (int)new_bodies[i].y[old]);
     }*/
-    fprintf(stderr, "Process %d before scatter\n", myid);
-    //MPI_Scatterv(bodies, bodies_per_proc, displs, mpi_body_type, rec_bodies, bufSize, mpi_body_type, 0, MPI_COMM_WORLD);
+    MPI_Scatterv(bodies, bodies_per_proc, displs, mpi_body_type, rec_bodies, bufSize, mpi_body_type, 0, MPI_COMM_WORLD);
     MPI_Scatterv(positions, bodies_per_proc, displs, mpi_position_type, rec_positions, bufSize, mpi_position_type, 0, MPI_COMM_WORLD);
     //MPI_Scatterv(new_bodies, bodies_per_proc, displs, mpi_body_type, rec_bodies, bufSize, mpi_body_type, 0, MPI_COMM_WORLD);
-    fprintf(stderr, "Process %d after scatter\n", myid);
-
-    MPI_Bcast(new_bodies, bodyCt, mpi_body_type, 0, MPI_COMM_WORLD);
+    //MPI_Bcast(new_bodies, bodyCt, mpi_body_type, 0, MPI_COMM_WORLD);
     //MPI_Bcast(new_positions, bodyCt, mpi_position_type, 0, MPI_COMM_WORLD);
 
     //fprintf(stderr, "h\n");
@@ -709,10 +692,10 @@ main(int argc, char **argv) {
 
     //new_bodies = malloc(sizeof(bodyType) * bodyCt);
     //MPI_Allgatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
-    //new_bodies = malloc(sizeof(bodyType) * bodyCt);
+    new_bodies = malloc(sizeof(bodyType) * bodyCt);
     new_positions = malloc(sizeof(bodyPositionType) * bodyCt);
-    //MPI_Allgatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
-    //MPI_Allgatherv(rec_positions, bodies_per_proc[myid], mpi_position_type, new_positions, bodies_per_proc, displs, mpi_position_type, MPI_COMM_WORLD);
+    MPI_Allgatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
+    MPI_Allgatherv(rec_positions, bodies_per_proc[myid], mpi_position_type, new_positions, bodies_per_proc, displs, mpi_position_type, MPI_COMM_WORLD);
 
 
     if(gettimeofday(&start, 0) != 0) {
@@ -727,8 +710,6 @@ main(int argc, char **argv) {
     /* Main Loop */
 
     while (steps--) {
-        MPI_Allgatherv(rec_positions, bodies_per_proc[myid], mpi_position_type, new_positions, bodies_per_proc, displs, mpi_position_type, MPI_COMM_WORLD);
-        rec_positions = new_positions + displs[myid];
         cont = 0;
         clear_forces();
         /*if(printed <= 1 && myid == 0) {
@@ -762,10 +743,10 @@ main(int argc, char **argv) {
         }*/
         compute_velocities();
         compute_positions();
-        //rec_positions = new_positions + displs[myid];
+        rec_positions = new_positions + displs[myid];
         new_positions = malloc(sizeof(bodyPositionType) * bodyCt);
         //MPI_Allgatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
-
+        MPI_Allgatherv(rec_positions, bodies_per_proc[myid], mpi_position_type, new_positions, bodies_per_proc, displs, mpi_position_type, MPI_COMM_WORLD);
 
         old ^= 1;
 
@@ -774,7 +755,7 @@ main(int argc, char **argv) {
             cont++;
         }*/
 
-
+        rec_positions = new_positions + displs[myid];
 
         /*if(printed <= 1) {
             printf("__ID__2: %d:\n", myid);
