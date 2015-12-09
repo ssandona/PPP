@@ -268,7 +268,7 @@ public class Rubiks {
         for(i = 0; i < z; i++) {
             resultOnFirstPart = 0;
             int levelCubes = (int)Math.pow(n, i);
-            System.out.println("LEVEL CUBES -> "+levelCubes+" Z -> "+i);
+            //System.out.println("LEVEL CUBES -> "+levelCubes+" Z -> "+i);
             for(j = 0; j < levelCubes; j++) {
                 resultOnFirstPart += generateAnotherLevel(initialToDo.remove(0), initialToDo);
             }
@@ -277,9 +277,7 @@ public class Rubiks {
                 return true;
             }
         }
-        System.out.println("INITIAL TO DO SIZE -> "+initialToDo.size());
-        //printTree();
-
+        //System.out.println("INITIAL TO DO SIZE -> "+initialToDo.size());
 
         /*find the first tree level with more nodes than ibis instances. Split the nodes fairly
         among the N ibis instances. If some nodes have left out (N is not a divisor of the
@@ -350,6 +348,7 @@ public class Rubiks {
                 }
             }
         }
+        printTree();
         return false;
     }
 
