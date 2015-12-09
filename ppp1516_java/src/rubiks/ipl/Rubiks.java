@@ -267,8 +267,8 @@ public class Rubiks {
         int n = 6*(initialCube.getSize()-1);
         for(i = 0; i < z; i++) {
             resultOnFirstPart = 0;
-            int levelCubes = (int)Math.pow(n, z);
-            System.out.println("LEVEL CUBES -> "+levelCubes+" Z -> "+z);
+            int levelCubes = (int)Math.pow(n, i);
+            System.out.println("LEVEL CUBES -> "+levelCubes+" Z -> "+i);
             for(j = 0; j < levelCubes; j++) {
                 resultOnFirstPart += generateAnotherLevel(initialToDo.remove(0), initialToDo);
             }
