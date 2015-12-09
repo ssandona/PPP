@@ -268,6 +268,7 @@ public class Rubiks {
         for(i = 0; i < z; i++) {
             resultOnFirstPart = 0;
             int levelCubes = (int)Math.pow(n, z);
+            System.out.println("LEVEL CUBES -> "+levelCubes);
             for(j = 0; j < levelCubes; j++) {
                 resultOnFirstPart += generateAnotherLevel(initialToDo.remove(0), initialToDo);
             }
@@ -276,6 +277,8 @@ public class Rubiks {
                 return true;
             }
         }
+        System.out.println("INITIAL TO DO SIZE -> "+initialToDo.size());
+        //printTree();
 
 
         /*find the first tree level with more nodes than ibis instances. Split the nodes fairly
@@ -347,7 +350,6 @@ public class Rubiks {
                 }
             }
         }
-        printTree();
         return false;
     }
 
