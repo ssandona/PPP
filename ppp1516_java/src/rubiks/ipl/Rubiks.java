@@ -144,6 +144,7 @@ public class Rubiks {
         while(Math.pow(n, z) / nodes < 101 && Math.pow(n, z) % nodes != 0) {
             z = z + 1;
         }
+        return z;
     }
 
     /**
