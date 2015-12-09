@@ -60,6 +60,7 @@ int myid;
 int printed = 0;
 int numprocs;
 MPI_Op mpi_sum;
+int totalNumberOfForcesComputed=0;
 
 
 /*  Macros to hide memory layout
@@ -277,6 +278,7 @@ clear_forces(void) {
 }
 
 void compute(int b, int c) {
+    totalNumberOfForcesComputed++;
     double dx = _X(c) - _X(b);
     double dy = _Y(c) - _Y(b);
     double angle = atan2(dy, dx);
@@ -803,6 +805,8 @@ main(int argc, char **argv) {
         fprintf(stderr, "N-body took %10.3f seconds\n", rtime);
 
     }
+
+    fprintf(stderr, "Process %d compute %d forces\n", myid, totalNumberOfForcesComputed);
 
     MPI_Finalize();
 
