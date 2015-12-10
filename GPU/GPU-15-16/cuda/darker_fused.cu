@@ -21,37 +21,6 @@ const unsigned int B_HEIGHT = 16;
 const unsigned int THREAD_NUMBER = 256;
 
 __global__ void darkGrayKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *darkGrayImage) {
-    /*unsigned int i = blockIdx.x * blockDim.x + threadIdx.x;
-    unsigned int j = blockIdx.y * blockDim.y + threadIdx.y;*/
-
-    //M[i,j]
-    /*unsigned int i = blockIdx.y;
-    unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
-    //unsigned int j = __fadd_rn(__fmul_rn(blockIdx.x , blockDim.x), threadIdx.x);
-    unsigned int globalIdx = j + (blockDim.x * gridDim.x * i);
-    //unsigned int globalIdx = __fadd_rn(j, __fmul_rn(__fmul_rn(blockDim.x , gridDim.x), i));
-
-
-    if(globalIdx >= width * height) return;
-
-    float grayPix = 0.0f;
-    //if(blockIdx.x >= 10) {
-    float r = static_cast< float >(inputImage[globalIdx]);
-    float g = static_cast< float >(inputImage[(width * height) + globalIdx]);
-    //float g = static_cast< float >(inputImage[__fadd_rn(__fmul_rn(width, height), globalIdx)]);
-    float b = static_cast< float >(inputImage[(2 * width * height) + globalIdx]);
-    //float b = static_cast< float >(inputImage[__fadd_rn(__fmul_rn(2, __fmul_rn(width, height)), globalIdx)]);
-
-    //grayPix = __fadd_rn(__fadd_rn(__fmul_rn(0.3f, r), __fmul_rn(0.59f, g)), __fmul_rn(0.11f, b));
-    grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
-    grayPix = (grayPix * 0.6f) + 0.5f;
-    //grayPix = __fadd_rn(__fmul_rn(0.6f, grayPix), 0.5f);
-    //}
-    darkGrayImage[globalIdx] = static_cast< unsigned char >(grayPix);*/
-    /*unsigned int i = blockIdx.x * blockDim.x + threadIdx.x;
-    unsigned int j = blockIdx.y * blockDim.y + threadIdx.y;*/
-
-    //M[i,j]
     unsigned int i = blockIdx.y * blockDim.y + threadIdx.y;
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
     unsigned int globalIdx = j + (blockDim.x * gridDim.x * i);
