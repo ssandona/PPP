@@ -54,20 +54,20 @@ __global__ void darkGrayKernel(const int width, const int height, const unsigned
     //M[i,j]
     unsigned int i = blockIdx.y * blockDim.y + threadIdx.y;
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
+    unsigned int globalIdx = j + (blockDim.x * gridDim.x * i);
+
+    if(globalIdx >= width * height) return;
 
 
-    if(j >= width || i >= height) return;
-
+    //if(j >= width || i >= height) return;
     float grayPix = 0.0f;
-    //if(blockIdx.x >= 10) {
-        float r = static_cast< float >(inputImage[(i * width) + j]);
-        float g = static_cast< float >(inputImage[(width * height) + (i * width) + j]);
-        float b = static_cast< float >(inputImage[(2 * width * height) + (i * width) + j]);
-
-        grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
-        grayPix = (grayPix * 0.6f) + 0.5f;
+    float r = static_cast< float >(inputImage[globalIdx]);
+    float g = static_cast< float >(inputImage[(width * height) + globalIdx]);
+    float b = static_cast< float >(inputImage[(2 * width * height) + globalIdx]);
+    grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
+    grayPix = (grayPix * 0.6f) + 0.5f;
     //}
-    darkGrayImage[(i * width) + j] = static_cast< unsigned char >(grayPix);
+    darkGrayImage[globalIdx] = static_cast< unsigned char >(grayPix);
 }
 
 
@@ -128,8 +128,11 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
     //cout << "Image size (w,h): (" << width << ", " << height << ")\n";
     //cout << "Grid size (w,h): (" << grid_width << ", " << grid_height << ")\n";
 
-    unsigned int grid_size = static_cast< unsigned int >(ceil(sqrt((width * height) / (float)256)));
+    //unsigned int grid_width=static_cast< unsigned int >(ceil(width / static_cast< float >(B_WIDTH)));
+    //unsigned int grid_height=static_cast< unsigned int >(ceil(height / static_cast< float >(B_HEIGHT)));
     // Execute the kernel
+    unsigned int grid_size = static_cast< unsigned int >(ceil(sqrt((width * height) / (float)256)));
+
     dim3 gridSize(grid_size, grid_size);
     dim3 blockSize(B_WIDTH, B_HEIGHT);
 
