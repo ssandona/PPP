@@ -18,58 +18,51 @@ __constant__ float filter[] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2
 
 __global__ void triangularSmoothDKernel(const int width, const int height, const int spectrum, unsigned char *inputImage, unsigned char *smoothImage) {
 
-    int i = blockIdx.y * blockDim.y + threadIdx.y;
-    int j = blockIdx.x * blockDim.x + threadIdx.x;
+    unsigned int i = blockIdx.y * blockDim.y + threadIdx.y;
+    unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
+    unsigned int globalIdx = j + (blockDim.x * gridDim.x * i);
 
-    //index inside the block (from 0 to 255)
+    //if(j >= width || i >= height) return;
+
     int inBlockIdx = threadIdx.x + (blockDim.x * threadIdx.y);
+    //unsigned int globalIdx = j + (width * i);
 
-    //the block is 16x16, but to apply the filter over these 256 pixels, also some 
-    //external pixels are needed. The filter is 5x5 so we need also the 2 px border of
-    //the 16x16 portion.
     __shared__ unsigned char localImagePortion[20 * 20 * 3];
 
-    //coordinates of the top left pixel for the localImagePortion
+    //int topLeftPx=(globalIdx-2*width-2);
     int topLeftPxI = (blockIdx.y * blockDim.y) - 2;
     int topLeftPxJ = (blockIdx.x * blockDim.x) - 2;
 
-    //coordinates of the first pixel to copy into the localImagePortion
     int pxAI = topLeftPxI + (inBlockIdx / 20);
     int pxAJ = topLeftPxJ + (inBlockIdx % 20);
     int pxA = pxAJ + (width * pxAI);
 
-    //coordinates of the pixel inside the localImagePortion to which this thread has to apply
-    //the filter
     int inLocalPortionI = threadIdx.y + 2;
     int inLocalPortionJ = threadIdx.x + 2;
 
-    //coordinates of the localImagePortion in which copy the pixel 
     int imageIdxI = pxAI - topLeftPxI;
     int imageIdxJ = pxAJ - topLeftPxJ;
     int imageIdx = imageIdxJ + (20 * imageIdxI);
 
 
-    //if the first pixel to copy is not out of the image, copy it into the localImagePortion
+    //from ai,aj to inside (20,20)
+
     if(pxAI >= 0 && pxAI < height && pxAJ >= 0 && pxAJ < width) {
         localImagePortion[imageIdx] = inputImage[pxA];
         localImagePortion[imageIdx + 20 * 20] = inputImage[pxA + (width * height)];
         localImagePortion[imageIdx + 2 * 20 * 20] = inputImage[pxA + 2 * (width * height)];
     }
 
-    //displacement to calculate the second pixel to add to the localImagePortion
     int newInBlockIdx = inBlockIdx + 16 * 16;
 
-    //coordinates of the second pixel to copy into the localImagePortion
     pxAI = topLeftPxI + (newInBlockIdx / 20);
     pxAJ = topLeftPxJ + (newInBlockIdx % 20);
     pxA = pxAJ + (width * pxAI);
 
-    //coordinates of the localImagePortion in which copy the pixel 
     imageIdxI = pxAI - topLeftPxI;
     imageIdxJ = pxAJ - topLeftPxJ;
     imageIdx = imageIdxJ + (20 * imageIdxI);
 
-    //if the second pixel to copy is not out of the image, copy it into the localImagePortion
     if(pxAI >= 0 && pxAI < height && pxAJ >= 0 && pxAJ < width && imageIdx < 20 * 20) {
         localImagePortion[imageIdx] = inputImage[pxA];
         localImagePortion[imageIdx + 20 * 20] = inputImage[pxA + (width * height)];
@@ -80,7 +73,8 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
 
     if(j >= width || i >= height) return;
 
-    //same code as the sequential, but with indexes of the localImagePortion
+    //const unsigned char example = 0;
+
     for ( int z = 0; z < spectrum; z++ ) {
         unsigned int filterItem = 0;
         float filterSum = 0.0f;
@@ -108,7 +102,9 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
 
         smoothPix /= filterSum;
         smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(smoothPix + 0.5f);
+        //smoothImage[(z * width * height) + (i * width) + j] = example;
 
+        //smoothImage[(z * width * height) + (i * width) + j] = localImagePortion[(z * 20 * 20) + (inLocalPortionI * 20) + inLocalPortionJ];
     }
 }
 

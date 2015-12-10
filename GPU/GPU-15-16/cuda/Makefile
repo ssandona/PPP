@@ -3,7 +3,7 @@ debug		:= 0
 include		../Makefile.inc
 
 
-all: clean darker_fused histogram2_
+all: clean smooth smooth2 histogram2_
 
 darker: darker.cpp darker.cu
 	$(NVCC) -c darker.cu $(INCLUDES) $(NVCCFLAGS)
@@ -19,11 +19,6 @@ darker2_: darker2_.cpp darker2_.cu
 	$(NVCC) -c darker2_.cu $(INCLUDES) $(NVCCFLAGS)
 	$(LINKER) -o $(PROJ_BASE)/bin/darker2_CUDA darker2_.cpp darker2_.o ../src/Timer.cpp $(INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./darker2_.o
-
-darker_fused: darker_fused.cpp darker_fused.cu
-	$(NVCC) -c darker_fused.cu $(INCLUDES) $(NVCCFLAGS)
-	$(LINKER) -o $(PROJ_BASE)/bin/darker_fusedCUDA darker_fused.cpp darker_fused.o ../src/Timer.cpp $(INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
-	rm -f ./darker_fused.o
 
 histogram: histogram.cpp histogram.cu
 	$(NVCC) -c histogram.cu $(INCLUDES) $(NVCCFLAGS)
@@ -45,11 +40,21 @@ smooth: smooth.cpp smooth.cu
 	$(LINKER) -o $(PROJ_BASE)/bin/smoothCUDA smooth.cpp smooth.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./smooth.o
 
+smooth2: smooth2.cpp smooth2.cu
+	$(NVCC) -c smooth2.cu $(INCLUDES) $(NVCCFLAGS)
+	$(LINKER) -o $(PROJ_BASE)/bin/smooth2CUDA smooth2.cpp smooth2.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
+	rm -f ./smooth2.o
+
+smooth3: smooth3.cpp smooth3.cu
+	$(NVCC) -c smooth3.cu $(INCLUDES) $(NVCCFLAGS)
+	$(LINKER) -o $(PROJ_BASE)/bin/smooth3CUDA smooth3.cpp smooth3.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
+	rm -f ./smooth3.o
+
 clean:
 	rm -f $(PROJ_BASE)/bin/darkerCUDA
 	rm -f $(PROJ_BASE)/bin/histogramCUDA
 	rm -f $(PROJ_BASE)/bin/smoothCUDA
 	rm -f $(PROJ_BASE)/bin/darker2CUDA
 	rm -f $(PROJ_BASE)/bin/histogram2CUDA
-	rm -f $(PROJ_BASE)/bin/darker_fusedCUDA
+	rm -f $(PROJ_BASE)/bin/smooth2CUDA
 
