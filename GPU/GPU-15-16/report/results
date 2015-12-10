@@ -35,10 +35,17 @@ image04		0 (0.00%)					0.197973	0.013899		14.24
 image05		12 (0.00%)					0.267590	0.009225		29		
 image06		48 (0.01%)					0.616924	0.024237		25.45	
 
-SEQ
-Image05		
-Image06		1.157487
+Image		Pixels above threshold		Seq			Par				Speedup	
 
+with square grid (2_) -> BETTER ON NO SQUARE IMAGES
+
+image00		324 (0.04%)					0.003208	0.000104	  				
+image01		12 (0.00%)					0.032379	0.001183	v		
+image02		0 (0.00%)					0.043784	0.002071	v		
+image03		24 (0.00%)					0.200681	0.011998		
+image04		0 (0.00%)					0.197973	0.013978						
+image05		12 (0.00%)					0.267590	0.005845	v	
+image06		48 (0.01%)					0.616924	0.012902	v		
 
 with grid UNI
 image00		0.000420	7.63
