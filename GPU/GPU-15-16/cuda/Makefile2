@@ -3,7 +3,7 @@ debug		:= 0
 include		../Makefile.inc
 
 
-all: clean darker_fused
+all: clean darker darker2 darker2_ darker_fused histogram histogram2 histogram2_ smooth
 
 darker: darker.cpp darker.cu
 	$(NVCC) -c darker.cu $(INCLUDES) $(NVCCFLAGS)
