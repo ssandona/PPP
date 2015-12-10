@@ -30,7 +30,7 @@ __global__ void darkGrayKernel(const int width, const int height, const unsigned
     unsigned int globalIdx = j + (blockDim.x * gridDim.x * i);
 
 
-    if(j >= width || i >= height) return;
+    if(globalIdx >= width*height) return;
 
     float grayPix = 0.0f;
     //if(blockIdx.x >= 10) {
