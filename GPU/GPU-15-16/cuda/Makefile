@@ -10,9 +10,9 @@ darker: darker.cpp darker.cu
 	$(LINKER) -o $(PROJ_BASE)/bin/darkerCUDA darker.cpp darker.o ../src/Timer.cpp $(INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./darker.o
 
-darker2: darker2.cpp darker2.cu
+darker2: darker.cpp darker2.cu
 	$(NVCC) -c darker2.cu $(INCLUDES) $(NVCCFLAGS)
-	$(LINKER) -o $(PROJ_BASE)/bin/darker2CUDA darker2.cpp darker2.o ../src/Timer.cpp $(INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
+	$(LINKER) -o $(PROJ_BASE)/bin/darker2CUDA darker.cpp darker2.o ../src/Timer.cpp $(INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./darker2.o
 
 histogram: histogram.cpp histogram.cu
