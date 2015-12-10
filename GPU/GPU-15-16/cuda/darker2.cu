@@ -31,10 +31,11 @@ __global__ void darkGrayKernel(const int width, const int height, const unsigned
     if(j >= width || i >= height) return;
 
     float grayPix = 0.0f;
-        //if(blockIdx.x >= 10) {
-        float r = static_cast< float >(inputImage[globalIdx]);
-        float g = static_cast< float >(inputImage[(width * height) + globalIdx]);
-        float b = static_cast< float >(inputImage[(2 * width * height) + globalIdx]);
+    //if(blockIdx.x >= 10) {
+        float r = static_cast< float >(inputImage[(i * width) + j]);
+        float g = static_cast< float >(inputImage[(width * height) + (i * width) + j]);
+        float b = static_cast< float >(inputImage[(2 * width * height) + (i * width) + j]);
+
         grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
         grayPix = (grayPix * 0.6f) + 0.5f;
     //}
