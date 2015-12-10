@@ -34,15 +34,6 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     localImagePortion[globalIdx + 2*(B_WIDTH * B_HEIGHT)] = inputImage[(2 * width * height) + (i * width) + j];
     __syncthreads();
 
-    /*float grayPix = 0.0f;
-    int k,z;
-
-    float r = static_cast< float >(localImagePortion[globalIdx]);
-    float g = static_cast< float >(localImagePortion[globalIdx + (B_WIDTH * B_HEIGHT)]);
-    float b = static_cast< float >(localImagePortion[globalIdx + 2*(B_WIDTH * B_HEIGHT)]);
-    grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
-    grayImage[(i * width) + j] = static_cast< unsigned char >(grayPix);*/
-
 
     for(k=0;k<B_HEIGHT;k++){
         for(z=0;z<B_WIDTH;z++){

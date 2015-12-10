@@ -53,8 +53,6 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
         grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
         //}
         grayImage[globalIdx] = static_cast< unsigned char >(grayPix);
-
-
         atomicAdd((unsigned int *)&localHistogram[static_cast< unsigned int >(grayPix)], 1);
     }
     __syncthreads();
