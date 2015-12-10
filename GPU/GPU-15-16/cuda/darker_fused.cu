@@ -42,10 +42,10 @@ __global__ void darkGrayKernel(const int width, const int height, const unsigned
     float b = static_cast< float >(inputImage[(2 * width * height) + globalIdx]);
     //float b = static_cast< float >(inputImage[__fadd_rn(__fmul_rn(2, __fmul_rn(width, height)), globalIdx)]);
 
-    grayPix = __fadd_rn(__fadd_rn(__fmul_rn(0.3f, r), __fmul_rn(0.59f, g)), __fmul_rn(0.11f, b));
-    //grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
-    //grayPix = (grayPix * 0.6f) + 0.5f;
-    grayPix = __fadd_rn(__fmul_rn(0.6f, grayPix), 0.5f);
+    //grayPix = __fadd_rn(__fadd_rn(__fmul_rn(0.3f, r), __fmul_rn(0.59f, g)), __fmul_rn(0.11f, b));
+    grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
+    grayPix = (grayPix * 0.6f) + 0.5f;
+    //grayPix = __fadd_rn(__fmul_rn(0.6f, grayPix), 0.5f);
     //}
     darkGrayImage[globalIdx] = static_cast< unsigned char >(grayPix);
 }
