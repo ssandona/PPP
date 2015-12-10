@@ -14,16 +14,12 @@ const unsigned int THREAD_NUMBER = 256;
 
 __global__ void histogram1DKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram) {
 
-    /*unsigned int globalIdx = threadIdx.x + (blockDim.x * blockIdx.x);
-
-    unsigned int i = blockIdx.y * blockDim.y + threadIdx.y;
-    unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;*/
-
     unsigned int i = blockIdx.y;
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
     unsigned int globalIdx = j + (blockDim.x * gridDim.x * i);
 
-    if(globalIdx>=width*height) return;
+
+    if(globalIdx >= width*height) return;
 
     __shared__ unsigned int localHistogram[HISTOGRAM_SIZE];
     
@@ -121,7 +117,7 @@ int histogram1D(const int width, const int height, const unsigned char *inputIma
     //cout << "Image size (w,h): (" << width << ", " << height << ")\n";
     //cout << "Grid size (w,h): (" << grid_width << ", " << grid_height << ")\n";
 
-    unsigned int grid_width = static_cast< unsigned int >(ceil(width / static_cast< float >(THREAD_NUMBER)));
+    unsigned int grid_size = static_cast< unsigned int >(ceil(sqrt((width * height)/(float)256)));
     // Execute the kernel
     dim3 gridSize(grid_width, height);
     dim3 blockSize(THREAD_NUMBER, 1);
