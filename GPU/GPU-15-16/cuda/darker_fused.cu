@@ -25,7 +25,7 @@ __global__ void darkGrayKernel(const int width, const int height, const unsigned
     unsigned int j = blockIdx.y * blockDim.y + threadIdx.y;*/
 
     //M[i,j]
-    unsigned int i = blockIdx.y;
+    /*unsigned int i = blockIdx.y;
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
     //unsigned int j = __fadd_rn(__fmul_rn(blockIdx.x , blockDim.x), threadIdx.x);
     unsigned int globalIdx = j + (blockDim.x * gridDim.x * i);
@@ -47,7 +47,27 @@ __global__ void darkGrayKernel(const int width, const int height, const unsigned
     grayPix = (grayPix * 0.6f) + 0.5f;
     //grayPix = __fadd_rn(__fmul_rn(0.6f, grayPix), 0.5f);
     //}
-    darkGrayImage[globalIdx] = static_cast< unsigned char >(grayPix);
+    darkGrayImage[globalIdx] = static_cast< unsigned char >(grayPix);*/
+    /*unsigned int i = blockIdx.x * blockDim.x + threadIdx.x;
+    unsigned int j = blockIdx.y * blockDim.y + threadIdx.y;*/
+
+    //M[i,j]
+    unsigned int i = blockIdx.y * blockDim.y + threadIdx.y;
+    unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
+
+
+    if(j >= width || i >= height) return;
+
+    float grayPix = 0.0f;
+    //if(blockIdx.x >= 10) {
+        float r = static_cast< float >(inputImage[(i * width) + j]);
+        float g = static_cast< float >(inputImage[(width * height) + (i * width) + j]);
+        float b = static_cast< float >(inputImage[(2 * width * height) + (i * width) + j]);
+
+        grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
+        grayPix = (grayPix * 0.6f) + 0.5f;
+    //}
+    darkGrayImage[(i * width) + j] = static_cast< unsigned char >(grayPix);
 }
 
 
