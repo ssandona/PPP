@@ -38,7 +38,9 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
         float g = static_cast< float >(inputImage[(width * height) + globalIdx]);
         float b = static_cast< float >(inputImage[(2 * width * height) + globalIdx]);
 
-        grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
+        //grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
+        grayPix = __fadd_rn(__fadd_rn(__fadd_rn(__fmul_rn(0.3f, r), __fmul_rn(0.59f, g)), __fmul_rn(0.11f, b)),0.5f);
+
         //}
         grayImage[globalIdx] = static_cast< unsigned char >(grayPix);
         atomicAdd((unsigned int *)&localHistogram[static_cast< unsigned int >(grayPix)], 1);
