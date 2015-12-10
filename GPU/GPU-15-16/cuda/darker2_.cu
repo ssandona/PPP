@@ -35,7 +35,7 @@ __global__ void darkGrayKernel(const int width, const int height, const unsigned
 
 
     //if(j >= width || i >= height) return;
-
+    float grayPix = 0.0f;
     float r = static_cast< float >(inputImage[globalIdx]);
     float g = static_cast< float >(inputImage[(width * height) + globalIdx]);
     float b = static_cast< float >(inputImage[(2 * width * height) + globalIdx]);
