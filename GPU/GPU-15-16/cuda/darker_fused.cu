@@ -26,10 +26,10 @@ __global__ void darkGrayKernel(const int width, const int height, const unsigned
 
     //M[i,j]
     unsigned int i = blockIdx.y;
-    //unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
-    unsigned int j = __fadd_rn(__fmul_rn(blockIdx.x , blockDim.x), threadIdx.x);
-    //unsigned int globalIdx = j + (blockDim.x * gridDim.x * i);
-    unsigned int globalIdx = __fadd_rn(j, __fmul_rn(__fmul_rn(blockDim.x , gridDim.x), i));
+    unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
+    //unsigned int j = __fadd_rn(__fmul_rn(blockIdx.x , blockDim.x), threadIdx.x);
+    unsigned int globalIdx = j + (blockDim.x * gridDim.x * i);
+    //unsigned int globalIdx = __fadd_rn(j, __fmul_rn(__fmul_rn(blockDim.x , gridDim.x), i));
 
 
     if(globalIdx >= width * height) return;
