@@ -3,7 +3,7 @@ debug		:= 0
 include		../Makefile.inc
 
 
-all: clean darker darker2 darker2_ darker_fused histogram histogram2 histogram2_ smooth
+all: clean darker darker2 histogram histogram2 histogram2_ smooth
 
 darker: darker.cpp darker.cu
 	$(NVCC) -c darker.cu $(INCLUDES) $(NVCCFLAGS)
@@ -19,11 +19,6 @@ darker2_: darker2_.cpp darker2_.cu
 	$(NVCC) -c darker2_.cu $(INCLUDES) $(NVCCFLAGS)
 	$(LINKER) -o $(PROJ_BASE)/bin/darker2_CUDA darker2_.cpp darker2_.o ../src/Timer.cpp $(INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./darker2_.o
-
-darker_fused: darker_fused.cpp darker_fused.cu
-	$(NVCC) -c darker_fused.cu $(INCLUDES) $(NVCCFLAGS)
-	$(LINKER) -o $(PROJ_BASE)/bin/darker_fusedCUDA darker_fused.cpp darker_fused.o ../src/Timer.cpp $(INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
-	rm -f ./darker_fused.o
 
 histogram: histogram.cpp histogram.cu
 	$(NVCC) -c histogram.cu $(INCLUDES) $(NVCCFLAGS)
@@ -51,7 +46,4 @@ clean:
 	rm -f $(PROJ_BASE)/bin/smoothCUDA
 	rm -f $(PROJ_BASE)/bin/darker2CUDA
 	rm -f $(PROJ_BASE)/bin/histogram2CUDA
-	rm -f $(PROJ_BASE)/bin/darker2_CUDA
-	rm -f $(PROJ_BASE)/bin/histogram2_CUDA
-	rm -f $(PROJ_BASE)/bin/darker_fusedCUDA
 
