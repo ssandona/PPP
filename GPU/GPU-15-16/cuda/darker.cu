@@ -1,7 +1,9 @@
-
 #include <Timer.hpp>
 #include <iostream>
 #include <iomanip>
+#include <CImg.h>
+#include <string>
+#include <cmath>
 
 using LOFAR::NSTimer;
 using std::cout;
@@ -9,85 +11,139 @@ using std::cerr;
 using std::endl;
 using std::fixed;
 using std::setprecision;
+using cimg_library::CImg;
+using std::string;
 
-const unsigned int nrThreads = 256;
+/*const unsigned int DIM = 16000000;
+const unsigned int nrThreads = 256;*/
+const unsigned int B_WIDTH = 16;
+const unsigned int B_HEIGHT = 16;
+const unsigned int THREAD_NUMBER = 256;
 
-__global__ void kernel(const int width, const int height, const unsigned char * inputImage, unsigned char * outputDarkGrayImage) {
-    unsigned int item = ((blockIdx.y * gridDim.x + blockIdx.x) * blockDim.x) + threadIdx.x;
+__global__ void darkGrayKernel(const int width, const int height, const unsigned char * inputImage, unsigned char * darkGrayImage) {
+    /*unsigned int i = blockIdx.x * blockDim.x + threadIdx.x;
+    unsigned int j = blockIdx.y * blockDim.y + threadIdx.y;*/
 
-    if ( item < width * height ) {
-        float grayPix = 0.0f;
-        float r = static_cast< float >(inputImage[item]);
-        float g = static_cast< float >(inputImage[(width * height) + item]);
-        float b = static_cast< float >(inputImage[(2 * width * height) + item]);
+    //M[i,j]
+    /*unsigned int i = blockIdx.y;
+    unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
+    unsigned int globalIdx = j + (blockDim.x * gridDim.x * i);*/
+
+    unsigned int globalIdx = (blockIdx.x * blockDim.x + threadIdx.x) + (blockDim.x * gridDim.x *  blockIdx.y);
+
+
+    if(globalIdx >= width*height) return;
+
+    float grayPix = 0.0f;
+    //if(blockIdx.x >= 10) {
+        float r = static_cast< float >(inputImage[globalIdx]);
+        float g = static_cast< float >(inputImage[(width * height) + globalIdx]);
+        float b = static_cast< float >(inputImage[(2 * width * height) + globalIdx]);
 
         grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
         grayPix = (grayPix * 0.6f) + 0.5f;
+    //}
+    darkGrayImage[globalIdx] = static_cast< unsigned char >(grayPix);
+}
 
-        outputDarkGrayImage[item] = static_cast< unsigned char >(grayPix);
-    }
-}   
 
-void darkGray(const int width, const int height, const unsigned char * inputImage, unsigned char * darkGrayImage) {
 
+int darkGray(const int width, const int height, const unsigned char * inputImage, unsigned char * darkGrayImage) {
+    //cout << "FUNC\n";
     cudaError_t devRetVal = cudaSuccess;
-    //Timers. 
+    unsigned char *devInputImage = 0;
+    unsigned char *devDarkGrayImage = 0;
+    int pixel_numbers;
+
     NSTimer globalTimer("GlobalTimer", false, false);
-    NSTimer kernelTimer = NSTimer("KernelTimer", false, false);
+    NSTimer kernelTimer("KernelTimer", false, false);
     NSTimer memoryTimer("MemoryTimer", false, false);
-    //Device memory pointers.
-    unsigned char* devInputImage = 0;
-    unsigned char* devDarkGrayImage = 0;
-    //Start of the computation.
+
+    int i, j;
+    /*for(i = 0; i < width * height; i++) {
+        cout << inputImage;
+    }*/
+
+    //cout << "FUNC1\n";
+    pixel_numbers = width * height;
+
+    // Start of the computation
     globalTimer.start();
+    // Convert the input image to grayscale and make it darker
+    //*outputImage = new unsigned char[pixel_numbers];
+
+    //cout << "FUNC2\n";
     // Allocate CUDA memory
-    if ( (devRetVal = cudaMalloc(reinterpret_cast< void ** >(&devInputImage), (3 * width * height) * sizeof(unsigned char))) != cudaSuccess ) {
-        cerr << "Impossible to allocate device memory for input matrix." << endl;
-        return;
+    if ( (devRetVal = cudaMalloc(reinterpret_cast< void ** >(&devInputImage), pixel_numbers * 3 * sizeof(unsigned char))) != cudaSuccess ) {
+        cerr << "Impossible to allocate device memory for inputImage." << endl;
+        return 1;
     }
-    if ( (devRetVal = cudaMalloc(reinterpret_cast< void ** >(&devDarkGrayImage), (width * height) * sizeof(unsigned char))) != cudaSuccess ) {
-        cerr << "Impossible to allocate device memory for output matrix" << endl;
-        return;
+    if ( (devRetVal = cudaMalloc(reinterpret_cast< void ** >(&devDarkGrayImage), pixel_numbers * sizeof(unsigned char))) != cudaSuccess ) {
+        cerr << "Impossible to allocate device memory for darkGrayImage." << endl;
+        return 1;
     }
+    //cout << "FUNC3\n";
+
     // Copy input to device
     memoryTimer.start();
-    if ( (devRetVal = cudaMemcpy(devInputImage, reinterpret_cast< const void * >(inputImage), (3 * width * height) * sizeof(unsigned char), cudaMemcpyHostToDevice)) != cudaSuccess ) {
-        cerr << "Impossible to copy the input matrix to device." << endl;
-        return;
+    if ( (devRetVal = cudaMemcpy(devInputImage, (void*)(inputImage), pixel_numbers * 3 * sizeof(unsigned char), cudaMemcpyHostToDevice)) != cudaSuccess ) {
+        cerr << "Impossible to copy inputImage to device." << endl;
+        return 1;
     }
+
+    /*if ( (devRetVal = cudaMemcpy(devDarkGrayImage, reinterpret_cast< void *>(*outputImage), pixel_numbers * sizeof(unsigned char), cudaMemcpyHostToDevice)) != cudaSuccess ) {
+        cerr << "Impossible to copy outputImage to device." << endl;
+        return 1;
+    }*/
     memoryTimer.stop();
-    //Kernel
-    unsigned int gridDimension = static_cast< unsigned int >(ceil(sqrt((float)(width * height) / (float)nrThreads)));
-    dim3 gridSize( gridDimension, gridDimension );
-    dim3 blockSize(nrThreads);
+
+    //cout << "FUNC4\n";
+    //int grid_width = width % B_WIDTH == 0 ? width / B_WIDTH : width / B_WIDTH + 1;
+    //int grid_height = height % B_HEIGHT == 0 ? height / B_HEIGHT : height / B_HEIGHT + 1;
+
+    //cout << "Image size (w,h): (" << width << ", " << height << ")\n";
+    //cout << "Grid size (w,h): (" << grid_width << ", " << grid_height << ")\n";
+
+    unsigned int grid_size = static_cast< unsigned int >(ceil(sqrt((width * height)/(float)256)));
+    // Execute the kernel
+    dim3 gridSize(grid_size, grid_size);
+    //dim3 blockSize(THREAD_NUMBER, 1);
+    dim3 blockSize(THREAD_NUMBER);
+
     kernelTimer.start();
-    kernel<<< gridSize, blockSize >>>(width, height, devInputImage, devDarkGrayImage);
+    //cout << "FUNC5\n";
+    darkGrayKernel <<< gridSize, blockSize >>>(width, height, devInputImage, devDarkGrayImage);
     cudaDeviceSynchronize();
     kernelTimer.stop();
+    //cout << "FUNC6\n";
     // Check if the kernel returned an error
     if ( (devRetVal = cudaGetLastError()) != cudaSuccess ) {
         cerr << "Uh, the kernel had some kind of issue: " << cudaGetErrorString(devRetVal) << endl;
-        return;
+        return 1;
     }
+    //cout << "FUNC7\n";
     // Copy the output back to host
     memoryTimer.start();
-    if ( (devRetVal = cudaMemcpy(reinterpret_cast< void * >(darkGrayImage), devDarkGrayImage, (width * height) * sizeof(unsigned char), cudaMemcpyDeviceToHost)) != cudaSuccess ) {
-        cerr << "Impossible to copy output to host." << endl;
-        return;
+    if ( (devRetVal = cudaMemcpy(reinterpret_cast< void *>(darkGrayImage), devDarkGrayImage, pixel_numbers * sizeof(unsigned char), cudaMemcpyDeviceToHost)) != cudaSuccess ) {
+        cerr << "Impossible to copy devC to host." << endl;
+        return 1;
     }
     memoryTimer.stop();
+
     globalTimer.stop();
+    //cout << "FUNC8\n";
+    //darkGrayImage._data = outputImage;
+    // Time GFLOP/s GB/s
+    cout << fixed << setprecision(6) << kernelTimer.getElapsed() << setprecision(3) << " " << (static_cast< long long unsigned int >(width) * height * 7) / 1000000000.0 / kernelTimer.getElapsed() << " " << (static_cast< long long unsigned int >(width) * height * (4 * sizeof(unsigned char))) / 1000000000.0 / kernelTimer.getElapsed() << endl;
+
+
     // Print the timers
-    long Gflops = ((long)width * (long)height) * (long)(4 + 3);
-    long GB = ((long)width * (long)height) * (long)(3 + 1) * (float)sizeof(unsigned char);
-    cout << fixed << setprecision(6);
-    cout << endl;
     cout << "Total (s): \t" << globalTimer.getElapsed() << endl;
     cout << "Kernel (s): \t" << kernelTimer.getElapsed() << endl;
     cout << "Memory (s): \t" << memoryTimer.getElapsed() << endl;
     cout << endl;
-    cout << setprecision(3);
-    cout << "GFLOP/s: \t" << (float)Gflops /  (1000000000.0f * kernelTimer.getElapsed()) << endl;
-    cout << "GB/s: \t\t" << (float)GB / (kernelTimer.getElapsed() * 1000000000.0f) << endl;
-    cout << endl;
+
+    cudaFree(devInputImage);
+    cudaFree(devDarkGrayImage);
+    return 0;
 }
