@@ -21,6 +21,16 @@ image03		0.001788	190.61
 image04		0.001290	117.38
 image05		0.002307	193.31
 image06		0.004403	133.73
+
+with only 1 row o f indexes
+
+image00	0.000150
+image01	0.000246
+image02	0.000318
+image03	0.001661
+image04	0.001213
+image05	0.002231
+image06	0.004082
 	
 
 histogram
