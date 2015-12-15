@@ -585,7 +585,7 @@ main(int argc, char **argv) {
     for(i = 0; i < bodyCt; i++) {
         new_forces[i].xf = 0;
         new_forces[i].yf = 0;
-        fprintf(stderr, "[%d,%d] ", new_forces[i].xf, new_forces[i].yf);
+        fprintf(stderr, "[%10.3f,%10.3f] ", new_forces[i].xf, new_forces[i].yf);
     }
 
     if(gettimeofday(&start, 0) != 0) {
@@ -598,7 +598,7 @@ main(int argc, char **argv) {
 
     fprintf(stderr, "InitialForces2 -> ");
     for (i = 0; i < bodyCt; i++) {
-        fprintf(stderr, "[%d,%d] ", _XF(i), _YF(i));
+        fprintf(stderr, "[%10.3f,%10.3f] ", _XF(i), _YF(i));
     }
     fprintf(stderr, "\n");
 
