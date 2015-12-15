@@ -402,9 +402,8 @@ colored:
 void
 print(void) {
     int b;
-
     for (b = 0; b < bodyCt; ++b) {
-        printf("%10.3f %10.3f %10.3f %10.3f %10.3f %10.3f\n", X(b), Y(b), XF(b), YF(b), XV(b), YV(b));
+        printf("%10.3f %10.3f %10.3f %10.3f %10.3f %10.3f\n", _X(b), _Y(b), _XF(b), _YF(b), _XV(b), _YV(b));
     }
 }
 
