@@ -598,6 +598,12 @@ main(int argc, char **argv) {
 
     fprintf(stderr, "InitialForces -> ");
     for (i = 0; i < bodyCt; i++) {
+        fprintf(stderr, "[%d,%d] ", new_forces[i].xf,new_forces[i].yf);
+    }
+    fprintf(stderr, "\n");
+
+    fprintf(stderr, "InitialForces2 -> ");
+    for (i = 0; i < bodyCt; i++) {
         fprintf(stderr, "[%d,%d] ", _XF(i),_YF(i));
     }
     fprintf(stderr, "\n");
