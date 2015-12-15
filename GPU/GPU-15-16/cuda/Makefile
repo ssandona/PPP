@@ -3,22 +3,22 @@ debug		:= 0
 include		../Makefile.inc
 
 
-all: clean darker histogram2_
+all: clean darker_square darker_uni darker_grid 
 
-darker: darker.cpp darker.cu
-	$(NVCC) -c darker.cu $(INCLUDES) $(NVCCFLAGS)
-	$(LINKER) -o $(PROJ_BASE)/bin/darkerCUDA darker.cpp darker.o ../src/Timer.cpp $(INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
-	rm -f ./darker.o
+darker_square: darker_square.cpp darker_square.cu
+	$(NVCC) -c darker_square.cu $(INCLUDES) $(NVCCFLAGS)
+	$(LINKER) -o $(PROJ_BASE)/bin/darker_squareCUDA darker_square.cpp darker_square.o ../src/Timer.cpp $(INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
+	rm -f ./darker_square.o
 
-darker2: darker2.cpp darker2.cu
-	$(NVCC) -c darker2.cu $(INCLUDES) $(NVCCFLAGS)
-	$(LINKER) -o $(PROJ_BASE)/bin/darker2CUDA darker2.cpp darker2.o ../src/Timer.cpp $(INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
-	rm -f ./darker2.o
+darker_uni: darker_uni.cpp darker_uni.cu
+	$(NVCC) -c darker_uni.cu $(INCLUDES) $(NVCCFLAGS)
+	$(LINKER) -o $(PROJ_BASE)/bin/darker_uniCUDA darker_uni.cpp darker_uni.o ../src/Timer.cpp $(INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
+	rm -f ./darker_uni.o
 
-darker2_: darker2_.cpp darker2_.cu
-	$(NVCC) -c darker2_.cu $(INCLUDES) $(NVCCFLAGS)
-	$(LINKER) -o $(PROJ_BASE)/bin/darker2_CUDA darker2_.cpp darker2_.o ../src/Timer.cpp $(INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
-	rm -f ./darker2_.o
+darker_grid: darker_grid.cpp darker_grid.cu
+	$(NVCC) -c darker_grid.cu $(INCLUDES) $(NVCCFLAGS)
+	$(LINKER) -o $(PROJ_BASE)/bin/darker_gridCUDA darker_grid.cpp darker_grid.o ../src/Timer.cpp $(INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
+	rm -f ./darker_grid.o
 
 histogram: histogram.cpp histogram.cu
 	$(NVCC) -c histogram.cu $(INCLUDES) $(NVCCFLAGS)
@@ -51,7 +51,9 @@ smooth3: smooth3.cpp smooth3.cu
 	rm -f ./smooth3.o
 
 clean:
-	rm -f $(PROJ_BASE)/bin/darkerCUDA
+	rm -f $(PROJ_BASE)/bin/darker_squareCUDA
+	rm -f $(PROJ_BASE)/bin/darker_uniCUDA
+	rm -f $(PROJ_BASE)/bin/darker_gridCUDA
 	rm -f $(PROJ_BASE)/bin/histogramCUDA
 	rm -f $(PROJ_BASE)/bin/smoothCUDA
 	rm -f $(PROJ_BASE)/bin/darker2CUDA
