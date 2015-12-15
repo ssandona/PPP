@@ -490,7 +490,7 @@ main(int argc, char **argv) {
     }
     //fprintf(stderr, "a\n");
 
-    /*calculateAssignedForces();
+   
 
 
     MPI_Init(&argc, &argv);
@@ -564,6 +564,8 @@ main(int argc, char **argv) {
         sum += forces_per_proc[i];
     }
 
+    calculateAssignedForces();
+
     MPI_Bcast(new_bodies, bodyCt, mpi_body_type, 0, MPI_COMM_WORLD);
 
 
@@ -628,7 +630,7 @@ main(int argc, char **argv) {
 
 
     MPI_Finalize();
-    */
+    
 
     free(forces_per_proc);
     free(displs);
