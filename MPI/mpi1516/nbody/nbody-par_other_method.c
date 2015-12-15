@@ -49,6 +49,7 @@ bodyType *new_bodies2;
 bodyType *rec_bodies;
 int *displs;
 int *bodies_per_proc;
+int * forces_per_proc;
 int myid;
 int printed = 0;
 int numprocs;
@@ -107,7 +108,7 @@ compute_forces(void) {
     for (b = globalStartB; b < bodyCt; ++b) {
         if(b == globalStartB) {
             for (c = globalStartC; c < bodyCt; ++c) {
-                if(count == forces_per_proc[i]) {
+                if(count == forces_per_proc[myid]) {
                     b = bodyCt;
                     break;
                 }
@@ -131,6 +132,7 @@ compute_forces(void) {
                 _YF(c) -= yf;
 
                 count++;
+                totalNumberOfForcesComputed++;
             }
         } else {
             for (c = b + 1; c < bodyCt; ++c) {
@@ -158,6 +160,7 @@ compute_forces(void) {
                 _YF(c) -= yf;
 
                 count++;
+                totalNumberOfForcesComputed++;
             }
         }
     }
@@ -183,24 +186,6 @@ calculateAssignedForces() {
                 b = bodyCt;
                 break;
             }
-            double dx = X(c) - X(b);
-            double dy = Y(c) - Y(b);
-            double angle = atan2(dy, dx);
-            double dsqr = dx * dx + dy * dy;
-            double mindist = R(b) + R(c);
-            double mindsqr I= mindist * mindist;
-            double forced = ((dsqr < mindsqr) ? mindsqr : dsqr);
-            double force = M(b) * M(c) * GRAVITY / forced;
-            double xf = force * cos(angle);
-            double yf = force * sin(angle);
-
-            /* Slightly sneaky...
-               force of b on c is negative of c on b;
-            */
-            XF(b) += xf;
-            YF(b) += yf;
-            XF(c) -= xf;
-            YF(c) -= yf;
             count++;
 
         }
@@ -212,15 +197,15 @@ compute_velocities(void) {
     int b;
 
     for (b = 0; b < bodyCt; ++b) {
-        double xv = XV(b);
-        double yv = YV(b);
+        double xv = _XV(b);
+        double yv = _YV(b);
         double force = sqrt(xv * xv + yv * yv) * FRICTION;
         double angle = atan2(yv, xv);
-        double xf = XF(b) - (force * cos(angle));
-        double yf = YF(b) - (force * sin(angle));
+        double xf = _XF(b) - (force * cos(angle));
+        double yf = _YF(b) - (force * sin(angle));
 
-        XV(b) += (xf / M(b)) * DELTA_T;
-        YV(b) += (yf / M(b)) * DELTA_T;
+        _XV(b) += (xf / M(b)) * DELTA_T;
+        _YV(b) += (yf / M(b)) * DELTA_T;
     }
 }
 
@@ -229,28 +214,28 @@ compute_positions(void) {
     int b;
 
     for (b = 0; b < bodyCt; ++b) {
-        double xn = X(b) + (XV(b) * DELTA_T);
-        double yn = Y(b) + (YV(b) * DELTA_T);
+        double xn = _X(b) + (_XV(b) * DELTA_T);
+        double yn = _Y(b) + (_YV(b) * DELTA_T);
 
         /* Bounce of image "walls" */
         if (xn < 0) {
             xn = 0;
-            XV(b) = -XV(b);
+            _XV(b) = -_XV(b);
         } else if (xn >= xdim) {
             xn = xdim - 1;
-            XV(b) = -XV(b);
+            _XV(b) = -_XV(b);
         }
         if (yn < 0) {
             yn = 0;
-            YV(b) = -YV(b);
+            _YV(b) = -_YV(b);
         } else if (yn >= ydim) {
             yn = ydim - 1;
-            YV(b) = -YV(b);
+            _YV(b) = -_YV(b);
         }
 
         /* Update position */
-        XN(b) = xn;
-        YN(b) = yn;
+        _XN(b) = xn;
+        _YN(b) = yn;
     }
 }
 
@@ -424,6 +409,16 @@ print(void) {
     }
 }
 
+void sumForces(forceType *in, forceType *inout, int *len, MPI_Datatype *dtype) {
+    int i;
+    for (i = 0; i < *len; ++i) {
+        inout->xf += in->xf;
+        inout->yf += in->yf;
+        in++;
+        inout++;
+    }
+}
+
 
 /*  Main program...
 */
@@ -508,7 +503,7 @@ main(int argc, char **argv) {
 
 
 
-    forceCt = 0;
+    int forceCt = 0;
     for(i = 0; i < bodyCt; i++) {
         forceCt += i;
     }
