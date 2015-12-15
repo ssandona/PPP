@@ -48,7 +48,6 @@ bodyType *new_bodies;
 bodyType *new_bodies2;
 bodyType *rec_bodies;
 int *displs;
-int *bodies_per_proc;
 int * forces_per_proc;
 int myid;
 int printed = 0;
@@ -557,7 +556,7 @@ main(int argc, char **argv) {
     //fprintf(stderr, "d\n");
     // calculate send counts and displacements
     for (i = 0; i < numprocs; i++) {
-        bodies_per_proc[i] = avarage_forces_per_proc;
+        forces_per_proc[i] = avarage_forces_per_proc;
         if (rem > 0) {
             forces_per_proc[i]++;
             rem--;
@@ -728,7 +727,7 @@ main(int argc, char **argv) {
         fprintf(stderr, "N-body took %10.3f seconds\n", rtime);
     }
 
-    fprintf(stderr, "Process %d compute %d forces\n, assigned %d bodies", myid, totalNumberOfForcesComputed, bodies_per_proc[myid]);
+    fprintf(stderr, "Process %d compute %d forces\n, assigned %d bodies", myid, totalNumberOfForcesComputed, forces_per_proc[myid]);
 
 
 
@@ -736,7 +735,7 @@ main(int argc, char **argv) {
 
     MPI_Finalize();
 
-    free(bodies_per_proc);
+    free(forces_per_proc);
     free(displs);
     free(new_bodies);
     free(rec_bodies);
