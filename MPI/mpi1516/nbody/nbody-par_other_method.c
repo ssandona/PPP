@@ -565,10 +565,7 @@ main(int argc, char **argv) {
         sum += forces_per_proc[i];
     }
 
-    /*printf("displs and bodies\n");
-    for(i = 0; i < numprocs; i++) {
-        printf("i:%d, displs:%d, numBodies:%d\n", i, displs[i], bodies_per_proc[i]);
-    }*/
+
     //fprintf(stderr, "e\n");
 
     //printf("bodies_per_proc[%d] = %d\tdispls[%d] = %d\n", 0, bodies_per_proc[0], 0, displs[0]);
@@ -649,58 +646,23 @@ main(int argc, char **argv) {
 
     /* Main Loop */
 
+/*
     while (steps--) {
         cont = 0;
         clear_forces();
-        /*if(printed <= 1 && myid == 0) {
-            printf("A -> %d\n", myid);
-            for (i = 0; i < bodyCt; i++) {
-                printf("\nbody: %d, mass: %d, pos: (%d,%d), forceX: %10.3f, forceY: %10.3f", i, (int)(new_bodies[i].mass), (int)new_bodies[i].x[old], (int)new_bodies[i].y[old], _XF(i), _YF(i));
-            }
-        }*/
-        compute_forces();
 
-        /*if(printed <= 1 && myid == 0) {
-            printf("B -> %d\n", myid);
-            for (i = 0; i < bodyCt; i++) {
-                printf("\nbody: %d, mass: %d, pos: (%d,%d), forceX: %10.3f, forceY: %10.3f", i, (int)(new_bodies[i].mass), (int)new_bodies[i].x[old], (int)new_bodies[i].y[old], _XF(i), _YF(i));
-            }
-        }*/
+        compute_forces();
 
         new_forces2 = malloc(sizeof(forceType) * bodyCt);
         MPI_Allreduce(new_forces, new_forces2, bodyCt, mpi_force_type, mpi_sum, MPI_COMM_WORLD);
         free(new_forces);
         new_forces = new_forces2;
 
-        /*if(printed <= 1 && myid == 0) {
-            printf("C -> %d\n", myid);
-            for (i = 0; i < bodyCt; i++) {
-                printf("\nbody: %d, mass: %d, pos: (%d,%d), forceX: %10.3f, forceY: %10.3f", i, (int)(new_bodies[i].mass), (int)new_bodies[i].x[old], (int)new_bodies[i].y[old], _XF(i), _YF(i));
-            }
-            printed++;
-        }*/
         compute_velocities();
         compute_positions();
 
         old ^= 1;
 
-        /*for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
-            rec_bodies[cont] = new_bodies[b];
-            cont++;
-        }*/
-
-        /*if(printed <= 1) {
-            printf("__ID__2: %d:\n", myid);
-            print_mine();
-            printed++;
-        }*/
-
-        /*Time for a display update?*/
-        /*if (secsup > 0 && (time(0) - lastup) > secsup) {
-            display();
-            msync(map, fsize, MS_SYNC);
-            lastup = time(0);
-        }*/
     }
     if(0 == myid) {
         if(gettimeofday(&end, 0) != 0) {
@@ -713,14 +675,6 @@ main(int argc, char **argv) {
 
     }
 
-
-    /*for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
-        rec_bodies[cont] = new_bodies[b];
-        cont++;
-    }
-    new_bodies = malloc(sizeof(bodyType) * bodyCt);
-    MPI_Gatherv(rec_bodies, bodies_per_proc[myid], mpi_force_type, new_bodies, bodies_per_proc, displs, mpi_force_type, 0, MPI_COMM_WORLD);
-    */
     if(0 == myid) {
         print();
         fprintf(stderr, "fine\n");
@@ -734,11 +688,13 @@ main(int argc, char **argv) {
 
 
     MPI_Finalize();
+    */
 
     free(forces_per_proc);
     free(displs);
     free(new_bodies);
     free(rec_bodies);
+    
 
     return 0;
 }
