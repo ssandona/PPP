@@ -596,7 +596,7 @@ main(int argc, char **argv) {
         cont = 0;
         clear_forces();
 
-        compute_forces();
+        //compute_forces();
         /*fprintf(stderr, "CalculatedForces -> ");
         for (i = 0; i < bodyCt; i++) {
             fprintf(stderr, "[%10.3f,%10.3f] ", _XF(i), _YF(i));

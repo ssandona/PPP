@@ -685,7 +685,7 @@ main(int argc, char **argv) {
                 printf("\nbody: %d, mass: %d, pos: (%d,%d), forceX: %10.3f, forceY: %10.3f", i, (int)(new_bodies[i].mass), (int)new_bodies[i].x[old], (int)new_bodies[i].y[old], _XF(i), _YF(i));
             }
         }*/
-        compute_forces();
+        //compute_forces();
 
         /*if(printed <= 1 && myid == 0) {
             printf("B -> %d\n", myid);
