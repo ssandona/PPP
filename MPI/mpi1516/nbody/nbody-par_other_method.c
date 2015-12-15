@@ -591,35 +591,35 @@ main(int argc, char **argv) {
     }
 
 
-    fprintf(stderr, "\n");
+    /*fprintf(stderr, "\n");
 
     fprintf(stderr, "InitialForces2 -> ");
     for (i = 0; i < bodyCt; i++) {
         fprintf(stderr, "[%10.3f,%10.3f] ", _XF(i), _YF(i));
     }
-    fprintf(stderr, "\n");
+    fprintf(stderr, "\n");*/
 
     while (steps--) {
         cont = 0;
         clear_forces();
 
         compute_forces();
-        fprintf(stderr, "CalculatedForces -> ");
+        /*fprintf(stderr, "CalculatedForces -> ");
         for (i = 0; i < bodyCt; i++) {
             fprintf(stderr, "[%10.3f,%10.3f] ", _XF(i), _YF(i));
         }
-        fprintf(stderr, "\n");
+        fprintf(stderr, "\n");*/
 
         new_forces2 = malloc(sizeof(forceType) * bodyCt);
         MPI_Allreduce(new_forces, new_forces2, bodyCt, mpi_force_type, mpi_sum, MPI_COMM_WORLD);
         free(new_forces);
         new_forces = new_forces2;
 
-        fprintf(stderr, "TOTALForces -> ");
+        /*fprintf(stderr, "TOTALForces -> ");
         for (i = 0; i < bodyCt; i++) {
             fprintf(stderr, "[%10.3f,%10.3f] ", _XF(i), _YF(i));
         }
-        fprintf(stderr, "\n");
+        fprintf(stderr, "\n");*/
 
         compute_velocities();
         compute_positions();
