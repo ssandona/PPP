@@ -598,7 +598,7 @@ main(int argc, char **argv) {
 
     fprintf(stderr, "InitialForces -> ");
     for (i = 0; i < bodyCt; i++) {
-        fprintf(stderr, "[%d,%d] ", _XF(B),_YF(B));
+        fprintf(stderr, "[%d,%d] ", _XF(i),_YF(i));
     }
     fprintf(stderr, "\n");
 
@@ -609,7 +609,7 @@ main(int argc, char **argv) {
         compute_forces();
         fprintf(stderr, "CalculatedForces -> ");
         for (i = 0; i < bodyCt; i++) {
-            fprintf(stderr, "[%d,%d] ", _XF(B),_YF(B));
+            fprintf(stderr, "[%d,%d] ", _XF(i),_YF(i));
         }
         fprintf(stderr, "\n");
 
