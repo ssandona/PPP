@@ -136,7 +136,7 @@ compute_forces(void) {
             }
         } else {
             for (c = b + 1; c < bodyCt; ++c) {
-                if(count == forces_per_proc[i]) {
+                if(count == forces_per_proc[myid]) {
                     b = bodyCt;
                     break;
                 }
