@@ -3,7 +3,7 @@ debug		:= 0
 include		../Makefile.inc
 
 
-all: clean darker_square darker_uni darker_grid 
+all: clean darker_square darker_uni darker_uni_more darker_grid 
 
 darker_square: darker_square.cpp darker_square.cu
 	$(NVCC) -c darker_square.cu $(INCLUDES) $(NVCCFLAGS)
@@ -14,6 +14,11 @@ darker_uni: darker_uni.cpp darker_uni.cu
 	$(NVCC) -c darker_uni.cu $(INCLUDES) $(NVCCFLAGS)
 	$(LINKER) -o $(PROJ_BASE)/bin/darker_uniCUDA darker_uni.cpp darker_uni.o ../src/Timer.cpp $(INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./darker_uni.o
+
+darker_uni_more: darker_uni_more.cpp darker_uni_more.cu
+	$(NVCC) -c darker_uni_more.cu $(INCLUDES) $(NVCCFLAGS)
+	$(LINKER) -o $(PROJ_BASE)/bin/darker_uni_moreCUDA darker_uni_more.cpp darker_uni_more.o ../src/Timer.cpp $(INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
+	rm -f ./darker_uni_more.o
 
 darker_grid: darker_grid.cpp darker_grid.cu
 	$(NVCC) -c darker_grid.cu $(INCLUDES) $(NVCCFLAGS)
@@ -53,6 +58,7 @@ smooth3: smooth3.cpp smooth3.cu
 clean:
 	rm -f $(PROJ_BASE)/bin/darker_squareCUDA
 	rm -f $(PROJ_BASE)/bin/darker_uniCUDA
+	rm -f $(PROJ_BASE)/bin/darker_uni_moreCUDA
 	rm -f $(PROJ_BASE)/bin/darker_gridCUDA
 	rm -f $(PROJ_BASE)/bin/histogramCUDA
 	rm -f $(PROJ_BASE)/bin/smoothCUDA
