@@ -108,10 +108,10 @@ compute_forces(void) {
     */
     b = globalStartB;
     for (c = globalStartC; c < bodyCt; ++c) {
-        /*if(count == forces_per_proc[myid]) {
+        if(count == forces_per_proc[myid]) {
             b = bodyCt;
             break;
-        }*/
+        }
         double dx = _X(c) - _X(b);
         double dy = _Y(c) - _Y(b);
         double angle = atan2(dy, dx);
@@ -132,15 +132,15 @@ compute_forces(void) {
         _YF(c) -= yf;
 
         count++;
-        totalNumberOfForcesComputed++;
+        //totalNumberOfForcesComputed++;
     }
 
     for (b = globalStartB + 1; b < bodyCt; ++b) {
         for (c = b + 1; c < bodyCt; ++c) {
-            /*if(count == forces_per_proc[myid]) {
+            if(count == forces_per_proc[myid]) {
                 b = bodyCt;
                 break;
-            }*/
+            }
             double dx = _X(c) - _X(b);
             double dy = _Y(c) - _Y(b);
             double angle = atan2(dy, dx);
@@ -161,7 +161,7 @@ compute_forces(void) {
             _YF(c) -= yf;
 
             count++;
-            totalNumberOfForcesComputed++;
+            //totalNumberOfForcesComputed++;
         }
     }
 }
