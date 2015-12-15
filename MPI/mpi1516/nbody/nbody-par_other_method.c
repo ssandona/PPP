@@ -490,7 +490,7 @@ main(int argc, char **argv) {
     }
     //fprintf(stderr, "a\n");
 
-    calculateAssignedForces();
+    /*calculateAssignedForces();
 
 
     MPI_Init(&argc, &argv);
@@ -552,7 +552,7 @@ main(int argc, char **argv) {
     int avarage_forces_per_proc = forceCt / numprocs;
     //fprintf(stderr, "avarage => %d\n", avarage_bodies_per_proc);
     int sum = 0;
-/*
+
     //fprintf(stderr, "d\n");
     // calculate send counts and displacements
     for (i = 0; i < numprocs; i++) {
