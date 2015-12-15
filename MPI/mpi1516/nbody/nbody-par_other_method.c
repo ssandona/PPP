@@ -93,7 +93,7 @@ clear_forces(void) {
 
     /* Clear force accumulation variables */
     for (b = 0; b < bodyCt; ++b) {
-        YF(b) = (XF(b) = 0);
+        _YF(b) = (_XF(b) = 0);
     }
 }
 
@@ -203,8 +203,8 @@ compute_velocities(void) {
         double xf = _XF(b) - (force * cos(angle));
         double yf = _YF(b) - (force * sin(angle));
 
-        _XV(b) += (xf / M(b)) * DELTA_T;
-        _YV(b) += (yf / M(b)) * DELTA_T;
+        _XV(b) += (xf / _M(b)) * DELTA_T;
+        _YV(b) += (yf / _M(b)) * DELTA_T;
     }
 }
 
@@ -490,7 +490,7 @@ main(int argc, char **argv) {
     }
     //fprintf(stderr, "a\n");
 
-   
+
 
 
     MPI_Init(&argc, &argv);
@@ -565,10 +565,10 @@ main(int argc, char **argv) {
     }
 
     for (i = 0; i < numprocs; i++) {
-            fprintf(stderr, "Forces per proc -> %d \n", forces_per_proc[i]);
+        fprintf(stderr, "Forces per proc -> %d \n", forces_per_proc[i]);
     }
 
-        
+
 
 
     calculateAssignedForces();
@@ -603,6 +603,10 @@ main(int argc, char **argv) {
         clear_forces();
 
         compute_forces();
+        fprintf(stderr, "CalculatedForces -> ");
+        for (i = 0; i < bodyCt; i++) {
+            fprintf(stderr, "[%d] ", new_forces[i]);
+        }
 
         new_forces2 = malloc(sizeof(forceType) * bodyCt);
         MPI_Allreduce(new_forces, new_forces2, bodyCt, mpi_force_type, mpi_sum, MPI_COMM_WORLD);
@@ -639,7 +643,7 @@ main(int argc, char **argv) {
 
 
     MPI_Finalize();
-    
+
 
     free(forces_per_proc);
     free(displs);
