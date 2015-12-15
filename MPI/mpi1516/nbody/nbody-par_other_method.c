@@ -629,7 +629,7 @@ main(int argc, char **argv) {
 
 
     MPI_Finalize();
-    * /
+    */
 
     free(forces_per_proc);
     free(displs);
