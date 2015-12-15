@@ -237,7 +237,7 @@ compute_positions(void) {
         _YN(b) = yn;
     }
 }
-}
+
 
 /*  Graphic output stuff...
 */
