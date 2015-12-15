@@ -508,7 +508,7 @@ main(int argc, char **argv) {
     }
     forces_per_proc = malloc(sizeof(int) * numprocs);
     displs = malloc(sizeof(int) * numprocs);
-    int rem = bodyCt % numprocs; // elements remaining after division among processes
+    int rem = forceCt % numprocs; // elements remaining after division among processes
     //fprintf(stderr, "rem => %d\n", rem);
 
     //fprintf(stderr, "b\n");
@@ -573,7 +573,7 @@ main(int argc, char **argv) {
 
     //printf("bodies_per_proc[%d] = %d\tdispls[%d] = %d\n", 0, bodies_per_proc[0], 0, displs[0]);
 
-    int bufSize = bodyCt % numprocs == 0 ? bodyCt / numprocs : (bodyCt / numprocs + 1);
+    //int bufSize = bodyCt % numprocs == 0 ? bodyCt / numprocs : (bodyCt / numprocs + 1);
     // Create a buffer that will hold a subset of the bodies
     //fprintf(stderr, "bufsize: %d\n", bufSize);
 
