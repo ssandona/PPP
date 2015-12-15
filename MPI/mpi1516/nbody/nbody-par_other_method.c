@@ -581,30 +581,24 @@ main(int argc, char **argv) {
     int cont;
 
     new_forces = malloc(sizeof(forceType) * bodyCt);
+    fprintf(stderr, "InitialForcess -> ");
     for(i = 0; i < bodyCt; i++) {
         new_forces[i].xf = 0;
         new_forces[i].yf = 0;
+        fprintf(stderr, "[%d,%d] ", new_forces[i].xf, new_forces[i].yf);
     }
 
     if(gettimeofday(&start, 0) != 0) {
         fprintf(stderr, "could not do timing\n");
         exit(1);
     }
-    //printf("a\n");
-    //new_bodies = malloc(sizeof(bodyType) * bodyCt);
 
-    //MPI_Allgatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
-    // printf("b\n");
 
-    fprintf(stderr, "InitialForces -> ");
-    for (i = 0; i < bodyCt; i++) {
-        fprintf(stderr, "[%d,%d] ", new_forces[i].xf,new_forces[i].yf);
-    }
     fprintf(stderr, "\n");
 
     fprintf(stderr, "InitialForces2 -> ");
     for (i = 0; i < bodyCt; i++) {
-        fprintf(stderr, "[%d,%d] ", _XF(i),_YF(i));
+        fprintf(stderr, "[%d,%d] ", _XF(i), _YF(i));
     }
     fprintf(stderr, "\n");
 
@@ -615,7 +609,7 @@ main(int argc, char **argv) {
         compute_forces();
         fprintf(stderr, "CalculatedForces -> ");
         for (i = 0; i < bodyCt; i++) {
-            fprintf(stderr, "[%d,%d] ", _XF(i),_YF(i));
+            fprintf(stderr, "[%d,%d] ", _XF(i), _YF(i));
         }
         fprintf(stderr, "\n");
 
