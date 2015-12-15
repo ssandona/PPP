@@ -596,7 +596,11 @@ main(int argc, char **argv) {
     //MPI_Allgatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
     // printf("b\n");
 
-
+    fprintf(stderr, "InitialForces -> ");
+    for (i = 0; i < bodyCt; i++) {
+        fprintf(stderr, "[%d] ", new_forces[i]);
+    }
+    fprintf(stderr, "\n");
 
     while (steps--) {
         cont = 0;
@@ -607,6 +611,7 @@ main(int argc, char **argv) {
         for (i = 0; i < bodyCt; i++) {
             fprintf(stderr, "[%d] ", new_forces[i]);
         }
+        fprintf(stderr, "\n");
 
         new_forces2 = malloc(sizeof(forceType) * bodyCt);
         MPI_Allreduce(new_forces, new_forces2, bodyCt, mpi_force_type, mpi_sum, MPI_COMM_WORLD);
