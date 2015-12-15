@@ -616,6 +616,12 @@ main(int argc, char **argv) {
         free(new_forces);
         new_forces = new_forces2;
 
+        fprintf(stderr, "TOTALForces -> ");
+        for (i = 0; i < bodyCt; i++) {
+            fprintf(stderr, "[%10.3f,%10.3f] ", _XF(i), _YF(i));
+        }
+        fprintf(stderr, "\n");
+
         compute_velocities();
         compute_positions();
 
