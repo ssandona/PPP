@@ -8,6 +8,7 @@
 #include <math.h>
 #include <time.h>
 #include <sys/time.h>
+#include <mpi.h>
 
 extern double   sqrt(double);
 extern double   atan2(double, double);
@@ -176,7 +177,7 @@ calculateAssignedForces() {
     */
     for (b = 0; b < bodyCt; ++b) {
         for (c = b + 1; c < bodyCt; ++c) {
-            if(count == displs[myId]) {
+            if(count == displs[myid]) {
                 globalStartB = b;
                 globalStartC = c;
                 b = bodyCt;
@@ -187,7 +188,7 @@ calculateAssignedForces() {
             double angle = atan2(dy, dx);
             double dsqr = dx * dx + dy * dy;
             double mindist = R(b) + R(c);
-            double mindsqr = mindist * mindist;
+            double mindsqr I= mindist * mindist;
             double forced = ((dsqr < mindsqr) ? mindsqr : dsqr);
             double force = M(b) * M(c) * GRAVITY / forced;
             double xf = force * cos(angle);
