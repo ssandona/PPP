@@ -48,7 +48,7 @@ bodyType *new_bodies;
 bodyType *new_bodies2;
 bodyType *rec_bodies;
 int *displs;
-int * forces_per_proc;
+int *forces_per_proc;
 int myid;
 int printed = 0;
 int numprocs;
@@ -552,7 +552,7 @@ main(int argc, char **argv) {
     int avarage_forces_per_proc = forceCt / numprocs;
     //fprintf(stderr, "avarage => %d\n", avarage_bodies_per_proc);
     int sum = 0;
-
+/*
     //fprintf(stderr, "d\n");
     // calculate send counts and displacements
     for (i = 0; i < numprocs; i++) {
@@ -565,66 +565,8 @@ main(int argc, char **argv) {
         sum += forces_per_proc[i];
     }
 
-
-    //fprintf(stderr, "e\n");
-
-    //printf("bodies_per_proc[%d] = %d\tdispls[%d] = %d\n", 0, bodies_per_proc[0], 0, displs[0]);
-
-    //int bufSize = bodyCt % numprocs == 0 ? bodyCt / numprocs : (bodyCt / numprocs + 1);
-    // Create a buffer that will hold a subset of the bodies
-    //fprintf(stderr, "bufsize: %d\n", bufSize);
-
-
-    //rec_bodies = malloc(sizeof(bodyType) * bufSize);
-
-
-
-    //fprintf(stderr, "f\n");
-
-    // Scatter the bodies to all processes
-    /*MPI_Scatter(bodies, bodies_per_proc, mpi_body_type, sub_bodies,
-                bodies_per_proc, mpi_body_type, 0, MPI_COMM_WORLD);
-
-    MPI_Scatterv(bodies, bodies_per_proc, bodyCt, sub_bodies,
-                 avarage_bodies_per_proc, mpi_body_type, 0, MPI_COMM_WORLD);*/
-
-
-    // print calculated send counts and displacements for each process
-    /*if (0 == myid) {
-        for (i = 0; i < numprocs; i++) {
-            printf("bodies_per_proc[%d] = %d\tdispls[%d] = %d\n", i, bodies_per_proc[i], i, displs[i]);
-        }
-    }*/
-    //fprintf(stderr, "g\n");
-
-    // divide the data among processes as described by bodies_per_proc and displs
-    //MPI_Scatterv(bodies, bodies_per_proc, displs, mpi_body_type, rec_bodies, bufSize, mpi_body_type, 0, MPI_COMM_WORLD);
-
-
-    /////MPI_Scatterv(bodies, bodies_per_proc, displs, mpi_force_type, rec_bodies, bufSize, mpi_force_type, 0, MPI_COMM_WORLD);
     MPI_Bcast(new_bodies, bodyCt, mpi_body_type, 0, MPI_COMM_WORLD);
 
-    //fprintf(stderr, "h\n");
-
-    // print what each process received
-    /*printf("__ID__: %d: ", myid);
-    for (i = 0; i < bodies_per_proc[myid]; i++) {
-        printf("\nbody: %d, mass: %d, pos: (%d,%d)", i, (int)(rec_bodies[i].mass), (int)rec_bodies[i].x[old], (int)rec_bodies[i].y[old]);
-    }*/
-    //fprintf(stderr, "i\n");
-    //printf("\n");
-
-    // new_bodies = malloc(sizeof(bodyType) * bodyCt);
-
-    //MPI_Allgatherv(rec_bodies, bodies_per_proc[myid],mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
-
-    /* printf("__ID__: %d: ", myid);
-     printf("__DIM__: %d: ", bodyCt);
-     for (i = 0; i < bodyCt; i++) {
-         printf("\nbody: %d, mass: %d, pos: (%d,%d)", i, (int)(new_bodies[i].mass), (int)new_bodies[i].x[old], (int)new_bodies[i].y[old]);
-     }*/
-
-    //fprintf(stderr, "k\n");
 
     int cont;
 
@@ -644,9 +586,8 @@ main(int argc, char **argv) {
     //MPI_Allgatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
     // printf("b\n");
 
-    /* Main Loop */
 
-/*
+
     while (steps--) {
         cont = 0;
         clear_forces();
@@ -688,13 +629,13 @@ main(int argc, char **argv) {
 
 
     MPI_Finalize();
-    */
+    * /
 
     free(forces_per_proc);
     free(displs);
     free(new_bodies);
     free(rec_bodies);
-    
+
 
     return 0;
 }
