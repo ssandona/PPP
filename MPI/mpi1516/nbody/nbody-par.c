@@ -48,6 +48,7 @@ bodyType *new_bodies2;
 bodyType *rec_bodies;
 int *displs;
 int *bodies_per_proc;
+int *forces_per_proc;
 int myid;
 int printed = 0;
 int numprocs;
