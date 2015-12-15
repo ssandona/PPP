@@ -512,7 +512,6 @@ main(int argc, char **argv) {
     //fprintf(stderr, "rem => %d\n", rem);
 
     //fprintf(stderr, "b\n");
-    /* create a type for struct bodyType */
     const int nitems = 2;
     int blocklengths[2] = {1, 1};
     MPI_Datatype types[2] = {MPI_DOUBLE, MPI_DOUBLE};
