@@ -565,7 +565,7 @@ main(int argc, char **argv) {
     }
 
     for (i = 0; i < numprocs; i++) {
-        fprintf(stderr, "Forces per proc -> %d \n", forces_per_proc[i]);
+        fprintf(stderr, "[%d] Forces -> %d, displ -> %d \n", myid, forces_per_proc[i], displs[i]);
     }
 
 
