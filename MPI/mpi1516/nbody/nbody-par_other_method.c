@@ -564,7 +564,16 @@ main(int argc, char **argv) {
         sum += forces_per_proc[i];
     }
 
+    for (i = 0; i < numprocs; i++) {
+            fprintf(stderr, "Forces per proc -> %d \n", forces_per_proc[i]);
+    }
+
+        
+
+
     calculateAssignedForces();
+
+    fprintf(stderr, "B -> %d, C -> %d \n", globalStartB, globalStartC);
 
     MPI_Bcast(new_bodies, bodyCt, mpi_body_type, 0, MPI_COMM_WORLD);
 
