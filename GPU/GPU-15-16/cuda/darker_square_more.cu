@@ -47,6 +47,7 @@ __global__ void darkGrayKernel(const int width, const int height, const unsigned
         darkGrayImage[globalIdx] = static_cast< unsigned char >(grayPix);
         globalIdx += (gridDim.x * blockDim.x) * (gridDim.y * blockDim.y);
     }
+}
 
 
 
