@@ -71,8 +71,8 @@ int main(int argc, char *argv[]) {
 	}
 
 	// Save output
-	grayImage.save(("" + string(argv[1]) + ".gray.par.bmp").c_str());
-	histogramImage.save(("" + string(argv[1]) + ".hist.par.bmp").c_str());
+	grayImage.save(("" + string(argv[1]) + ".gray.uni.more.par.bmp").c_str());
+	histogramImage.save(("" + string(argv[1]) + ".hist.uni.more.par.bmp").c_str());
 
 	return 0;
 }

@@ -116,10 +116,10 @@ int histogram1D(const int width, const int height, const unsigned char *inputIma
     //cout << "Image size (w,h): (" << width << ", " << height << ")\n";
     //cout << "Grid size (w,h): (" << grid_width << ", " << grid_height << ")\n";
 
-    unsigned int grid_size = static_cast< unsigned int >(ceil(sqrt((width * height) / (float)256)));
+    unsigned int grid_size = static_cast< unsigned int >(ceil(sqrt((width * height) / (float)THREAD_NUMBER)));
     // Execute the kernel
     dim3 gridSize(grid_size, height);
-    dim3 blockSize(THREAD_NUMBER, 1);
+    dim3 blockSize(THREAD_NUMBER);
 
     kernelTimer.start();
     //cout << "FUNC5\n";
