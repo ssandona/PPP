@@ -18,13 +18,14 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     unsigned int i = blockIdx.y;
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
     unsigned int globalIdx = j + (blockDim.x * gridDim.x * i);
+    int k;
 
     __shared__ unsigned int localHistogram[HISTOGRAM_SIZE];
 
     localHistogram[threadIdx.x] = 0;
     __syncthreads();
 
-    for(i = 0; i < PIXELS_THREAD; i++) {
+    for(k = 0; k < PIXELS_THREAD; k++) {
         if(globalIdx < width * height) {
             float grayPix = 0.0f;
             //if(blockIdx.x >= 10) {
