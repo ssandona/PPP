@@ -15,7 +15,7 @@ using cimg_library::CImg;
 using std::string;
 
 
-const unsigned int THREAD_NUMBER = 512;
+const unsigned int THREAD_NUMBER = 256;
 const int PIXELS_THREAD = 11;
 
 __global__ void darkGrayKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *darkGrayImage) {
@@ -30,8 +30,8 @@ __global__ void darkGrayKernel(const int width, const int height, const unsigned
     //unsigned int globalIdx = (blockIdx.x * blockDim.x + threadIdx.x) + (blockDim.x * gridDim.x *  blockIdx.y);
     int i;
     //unsigned int globalIdx2 = (blockIdx.x * blockDim.x + threadIdx.x) + (blockDim.x * gridDim.x *  blockIdx.y) + (gridDim.x * blockDim.x) * (gridDim.y * blockDim.y);
-
-    /*for(i = 0; i < PIXELS_THREAD; i++) {
+    unsigned int globalIdx = ((blockIdx.y * gridDim.x + blockIdx.x) * blockDim.x) + threadIdx.x;
+    for(i = 0; i < PIXELS_THREAD; i++) {
         if(globalIdx < width * height) {
             float grayPix = 0.0f;
             //if(blockIdx.x >= 10) {
@@ -45,8 +45,8 @@ __global__ void darkGrayKernel(const int width, const int height, const unsigned
             darkGrayImage[globalIdx] = static_cast< unsigned char >(grayPix);
             globalIdx += (gridDim.x * blockDim.x) * (gridDim.y * blockDim.y);
         }
-    }*/
-
+    }
+/*
     for(i = (blockIdx.x * blockDim.x + threadIdx.x) + (blockDim.x * gridDim.x *  blockIdx.y); i < width * height; i += (gridDim.x * blockDim.x) * (gridDim.y * blockDim.y)) {
         float grayPix = 0.0f;
         //if(blockIdx.x >= 10) {
@@ -58,7 +58,7 @@ __global__ void darkGrayKernel(const int width, const int height, const unsigned
         grayPix = (grayPix * 0.6f) + 0.5f;
         //}
         darkGrayImage[i] = static_cast< unsigned char >(grayPix);
-    }
+    }*/
 
     /*if(globalIdx2 >= width * height) return;
 
