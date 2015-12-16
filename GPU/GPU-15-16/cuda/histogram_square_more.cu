@@ -53,14 +53,14 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     for(k = j + (blockDim.x * gridDim.x * i); k < width * height; k += (gridDim.x * blockDim.x) * (gridDim.y * blockDim.y)) {
         float grayPix = 0.0f;
         //if(blockIdx.x >= 10) {
-        float r = static_cast< float >(inputImage[globalIdx]);
-        float g = static_cast< float >(inputImage[(width * height) + globalIdx]);
-        float b = static_cast< float >(inputImage[(2 * width * height) + globalIdx]);
+        float r = static_cast< float >(inputImage[k]);
+        float g = static_cast< float >(inputImage[(width * height) + k]);
+        float b = static_cast< float >(inputImage[(2 * width * height) + k]);
 
         grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
 
         //}
-        grayImage[globalIdx] = static_cast< unsigned char >(grayPix);
+        grayImage[k] = static_cast< unsigned char >(grayPix);
         atomicAdd((unsigned int *)&localHistogram[static_cast< unsigned int >(grayPix)], 1);
     }
 
