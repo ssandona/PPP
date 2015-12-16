@@ -130,6 +130,7 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
     // Print the timers
     cout << "Total (s): \t" << fixed << setprecision(6) << globalTimer.getElapsed() << endl;
     cout << "Kernel (s): \t" << fixed << setprecision(6) << kernelTimer.getElapsed() << endl;
+    cout << "Kernel2 (s): \t" << kernelTimer.getElapsed() << endl;
     cout << "Memory (s): \t" << fixed << setprecision(6) << memoryTimer.getElapsed() << endl;
     cout << endl;
 
