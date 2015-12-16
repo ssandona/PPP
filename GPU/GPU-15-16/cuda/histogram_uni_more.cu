@@ -11,7 +11,7 @@ using std::setprecision;
 
 const int HISTOGRAM_SIZE = 256;
 const unsigned int THREAD_NUMBER = 256;
-const unsigned int  = 10;
+const int PIXELS_THREAD = 20;
 
 __global__ void histogram1DKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram) {
 

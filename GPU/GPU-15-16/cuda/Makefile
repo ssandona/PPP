@@ -3,12 +3,17 @@ debug		:= 0
 include		../Makefile.inc
 
 
-all: clean darker_uni_more histogram_uni_more
+all: clean darker_uni_more histogram_uni_more darker_square_more
 
 darker_square: darker_square.cpp darker_square.cu
 	$(NVCC) -c darker_square.cu $(INCLUDES) $(NVCCFLAGS)
 	$(LINKER) -o $(PROJ_BASE)/bin/darker_squareCUDA darker_square.cpp darker_square.o ../src/Timer.cpp $(INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./darker_square.o
+
+darker_square_more: darker_square_more.cpp darker_square_more.cu
+	$(NVCC) -c darker_square_more.cu $(INCLUDES) $(NVCCFLAGS)
+	$(LINKER) -o $(PROJ_BASE)/bin/darker_square_moreCUDA darker_square_more.cpp darker_square_more.o ../src/Timer.cpp $(INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
+	rm -f ./darker_square_more.o
 
 darker_uni: darker_uni.cpp darker_uni.cu
 	$(NVCC) -c darker_uni.cu $(INCLUDES) $(NVCCFLAGS)
