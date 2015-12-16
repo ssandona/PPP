@@ -14,11 +14,8 @@ using std::setprecision;
 using cimg_library::CImg;
 using std::string;
 
-/*const unsigned int DIM = 16000000;
-const unsigned int nrThreads = 256;*/
-const unsigned int B_WIDTH = 16;
-const unsigned int B_HEIGHT = 16;
-const unsigned int THREAD_NUMBER = 256;
+
+const unsigned int THREAD_NUMBER = 512;
 const int PIXELS_THREAD = 11;
 
 __global__ void darkGrayKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *darkGrayImage) {
