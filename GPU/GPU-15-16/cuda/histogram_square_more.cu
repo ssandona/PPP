@@ -13,7 +13,7 @@ const int HISTOGRAM_SIZE = 256;
 const unsigned int B_WIDTH = 16;
 const unsigned int B_HEIGHT = 16;
 const unsigned int THREAD_NUMBER = 256;
-const int PIXELS_THREAD = 20;
+const int PIXELS_THREAD = 11;
 //const int WARP_SIZE = 32;
 //const int WARPS=8;
 
