@@ -30,7 +30,7 @@ __global__ void darkGrayKernel(const int width, const int height, const unsigned
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
     unsigned int globalIdx = j + (blockDim.x * gridDim.x * i);*/
 
-    unsigned int globalIdx = (blockIdx.x * blockDim.x + threadIdx.x) + (blockDim.x * gridDim.x *  blockIdx.y);
+    //unsigned int globalIdx = (blockIdx.x * blockDim.x + threadIdx.x) + (blockDim.x * gridDim.x *  blockIdx.y);
     int i;
     //unsigned int globalIdx2 = (blockIdx.x * blockDim.x + threadIdx.x) + (blockDim.x * gridDim.x *  blockIdx.y) + (gridDim.x * blockDim.x) * (gridDim.y * blockDim.y);
 
@@ -50,7 +50,7 @@ __global__ void darkGrayKernel(const int width, const int height, const unsigned
         }
     }*/
 
-    for(i = globalIdx; i < width * height; i += (gridDim.x * blockDim.x) * (gridDim.y * blockDim.y)) {
+    for(i = (blockIdx.x * blockDim.x + threadIdx.x) + (blockDim.x * gridDim.x *  blockIdx.y); i < width * height; i += (gridDim.x * blockDim.x) * (gridDim.y * blockDim.y)) {
         float grayPix = 0.0f;
         //if(blockIdx.x >= 10) {
         float r = static_cast< float >(inputImage[i]);
