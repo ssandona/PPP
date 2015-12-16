@@ -21,18 +21,18 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
 
     unsigned int i = blockIdx.y * blockDim.y + threadIdx.y;
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
-    unsigned int globalIdx = j + (blockDim.x * gridDim.x * i);
+    //unsigned int globalIdx = j + (blockDim.x * gridDim.x * i);
   
-  
+
 
     __shared__ unsigned int localHistogram[HISTOGRAM_SIZE];
     unsigned int inBlockIdx = threadIdx.x + (blockDim.x * threadIdx.y);
     localHistogram[inBlockIdx] = 0;
     __syncthreads();
 
-    int k;
+    unsigned int k;
 
-    for(k = 0; k < PIXELS_THREAD; k++) {
+    /*for(k = 0; k < PIXELS_THREAD; k++) {
         if(globalIdx < width * height) {
 
             float grayPix = 0.0f;
@@ -47,6 +47,23 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
             grayImage[globalIdx] = static_cast< unsigned char >(grayPix);
             atomicAdd((unsigned int *)&localHistogram[static_cast< unsigned int >(grayPix)], 1);
             globalIdx += (gridDim.x * blockDim.x) * (gridDim.y * blockDim.y);
+        }
+    }*/
+
+    for(k = j + (blockDim.x * gridDim.x * i); k < width*height; k+= (gridDim.x * blockDim.x) * (gridDim.y * blockDim.y);) {
+        if(globalIdx < width * height) {
+
+            float grayPix = 0.0f;
+            //if(blockIdx.x >= 10) {
+            float r = static_cast< float >(inputImage[globalIdx]);
+            float g = static_cast< float >(inputImage[(width * height) + globalIdx]);
+            float b = static_cast< float >(inputImage[(2 * width * height) + globalIdx]);
+
+            grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
+
+            //}
+            grayImage[globalIdx] = static_cast< unsigned char >(grayPix);
+            atomicAdd((unsigned int *)&localHistogram[static_cast< unsigned int >(grayPix)], 1);
         }
     }
 
