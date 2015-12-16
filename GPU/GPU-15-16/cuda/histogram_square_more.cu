@@ -49,6 +49,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
             atomicAdd((unsigned int *)&localHistogram[static_cast< unsigned int >(grayPix)], 1);
             globalIdx += (gridDim.x * blockDim.x) * (gridDim.y * blockDim.y);
         }
+    }
 
 
         __syncthreads();
