@@ -3,7 +3,7 @@ debug		:= 0
 include		../Makefile.inc
 
 
-all: clean histogram_square_more
+all: clean histogram_square_more2
 
 darker_square: darker_square.cpp darker_square.cu
 	$(NVCC) -c darker_square.cu $(INCLUDES) $(NVCCFLAGS)
@@ -49,6 +49,11 @@ histogram_square_more: histogram_square_more.cpp histogram_square_more.cu
 	$(NVCC) -c histogram_square_more.cu $(INCLUDES) $(NVCCFLAGS)
 	$(LINKER) -o $(PROJ_BASE)/bin/histogram_square_moreCUDA histogram_square_more.cpp histogram_square_more.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./histogram_square_more.o
+
+histogram_square_more2: histogram_square_more2.cpp histogram_square_more2.cu
+	$(NVCC) -c histogram_square_more2.cu $(INCLUDES) $(NVCCFLAGS)
+	$(LINKER) -o $(PROJ_BASE)/bin/histogram_square_more2CUDA histogram_square_more2.cpp histogram_square_more2.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
+	rm -f ./histogram_square_more2.o
 
 histogram2: histogram2.cpp histogram2.cu
 	$(NVCC) -c histogram2.cu $(INCLUDES) $(NVCCFLAGS)
