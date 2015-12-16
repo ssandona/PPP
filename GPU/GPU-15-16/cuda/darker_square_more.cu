@@ -18,49 +18,33 @@ using std::string;
 const unsigned int nrThreads = 256;*/
 const unsigned int B_WIDTH = 16;
 const unsigned int B_HEIGHT = 16;
-const unsigned int THREAD_NUMBER = 256;
-const int PIXELS_THREAD = 20;
+consf int PIXELS_THREAD
 
 __global__ void darkGrayKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *darkGrayImage) {
     /*unsigned int i = blockIdx.x * blockDim.x + threadIdx.x;
     unsigned int j = blockIdx.y * blockDim.y + threadIdx.y;*/
 
     //M[i,j]
-    /*unsigned int i = blockIdx.y;
+    /*unsigned int i = blockIdx.y * blockDim.y + threadIdx.y;
+    unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;*/
+
+    unsigned int i = blockIdx.y * blockDim.y + threadIdx.y;
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
-    unsigned int globalIdx = j + (blockDim.x * gridDim.x * i);*/
+    unsigned int globalIdx = j + (blockDim.x * gridDim.x * i);
+    int k;
 
-    unsigned int globalIdx = (blockIdx.x * blockDim.x + threadIdx.x) + (blockDim.x * gridDim.x *  blockIdx.y);
-    int i;
-    //unsigned int globalIdx2 = (blockIdx.x * blockDim.x + threadIdx.x) + (blockDim.x * gridDim.x *  blockIdx.y) + (gridDim.x * blockDim.x) * (gridDim.y * blockDim.y);
-
-    for(i = 0; i < PIXELS_THREAD; i++) {
+    for(k = 0; k < PIXELS_THREAD; k++) {
         if(globalIdx >= width * height) return;
+        //if(j >= width || i >= height) return;
         float grayPix = 0.0f;
-        //if(blockIdx.x >= 10) {
         float r = static_cast< float >(inputImage[globalIdx]);
         float g = static_cast< float >(inputImage[(width * height) + globalIdx]);
         float b = static_cast< float >(inputImage[(2 * width * height) + globalIdx]);
-
         grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
         grayPix = (grayPix * 0.6f) + 0.5f;
         //}
         darkGrayImage[globalIdx] = static_cast< unsigned char >(grayPix);
-        globalIdx+=(gridDim.x * blockDim.x) * (gridDim.y * blockDim.y);
-    }
-
-        /*if(globalIdx2 >= width * height) return;
-
-        grayPix = 0.0f;
-        //if(blockIdx.x >= 10) {
-        r = static_cast< float >(inputImage[globalIdx2]);
-        g = static_cast< float >(inputImage[(width * height) + globalIdx2]);
-        b = static_cast< float >(inputImage[(2 * width * height) + globalIdx2]);
-
-        grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
-        grayPix = (grayPix * 0.6f) + 0.5f;
-        //}
-        darkGrayImage[globalIdx2] = static_cast< unsigned char >(grayPix);*/
+        globalIdx += (gridDim.x * blockDim.x) * (gridDim.y * blockDim.y);
     }
 
 
@@ -121,11 +105,13 @@ __global__ void darkGrayKernel(const int width, const int height, const unsigned
         //cout << "Image size (w,h): (" << width << ", " << height << ")\n";
         //cout << "Grid size (w,h): (" << grid_width << ", " << grid_height << ")\n";
 
-        unsigned int grid_size = static_cast< unsigned int >(ceil(sqrt(ceil(width * height / PIXELS_THREAD) / (float)THREAD_NUMBER)));
+        //unsigned int grid_width=static_cast< unsigned int >(ceil(width / static_cast< float >(B_WIDTH)));
+        //unsigned int grid_height=static_cast< unsigned int >(ceil(height / static_cast< float >(B_HEIGHT)));
         // Execute the kernel
+        unsigned int grid_size = static_cast< unsigned int >(ceil(sqrt(ceil(width * height / PIXELS_THREAD) / (float)THREAD_NUMBER)));
+
         dim3 gridSize(grid_size, grid_size);
-        //dim3 blockSize(THREAD_NUMBER, 1);
-        dim3 blockSize(THREAD_NUMBER);
+        dim3 blockSize(B_WIDTH, B_HEIGHT);
 
         kernelTimer.start();
         //cout << "FUNC5\n";
