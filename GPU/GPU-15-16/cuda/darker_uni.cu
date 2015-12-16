@@ -1,9 +1,6 @@
 #include <Timer.hpp>
 #include <iostream>
 #include <iomanip>
-#include <CImg.h>
-#include <string>
-#include <cmath>
 
 using LOFAR::NSTimer;
 using std::cout;
@@ -11,16 +8,10 @@ using std::cerr;
 using std::endl;
 using std::fixed;
 using std::setprecision;
-using cimg_library::CImg;
-using std::string;
 
-/*const unsigned int DIM = 16000000;
-const unsigned int nrThreads = 256;*/
-const unsigned int B_WIDTH = 16;
-const unsigned int B_HEIGHT = 16;
 const unsigned int THREAD_NUMBER = 256;
 
-__global__ void darkGrayKernel(const int width, const int height, const unsigned char * inputImage, unsigned char * darkGrayImage) {
+__global__ void darkGrayKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *darkGrayImage) {
     /*unsigned int i = blockIdx.x * blockDim.x + threadIdx.x;
     unsigned int j = blockIdx.y * blockDim.y + threadIdx.y;*/
 
@@ -31,23 +22,23 @@ __global__ void darkGrayKernel(const int width, const int height, const unsigned
 
     unsigned int globalIdx = (blockIdx.x * blockDim.x + threadIdx.x) + (blockDim.x * gridDim.x *  blockIdx.y);
 
-    if(globalIdx >= width*height) return;
+    if(globalIdx >= width * height) return;
 
     float grayPix = 0.0f;
     //if(blockIdx.x >= 10) {
-        float r = static_cast< float >(inputImage[globalIdx]);
-        float g = static_cast< float >(inputImage[(width * height) + globalIdx]);
-        float b = static_cast< float >(inputImage[(2 * width * height) + globalIdx]);
+    float r = static_cast< float >(inputImage[globalIdx]);
+    float g = static_cast< float >(inputImage[(width * height) + globalIdx]);
+    float b = static_cast< float >(inputImage[(2 * width * height) + globalIdx]);
 
-        grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
-        grayPix = (grayPix * 0.6f) + 0.5f;
+    grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
+    grayPix = (grayPix * 0.6f) + 0.5f;
     //}
     darkGrayImage[globalIdx] = static_cast< unsigned char >(grayPix);
 }
 
 
 
-int darkGray(const int width, const int height, const unsigned char * inputImage, unsigned char * darkGrayImage) {
+int darkGray(const int width, const int height, const unsigned char *inputImage, unsigned char *darkGrayImage) {
     //cout << "FUNC\n";
     cudaError_t devRetVal = cudaSuccess;
     unsigned char *devInputImage = 0;
@@ -85,7 +76,7 @@ int darkGray(const int width, const int height, const unsigned char * inputImage
 
     // Copy input to device
     memoryTimer.start();
-    if ( (devRetVal = cudaMemcpy(devInputImage, (void*)(inputImage), pixel_numbers * 3 * sizeof(unsigned char), cudaMemcpyHostToDevice)) != cudaSuccess ) {
+    if ( (devRetVal = cudaMemcpy(devInputImage, (void *)(inputImage), pixel_numbers * 3 * sizeof(unsigned char), cudaMemcpyHostToDevice)) != cudaSuccess ) {
         cerr << "Impossible to copy inputImage to device." << endl;
         return 1;
     }
@@ -103,7 +94,7 @@ int darkGray(const int width, const int height, const unsigned char * inputImage
     //cout << "Image size (w,h): (" << width << ", " << height << ")\n";
     //cout << "Grid size (w,h): (" << grid_width << ", " << grid_height << ")\n";
 
-    unsigned int grid_size = static_cast< unsigned int >(ceil(sqrt((width * height)/(float)256)));
+    unsigned int grid_size = static_cast< unsigned int >(ceil(sqrt((width * height) / (float)256)));
     // Execute the kernel
     dim3 gridSize(grid_size, grid_size);
     //dim3 blockSize(THREAD_NUMBER, 1);
@@ -137,9 +128,9 @@ int darkGray(const int width, const int height, const unsigned char * inputImage
 
 
     // Print the timers
-    cout << "Total (s): \t" << globalTimer.getElapsed() << endl;
-    cout << "Kernel (s): \t" << kernelTimer.getElapsed() << endl;
-    cout << "Memory (s): \t" << memoryTimer.getElapsed() << endl;
+    cout << "Total (s): \t" << fixed << setprecision(6) << globalTimer.getElapsed() << endl;
+    cout << "Kernel (s): \t" << fixed << setprecision(6) << kernelTimer.getElapsed() << endl;
+    cout << "Memory (s): \t" << fixed << setprecision(6) << memoryTimer.getElapsed() << endl;
     cout << endl;
 
     cudaFree(devInputImage);
