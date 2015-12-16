@@ -50,18 +50,17 @@ __global__ void darkGrayKernel(const int width, const int height, const unsigned
         }
     }*/
 
-    for(i = globalIdx; i<width*height;i+=(gridDim.x * blockDim.x) * (gridDim.y * blockDim.y)) {
-            float grayPix = 0.0f;
-            //if(blockIdx.x >= 10) {
-            float r = static_cast< float >(inputImage[i]);
-            float g = static_cast< float >(inputImage[(width * height) + i]);
-            float b = static_cast< float >(inputImage[(2 * width * height) + i]);
+    for(i = globalIdx; i < width * height; i += (gridDim.x * blockDim.x) * (gridDim.y * blockDim.y)) {
+        float grayPix = 0.0f;
+        //if(blockIdx.x >= 10) {
+        float r = static_cast< float >(inputImage[i]);
+        float g = static_cast< float >(inputImage[(width * height) + i]);
+        float b = static_cast< float >(inputImage[(2 * width * height) + i]);
 
-            grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
-            grayPix = (grayPix * 0.6f) + 0.5f;
-            //}
-            darkGrayImage[i] = static_cast< unsigned char >(grayPix);
-        }
+        grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
+        grayPix = (grayPix * 0.6f) + 0.5f;
+        //}
+        darkGrayImage[i] = static_cast< unsigned char >(grayPix);
     }
 
     /*if(globalIdx2 >= width * height) return;
