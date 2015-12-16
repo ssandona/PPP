@@ -22,18 +22,19 @@ __global__ void darkGrayKernel(const int width, const int height, const unsigned
 
     unsigned int globalIdx = (blockIdx.x * blockDim.x + threadIdx.x) + (blockDim.x * gridDim.x *  blockIdx.y);
 
-    if(globalIdx >= width * height) return;
+    if(globalIdx < width * height) {
 
-    float grayPix = 0.0f;
-    //if(blockIdx.x >= 10) {
-    float r = static_cast< float >(inputImage[globalIdx]);
-    float g = static_cast< float >(inputImage[(width * height) + globalIdx]);
-    float b = static_cast< float >(inputImage[(2 * width * height) + globalIdx]);
+        float grayPix = 0.0f;
+        //if(blockIdx.x >= 10) {
+        float r = static_cast< float >(inputImage[globalIdx]);
+        float g = static_cast< float >(inputImage[(width * height) + globalIdx]);
+        float b = static_cast< float >(inputImage[(2 * width * height) + globalIdx]);
 
-    grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
-    grayPix = (grayPix * 0.6f) + 0.5f;
-    //}
-    darkGrayImage[globalIdx] = static_cast< unsigned char >(grayPix);
+        grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
+        grayPix = (grayPix * 0.6f) + 0.5f;
+        //}
+        darkGrayImage[globalIdx] = static_cast< unsigned char >(grayPix);
+    }
 }
 
 
