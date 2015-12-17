@@ -1,3 +1,6 @@
 \BOOKMARK [1][-]{section.1}{The Rubik's Cube}{}% 1
 \BOOKMARK [1][-]{section.2}{The Sequential Algorithm}{}% 2
 \BOOKMARK [1][-]{section.3}{The Parallel Algorithm}{}% 3
+\BOOKMARK [2][-]{subsection.3.1}{The Ibis Portability Layer \(IPL\)}{section.3}% 4
+\BOOKMARK [2][-]{subsection.3.2}{Cubes distribution}{section.3}% 5
+\BOOKMARK [2][-]{subsection.3.3}{Ibis setting}{section.3}% 6

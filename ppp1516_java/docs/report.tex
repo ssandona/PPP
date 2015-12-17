@@ -73,43 +73,106 @@ The used state space search strategy, is the \textbf{deepening depth-first searc
 
 \section{The Parallel Algorithm}
 \label{sec:par_algo}
+An efficient parallelization of this algorithm is not trivial because of the work distribution. At each tree level, there are \textit{(6*(cubeSize-1))\textsuperscript{i}} cubes, and this number is most likely not a multiple of the available nodes involved in the computation. Another aspect, consist on the organization of the entire work, due to the fact that after each tree bound level is reached, we have to decide if the work is finished or not.  The next paragraph was introduced to clarify terms and concepts that will be used in the rest part of the report.
 
 \subsection{The Ibis Portability Layer (IPL)}
 \label{sec:ibis}
-The Ibis Portability layer (IPL) is a communication library specifically designed for usage in a grid environment. It is based on setting up connections. The programmer can create send/receive ports and connect them in a flexible way: one-to-one, one-to-many, many-to-one. In addition, the programmer can define properties of connections and ports like realiability, FIFO ordering, ... . This flexible message passing library for Java, is the core of the Ibis system, a Java-centric communication system designed for grid computing. A central concept in Ibis is the Pool. A pool consists of one or more Ibis instances,usually running on different machines. Each pool is generally made up of Ibises running single distributed application. Ibises in a pool can communicate with each other,
-and, using the registry mechanism present in Ibis, can search for other Ibises in the
-same pool, get notified of Ibises joining the pool, etc. To coordinate Ibis pools a socalled Ibis server is used.
-
-For the parallel implementation of Rubik's Cube solver, this library was used.
-
-
-
-An efficient parallelization of this algorithm is not trivial because of the work distribution. At each tree level there are \textit{(6*(S-1))\textsuperscript{i}} cubes, and this number is most likely not a multiple of the available nodes involved on the computation.
-is easy to encounter load imbalance problems. The most balanced is the work among the involved nodes and the most is the performance.
+For this project was used an efficient platform for distributed computing: Ibis. This is a Java-centric communication system designed for grid computing, developed at VU University, Amsterdam. A fundamental concept in Ibis is the Pool, that is a set of one or more Ibis instances, often distributed in different machines. Each Ibis instance, that joined a specific pool, has an unique id and can cooperate with the others, running a single distributed application. With the election mechanism of Ibis, one machine can be elected as "master" and so be the "coordinator" or the central point of the entire work. Thanks to the registry mechanism, each Ibis instance can also know all the other Ibises that joined the same Pool and communicate with them. The core of the Ibis system is the  Ibis Portability layer (IPL), that is a communication library specifically designed for usage in a grid environment. It is based on setting up connections. The programmer can create send/receive ports (with a name) and connect them in a flexible way: one-to-one, one-to-many, many-to-one. In addition, the programmer can define properties of connections and ports like reliability, FIFO ordering, ... . Proceeding in this way, after a port configuration, the only thing to do is to send a message through this port, the library will take care of the rest. 
 
 \subsection{Cubes distribution}
 \label{sec:cubes_distr}
-
+The work distribution, or better the cubes distribution, is the central part of the parallel implementation. The more balanced is the work among the involved nodes and the more will be the achieved performance. The major problem with a static partitioning, is that at each tree level, a number multiple of 6 of cubes are generated, and this is often not perfect divisible by the number of involved machines. A naive approach could be to generate the first levels of the tree and when there are enough nodes (more than the number of Ibis instances involved), distribute them as fairly as possible. However, this could lead to a big load imbalance and, as conseguece, not good performance. The basic idea of amplify the tree until there are enough nodes is correct, but the laod imbalance factor must be considered. After an accurate evaluation, a "weight" can be assigned to each cube, based on the amount of the next cubes that will be generated from it. This weight is represented in Equation\ref{eq:eqWe}, where \textit{m} is the tree level in which there will be the solution (unknown at the begin), \textit{n} is \textit{6*(cubeSize-1)} so the number of possible children per cube and \textit{z} is the actual tree level of the cube.
 
 \begin{equation} 
-\label{eq:eq1}
+\label{eq:eqWe}
+Weight = \sum_{i=0}^{m-z}{n^i}
+\end{equation}
+\FloatBarrier
+
+As clarification, a practical example is reported in Figure \ref{fig:treeBin}. In this example, that is not related to the Rubik's Cube, but just to explain the general idea, \textit{n=2}, \textit{z1=1}, \textit{z2=2}, \textit{m=4}. Applying the previous formula, the weight of the first cube (at z1 level) is \textit{2\textsuperscript{0}+2\textsuperscript{1}+2\textsuperscript{2}+2\textsuperscript{3}=15}, because from it 14 cubes will be generated, so 15 (counting also the root node) will be evaluated in total. The weight of the second cube (at z2 level), is \textit{2\textsuperscript{0}+2\textsuperscript{1}+2\textsuperscript{2}=7}. 
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\linewidth]{tree_bin}
+  \caption{Rubik's Cube Solution Tree}
+  \label{fig:treeBin}
+\end{figure}
+\FloatBarrier
+
+Give a weight to a cube is useful, because it should be correct to assign to each Ibis instance more or less the same work to do. Given the fact that the number of cubes on a tree level often is not a multiple of the nodes involved on the computation, there will be load imbalance at a certain point. Also distributing the nodes at a specific tree level as fairly as possible, there will be one or more Ibis instances with one more cube than the others, for a gap of maximum one cube. The only thing to do, is to select the correct tree level in which have this load imbalance, in order to limit the deriving damages. Looking at the previous formula, at the begin of the computation \textit{n} is known because the size of the cube is known, \textit{m} is unknown, is part of the solution, and \textit{z} is the value that we want to find. As just said, given enough cubes (more than the number of Ibis instances), the maximum difference of assigned cubes is one cube. In fact, this is possible using a simple \textit{for} construct, shown here:
+
+\begin{lstlisting}
+int sum = 0;
+int rem = numCubes % numProcs; 
+for (i = 0; i < numprocs; i++) {
+    cubes_per_proc[i] = numCubes / numProcs;
+    if (rem > 0) {
+        cubes_per_proc[i]++;
+        rem--;
+    }
+    displs[i] = sum;
+    sum += cubes_per_proc[i];
+}
+\end{lstlisting}
+\FloatBarrier
+
+The aim of this work is to reduce the tree nodes unroll and the load imbalance at the same time.
+At a certain tree level \textit{z}, there are \textit{n\textsuperscript{z}} cubes and the relative weight per cube is the one shown in Equation\ref{eq:eqWe}. With the previous code, calling \textit{k} the number of machines involved in the computation, the lowest amount of work assigned per slave, is shown in Equation \ref{eq:eqLow}, while the highest is shown in Equation \ref{eq:eqHig}. 
+
+\begin{equation} 
+\label{eq:eqLow}
+LW=\sum_{i=0}^{m-z}{n^i}*\lfloor\frac{n^z}{k}\rfloor
+\end{equation}
+\FloatBarrier
+
+\begin{equation} 
+\label{eq:eqHig}
+HW=\sum_{i=0}^{m-z}{n^i}*\lfloor\frac{n^z}{k}\rfloor +  \sum_{i=0}^{m-z}{n^i}
+\end{equation}
+\FloatBarrier
+
+To reduce the load imbalance as much as possible, the two amounts of work should differ as little as possible. That means that \textit{HW*100/LW} has to be as near to 100 as possible, for example lower than 101. Solving the inequality shown in Equation \ref{eq:eqIne}, the solution is the one shown in Equation \ref{eq:eqSol}.
+
+\begin{equation} 
+\label{eq:eqIne}
 \frac{(\sum_{i=0}^{m-z}{n^i}*\lfloor\frac{n^z}{k}\rfloor +  \sum_{i=0}^{m-z}{n^i})*100}{(\sum_{i=0}^{m-z}{n^i}*\lfloor\frac{n^z}{k}\rfloor)} < 101
 \end{equation}
+\FloatBarrier
 
 \begin{equation} 
-\label{eq:eq1}
+\label{eq:eqSol}
 \lfloor\frac{n^z}{k}\rfloor > 100
 \end{equation}
+\FloatBarrier
 
-\begin{equation} 
-\label{eq:eq1}
-\sum_{i=0}^{m-z}{n^i}*\lfloor\frac{n^z}{k}\rfloor
-\end{equation}
 
-\begin{equation} 
-\label{eq:eq1}
-\sum_{i=0}^{m-z}{n^i}*\lfloor\frac{n^z}{k}\rfloor +  \sum_{i=0}^{m-z}{n^i}
-\end{equation}
+\subsection{Ibis setting}
+\label{sec:ibis_setting}
+Each node involved in the computation is an Ibis instance with an unique identifier.
+When a tree level bound is reached, each Ibis instance has to communicate its results (if a solution is founded and, in the case, how many) and has to decide if continue with the next bound or not. The most obvious solution, is to adopt a "master slave" approach and use the "master" instance to collect the partial results and decide if the work is finished or continue with the next bound. To do this 4 ports are needed. On the master side 2 ports are needed, one to receive the results from the slaves and one to send if the  the work is finisched. Specularly, on the slaves side, 2 ports are needed, one to communicate the solutions found and one to receive if the if the next bound has to be evaluated or the work is finished. A graphic representation is presented in Figure \ref{fig:ports}.
+
+\begin{figure}
+\begin{subfigure}{0.5\textwidth}
+\includegraphics[width=0.5\linewidth]{results}
+\caption{Results communication - Many to 1} \label{fig:ca}
+\end{subfigure}
+\hspace*{\fill} % separation between the subfigures
+\begin{subfigure}{0.5\textwidth}
+\includegraphics[width=0.5\linewidth]{continue}
+\caption{Work status communication - 1 to Many} \label{fig:cb}
+\end{subfigure}
+\caption{Send (circle) and Receive (square) Ports organization} \label{fig:ports}
+\end{figure}
+\FloatBarrier
+
+
+
+
+
+
+
+
+
 
 \printbibliography 
 
