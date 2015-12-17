@@ -152,6 +152,19 @@ public class Rubiks {
         return z-1;
     }
 
+public static int levelUntilExpand2() {
+        boolean ok = false;
+        int n = 6*(initialCube.getSize()-1);
+        int z = 0;
+        while(Math.pow(n, z) / nodes < 100 && Math.pow(n, z-1)<nodes) {
+            if(Math.pow(n, z) % nodes == 0){
+                return z;
+            }
+            z = z + 1;
+        }
+        return z-1;
+    }
+
     /**
      * Function called by all the workers sert in the
      * initial queue of work the children of a given cube

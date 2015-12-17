@@ -156,10 +156,30 @@ At the begin \textit{n} (the size of the cube) is known and also \textit{k} (the
 \label{sec:ws}
 
 Once found the correct value of \textit{z}, this is the tree level in which to have an imbalance of 1 cube, isn't such a big risk for the performance. 
-To reduce the unrolls (the initial work), the tree is extended A) until the level \textit{z-1} if at that level there are enough nodes (more than the Ibis instances) (FIGURE), otherwise B) until the level \textit{z} (FIGURE). If we are in case A, the \textit{n\textsuperscript{(z-1)}} nodes are divided in equal parts to the machines. If some nodes have left out (\textit{k} is not a divisor of the number of nodes of this level), these are expanded to the next tree level (FIGURE A), otherwise the splitting phase is terminated (FIGURE C). If we have expanded some nodes, we try to split them among the Ibis instances. Until they are less than the number of ibis instances we generate another level of the tree from them. When they are enough, we split them as fairly as possible (Listing \ref{fair}) (FIGURE B and A). If we are in case B we just split the \textit{n\textsuperscript{(z)}} nodes as fairly as possible (FIGURE).
+To reduce the unroll, the tree is extended A) until the level \textit{z-1} if at that level there are enough nodes (more than the Ibis instances), otherwise B) until the level \textit{z}. If we are in case A, the \textit{n\textsuperscript{(z-1)}} resulting nodes are divided into equal parts to the machines(\textit{n\textsuperscript{(z-1)}/k}). If some nodes have left out (\textit{k} is not a divisor of the number of nodes of this level), these are expanded to the next tree level (Figure \ref{fig:ev1}), otherwise the splitting phase is terminated (Figure \ref{fig:ev2}). If we have expanded some nodes, we try to split them among the Ibis instances. Until they are less than the number of ibis instances we generate another level of the tree from them. When they are enough, we split them as fairly as possible (using the approach shown in Listing \ref{fair}) (Figure \ref{fig:ev2} and \ref{fig:ev3} ). If we are in case B we just split the \textit{n\textsuperscript{(z)}} nodes as fairly as possible.
 
+\begin{figure}
+\begin{subfigure}{0.5\textwidth}
+\centering
+\includegraphics[width=\linewidth]{rubik_tree_eval3}
+\caption{11 machines, z=3, 13 cubes of level 2 per node + 1 cube of level 3 per node except one with 2 cubes} \label{fig:ev1}
+\end{subfigure}
+\hspace*{\fill} % separation between the subfigures
+\begin{subfigure}{0.5\textwidth}
+\centering
+\includegraphics[width=\linewidth]{rubik_tree_eval5}
+\caption{16 machines, z=3, 9 cubes of level 2 per node} \label{fig:ev2}
+\end{subfigure} % separation between the subfigures
+\begin{subfigure}{\textwidth}
+\centering
+\includegraphics[width=0.7\linewidth]{rubik_tree_eval4}
+\caption{13 machines, z=3, 11 cubes of level 2 per node + 0 nodes of level 3 per node (12<13) + 11 cubes of level 4 per node except one with 2 cubes} \label{fig:ev3}
+\end{subfigure}
+\caption{Examples of Tree splitting} \label{fig:ports}
+\end{figure}
+\FloatBarrier
 
-
+table with some real examples
 
 \subsection{Ibis setting}
 \label{sec:ibis_setting}
@@ -181,6 +201,9 @@ When a tree level bound is reached, each Ibis instance has to communicate its re
 \caption{Send (circle) and Receive (square) Ports organization} \label{fig:ports}
 \end{figure}
 \FloatBarrier
+
+\subsection{Results}
+\label{sec:results}
 
 
 \printbibliography 
