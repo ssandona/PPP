@@ -47,7 +47,7 @@ __global__ void darkGrayKernel(const int width, const int height, const unsigned
         }
     }
 */
-    for(i = ((blockIdx.y * gridDim.x + blockIdx.x) * blockDim.x) + threadIdx.x; i < width * height; i += (gridDim.x * blockDim.x) * (gridDim.y * blockDim.y)) {
+    for(i = ((gridDim.x + blockIdx.x) * blockDim.x) + threadIdx.x; i < width * height; i += (gridDim.x * blockDim.x)) {
         float grayPix = 0.0f;
         //if(blockIdx.x >= 10) {
         float r = static_cast< float >(inputImage[i]);
@@ -136,7 +136,7 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
     // Execute the kernel
     dim3 gridSize(45);
     //dim3 blockSize(THREAD_NUMBER, 1);
-    dim3 blockSize(256);
+    dim3 blockSize(512);
 
     kernelTimer.start();
     //cout << "FUNC5\n";
