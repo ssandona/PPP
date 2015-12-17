@@ -134,9 +134,9 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
 
     //unsigned int grid_size = static_cast< unsigned int >(ceil(sqrt(ceil(width * height / PIXELS_THREAD) / (float)THREAD_NUMBER)));
     // Execute the kernel
-    dim3 gridSize(90);
-    //dim3 blockSize(THREAD_NUMBER, 1);
-    dim3 blockSize(265);
+    dim3 gridSize(45);
+    //dim3 gridsize(grid_size,grid_size);
+    dim3 blockSize(512);
 
     kernelTimer.start();
     //cout << "FUNC5\n";
