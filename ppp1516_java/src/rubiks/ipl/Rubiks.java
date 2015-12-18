@@ -38,6 +38,7 @@ public class Rubiks {
 
     static int levelOfResult;               //variable useful for the work splitting phase
     static int valuatedCubes=0;
+    static int expandedCubes=0;
 
     public static final boolean PRINT_SOLUTION = false;
 
@@ -125,6 +126,7 @@ public class Rubiks {
      * @return if the cube was solved or not
      */
     public static int generateAnotherLevel(Cube cube, ArrayList<Cube> initialToDo) {
+        expandedCubes++;
         if (cube.isSolved()) {
             return 1;
         }
@@ -407,7 +409,7 @@ public static int levelUntilExpand2() {
                 task.finish();
             }
         }
-        System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
+        System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes+" - expandedCubes: "+expandedCubes);
         long end = System.currentTimeMillis();
         System.out.println("Solving cube possible in " + result + " ways of "
                            + bound + " steps");
