@@ -37,8 +37,8 @@ public class Rubiks {
     static int resultOnFirstPart;           //variable useful for the work splitting phase
 
     static int levelOfResult;               //variable useful for the work splitting phase
-    static int valuatedCubes=0;
-    static int expandedCubes=0;
+    static int valuatedCubes = 0;
+    static int expandedCubes = 0;
 
     public static final boolean PRINT_SOLUTION = false;
 
@@ -143,30 +143,28 @@ public class Rubiks {
 
     public static int levelUntilExpand() {
         boolean ok = false;
-        int n = 6*(initialCube.getSize()-1);
+        int n = 6 * (initialCube.getSize() - 1);
         int z = 0;
         while(Math.pow(n, z) / nodes < 101) {
-            if(Math.pow(n, z) % nodes == 0){
-                System.out.println("EXPAND UNTIL "+z);
+            if(Math.pow(n, z) % nodes == 0) {
                 return z;
             }
             z = z + 1;
         }
-        System.out.println("EXPAND UNTIL "+(z-1));
-        return z-1;
+        return z - 1;
     }
 
-public static int levelUntilExpand2() {
+    public static int levelUntilExpand2() {
         boolean ok = false;
-        int n = 6*(initialCube.getSize()-1);
+        int n = 6 * (initialCube.getSize() - 1);
         int z = 0;
-        while(Math.pow(n, z) / nodes < 100 && Math.pow(n, z-1)<nodes) {
-            if(Math.pow(n, z) % nodes == 0){
+        while(Math.pow(n, z) / nodes < 100 && Math.pow(n, z - 1) < nodes) {
+            if(Math.pow(n, z) % nodes == 0) {
                 return z;
             }
             z = z + 1;
         }
-        return z-1;
+        return z - 1;
     }
 
     /**
@@ -199,7 +197,10 @@ public static int levelUntilExpand2() {
         int i;
         //calculate the results for the assigned part of the tree
         int result = solutionsWorkers();
-        //valuatedCubes = 0;
+        System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
+
+        valuatedCubes = 0;
+        expandedCubes = 0;
         //wait results from other nodes
         for(i = 0; i < nodes - 1; i++) {
             ReadMessage r = resultsReceiver.receive();
@@ -280,11 +281,11 @@ public static int levelUntilExpand2() {
         boolean levelFound = false;
         boolean terminated = false;
         levelOfResult = -1;
-        int n = 6*(initialCube.getSize()-1);
+        int n = 6 * (initialCube.getSize() - 1);
         for(i = 0; i < z; i++) {
             resultOnFirstPart = 0;
             int levelCubes = (int)Math.pow(n, i);
-            System.out.println("LEVEL CUBES -> "+levelCubes+" Z -> "+i);
+            //System.out.println("LEVEL CUBES -> "+levelCubes+" Z -> "+i);
             for(j = 0; j < levelCubes; j++) {
                 resultOnFirstPart += generateAnotherLevel(initialToDo.remove(0), initialToDo);
             }
@@ -318,7 +319,6 @@ public static int levelUntilExpand2() {
         }
 
         if(r != 0) {
-            System.out.println("LEVEL R!=0");
             for(i = 0; i < r; i++) {
                 generateAnotherLevel(initialToDo.remove(0), initialToDo);
             }
@@ -412,7 +412,6 @@ public static int levelUntilExpand2() {
                 task.finish();
             }
         }
-        System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes+" - expandedCubes: "+expandedCubes);
         long end = System.currentTimeMillis();
         System.out.println("Solving cube possible in " + result + " ways of "
                            + bound + " steps");
@@ -458,7 +457,9 @@ public static int levelUntilExpand2() {
                 break;
             }
             result = solutionsWorkers();
-            //valuatedCubes = 0;
+            System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes + " - expandedCubes: " + expandedCubes);
+            valuatedCubes = 0;
+            expandedCubes = 0;
             //communicate local results to the server
             WriteMessage resultMessage = resultsSender.newMessage();
             resultMessage.writeInt(result);
@@ -471,7 +472,6 @@ public static int levelUntilExpand2() {
         }
 
         resultsSender.close();
-        System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
         Thread.sleep(2000); //wait for safety
         terminationReceiver.close();
     }
