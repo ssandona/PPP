@@ -417,10 +417,12 @@ public class Rubiks {
                 bound = levelOfResult;
                 continue;
             }
-            System.out.println("RESULTS SIZE: "+results.size());
+            System.out.println("RESULTS SIZE: " + results.size());
             System.out.print(" " + bound);
             result = solutionsServer(resultsReceiver);
-            result+=results.get(bound);
+            if(results.size() > bound) {
+                result += results.get(bound);
+            }
 
             //if the solution found for this bounds are zero, communicate to the ibis instances
             //that the next bound has to be evaluated
