@@ -277,6 +277,7 @@ public class Rubiks {
      * @return if the solution of the cube was found during the splitting phase
      */
     public static boolean splitTheWork() {
+        results.clear();
         int z = levelUntilExpand();
         initialLevelOfTree = z;
         ArrayList<Cube> initialToDo = new ArrayList<Cube>();
