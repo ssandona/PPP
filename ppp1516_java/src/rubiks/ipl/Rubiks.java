@@ -181,6 +181,9 @@ public class Rubiks {
         Cube cube;
         boolean end = false;
         while((cube = getFromPool()) != null) {
+            if(cube.getTwists() > cube.getBound()) {
+                continue;
+            }
             result += solutions(cube);
 
         }
@@ -405,12 +408,8 @@ public class Rubiks {
                 continue;
             }
             System.out.print(" " + bound);
-            if(bound >= initialLevelOfTree) {
-                result = solutionsServer(resultsReceiver);
-            }
-            else{
-                toDo.clear();
-            }
+            result = solutionsServer(resultsReceiver);
+
             //if the solution found for this bounds are zero, communicate to the ibis instances
             //that the next bound has to be evaluated
             if(result == 0) {
@@ -463,12 +462,7 @@ public class Rubiks {
                 result = resultOnFirstPart;
                 break;
             }
-            if(bound >= initialLevelOfTree) {
-                result = solutionsWorkers();
-            }
-            else{
-                toDo.clear();
-            }
+            result = solutionsWorkers();
             System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes + " - expandedCubes: " + expandedCubes);
             valuatedCubes = 0;
             expandedCubes = 0;
