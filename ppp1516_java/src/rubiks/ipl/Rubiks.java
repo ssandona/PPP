@@ -147,10 +147,12 @@ public class Rubiks {
         int z = 0;
         while(Math.pow(n, z) / nodes < 101) {
             if(Math.pow(n, z) % nodes == 0){
+                System.out.println("EXPAND UNTIL "+z);
                 return z;
             }
             z = z + 1;
         }
+        System.out.println("EXPAND UNTIL "+z-1);
         return z-1;
     }
 
