@@ -152,7 +152,7 @@ public class Rubiks {
             }
             z = z + 1;
         }
-        System.out.println("EXPAND UNTIL "+z-1);
+        System.out.println("EXPAND UNTIL "+(z-1));
         return z-1;
     }
 
