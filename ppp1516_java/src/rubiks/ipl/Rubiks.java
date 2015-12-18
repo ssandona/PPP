@@ -195,7 +195,6 @@ public static int levelUntilExpand2() {
         int i;
         //calculate the results for the assigned part of the tree
         int result = solutionsWorkers();
-        System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
         //valuatedCubes = 0;
         //wait results from other nodes
         for(i = 0; i < nodes - 1; i++) {
@@ -408,7 +407,7 @@ public static int levelUntilExpand2() {
                 task.finish();
             }
         }
-
+        System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
         long end = System.currentTimeMillis();
         System.out.println("Solving cube possible in " + result + " ways of "
                            + bound + " steps");
@@ -454,8 +453,6 @@ public static int levelUntilExpand2() {
                 break;
             }
             result = solutionsWorkers();
-
-            System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
             //valuatedCubes = 0;
             //communicate local results to the server
             WriteMessage resultMessage = resultsSender.newMessage();
@@ -469,6 +466,7 @@ public static int levelUntilExpand2() {
         }
 
         resultsSender.close();
+        System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
         Thread.sleep(2000); //wait for safety
         terminationReceiver.close();
     }
