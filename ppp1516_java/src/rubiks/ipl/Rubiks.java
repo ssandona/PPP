@@ -399,7 +399,7 @@ public class Rubiks {
         while(result == 0) {
             bound++;
             initialCube.setBound(bound);
-            if(splitTheWork(bound)) {
+            if(splitTheWork()) {
                 result = resultOnFirstPart;
                 bound = levelOfResult;
                 continue;
