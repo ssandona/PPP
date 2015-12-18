@@ -159,7 +159,7 @@ public class Rubiks {
 
     
 
-    public static int levelUntilExpand2() {
+    public static int levelUntilExpand() {
         boolean ok = false;
         int n = 6 * (initialCube.getSize() - 1);
         int z = 0;
@@ -280,6 +280,7 @@ public class Rubiks {
 
 
     public static void fairlyDivision(ArrayList<Cube> initialToDo ) {
+        int i;
         int[] cubes_per_proc = new int[nodes];
         int[] displs = new int[nodes];
         int avarage_cubes_per_proc = initialToDo.size() / nodes;
