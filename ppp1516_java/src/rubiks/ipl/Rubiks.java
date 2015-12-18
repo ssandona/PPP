@@ -35,7 +35,7 @@ public class Rubiks {
 
     static String[] arguments;              //arguments provided by the user to generate the cube
     static int resultOnFirstPart;           //variable useful for the work splitting phase
-    static int initialLevelOfTree:
+    static int initialLevelOfTree;
 
     static int levelOfResult;               //variable useful for the work splitting phase
     static int valuatedCubes = 0;
