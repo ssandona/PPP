@@ -284,7 +284,7 @@ public static int levelUntilExpand2() {
         for(i = 0; i < z; i++) {
             resultOnFirstPart = 0;
             int levelCubes = (int)Math.pow(n, i);
-            //System.out.println("LEVEL CUBES -> "+levelCubes+" Z -> "+i);
+            System.out.println("LEVEL CUBES -> "+levelCubes+" Z -> "+i);
             for(j = 0; j < levelCubes; j++) {
                 resultOnFirstPart += generateAnotherLevel(initialToDo.remove(0), initialToDo);
             }
@@ -318,6 +318,7 @@ public static int levelUntilExpand2() {
         }
 
         if(r != 0) {
+            System.out.println("LEVEL R!=0");
             for(i = 0; i < r; i++) {
                 generateAnotherLevel(initialToDo.remove(0), initialToDo);
             }
