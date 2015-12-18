@@ -408,6 +408,9 @@ public class Rubiks {
             if(bound >= initialLevelOfTree) {
                 result = solutionsServer(resultsReceiver);
             }
+            else{
+                toDo.clear();
+            }
             //if the solution found for this bounds are zero, communicate to the ibis instances
             //that the next bound has to be evaluated
             if(result == 0) {
@@ -462,6 +465,9 @@ public class Rubiks {
             }
             if(bound >= initialLevelOfTree) {
                 result = solutionsWorkers();
+            }
+            else{
+                toDo.clear();
             }
             System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes + " - expandedCubes: " + expandedCubes);
             valuatedCubes = 0;
