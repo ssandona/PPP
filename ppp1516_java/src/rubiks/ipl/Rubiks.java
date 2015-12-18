@@ -197,7 +197,7 @@ public class Rubiks {
         int i;
         //calculate the results for the assigned part of the tree
         int result = solutionsWorkers();
-        System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes);
+        System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes + " - expandedCubes: " + expandedCubes);
 
         valuatedCubes = 0;
         expandedCubes = 0;
