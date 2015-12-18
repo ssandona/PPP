@@ -37,6 +37,7 @@ public class Rubiks {
     static int resultOnFirstPart;           //variable useful for the work splitting phase
     static int initialLevelOfTree;
     static ArrayList<Integer> results = new ArrayList<Integer>();
+    static boolean skip = false;
 
     static int levelOfResult;               //variable useful for the work splitting phase
     static int valuatedCubes = 0;
@@ -143,7 +144,7 @@ public class Rubiks {
         return 0;
     }
 
-    public static int levelUntilExpand() {
+    /*public static int levelUntilExpand() {
         boolean ok = false;
         int n = 6 * (initialCube.getSize() - 1);
         int z = 0;
@@ -154,17 +155,23 @@ public class Rubiks {
             z = z + 1;
         }
         return z - 1;
-    }
+    }*/
+
+    
 
     public static int levelUntilExpand2() {
         boolean ok = false;
         int n = 6 * (initialCube.getSize() - 1);
         int z = 0;
-        while(Math.pow(n, z) / nodes < 100 && Math.pow(n, z - 1) < nodes) {
+        while(Math.pow(n, z) / nodes < 100) {
             if(Math.pow(n, z) % nodes == 0) {
                 return z;
             }
             z = z + 1;
+        }
+        if(Math.pow(n, z - 1) < nodes) {
+            skip = true;
+            return z;
         }
         return z - 1;
     }
@@ -272,6 +279,30 @@ public class Rubiks {
     }
 
 
+    public static void fairlyDivision(ArrayList<Cube> initialToDo ) {
+        int[] cubes_per_proc = new int[nodes];
+        int[] displs = new int[nodes];
+        int avarage_cubes_per_proc = initialToDo.size() / nodes;
+        int rem = initialToDo.size() % nodes;
+        int sum = 0;
+        for (i = 0; i < nodes; i++) {
+            cubes_per_proc[i] = avarage_cubes_per_proc;
+            if (rem > 0) {
+                cubes_per_proc[i]++;
+                rem--;
+            }
+            displs[i] = sum;
+            sum += cubes_per_proc[i];
+        }
+        int mydisp = displs[myIntIbisId];
+        for(i = 0; i < displs[myIntIbisId]; i++) {
+            initialToDo.remove(0);
+        }
+        for(i = 0; i < cubes_per_proc[myIntIbisId]; i++) {
+            toDo.add(initialToDo.remove(0));
+        }
+    }
+
     /**
      * Function called at the begin to split the work as fairly as possible among Ibis instances.
      * @return if the solution of the cube was found during the splitting phase
@@ -310,76 +341,62 @@ public class Rubiks {
         number of nodes of this level), these are expanded to the next tree level, otherwise
         the splitting phase is terminated*/
 
-        int m = initialToDo.size() / nodes;
-        int r = initialToDo.size() % nodes;
+        if(!skip) {
 
-        int startIndex = m * myIntIbisId;
+            int m = initialToDo.size() / nodes;
+            int r = initialToDo.size() % nodes;
 
-        for(i = 0; i < startIndex; i++) {
-            initialToDo.remove(0);
-        }
+            int startIndex = m * myIntIbisId;
 
-        for(i = 0; i < m; i++) {
-            toDo.add(initialToDo.remove(0));
-        }
-
-        for(i = 0; i < (nodes - 1 - myIntIbisId) * m; i++) {
-            initialToDo.remove(0);
-        }
-
-        if(r != 0) {
-            for(i = 0; i < r; i++) {
-                resultOnFirstPart += generateAnotherLevel(initialToDo.remove(0), initialToDo);
+            for(i = 0; i < startIndex; i++) {
+                initialToDo.remove(0);
             }
-            results.add(resultOnFirstPart);
-        } else {
-            terminated = true;
-        }
 
-        if(resultOnFirstPart != 0) {
-            return false;
-        }
+            for(i = 0; i < m; i++) {
+                toDo.add(initialToDo.remove(0));
+            }
 
-        /*if we have expanded some nodes, we try to split them among the N ibis instances.
-        Until they are less than the number of ibis instances we generate another level of
-        the tree from them, when they are enough, we split them as fairly as possible*/
-        while(!terminated) {
-            m = initialToDo.size() / nodes;
-            r = initialToDo.size() % nodes;
-            if(m == 0) {
-                int s = initialToDo.size();
-                for(i = 0; i < s; i++) {
+            for(i = 0; i < (nodes - 1 - myIntIbisId) * m; i++) {
+                initialToDo.remove(0);
+            }
+
+            if(r != 0) {
+                for(i = 0; i < r; i++) {
                     resultOnFirstPart += generateAnotherLevel(initialToDo.remove(0), initialToDo);
                 }
                 results.add(resultOnFirstPart);
-                if(resultOnFirstPart != 0) {
-                    return false;
-                }
-                continue;
             } else {
                 terminated = true;
-                int[] cubes_per_proc = new int[nodes];
-                int[] displs = new int[nodes];
-                int avarage_cubes_per_proc = initialToDo.size() / nodes;
-                int rem = initialToDo.size() % nodes;
-                int sum = 0;
-                for (i = 0; i < nodes; i++) {
-                    cubes_per_proc[i] = avarage_cubes_per_proc;
-                    if (rem > 0) {
-                        cubes_per_proc[i]++;
-                        rem--;
+            }
+
+            if(resultOnFirstPart != 0) {
+                return false;
+            }
+
+
+            /*if we have expanded some nodes, we try to split them among the N ibis instances.
+            Until they are less than the number of ibis instances we generate another level of
+            the tree from them, when they are enough, we split them as fairly as possible*/
+            while(!terminated) {
+                m = initialToDo.size() / nodes;
+                r = initialToDo.size() % nodes;
+                if(m == 0) {
+                    int s = initialToDo.size();
+                    for(i = 0; i < s; i++) {
+                        resultOnFirstPart += generateAnotherLevel(initialToDo.remove(0), initialToDo);
                     }
-                    displs[i] = sum;
-                    sum += cubes_per_proc[i];
-                }
-                int mydisp = displs[myIntIbisId];
-                for(i = 0; i < displs[myIntIbisId]; i++) {
-                    initialToDo.remove(0);
-                }
-                for(i = 0; i < cubes_per_proc[myIntIbisId]; i++) {
-                    toDo.add(initialToDo.remove(0));
+                    results.add(resultOnFirstPart);
+                    if(resultOnFirstPart != 0) {
+                        return false;
+                    }
+                    continue;
+                } else {
+                    terminated = true;
+                    fairlyDivision(initialToDo);
                 }
             }
+        } else {
+            fairlyDivision(initialToDo);
         }
         return false;
     }

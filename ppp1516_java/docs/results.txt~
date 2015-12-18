@@ -167,69 +167,43 @@ Bound now: 2
 valuatedCubes: 13 - expandedCubes: 14
 
 Bound now: 3 
-valuatedCubes: 170 - expandedCubes: 14
-valuatedCubes: 171 - expandedCubes: 14
+valuatedCubes: 170 - expandedCubes: 14	x 10	-> 12:100% 1:100,58%
+valuatedCubes: 171 - expandedCubes: 14	x 1
+
 Bound now: 4 
+valuatedCubes: 2054 - expandedCubes: 14	x 10	-> 12:100% 1:100,63%
+valuatedCubes: 2067 - expandedCubes: 14 x 1
 Bound now: 5 
+valuatedCubes: 24662 - expandedCubes: 14	x 10	-> 12:100% 1:100,63%
+valuatedCubes: 24819 - expandedCubes: 14	x 1
+
 Bound now: 6
+valuatedCubes: 295958 - expandedCubes: 14 x 10		-> 100,63
+valuatedCubes: 297843 - expandedCubes: 14	x 1
 Bound now: 7  
+valuatedCubes: 3551510 - expandedCubes: 14	x 10	-> 100,63
+valuatedCubes: 3574131 - expandedCubes: 14 x 1
 
- 3Ibis[3] -> 
-Ibis[5] -> valuatedCubes: 170 - expandedCubes: 14
-Ibis[8] -> valuatedCubes: 170 - expandedCubes: 14
-Ibis[7] -> valuatedCubes: 170 - expandedCubes: 14
-Ibis[4] -> valuatedCubes: 170 - expandedCubes: 14
-Ibis[9] -> valuatedCubes: 170 - expandedCubes: 14
-Ibis[6] -> valuatedCubes: 170 - expandedCubes: 14
-Ibis[2] -> valuatedCubes: 170 - expandedCubes: 14
-Ibis[10] -> valuatedCubes: 170 - expandedCubes: 14
-Ibis[0] -> 
-Ibis[1] -> valuatedCubes: 170 - expandedCubes: 14
- 4Ibis[10] -> valuatedCubes: 2054 - expandedCubes: 14Ibis[3] -> valuatedCubes: 2054 - expandedCubes: 14
-Ibis[4] -> valuatedCubes: 2054 - expandedCubes: 14
-Ibis[2] -> valuatedCubes: 2054 - expandedCubes: 14
-Ibis[1] -> valuatedCubes: 2054 - expandedCubes: 14
-Ibis[7] -> valuatedCubes: 2054 - expandedCubes: 14
-Ibis[9] -> valuatedCubes: 2054 - expandedCubes: 14
 
-Ibis[6] -> valuatedCubes: 2054 - expandedCubes: 14
-Ibis[0] -> valuatedCubes: 2067 - expandedCubes: 14
-Ibis[5] -> valuatedCubes: 2054 - expandedCubes: 14
-Ibis[8] -> valuatedCubes: 2054 - expandedCubes: 14
- 5Ibis[6] -> valuatedCubes: 24662 - expandedCubes: 14
-Ibis[4] -> valuatedCubes: 24662 - expandedCubes: 14
-Ibis[7] -> valuatedCubes: 24662 - expandedCubes: 14
-Ibis[2] -> valuatedCubes: 24662 - expandedCubes: 14
-Ibis[3] -> valuatedCubes: 24662 - expandedCubes: 14
-Ibis[9] -> valuatedCubes: 24662 - expandedCubes: 14
-Ibis[10] -> valuatedCubes: 24662 - expandedCubes: 14
-Ibis[1] -> valuatedCubes: 24662 - expandedCubes: 14
-Ibis[8] -> valuatedCubes: 24662 - expandedCubes: 14
-Ibis[0] -> valuatedCubes: 24819 - expandedCubes: 14
-Ibis[5] -> valuatedCubes: 24662 - expandedCubes: 14
- 6Ibis[8] -> valuatedCubes: 295958 - expandedCubes: 14
-Ibis[9] -> valuatedCubes: 295958 - expandedCubes: 14
-Ibis[2] -> valuatedCubes: 295958 - expandedCubes: 14
-Ibis[3] -> valuatedCubes: 295958 - expandedCubes: 14
-Ibis[5] -> valuatedCubes: 295958 - expandedCubes: 14
-Ibis[10] -> valuatedCubes: 295958 - expandedCubes: 14
-Ibis[6] -> valuatedCubes: 295958 - expandedCubes: 14
-Ibis[4] -> valuatedCubes: 295958 - expandedCubes: 14
-Ibis[1] -> valuatedCubes: 295958 - expandedCubes: 14
-Ibis[7] -> valuatedCubes: 295958 - expandedCubes: 14
-Ibis[0] -> valuatedCubes: 297843 - expandedCubes: 14
- 7Ibis[6] -> valuatedCubes: 3551510 - expandedCubes: 14
-Ibis[5] -> valuatedCubes: 3551510 - expandedCubes: 14
-Ibis[1] -> valuatedCubes: 3551510 - expandedCubes: 14
-Ibis[4] -> valuatedCubes: 3551510 - expandedCubes: 14
-Ibis[0] -> valuatedCubes: 3574131 - expandedCubes: 14
-Ibis[8] -> valuatedCubes: 3551510 - expandedCubes: 14
-Ibis[3] -> valuatedCubes: 3551510 - expandedCubes: 14
-Ibis[7] -> valuatedCubes: 3551510 - expandedCubes: 14
-Ibis[2] -> valuatedCubes: 3551510 - expandedCubes: 14
-Ibis[9] -> valuatedCubes: 3551510 - expandedCubes: 14
-Ibis[10] -> valuatedCubes: 3551510 - expandedCubes: 14
-
+13 nodes
+1
+valuatedCubes: 0 - expandedCubes: 26
+2
+valuatedCubes: 11 - expandedCubes: 26
+3
+valuatedCubes: 143 - expandedCubes: 26
+4
+valuatedCubes: 1738 - expandedCubes: 26 x 12	-> 100,05
+valuatedCubes: 1739 - expandedCubes: 26	x 1
+5
+valuatedCubes: 20878 - expandedCubes: 26 x 12	-> 100,06
+valuatedCubes: 20891 - expandedCubes: 26 x 1
+6
+valuatedCubes: 250558 - expandedCubes: 26 x 12 	-> 100.06
+valuatedCubes: 250715 - expandedCubes: 26 x 1
+7
+valuatedCubes: 3006718 - expandedCubes: 26 x 12	-> 100.06
+valuatedCubes: 3008603 - expandedCubes: 26 x 1
 
 
 
