@@ -415,7 +415,7 @@ public class Rubiks {
             initialCube.setBound(bound);
             if(splitTheWork()) {
                 int k;
-                System.out.println("RESULTS");
+                System.out.print("RESULTS");
                 for(k = 0; k < results.size(); k++) {
                     System.out.print(" " + results.get(k));
                 }
@@ -430,7 +430,7 @@ public class Rubiks {
                 System.out.print(" " + results.get(k));
             }
             System.out.println("\n");
-            System.out.print(" " + bound);
+            //System.out.print(" " + bound);
             result = solutionsServer(resultsReceiver);
             if(results.size() > bound) {
                 result += results.get(bound);
