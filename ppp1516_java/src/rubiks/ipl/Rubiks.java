@@ -37,7 +37,7 @@ public class Rubiks {
     static int resultOnFirstPart;           //variable useful for the work splitting phase
 
     static int levelOfResult;               //variable useful for the work splitting phase
-    //static int valuatedCubes=0;
+    static int valuatedCubes=0;
 
     public static final boolean PRINT_SOLUTION = false;
 
