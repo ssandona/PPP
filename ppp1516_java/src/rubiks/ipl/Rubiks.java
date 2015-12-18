@@ -573,7 +573,7 @@ public class Rubiks {
         // Elect a server
         server = ibis.registry().elect("Server");
 
-        System.out.println("Server is " + server);
+        //System.out.println("Server is " + server);
 
         //get the list of the ibises that joined the pool, in order to know the number of Ibis
         //instances involved in the calculation and the integer id of the local ibis on the pool
@@ -581,7 +581,7 @@ public class Rubiks {
         nodes = joinedIbises.length;
         int i = 0;
         for (IbisIdentifier joinedIbis : joinedIbises) {
-            System.err.println("Ibis joined: " + joinedIbis);
+            //System.err.println("Ibis joined: " + joinedIbis);
             if(joinedIbis.equals(ibis.identifier())) {
                 myIntIbisId = i;
             }
