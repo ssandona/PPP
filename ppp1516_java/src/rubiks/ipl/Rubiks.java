@@ -36,6 +36,7 @@ public class Rubiks {
     static String[] arguments;              //arguments provided by the user to generate the cube
     static int resultOnFirstPart;           //variable useful for the work splitting phase
     static int initialLevelOfTree;
+    ArrayList<Integer> results = new ArrayList<Integer>();
 
     static int levelOfResult;               //variable useful for the work splitting phase
     static int valuatedCubes = 0;
@@ -270,6 +271,7 @@ public class Rubiks {
         return cube;
     }
 
+
     /**
      * Function called at the begin to split the work as fairly as possible among Ibis instances.
      * @return if the solution of the cube was found during the splitting phase
@@ -295,6 +297,7 @@ public class Rubiks {
                 resultOnFirstPart += generateAnotherLevel(initialToDo.remove(0), initialToDo);
             }
             levelOfResult = z;
+            results.add(resultOnFirstPart);
             if(resultOnFirstPart != 0) {
                 return true;
             }
@@ -325,13 +328,16 @@ public class Rubiks {
 
         if(r != 0) {
             for(i = 0; i < r; i++) {
-                generateAnotherLevel(initialToDo.remove(0), initialToDo);
+                resultOnFirstPart += generateAnotherLevel(initialToDo.remove(0), initialToDo);
             }
+            results.add(resultOnFirstPart);
         } else {
             terminated = true;
         }
 
-
+        if(resultOnFirstPart != 0) {
+            return false;
+        }
 
         /*if we have expanded some nodes, we try to split them among the N ibis instances.
         Until they are less than the number of ibis instances we generate another level of
@@ -342,7 +348,11 @@ public class Rubiks {
             if(m == 0) {
                 int s = initialToDo.size();
                 for(i = 0; i < s; i++) {
-                    generateAnotherLevel(initialToDo.remove(0), initialToDo);
+                    resultOnFirstPart += generateAnotherLevel(initialToDo.remove(0), initialToDo);
+                }
+                results.add(resultOnFirstPart);
+                if(resultOnFirstPart != 0) {
+                    return false;
                 }
                 continue;
             } else {
@@ -407,8 +417,10 @@ public class Rubiks {
                 bound = levelOfResult;
                 continue;
             }
+            System.out.println("RESULTS SIZE: "+results.size());
             System.out.print(" " + bound);
             result = solutionsServer(resultsReceiver);
+            result+=results.get(bound);
 
             //if the solution found for this bounds are zero, communicate to the ibis instances
             //that the next bound has to be evaluated
