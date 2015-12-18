@@ -73,6 +73,7 @@ size 3 (twist 13)
 1-> 
 
 STATIC NORMAL
+1 -> 9863
 2 -> 5428
 4 -> 2529
 8 -> 1562
@@ -89,12 +90,74 @@ STATIC 12 twists
 16 -> 7931
 
 NUMBER OF VALUATED CUBES 
-2 -> 255856872 x 2 -> tot 511713744
-4 -> 127928436 x 4 -> tot 511713744
-8 -> 63964224 x 8 -> tot 511713792
-11 -> 46492516 x 10 + 46788648 (1) -> tot 511713808 -> load imbalance 10=100%, 1=100,63%
-13 -> 39360728 (12) + 39385408 (1) -> tot 511714144 -> load imbalance 12=100%, 1=100,06%
-16 -> 31982112 x 16 -> tot 511713792
+
+Bound now: 1
+Ibis[1] -> valuatedCubes: 6 - expandedCubes: 1	x 2
+
+Bound now: 2
+Ibis[0] -> valuatedCubes: 78 - expandedCubes: 1	x 2
+
+Bound now: 3
+Ibis[1] -> valuatedCubes: 942 - expandedCubes: 1	x 2
+
+ Bound now: 4
+Ibis[0] -> valuatedCubes: 11310 - expandedCubes: 1	x 2
+
+Bound now: 5
+Ibis[0] -> valuatedCubes: 135726 - expandedCubes: 1	x 2
+
+Bound now: 6
+Ibis[0] -> valuatedCubes: 1628718 - expandedCubes: 1	x 2
+
+Bound now: 7
+Ibis[0] -> valuatedCubes: 19544622 - expandedCubes: 1	x 2
+
+
+4 nodes
+
+Bound now: 1
+Ibis[1] -> valuatedCubes: 3 - expandedCubes: 1	x 4
+Bound now: 2
+Ibis[1] -> valuatedCubes: 39 - expandedCubes: 1	x 4
+Bound now: 3
+Ibis[1] -> valuatedCubes: 471 - expandedCubes: 1	x 4
+Bound now: 4
+Ibis[2] -> valuatedCubes: 5655 - expandedCubes: 1	x 4
+Bound now: 5
+Ibis[1] -> valuatedCubes: 67863 - expandedCubes: 1	x 4
+Bound now: 6
+Ibis[1] -> valuatedCubes: 814359 - expandedCubes: 1	x 4
+Bound now: 7
+Ibis[0] -> valuatedCubes: 9772311 - expandedCubes: 1	x 4
+
+
+8 nodes
+
+Bound now: 1
+valuatedCubes: 18 - expandedCubes: 13	x 8
+
+Bound now: 2
+valuatedCubes: 18 - expandedCubes: 13	x 8
+
+Bound now: 3
+
+valuatedCubes: 234 - expandedCubes: 13	x 8
+
+Bound now: 4
+
+valuatedCubes: 2826 - expandedCubes: 13	x 8
+
+Bound now: 5
+valuatedCubes: 33930 - expandedCubes: 13
+
+Bound now: 6
+valuatedCubes: 407178 - expandedCubes: 13
+
+Bound now: 7 
+valuatedCubes: 4886154 - expandedCubes: 13
+
+
+
 
 STATIC 4 size
 

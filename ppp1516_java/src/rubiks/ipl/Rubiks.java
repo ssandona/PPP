@@ -35,6 +35,7 @@ public class Rubiks {
 
     static String[] arguments;              //arguments provided by the user to generate the cube
     static int resultOnFirstPart;           //variable useful for the work splitting phase
+    static int initialLevelOfTree:
 
     static int levelOfResult;               //variable useful for the work splitting phase
     static int valuatedCubes = 0;
@@ -272,6 +273,7 @@ public class Rubiks {
      */
     public static boolean splitTheWork() {
         int z = levelUntilExpand();
+        initialLevelOfTree = z;
         ArrayList<Cube> initialToDo = new ArrayList<Cube>();
         //add the initial cube to the initial work queue (root of the tree)
         initialToDo.add(initialCube);
@@ -397,13 +399,15 @@ public class Rubiks {
         while(result == 0) {
             bound++;
             initialCube.setBound(bound);
-            if(splitTheWork()) {
+            if(splitTheWork(bound)) {
                 result = resultOnFirstPart;
                 bound = levelOfResult;
                 continue;
             }
             System.out.print(" " + bound);
-            result = solutionsServer(resultsReceiver);
+            if(bound >= initialLevelOfTree) {
+                result = solutionsServer(resultsReceiver);
+            }
             //if the solution found for this bounds are zero, communicate to the ibis instances
             //that the next bound has to be evaluated
             if(result == 0) {
@@ -456,7 +460,9 @@ public class Rubiks {
                 result = resultOnFirstPart;
                 break;
             }
-            result = solutionsWorkers();
+            if(bound >= initialLevelOfTree) {
+                result = solutionsWorkers();
+            }
             System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes + " - expandedCubes: " + expandedCubes);
             valuatedCubes = 0;
             expandedCubes = 0;
