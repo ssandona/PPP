@@ -38,6 +38,7 @@ public class Rubiks {
     static int initialLevelOfTree;
     static ArrayList<Integer> results = new ArrayList<Integer>();
     static boolean skip = false;
+    static IbisIdentifier server;
 
     static int levelOfResult;               //variable useful for the work splitting phase
     static int valuatedCubes = 0;
@@ -157,8 +158,11 @@ public class Rubiks {
         return z - 1;
     }*/
 
-    
 
+    /**
+     * Function called to determine the highest tree level that guarantee load balance
+     * @return the first safe tree level
+     */
     public static int levelUntilExpand() {
         boolean ok = false;
         int n = 6 * (initialCube.getSize() - 1);
@@ -269,17 +273,22 @@ public class Rubiks {
                 System.exit(1);
             }
         }
-
-        // print cube info
-        System.out.println("Searching for solution for cube of size "
-                           + cube.getSize() + ", twists = " + twists + ", seed = " + seed);
-        cube.print(System.out);
-        System.out.flush();
+        if(joinedIbises[myIntIbisId].equals(server)) {
+            // print cube info
+            System.out.println("Searching for solution for cube of size "
+                               + cube.getSize() + ", twists = " + twists + ", seed = " + seed);
+            cube.print(System.out);
+            System.out.flush();
+        }
         return cube;
     }
 
-
-    public static void fairlyDivision(ArrayList<Cube> initialToDo ) {
+    /**
+     * Split the cubes as fairly as possible among the Ibis instances.
+     * @param initialToDo
+     *            list of cubes to divide among Ibis instances.
+     */
+    public static void fairlyDivision(ArrayList<Cube> initialToDo) {
         int i;
         int[] cubes_per_proc = new int[nodes];
         int[] displs = new int[nodes];
@@ -432,24 +441,25 @@ public class Rubiks {
             bound++;
             initialCube.setBound(bound);
             if(splitTheWork()) {
-                int k;
+                /*int k;
                 System.out.print("RESULTS");
                 for(k = 0; k < results.size(); k++) {
                     System.out.print(" " + results.get(k));
                 }
-                System.out.println("\n");
+                System.out.println("\n");*/
                 result = resultOnFirstPart;
                 bound = levelOfResult;
                 continue;
             }
-            System.out.println("RESULTS SIZE: " + results.size());
+            /*System.out.println("RESULTS SIZE: " + results.size());
             int k;
             for(k = 0; k < results.size(); k++) {
                 System.out.print(" " + results.get(k));
             }
-            System.out.println("\n");
-            //System.out.print(" " + bound);
+            System.out.println("\n");*/
+            System.out.print(" " + bound);
             result = solutionsServer(resultsReceiver);
+            //add results found during the splitting phase
             if(results.size() > bound) {
                 result += results.get(bound);
             }
@@ -484,7 +494,7 @@ public class Rubiks {
     }
 
 
-    public static void solveWorkers(Ibis ibis, IbisIdentifier server) throws Exception {
+    public static void solveWorkers(Ibis ibis) throws Exception {
 
         int result = 0;
         boolean end = false;
@@ -561,7 +571,7 @@ public class Rubiks {
         Thread.sleep(5000); //wait for safety that all the ibises join the pool
 
         // Elect a server
-        IbisIdentifier server = ibis.registry().elect("Server");
+        server = ibis.registry().elect("Server");
 
         System.out.println("Server is " + server);
 
@@ -586,7 +596,7 @@ public class Rubiks {
         if (server.equals(ibis.identifier())) {
             solveServer(ibis);
         } else {
-            solveWorkers(ibis, server);
+            solveWorkers(ibis);
         }
         ibis.end();
     }
