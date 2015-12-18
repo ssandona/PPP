@@ -414,11 +414,21 @@ public class Rubiks {
             bound++;
             initialCube.setBound(bound);
             if(splitTheWork()) {
+                int k;
+                for(k = 0; k < results.size; k++) {
+                    System.out.print(" " + results.get(k));
+                }
+                System.out.println("\n");
                 result = resultOnFirstPart;
                 bound = levelOfResult;
                 continue;
             }
             System.out.println("RESULTS SIZE: " + results.size());
+            int k;
+            for(k = 0; k < results.size; k++) {
+                System.out.print(" " + results.get(k));
+            }
+            System.out.println("\n");
             System.out.print(" " + bound);
             result = solutionsServer(resultsReceiver);
             if(results.size() > bound) {
