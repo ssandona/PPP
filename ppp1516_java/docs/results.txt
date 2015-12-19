@@ -90,6 +90,7 @@ STATIC 12 twists
 16 -> 7931
 
 NUMBER OF VALUATED CUBES 
+2 nodes
 
 Bound now: 1
 Ibis[1] -> valuatedCubes: 6 - expandedCubes: 1	x 2
@@ -204,6 +205,12 @@ valuatedCubes: 250715 - expandedCubes: 26 x 1
 7
 valuatedCubes: 3006718 - expandedCubes: 26 x 12	-> 100.06
 valuatedCubes: 3008603 - expandedCubes: 26 x 1
+
+5 nodes
+
+aluatedCubes: 7826894 - expandedCubes: 17 x 3 -> 100,28
+valuatedCubes:7804273 - expandedCubes: 17 x 2
+
 
 
 
