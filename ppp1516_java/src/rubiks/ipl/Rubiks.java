@@ -88,7 +88,7 @@ public class Rubiks {
      * @return the number of solutions found for the subtree rooted in cube
      */
     private static int solutions(Cube cube) {
-        valuatedCubes++;
+        /*valuatedCubes++;*/
         if (cube.isSolved()) {
             return 1;
         }
@@ -130,7 +130,7 @@ public class Rubiks {
      * @return if the cube was solved or not
      */
     public static int generateAnotherLevel(Cube cube, ArrayList<Cube> initialToDo) {
-        expandedCubes++;
+        /*expandedCubes++;*/
         if (cube.isSolved()) {
             return 1;
         }
@@ -213,10 +213,10 @@ public class Rubiks {
         int i;
         //calculate the results for the assigned part of the tree
         int result = solutionsWorkers();
-        System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes + " - expandedCubes: " + expandedCubes);
+        /*System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes + " - expandedCubes: " + expandedCubes);
 
         valuatedCubes = 0;
-        expandedCubes = 0;
+        expandedCubes = 0;*/
         //wait results from other nodes
         for(i = 0; i < nodes - 1; i++) {
             ReadMessage r = resultsReceiver.receive();
@@ -517,9 +517,9 @@ public class Rubiks {
                 break;
             }
             result = solutionsWorkers();
-            System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes + " - expandedCubes: " + expandedCubes);
-            valuatedCubes = 0;
-            expandedCubes = 0;
+            /*System.out.println("Ibis[" + myIntIbisId + "] -> valuatedCubes: " + valuatedCubes + " - expandedCubes: " + expandedCubes);
+            //valuatedCubes = 0;
+            //expandedCubes = 0;*/
             //communicate local results to the server
             WriteMessage resultMessage = resultsSender.newMessage();
             resultMessage.writeInt(result);
