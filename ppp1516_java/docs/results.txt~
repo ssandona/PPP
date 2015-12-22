@@ -74,17 +74,17 @@ size 3 (twist 13)
 
 STATIC NORMAL
 1 -> 9863
-2 -> 5428
+2 -> 5428	
 4 -> 2529
-8 -> 1562
-16 -> 897
+8 -> 1575
+16 -> 977
 
 STATIC 12 twists
 
 1 -> 121067
-2 -> 61350
-4 -> 29841
-8 -> 15615
+2 -> 61350	58326	59226
+4 -> 29841	29722
+8 -> 15615	15899
 11 -> 11547
 13 -> 9710
 16 -> 7931
@@ -208,7 +208,7 @@ valuatedCubes: 3008603 - expandedCubes: 26 x 1
 
 5 nodes
 
-aluatedCubes: 7826894 - expandedCubes: 17 x 3
+aluatedCubes: 7826894 - expandedCubes: 17 x 3 -> 100,28
 valuatedCubes:7804273 - expandedCubes: 17 x 2
 
 
@@ -219,12 +219,12 @@ valuatedCubes:7804273 - expandedCubes: 17 x 2
 STATIC 4 size
 
 1 -> 193453
-2 -> 95888
-4 -> 49825
-8 -> 25112
-11 -> 18330
-13 -> 16512
-16 -> 12246
+2 -> 97769
+4 -> 50208
+8 -> 25313
+11 -> 18391
+13 -> 16512	
+16 -> 12375
 
 SIZE 5
 

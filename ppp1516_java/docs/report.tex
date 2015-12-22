@@ -157,8 +157,7 @@ At the begin \textit{n} (the size of the cube) is known and also \textit{k} (the
 \label{sec:ws}
 
 Once found the correct value of \textit{z}, this is the tree level in which to have an imbalance of 1 cube, isn't such a big risk for the performance. 
-To reduce the unroll, the tree is extended (A) until the level \textit{z-1}, if at that level there are enough nodes (more than the Ibis instances), otherwise (B) until the level \textit{z}. If we are in case A, the \textit{n\textsuperscript{(z-1)}} resulting nodes are divided into equal parts to the machines (\textit{n\textsuperscript{(z-1)}/k} cubes per machine). If some nodes have left out (\textit{k} is not a divisor of the number of nodes of this level), these are expanded to the next tree level (Figure \ref{fig:ev1}), otherwise the splitting phase is terminated (Figure \ref{fig:ev2}). If we have expanded some nodes, we try to split their children among the Ibis instances. Until they are less than the number of ibis instances we generate another level of the tree from them (Figure \ref{fig:ev3}). When they are enough, we split them as fairly as possible (using the approach shown in Listing \ref{fair}). If we are in case B we just split the \textit{n\textsuperscript{(z)}} nodes as fairly as possible (Listing \ref{fair}). In Figure \ref{fig:ev1}, Table \ref{table:tev1} there is an example of work riparitition among 11 Ibis instances, in Figure \ref{fig:ev2}, Table \ref{table:tev2} among 16 Ibis instances and in Figure \ref{fig:ev3}, Table \ref{table:tev3} among 13 Ibis instances.
-
+To reduce the unroll, the tree is extended (A) until the level \textit{z-1}, if at that level there are enough nodes (more than the Ibis instances), otherwise (B) until the level \textit{z}. If we are in case A, the \textit{n\textsuperscript{(z-1)}} resulting nodes are divided into equal parts to the machines (\textit{n\textsuperscript{(z-1)}/k} cubes per machine). If some nodes have left out (\textit{k} is not a divisor of the number of nodes of this level), these are expanded to the next tree level (Figure \ref{fig:ev1}), otherwise the splitting phase is terminated (Figure \ref{fig:ev2}). If we have expanded some nodes, we try to split their children among the Ibis instances. Until they are less than the number of ibis instances we generate another level of the tree from them (Figure \ref{fig:ev3}). When they are enough, we split them as fairly as possible (using the approach shown in Listing \ref{fair}). If we are in case B we just split the \textit{n\textsuperscript{(z)}} nodes as fairly as possible (Listing \ref{fair}). In Figure \ref{fig:ev1}, Table \ref{table:tev1} there is an example of work riparitition among 11 Ibis instances, in Figure \ref{fig:ev2}, Table \ref{table:tev2} among 16 Ibis instances and in Figure \ref{fig:ev3}, Table \ref{table:tev3} among 13 Ibis instances. 
 
 \begin{figure}[!ht]
   \centering
@@ -237,11 +236,11 @@ In Table \ref{table:tlow}, are reported the numbers of cubes evaluated by each I
 13 & 3006718(12), 3008603(1) & 26 & 39089245 & 0.06\%
 \end{tabular}
 \end{table}
+\FloatBarrier
 
-\subsection{Ibis setting}
+\subsection{Solution search and Ibises coordination}
 \label{sec:ibis_setting}
-Each node involved in the computation is an Ibis instance with an unique identifier.
-When a tree level bound is reached, each Ibis instance has to communicate its results (if a solution is founded on the assigned subtree and, in the case, how many) and has to decide if continue with the next bound or not. The most obvious solution, is to adopt a "master slave" approach and use the "master" Ibis instance to collect the partial results and decide if the work is finished or continue with the next bound. To do this 4 ports are needed. On the master side 2 ports are needed, one to receive the results from the slaves and one to send if the  the work is finisched. Specularly, on the slaves side, 2 ports are needed, one to communicate the solutions found and one to receive if the if the next bound has to be evaluated or the work is finished. A graphic representation is presented in Figure \ref{fig:ports}.
+After the cubes of the first levels are correclty splitted, each Ibis instance will have a work queue and for each cubes inside it, the algorithm will proceed like in the sequential version. To avoid the initial send of the cubes, each Ibis instance will generate the same initial cube, will perform the splitting phase and will assign certain cubes to itself. To reach the final solution, the machines involved in the computation have to coordinate and cooperate. When a tree level bound is reached, the distributed results have to be summed, in order to decide if continue with the next bound or not. To do that, a "master slave" approach s adopted. The "master" Ibis instance collects and sums the partial results and decides if the work is finished or continue with the next bound. For what concerning the communication setting, 4 ports are used. On the master side 2 ports are needed, one to receive the results from the slaves and one to communicate them if the  the work is finisched. Specularly, on the slaves side, 2 ports are needed, one to communicate the solution found and one to receive if the next bound has to be evaluated or the work is finished. A graphic representation of the ports organization is presented in Figure \ref{fig:ports}.
 
 \begin{figure}
 \begin{subfigure}{0.5\textwidth}
@@ -259,8 +258,9 @@ When a tree level bound is reached, each Ibis instance has to communicate its re
 \end{figure}
 \FloatBarrier
 
-\subsubsection{Weaknesses of the implementation}
-\label{sec:wi}
+\subsubsection{Special cases}
+\label{sec:sc}
+The worst part of this implementation, is that it performs the tree unrolling phase at the begin of each bound increase, in order to better distribute the work. During this step, it's possible to find the problem solution if the cube was previously twisted for few times. However, that would means a small searching space, and so a non convenience on solving the cube in parallel. In the case a tree level is completely generated during the initial unrolling phase and a solution is found, the current algorithm will stops, and the master Ibis will show the problem solution, without performing any extra communication with the slaves. Another border case, is that we are unlucky and performing the second tree extension with the cubes left out by the division (in the Figure \ref{fig:ev1} the cube surrounded by the red square), these are solved cubes. The algorithm, correctly treat also this scenario, storing the partial results found at each level of the unrolling and adding these to the tree level results found during the next solving phase.
 
 \subsection{Results}
 \label{sec:results}
