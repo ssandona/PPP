@@ -153,7 +153,7 @@ compute_forces(void) {
             _YF(c) -= yf;
 
             count++;
-            //totalNumberOfForcesComputed++;
+            totalNumberOfForcesComputed++;
         }
     }
 }
@@ -188,6 +188,7 @@ compute_velocities(void) {
     int b;
 
     for (b = 0; b < bodyCt; ++b) {
+        //for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
         double xv = _XV(b);
         double yv = _YV(b);
         double force = sqrt(xv * xv + yv * yv) * FRICTION;
@@ -203,8 +204,8 @@ compute_velocities(void) {
 void
 compute_positions(void) {
     int b;
-
     for (b = 0; b < bodyCt; ++b) {
+        //for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
         double xn = _X(b) + (_XV(b) * DELTA_T);
         double yn = _Y(b) + (_YV(b) * DELTA_T);
 
@@ -502,6 +503,7 @@ main(int argc, char **argv) {
     displs = malloc(sizeof(int) * numprocs);
     int rem = forceCt % numprocs; // elements remaining after division among processes
     //fprintf(stderr, "rem => %d\n", rem);
+    fprintf(stderr, "Total Forces => %d\n", forceCt);
 
     //fprintf(stderr, "b\n");
     const int nitems = 2;
