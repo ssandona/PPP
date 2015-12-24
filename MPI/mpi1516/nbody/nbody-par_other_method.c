@@ -128,7 +128,7 @@ compute_forces(void) {
         _YF(c) -= yf;
 
         count++;
-        //totalNumberOfForcesComputed++;
+        totalNumberOfForcesComputed++;
     }
 
     for (b = globalStartB + 1; b < bodyCt && count<forces_per_proc[myid]; ++b) {
