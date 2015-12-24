@@ -629,15 +629,9 @@ main(int argc, char **argv) {
     new_bodies = malloc(sizeof(bodyType) * bodyCt);
     new_positions = malloc(sizeof(bodyPositionType) * bodyCt);
 
-    fprintf(stderr, "DENNNIIIIIIIIIIIII A1");
-
     MPI_Allgatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs2, mpi_body_type, MPI_COMM_WORLD);
     
-    fprintf(stderr, "DENNNIIIIIIIIIIIII A2");
-
     MPI_Allgatherv(rec_positions, bodies_per_proc[myid], mpi_position_type, new_positions, bodies_per_proc, displs2, mpi_position_type, MPI_COMM_WORLD);
-
-    fprintf(stderr, "DENNNIIIIIIIIIIIII A3");
 
 
     if(gettimeofday(&start, 0) != 0) {
@@ -680,14 +674,14 @@ main(int argc, char **argv) {
 
         compute_velocities();
         compute_positions();
-        rec_positions = new_positions + displs[myid];
+        rec_positions = new_positions + displs2[myid];
         new_positions = malloc(sizeof(bodyPositionType) * bodyCt);
         //MPI_Allgatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
-        MPI_Allgatherv(rec_positions, bodies_per_proc[myid], mpi_position_type, new_positions, bodies_per_proc, displs, mpi_position_type, MPI_COMM_WORLD);
+        MPI_Allgatherv(rec_positions, bodies_per_proc[myid], mpi_position_type, new_positions, bodies_per_proc, displs2, mpi_position_type, MPI_COMM_WORLD);
 
 
         old ^= 1;
-        rec_positions = new_positions + displs[myid];
+        rec_positions = new_positions + displs2[myid];
 
     }
     if(0 == myid) {
