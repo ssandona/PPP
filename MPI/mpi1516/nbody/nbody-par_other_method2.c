@@ -612,10 +612,15 @@ main(int argc, char **argv) {
 
     fprintf(stderr, "B -> %d, C -> %d \n", globalStartB, globalStartC);
 
+    fprintf(stderr, "DENNNIIIIIIIIIIIII A");
     //MPI_Bcast(new_bodies, bodyCt, mpi_body_type, 0, MPI_COMM_WORLD);
     MPI_Scatterv(bodies, bodies_per_proc, displs2, mpi_body_type, rec_bodies, bufSize, mpi_body_type, 0, MPI_COMM_WORLD);
+    
+    fprintf(stderr, "DENNNIIIIIIIIIIIII B");
+
     MPI_Scatterv(positions, bodies_per_proc, displs2, mpi_position_type, rec_positions, bufSize, mpi_position_type, 0, MPI_COMM_WORLD);
 
+    fprintf(stderr, "DENNNIIIIIIIIIIIII C");
 
     int cont;
 
