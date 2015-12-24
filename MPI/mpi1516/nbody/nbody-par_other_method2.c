@@ -613,8 +613,8 @@ main(int argc, char **argv) {
     fprintf(stderr, "B -> %d, C -> %d \n", globalStartB, globalStartC);
 
     //MPI_Bcast(new_bodies, bodyCt, mpi_body_type, 0, MPI_COMM_WORLD);
-    MPI_Scatterv(bodies, bodies_per_proc, displs, mpi_body_type, rec_bodies, bufSize, mpi_body_type, 0, MPI_COMM_WORLD);
-    MPI_Scatterv(positions, bodies_per_proc, displs, mpi_position_type, rec_positions, bufSize, mpi_position_type, 0, MPI_COMM_WORLD);
+    MPI_Scatterv(bodies, bodies_per_proc, displs2, mpi_body_type, rec_bodies, bufSize, mpi_body_type, 0, MPI_COMM_WORLD);
+    MPI_Scatterv(positions, bodies_per_proc, displs2, mpi_position_type, rec_positions, bufSize, mpi_position_type, 0, MPI_COMM_WORLD);
 
 
     int cont;
@@ -627,8 +627,8 @@ main(int argc, char **argv) {
 
     new_bodies = malloc(sizeof(bodyType) * bodyCt);
     new_positions = malloc(sizeof(bodyPositionType) * bodyCt);
-    MPI_Allgatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
-    MPI_Allgatherv(rec_positions, bodies_per_proc[myid], mpi_position_type, new_positions, bodies_per_proc, displs, mpi_position_type, MPI_COMM_WORLD);
+    MPI_Allgatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs2, mpi_body_type, MPI_COMM_WORLD);
+    MPI_Allgatherv(rec_positions, bodies_per_proc[myid], mpi_position_type, new_positions, bodies_per_proc, displs2, mpi_position_type, MPI_COMM_WORLD);
 
 
 
