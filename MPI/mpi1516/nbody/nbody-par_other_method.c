@@ -634,7 +634,7 @@ main(int argc, char **argv) {
     }
 
     if(0 == myid) {
-        print();
+        //print();
         fprintf(stderr, "fine\n");
         fprintf(stderr, "N-body took %10.3f seconds\n", rtime);
     }
