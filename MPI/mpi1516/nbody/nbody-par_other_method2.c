@@ -652,13 +652,10 @@ main(int argc, char **argv) {
 
     while (steps--) {
         cont = 0;
-        fprintf(stderr, "BEAAA 1\n");
         clear_forces();
 
-        fprintf(stderr, "BEAAA 2\n");
         compute_forces();
 
-        fprintf(stderr, "BEAAA 3\n");
         /*fprintf(stderr, "CalculatedForces -> ");
         for (i = 0; i < bodyCt; i++) {
             fprintf(stderr, "[%10.3f,%10.3f] ", _XF(i), _YF(i));
@@ -669,7 +666,6 @@ main(int argc, char **argv) {
         MPI_Allreduce(new_forces, new_forces2, bodyCt, mpi_force_type, mpi_sum, MPI_COMM_WORLD);
         free(new_forces);
         new_forces = new_forces2;
-        fprintf(stderr, "BEAAA 4\n");
 
         /*fprintf(stderr, "TOTALForces -> ");
         for (i = 0; i < bodyCt; i++) {
@@ -678,24 +674,19 @@ main(int argc, char **argv) {
         fprintf(stderr, "\n");*/
 
         compute_velocities();
-        fprintf(stderr, "BEAAA 5\n");
         compute_positions();
-        fprintf(stderr, "BEAAA 6\n");
         rec_positions = new_positions + displs2[myid];
-        fprintf(stderr, "BEAAA 7\n");
         new_positions = malloc(sizeof(bodyPositionType) * bodyCt);
-        fprintf(stderr, "BEAAA 8\n");
         //MPI_Allgatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
         MPI_Allgatherv(rec_positions, bodies_per_proc[myid], mpi_position_type, new_positions, bodies_per_proc, displs2, mpi_position_type, MPI_COMM_WORLD);
 
 
         old ^= 1;
-        fprintf(stderr, "BEAAA 9\n");
         rec_positions = new_positions + displs2[myid];
 
     }
 
-    fprintf(stderr, "FINEEE\n");
+    
     if(0 == myid) {
         if(gettimeofday(&end, 0) != 0) {
             fprintf(stderr, "could not do timing\n");
@@ -707,13 +698,17 @@ main(int argc, char **argv) {
 
     }
 
+    fprintf(stderr, "FINEEE 1\n");
     new_positions = malloc(sizeof(bodyPositionType) * bodyCt);
+    fprintf(stderr, "FINEEE 2\n");
     MPI_Gatherv(rec_positions, bodies_per_proc[myid], mpi_position_type, new_positions, bodies_per_proc, displs2, mpi_position_type, 0, MPI_COMM_WORLD);
-
-    rec_bodies = new_bodies + displs[myid];
+    fprintf(stderr, "FINEEE 3\n");
+    rec_bodies = new_bodies + displs2[myid];
+    fprintf(stderr, "FINEEE 4\n");
     new_bodies = malloc(sizeof(bodyType) * bodyCt);
+    fprintf(stderr, "FINEEE 5\n");
     MPI_Gatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs2, mpi_body_type, 0, MPI_COMM_WORLD);
-
+    fprintf(stderr, "FINEEE 6\n");
 
     if(0 == myid) {
         print();
@@ -732,6 +727,7 @@ main(int argc, char **argv) {
 
     free(forces_per_proc);
     free(displs);
+    free(displs2);
     free(new_bodies);
     free(rec_bodies);
 
