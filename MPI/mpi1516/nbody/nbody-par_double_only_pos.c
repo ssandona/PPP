@@ -802,7 +802,7 @@ main(int argc, char **argv) {
         fprintf(stderr, "N-body took %10.3f seconds\n", rtime);
 
     }
-    fprintf(stderr, "Process %d compute %d forces\n, assigned %d bodies", myid, totalNumberOfForcesComputed, forces_per_proc[myid]);
+    fprintf(stderr, "Process %d compute %d forces\n", myid, totalNumberOfForcesComputed);
 
 
     MPI_Finalize();
