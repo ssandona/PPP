@@ -727,11 +727,15 @@ main(int argc, char **argv) {
     fprintf(stderr, "ZIOOOOOO 3\n");
 
     free(forces_per_proc);
-    free(displs);
-    free(displs2);
-    free(new_bodies);
-    free(rec_bodies);
     fprintf(stderr, "ZIOOOOOO 4\n");
+    free(displs);
+    fprintf(stderr, "ZIOOOOOO 5\n");
+    free(displs2);
+    fprintf(stderr, "ZIOOOOOO 6\n");
+    free(new_bodies);
+    fprintf(stderr, "ZIOOOOOO 7\n");
+    free(rec_bodies);
+    fprintf(stderr, "ZIOOOOOO 8\n");
 
 
     return 0;
