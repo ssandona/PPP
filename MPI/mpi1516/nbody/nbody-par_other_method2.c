@@ -601,8 +601,10 @@ main(int argc, char **argv) {
         sum += bodies_per_proc[i];
     }
 
-    rec_positions = malloc(sizeof(bodyPositionType) * bodies_per_proc[myid]);
-    rec_bodies = malloc(sizeof(bodyType) * bodies_per_proc[myid]);
+    int bufSize = bodyCt % numprocs == 0 ? bodyCt / numprocs : (bodyCt / numprocs + 1);
+
+    rec_positions = malloc(sizeof(bodyPositionType) * bufSize);
+    rec_bodies = malloc(sizeof(bodyType) * bufSize);
 
 
 
