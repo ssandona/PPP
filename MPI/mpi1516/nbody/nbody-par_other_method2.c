@@ -734,7 +734,7 @@ main(int argc, char **argv) {
     fprintf(stderr, "ZIOOOOOO 6\n");
     free(new_bodies);
     fprintf(stderr, "ZIOOOOOO 7\n");
-    free(rec_bodies);
+    //free(rec_bodies);
     fprintf(stderr, "ZIOOOOOO 8\n");
 
 
