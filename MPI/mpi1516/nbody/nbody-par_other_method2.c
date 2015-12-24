@@ -53,10 +53,13 @@ forceType *new_forces2;
 int bodyCt;
 int old = 0;    /* Flips between 0 and 1 */
 bodyType *new_bodies;
+bodyPositionType *new_positions;
 bodyType *new_bodies2;
 bodyType *rec_bodies;
 bodyPositionType *rec_positions;
 int *displs;
+int *displs2;
+int *bodies_per_proc;
 int *forces_per_proc;
 int myid;
 int printed = 0;
@@ -194,7 +197,7 @@ void
 compute_velocities(void) {
     int b;
 
-    for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
+    for (b = displs2[myid]; b < displs2[myid] + bodies_per_proc[myid]; ++b) {
         //for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
         double xv = _XV(b);
         double yv = _YV(b);
@@ -211,7 +214,7 @@ compute_velocities(void) {
 void
 compute_positions(void) {
     int b;
-    for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
+    for (b = displs2[myid]; b < displs2[myid] + bodies_per_proc[myid]; ++b) {
         //for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
         double xn = _X(b) + (_XV(b) * DELTA_T);
         double yn = _Y(b) + (_YV(b) * DELTA_T);
@@ -598,8 +601,8 @@ main(int argc, char **argv) {
         sum += bodies_per_proc[i];
     }
 
-    rec_positions = malloc(sizeof(bodyPositionType) * bufSize);
-    rec_bodies = malloc(sizeof(bodyType) * bufSize);
+    rec_positions = malloc(sizeof(bodyPositionType) * bodies_per_proc[myid]);
+    rec_bodies = malloc(sizeof(bodyType) * bodies_per_proc[myid]);
 
 
 
