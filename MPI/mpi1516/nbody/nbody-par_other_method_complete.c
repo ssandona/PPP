@@ -23,8 +23,6 @@ extern double   atan2(double, double);
 typedef struct {
     double x[2];        /* Old and new X-axis coordinates */
     double y[2];        /* Old and new Y-axis coordinates */
-    double xf;          /* force along X-axis */
-    double yf;          /* force along Y-axis */
     double xv;          /* velocity along X-axis */
     double yv;          /* velocity along Y-axis */
     double mass;        /* Mass of the body */
@@ -424,11 +422,7 @@ main(int argc, char **argv) {
                 argv[0]);
         exit(1);
     }
-    /*fprintf(stderr, "0 => %s\n", argv[0]);
-    fprintf(stderr, "1 => %s\n", argv[1]);
-    fprintf(stderr, "2 => %s\n", argv[2]);
-    fprintf(stderr, "3 => %s\n", argv[3]);
-    fprintf(stderr, "4 => %s\n", argv[4]);*/
+
     if ((bodyCt = atol(argv[1])) > MAXBODIES ) {
         fprintf(stderr, "Using only %d bodies...\n", MAXBODIES);
         bodyCt = MAXBODIES;
@@ -437,15 +431,14 @@ main(int argc, char **argv) {
         bodyCt = 2;
     }
 
+    bodies = malloc(sizeof(bodyType) * bodyCt);
     forces = malloc(sizeof(forceType) * bodyCt);
+
+    //forces initialization
     for(i = 0; i < bodyCt; i++) {
         XF(i) = 0;
         YF(i) = 0;
     }
-    /*if(bodyCt > numprocs) {
-        bodyCt = numprocs;
-    }*/
-    bodies = malloc(sizeof(bodyType) * bodyCt);
 
     secsup = atoi(argv[2]);
     image = map_P6(argv[3], &xdim, &ydim);
@@ -473,6 +466,7 @@ main(int argc, char **argv) {
             YV(b) = ((rand() % 20000) - 10000) / 2000.0;
         }
     }
+
 
     int forceCt = 0;
     for(i = 0; i < bodyCt; i++) {
@@ -587,7 +581,7 @@ main(int argc, char **argv) {
     }
 
     if(0 == myid) {
-        //print();
+        print();
         fprintf(stderr, "fine\n");
         fprintf(stderr, "N-body took %10.3f seconds\n", rtime);
     }
