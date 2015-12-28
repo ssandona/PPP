@@ -590,7 +590,7 @@ main(int argc, char **argv) {
     free(displs);
     free(bodies);
     free(forces);
-    free(new_forces);
-    
+    //free(new_forces);
+
    return 0;
 }
