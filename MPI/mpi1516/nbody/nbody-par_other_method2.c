@@ -715,27 +715,26 @@ main(int argc, char **argv) {
         fprintf(stderr, "N-body took %10.3f seconds\n", rtime);
     }
 
-    fprintf(stderr, "ZIOOOOOO 1\n");
+    //fprintf(stderr, "ZIOOOOOO 1\n");
     fprintf(stderr, "Process %d compute %d forces\n, assigned %d bodies", myid, totalNumberOfForcesComputed, forces_per_proc[myid]);
-    fprintf(stderr, "ZIOOOOOO 2\n");
+    //fprintf(stderr, "ZIOOOOOO 2\n");
 
 
 
 
     MPI_Finalize();
 
-    fprintf(stderr, "ZIOOOOOO 3\n");
+    
 
     free(forces_per_proc);
-    fprintf(stderr, "ZIOOOOOO 4\n");
+    
     free(displs);
-    fprintf(stderr, "ZIOOOOOO 5\n");
+    
     free(displs2);
-    fprintf(stderr, "ZIOOOOOO 6\n");
-    free(new_bodies);
-    fprintf(stderr, "ZIOOOOOO 7\n");
+        free(new_bodies);
+    
     //free(rec_bodies);
-    fprintf(stderr, "ZIOOOOOO 8\n");
+    
 
 
     return 0;
