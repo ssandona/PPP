@@ -711,7 +711,7 @@ main(int argc, char **argv) {
     MPI_Gatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs2, mpi_body_type, 0, MPI_COMM_WORLD);
 
     if(0 == myid) {
-        print();
+        //print();
         fprintf(stderr, "fine\n");
         fprintf(stderr, "N-body took %10.3f seconds\n", rtime);
     }
