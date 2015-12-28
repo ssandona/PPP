@@ -41,11 +41,10 @@ int globalStartC;
 int globalStopB;
 int globalStopC;
 forceType *forces;
-forceType *new_forces2;
+forceType *new_forces;
 int bodyCt;
 int old = 0;    /* Flips between 0 and 1 */
 bodyType *bodies;
-bodyType *new_bodies2;
 int *displs;
 int *forces_per_proc;
 int myid;
