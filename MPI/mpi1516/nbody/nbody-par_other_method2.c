@@ -586,6 +586,7 @@ main(int argc, char **argv) {
     }
 
     int avarage_bodies_per_proc = bodyCt / numprocs;
+    rem = bodyCt % numprocs;
     //fprintf(stderr, "avarage => %d\n", avarage_bodies_per_proc);
     sum = 0;
 
