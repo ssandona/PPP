@@ -20,7 +20,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     unsigned int i = blockIdx.y;
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
     unsigned int globalIdx = j + (blockDim.x * gridDim.x * i);
-    unsigned int warpid = inBlockIdx / WARP_SIZE;
+    unsigned int warpid = threadIdx.x / WARP_SIZE;
     int k;
 
     __shared__ unsigned int localHistogram[WARP_NUMBER][HISTOGRAM_SIZE];
