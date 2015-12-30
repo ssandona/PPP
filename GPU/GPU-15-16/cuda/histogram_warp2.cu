@@ -11,7 +11,7 @@ using std::setprecision;
 
 const int HISTOGRAM_SIZE = 256;
 const unsigned int THREAD_NUMBER = 256;
-const int PIXELS_THREAD = 11;
+const int PIXELS_THREAD = 1;
 const int WARP_NUMBER = 8;
 const int WARP_SIZE = 32;
 
@@ -28,21 +28,21 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     //localHistogram[threadIdx.x] = 0;
     __syncthreads();
 
-    for(k = 0; k < PIXELS_THREAD; k++) {
-        if(globalIdx < width * height) {
-            float grayPix = 0.0f;
-            //if(blockIdx.x >= 10) {
-            float r = static_cast< float >(inputImage[globalIdx]);
-            float g = static_cast< float >(inputImage[(width * height) + globalIdx]);
-            float b = static_cast< float >(inputImage[(2 * width * height) + globalIdx]);
+    //for(k = 0; k < PIXELS_THREAD; k++) {
+    if(globalIdx < width * height) {
+        float grayPix = 0.0f;
+        //if(blockIdx.x >= 10) {
+        float r = static_cast< float >(inputImage[globalIdx]);
+        float g = static_cast< float >(inputImage[(width * height) + globalIdx]);
+        float b = static_cast< float >(inputImage[(2 * width * height) + globalIdx]);
 
-            grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
+        grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
 
-            grayImage[globalIdx] = static_cast< unsigned char >(grayPix);
-            atomicAdd((unsigned int *)&localHistogram[warpid][static_cast< unsigned int >(grayPix)],1);
-            globalIdx += (gridDim.x * blockDim.x) * (gridDim.y * blockDim.y);
-        }
+        grayImage[globalIdx] = static_cast< unsigned char >(grayPix);
+        atomicAdd((unsigned int *)&localHistogram[warpid][static_cast< unsigned int >(grayPix)], 1);
+        globalIdx += (gridDim.x * blockDim.x) * (gridDim.y * blockDim.y);
     }
+    //}
 
     __syncthreads();
 
