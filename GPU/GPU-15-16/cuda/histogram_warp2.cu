@@ -36,19 +36,18 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
         __syncthreads();
 
 
-        for(k = 0; k < THREAD_NUMBER;k++){
-                grayPix = 0.0f;
-                r = static_cast< float >(localImagePortion[k);
-                g = static_cast< float >(localImagePortion[(B_WIDTH * B_HEIGHT) + k]);
-                b = static_cast< float >(localImagePortion[(2 * B_WIDTH * B_HEIGHT) + k);
-                grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
-                if(static_cast< unsigned int >(grayPix) == threadIdx.x)
-                    localHistogram[threadIdx.x] += 1;
-            }
+        for(k = 0; k < THREAD_NUMBER; k++) {
+            grayPix = 0.0f;
+            r = static_cast< float >(localImagePortion[k]);
+            g = static_cast< float >(localImagePortion[(B_WIDTH * B_HEIGHT) + k]);
+            b = static_cast< float >(localImagePortion[(2 * B_WIDTH * B_HEIGHT) + k);
+                                     grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
+                                     if(static_cast< unsigned int >(grayPix) == threadIdx.x)
+                                     localHistogram[threadIdx.x] += 1;
         }
     }
 
-    //localHistogram[threadIdx.x] = 0;
+
     __syncthreads();
 
 
