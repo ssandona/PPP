@@ -49,7 +49,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
 
     int s = 1;
     for(k = 0; k < WARP_NUMBER; k++) {
-        s += localHistogram[k][inBlockIdx];
+        s += localHistogram[k][threadIdx.x];
     }
 
     atomicAdd((unsigned int *)&histogram[threadIdx.x], s);
