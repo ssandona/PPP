@@ -20,39 +20,40 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     unsigned int i = blockIdx.y;
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
     unsigned int globalIdx = j + (blockDim.x * gridDim.x * i);
-    unsigned int warpid = threadIdx.x / WARP_SIZE;
+    //unsigned int warpid = threadIdx.x / WARP_SIZE;
     int k;
 
-    __shared__ unsigned int localHistogram[WARP_NUMBER][HISTOGRAM_SIZE];
+    // __shared__ unsigned int localHistogram[WARP_NUMBER][HISTOGRAM_SIZE];
+
+    __shared__ unsigned char localImagePortion[THREAD_NUMBER * 3];
+    __shared__ unsigned int localHistogram[HISTOGRAM_SIZE];
+
+    if(j < width && i < height) {
+        localHistogram[threadIdx.x] = histogram[threadIdx.x];
+        localImagePortion[threadIdx.x] = inputImage[globalIdx];
+        localImagePortion[threadIdx.x + THREAD_NUMBER] = inputImage[(width * height) + globalIdx];
+        localImagePortion[threadIdx.x + 2 * THREAD_NUMBER] = inputImage[(2 * width * height) + globalIdx];
+        __syncthreads();
+
+
+        for(k = 0; k < THREAD_NUMBER;k++){
+                grayPix = 0.0f;
+                r = static_cast< float >(localImagePortion[k);
+                g = static_cast< float >(localImagePortion[(B_WIDTH * B_HEIGHT) + k]);
+                b = static_cast< float >(localImagePortion[(2 * B_WIDTH * B_HEIGHT) + k);
+                grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
+                if(static_cast< unsigned int >(grayPix) == threadIdx.x)
+                    localHistogram[threadIdx.x] += 1;
+            }
+        }
+    }
 
     //localHistogram[threadIdx.x] = 0;
     __syncthreads();
 
-    //for(k = 0; k < PIXELS_THREAD; k++) {
-    if(globalIdx < width * height) {
-        float grayPix = 0.0f;
-        //if(blockIdx.x >= 10) {
-        float r = static_cast< float >(inputImage[globalIdx]);
-        float g = static_cast< float >(inputImage[(width * height) + globalIdx]);
-        float b = static_cast< float >(inputImage[(2 * width * height) + globalIdx]);
-
-        grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
-
-        grayImage[globalIdx] = static_cast< unsigned char >(grayPix);
-        atomicAdd(&localHistogram[warpid][static_cast< unsigned int >(grayPix)], 1);
-        //globalIdx += (gridDim.x * blockDim.x) * (gridDim.y * blockDim.y);
-    }
-    //}
-
-    __syncthreads();
 
 
-    int s = 1;
-    for(k = 0; k < WARP_NUMBER; k++) {
-        s += localHistogram[k][threadIdx.x];
-    }
-
-    atomicAdd((unsigned int *)&histogram[threadIdx.x], s);
+    atomicAdd((unsigned int *)&histogram[threadIdx.x], localHistogram[threadIdx.x]);
 
 }
 

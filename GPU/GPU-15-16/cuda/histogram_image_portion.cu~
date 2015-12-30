@@ -19,6 +19,8 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     unsigned int i = blockIdx.y * blockDim.y + threadIdx.y;
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
 
+    if(j >= width || i >= height) return;
+
     unsigned int globalIdx = threadIdx.x + (blockDim.x * threadIdx.y);
 
     //attention for images with sizes not multiple of 16
@@ -26,7 +28,6 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     __shared__ unsigned char localImagePortion[B_WIDTH*B_HEIGHT*3];
     __shared__ unsigned int localHistogram[HISTOGRAM_SIZE];
     
- if(j < width && i < height){
     localHistogram[globalIdx] = histogram[globalIdx];
     localImagePortion[globalIdx] = inputImage[(i * width) + j];
     localImagePortion[globalIdx + (B_WIDTH * B_HEIGHT)] = inputImage[(width * height) + (i * width) + j];
@@ -45,7 +46,6 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
                 localHistogram[globalIdx]+=1;
         }
     }
-}
     
     __syncthreads();
     
