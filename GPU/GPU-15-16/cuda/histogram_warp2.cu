@@ -35,7 +35,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
         localImagePortion[threadIdx.x + 2 * THREAD_NUMBER] = inputImage[(2 * width * height) + globalIdx];
         __syncthreads();
 
-
+        /*
         for(k = 0; k < THREAD_NUMBER; k++) {
             float grayPix = 0.0f;
             float r = static_cast< float >(localImagePortion[k]);
@@ -44,7 +44,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
             grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
             if(static_cast< unsigned int >(grayPix) == threadIdx.x)
                 localHistogram[threadIdx.x] += 1;
-        }
+        }*/
     }
 
 
