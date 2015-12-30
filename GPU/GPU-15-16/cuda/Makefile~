@@ -3,12 +3,22 @@ debug		:= 0
 include		../Makefile.inc
 
 
-all: clean darker_square darker_uni darker_uni_more darker_grid 
+all: clean darker_uni_more darker_uni_more2
 
 darker_square: darker_square.cpp darker_square.cu
 	$(NVCC) -c darker_square.cu $(INCLUDES) $(NVCCFLAGS)
 	$(LINKER) -o $(PROJ_BASE)/bin/darker_squareCUDA darker_square.cpp darker_square.o ../src/Timer.cpp $(INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./darker_square.o
+
+darker: darker.cpp darker.cu
+	$(NVCC) -c darker.cu $(INCLUDES) $(NVCCFLAGS)
+	$(LINKER) -o $(PROJ_BASE)/bin/darkerCUDA darker.cpp darker.o ../src/Timer.cpp $(INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
+	rm -f ./darker.o
+
+darker_square_more: darker_square_more.cpp darker_square_more.cu
+	$(NVCC) -c darker_square_more.cu $(INCLUDES) $(NVCCFLAGS)
+	$(LINKER) -o $(PROJ_BASE)/bin/darker_square_moreCUDA darker_square_more.cpp darker_square_more.o ../src/Timer.cpp $(INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
+	rm -f ./darker_square_more.o
 
 darker_uni: darker_uni.cpp darker_uni.cu
 	$(NVCC) -c darker_uni.cu $(INCLUDES) $(NVCCFLAGS)
@@ -20,6 +30,11 @@ darker_uni_more: darker_uni_more.cpp darker_uni_more.cu
 	$(LINKER) -o $(PROJ_BASE)/bin/darker_uni_moreCUDA darker_uni_more.cpp darker_uni_more.o ../src/Timer.cpp $(INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./darker_uni_more.o
 
+darker_uni_more2: darker_uni_more2.cpp darker_uni_more2.cu
+	$(NVCC) -c darker_uni_more2.cu $(INCLUDES) $(NVCCFLAGS)
+	$(LINKER) -o $(PROJ_BASE)/bin/darker_uni_more2CUDA darker_uni_more2.cpp darker_uni_more2.o ../src/Timer.cpp $(INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
+	rm -f ./darker_uni_more2.o
+
 darker_grid: darker_grid.cpp darker_grid.cu
 	$(NVCC) -c darker_grid.cu $(INCLUDES) $(NVCCFLAGS)
 	$(LINKER) -o $(PROJ_BASE)/bin/darker_gridCUDA darker_grid.cpp darker_grid.o ../src/Timer.cpp $(INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
@@ -29,6 +44,21 @@ histogram: histogram.cpp histogram.cu
 	$(NVCC) -c histogram.cu $(INCLUDES) $(NVCCFLAGS)
 	$(LINKER) -o $(PROJ_BASE)/bin/histogramCUDA histogram.cpp histogram.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./histogram.o
+
+histogram_square: histogram_square.cpp histogram_square.cu
+	$(NVCC) -c histogram_square.cu $(INCLUDES) $(NVCCFLAGS)
+	$(LINKER) -o $(PROJ_BASE)/bin/histogram_squareCUDA histogram_square.cpp histogram_square.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
+	rm -f ./histogram_square.o
+
+histogram_square_more: histogram_square_more.cpp histogram_square_more.cu
+	$(NVCC) -c histogram_square_more.cu $(INCLUDES) $(NVCCFLAGS)
+	$(LINKER) -o $(PROJ_BASE)/bin/histogram_square_moreCUDA histogram_square_more.cpp histogram_square_more.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
+	rm -f ./histogram_square_more.o
+
+histogram_square_more2: histogram_square_more2.cpp histogram_square_more2.cu
+	$(NVCC) -c histogram_square_more2.cu $(INCLUDES) $(NVCCFLAGS)
+	$(LINKER) -o $(PROJ_BASE)/bin/histogram_square_more2CUDA histogram_square_more2.cpp histogram_square_more2.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
+	rm -f ./histogram_square_more2.o
 
 histogram2: histogram2.cpp histogram2.cu
 	$(NVCC) -c histogram2.cu $(INCLUDES) $(NVCCFLAGS)
