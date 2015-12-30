@@ -37,10 +37,10 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
 
 
         for(k = 0; k < THREAD_NUMBER; k++) {
-            grayPix = 0.0f;
+            float grayPix = 0.0f;
             float r = static_cast< float >(localImagePortion[k]);
             float g = static_cast< float >(localImagePortion[THREAD_NUMBER + k]);
-            float b = static_cast< float >(localImagePortion[(2 * THREAD_NUMBER + k]);
+            float b = static_cast< float >(localImagePortion[2 * THREAD_NUMBER + k]);
             grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
             if(static_cast< unsigned int >(grayPix) == threadIdx.x)
                 localHistogram[threadIdx.x] += 1;
