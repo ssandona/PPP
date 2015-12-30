@@ -11,7 +11,7 @@ using std::setprecision;
 
 const int HISTOGRAM_SIZE = 256;
 const unsigned int THREAD_NUMBER = 256;
-const int PIXELS_THREAD = 20;
+const int PIXELS_THREAD = 11;
 const int WARP_NUMBER = 8;
 const int WARP_SIZE = 32;
 
