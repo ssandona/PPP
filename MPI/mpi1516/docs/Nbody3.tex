@@ -43,18 +43,18 @@ for each timestep do
 	Compute new positions and velocities
 \end{lstlisting}
 
-As first thing, the time is discretized, so that the application knows what to do at certain time steps. After that, for each step, the algorithm computes the force between the bodies. With the result, the new velocity and positions of all the bodies are updated.
+As first thing, the time is discretized, so that the application knows what to do at certain time steps. After that, for each step, the algorithm computes the force between the bodies. With the result, the new velocity and position of all the bodies are updated.
 
 \subsection{Force computation}
 \label{sec:force_comp_seq}
-This step of the algorithm is the most expensive and define its complexity.
+This step of the algorithm is the most expensive and defines its complexity.
 The force that bodies exert on each other has to be calculated once per pair of bodies (Listing \ref{forceloop}).
 \begin{lstlisting}[label=forceloop, caption=loop for the force calculation]
 for (b=0; b<bodyCt; ++b) {
 		for (c=b+1; c<bodyCt; ++c) {
 			...
 \end{lstlisting}
-With N bodies, there are (N-1)+(N-2)+(N-3)+...+1 pairs, so that O(N\textsuperscript{2}) force computations for every time step.
+With N bodies, there are \textit{(N-1)+(N-2)+(N-3)+...+1} pairs, so that \textit{O(N\textsuperscript{2})} force computations for every time step.
 
 \section{Parallel N-body algorithm}
 \label{sec:par}
@@ -62,12 +62,12 @@ An efficient parallelization of this algorithm is not trivial because for every 
 
 \subsection{MPI}
 \label{sec:mpi}
-For this project was used the Message Passing Interface (MPI), a message passing library that is developed and maintained by a consortium of academic, research, and industry partners, that can be added to sequential languages (C, Fortran) to program multiple nodes. Using this library, to set up a point-to-point or collective communication is simplifyed. In addition to High performance, network and process fault tolerance is provided, making this library optimal for the parallel programming.
+For this project was used the Message Passing Interface (MPI), a message passing library that is developed and maintained by a consortium of academic, research, and industry partners, that can be added to sequential languages (C, Fortran) to program multiple nodes. Using this library, to set up a point-to-point or collective communication is simplified. In addition to High performance, network and process fault tolerance is provided, making this library optimal for the parallel programming. For the collective commmunication, lots of useful functions are provided, like the \textit{MPI\_Bcast} to send data to all processes, the \textit{MPI\_Gather} to gather data from all processes, the \textit{MPI\_Scatter} to scatter data to all processes and others.
 
 \subsection{Work distribution}
 \label{sec:bodies_distr}
-One of the major problems of the parallel algorithms is the load imbalance. If the work is not fairly distributed among the machines involved in the computation, there will be some machines idle while the others will still work. This problem affects a lot the performance of the applications because the overall execution time depends on the last machine that terminate the computation. 
-Looking at this specific case, there where two possible ways to follow: a fairly distribution of the bodies or a fairly distribution of the forces to compute. The major differences between this 2 approaches were encountered when the amount of work to distribute was not perfectly divisible by the number of machines.
+One of the major problems of the parallel algorithms is the load imbalance. If the work is not fairly distributed among the machines involved in the computation, there will be some machines idle while the others will still work. This problem affects a lot the performance of an application because the overall execution time depends on the last machine that terminate the computation. 
+Looking at this specific case, there were two possible ways to follow: a fair distribution of the bodies or a fair distribution of the forces to compute. The major differences between this 2 approaches were encountered when the amount of work to distribute was not perfectly divisible by the number of machines.
 Using a simple \textit{for} construct (Listing \ref{fair}), it is possible to calculate the chunks of forces/bodies to assign to each computational node. The Figure \ref{fig:repa} shows two examples of repartition.
 
 \begin{lstlisting}[label=fair, caption=fair distribution of work]
@@ -108,23 +108,23 @@ for (i = 0; i < numprocs; i++) {
 
 A comparison of the two approaches was reported on the next paragraphs in order to clarify the made decisions.
 
-\subsection{Approach 1 - Bodies repartition}
+\subsubsection{Approach 1 - Bodies repartition}
 \label{sec:a1}
 
-The total amount of bodies (known at the beginning) is distributed as fairly as possible among the  MPI processes as shown in the Listing \ref{fair}. Then, to avoid a duplication of work, given a pair of bodies chunks, half of the forces are calculated by one MPI node, and half by the other. The ripartition is clarify in the Figures \ref{fig:pr1}, \ref{fig:pr2} and \ref{fig:pr3}.
+The total amount of bodies (known at the beginning) is distributed as fairly as possible among the  MPI processes as shown in the Listing \ref{fair}. Then, to avoid a duplication of work, given a pair of bodies chunks, half of the forces are calculated by one MPI node, and half by the other. The repartition is clarified in the Figures \ref{fig:pr1}, \ref{fig:pr2} and \ref{fig:pr3}.
 
 
 \begin{figure}[ht]
 \centering
-\begin{subfigure}{.35\textwidth}
+\begin{subfigure}{.3\textwidth}
   \centering
   \includegraphics[width=1\linewidth]{array_proc_0_b_0}
 \end{subfigure}%
-\begin{subfigure}{.35\textwidth}
+\begin{subfigure}{.3\textwidth}
   \centering
   \includegraphics[width=1\linewidth]{array_proc_0_b_1}
 \end{subfigure}\\ %
-\begin{subfigure}{.35\textwidth}
+\begin{subfigure}{.3\textwidth}
   \centering
   \includegraphics[width=1\linewidth]{array_proc_0_b_2}
 \end{subfigure}
@@ -136,15 +136,15 @@ The total amount of bodies (known at the beginning) is distributed as fairly as 
 
 \begin{figure}[ht]
 \centering
-\begin{subfigure}{.35\textwidth}
+\begin{subfigure}{.3\textwidth}
   \centering
   \includegraphics[width=1\linewidth]{array_proc_1_b_0}
 \end{subfigure}%
-\begin{subfigure}{.35\textwidth}
+\begin{subfigure}{.3\textwidth}
   \centering
   \includegraphics[width=1\linewidth]{array_proc_1_b_1}
 \end{subfigure}\\ %
-\begin{subfigure}{.35\textwidth}
+\begin{subfigure}{.3\textwidth}
   \centering
   \includegraphics[width=1\linewidth]{array_proc_1_b_2}
 \end{subfigure}
@@ -156,15 +156,15 @@ The total amount of bodies (known at the beginning) is distributed as fairly as 
 
 \begin{figure}[ht]
 \centering
-\begin{subfigure}{.35\textwidth}
+\begin{subfigure}{.3\textwidth}
   \centering
   \includegraphics[width=1\linewidth]{array_proc_2_b_0}
 \end{subfigure}%
-\begin{subfigure}{.35\textwidth}
+\begin{subfigure}{.3\textwidth}
   \centering
   \includegraphics[width=1\linewidth]{array_proc_2_b_1}
 \end{subfigure}\\ %
-\begin{subfigure}{.35\textwidth}
+\begin{subfigure}{.3\textwidth}
   \centering
   \includegraphics[width=1\linewidth]{array_proc_2_b_2}
 \end{subfigure}
@@ -181,9 +181,9 @@ Complexity & = O(\lceil\frac{N}{P}\rceil * (\lceil\frac{N}{P}\rceil * \frac{1}{2
 \end{split}
 \end{equation}
 
-\subsection{Approach 2 - Forces repartition}
+\subsubsection{Approach 2 - Forces repartition}
 \label{sec:a2}
-With this approach, the bodies are not taken into consideration, but only the forces to compute, resulting in a more simple and intuitive way to proceed. After calculating the total amount of forces to compute per step (Listing \ref{forces}), this can be simply distributes as shown in Listing \ref{fair}. The approximated computational time is shown in the Equation \ref{eq:eq3}.
+With this approach, the bodies are not taken into consideration, but only the forces to compute, resulting in a more simple and intuitive way to proceed. After calculating the total amount of forces to compute per step (Listing \ref{forces}), these can be simply distributed as shown in Listing \ref{fair}. The approximated computational time is shown in the Equation \ref{eq:eq3}.
 
 \begin{lstlisting}[label=forces, caption=total amount of forces]
 int forceCt = 0;
@@ -198,9 +198,9 @@ Complexity & = O(\lceil\frac{N^2}{P}\rceil)
 \end{split}
 \end{equation}
 
-\subsection{Solution Comparison - Load imbalance}
+\subsubsection{Load imbalance}
 \label{sec:b_rep}
-As mentioned before, the load imbalance is a painfull aspect of the parallel programming. If the total amount of work is perfectly divisible by the number of MPI processes, the two approaches are not so different, in fact, the number of forces calculated per machine is the same. The problems come out, when the work (bodies or forces) is not equally distributed. With the second approach, the inequity is simply reduced at the minimum. The maximum work difference between 2 nodes is of one force, that means less than 1\% of load imbalance if the assigned forces per machine are more than 100. To reach this bound with 16 MPI nodes for example, 58 bodies (1653 forces) are sufficient. With the First approach is more difficult to balance the work, because the assigned number of bodies is different, and from one body the forces that exerts on all the others has to be calculated, that means a load imbalance of \textit{O(N)}. For this reason the second approach appeared more simple and efficient, so that it is adopted.
+As mentioned before, the load imbalance is a painful aspect of the parallel programming. If the total amount of work is perfectly divisible by the number of MPI processes, the two approaches are not so different, in fact, the number of forces calculated per machine is the same. The problems come out, when the work (bodies or forces) is not equally distributed. With the second approach, the inequity is simply reduced at the minimum. The maximum work difference between 2 nodes is of one force, that means less than 1\% of load imbalance if the assigned forces per machine are more than 100. To reach this bound with 16 MPI nodes, for example, 58 bodies (1653 forces) are sufficient. With the First approach is more difficult to balance the work, because the assigned number of bodies is different, and from one body the forces that exerts on all the others has to be calculated, that means a load imbalance of \textit{O(N)}. For this reason the second approach appeared more simple and efficient, so that it is adopted.
 
 
 \subsection{The final solution}
@@ -212,78 +212,70 @@ The communication is a common bottleneck of lots of parallel implementations. Th
 
 \subsubsection{Approach one}
 \label{sec:app_1}
-Due to the fact that the force computation is the most expensive part of the algorithm and that as less data as possible should be exchanged, a good compromise is the following. At the beginning, the bodies are broadcasted to all the nodes (MPI\_Bcast Figure \ref{fig:A2}). After that, at each step, each node calculates the assigned forces, the result is an array of N forces (one per body), then with an MPI\_Allreduce operation, all the calculated forces are summed (Figure \ref{fig:C2}) and as the last thing the velocities and positions for all the bodies are computed. Proceeding in this way, only an array of N elements containing the calculated forces is exchanged with the other nodes. The major problem with this approach, is that the positions and velocities of all the bodies are calculated in every node, that represents a duplication of work. An approximation of the whole complexity and of the total amount of data exchanged per step is presented in Equations \ref{eq:comp_app1} and \ref{eq:com_app1}. In the first equation, the first \textit{O} represents the force computation step, the second the velocities computation and the third the positions computation.
+Due to the fact that the force computation is the most expensive part of the algorithm and that as less data as possible should be exchanged, a good compromise is the following. The force (x, y) applied to a certain body is separated from the structure Body type, so at the beginning there are an array of N bodies and an array of N forces. As first thing, the bodies are broadcasted to all the nodes (\textit{MPI\_Bcast} Figure \ref{fig:A2}). After that, at each step, each node calculates the assigned forces, then with an \textit{MPI\_Allreduce} operation, all calculated arrays of N forces are summed (Figure \ref{fig:C2}) and as the last thing the velocities and positions for all the bodies are computed. Proceeding in this way, only an array of N elements containing the calculated forces is exchanged with the other nodes. The major problem with this approach, is that the positions and velocities of all the bodies are calculated in every node, that represents a duplication of work. An approximation of the complexity of a loop iteration and of the total amount of data exchanged per step is presented in Equations \ref{eq:comp_app1} and \ref{eq:com_app1}. In the first equation, the first \textit{O} represents the force computation step, the second the velocities computation and the third the positions computation. In the second equation, the \textit{2} represents the (x, y) values of the force.
 
 \begin{figure}[ht]
+\centering
+\begin{minipage}{.5\textwidth}
   \centering
-  \includegraphics[width=0.5\linewidth]{broadcast2}
+  \includegraphics[width=\linewidth]{broadcast2}
   \caption{Broadcast the N bodies to all the nodes}
   \label{fig:A2}
-\end{figure}
-\FloatBarrier
-
-
-\begin{figure}[ht]
-  \includegraphics[width=0.5\linewidth]{MPI_all_reduce}
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{MPI_all_reduce}
   \captionof{figure}{The N forces reduction}
   \label{fig:C2}
+\end{minipage}
 \end{figure}
 \FloatBarrier
-
-\newpage
 
 \begin{equation} \label{eq:comp_app1}
 \begin{split}
-Complexity (per step) & = O(\lceil\frac{N^2}{P}\rceil)) + O(N) + O(N)\\
- & = O(\lceil\frac{N^2}{P}\rceil)
+Complexity (per step) & = O(\lceil\frac{N^2}{P}\rceil)) + O(N) + O(N)
 \end{split}
 \end{equation}
 
 \begin{equation} \label{eq:com_app1}
 \begin{split}
-Communication (per step) & = O(N)*sizeof(double)
+Communication (per step) & = O(2*N)*sizeof(double)
 \end{split}
 \end{equation}
 
 \subsubsection{Approach two}
 \label{sec:app_1}
-An alternative to approach one, is to mix the two approaches explained in Sections \ref{sec:a1} and \ref{sec:a2}. The force calculation, is the same as approach one (the one explained in Section \ref{sec:a2}), but to avoid the duplication of work computing the new velocities and positions, the idea of the bodies distribution could be expoited. The bodies could be distributed as fairly as possible (Listing \ref{fair}) and than calculate in each node only the velocities and the positions of the bodies of the assigned chunk. At the beginning, the bodies are broadcasted to all the nodes (MPI\_Bcast Figure \ref{fig:A2}). After that, at each step, each node collect the updated bodies from other nodes (Figure \ref{fig:B1}), calculates the assigned forces, the result is an array of N forces (one per body), then with an MPI\_Allreduce operation, all the calculated forces are summed (Figure \ref{fig:C2}) and as the last thing the velocities and positions for the assigned bodies are computed.
-An approximation of the whole complexity and of the total amount of data exchanged per step is presented in Equations \ref{eq:comp_app2} and \ref{eq:com_app2}.
+The aim of this approach, is to avoid the work duplication during the positions and velocities computation step. To calculate the force that two bodies exert on each other, at each step their mass, radius and position are needed. As first thing, the position (x, y) and the force of each body are separated from the structure Body type, so at the beginning there are an array of N bodies, an array of N positions and an array of N forces. 
+After that, the bodies and the positions are broadcasted to all the nodes and each node calculates its range of assigned bodies and positions (with the method of Listing \ref{fair}).
+The force calculation step is the same as the one of the previous approach (calculation and MPI\_Allreduce), afterwards the assigned positions and bodies are updated. Before starting another iteration, with an MPI\_Allgatherv operation (Figure \ref{fig:posi}) the positions are gathered from all the nodes to all the nodes in order to have all the needed updated information for the next step. At the end, with an MPI\_Allgatherv operation the final bodies are gathered from all the nodes to the "master" node that prints the results.
+An approximation of the complexity of a loop iteration and of the total amount of data exchanged per step is presented in Equations \ref{eq:comp_app2} and \ref{eq:com_app2}. In the first equation, the first \textit{O} represents the force computation step, the second the velocity computation and the third the position computation. In the second equation, the \textit{4} represents the (x, y) values of the force and the (x, y) values of the position.
 
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=0.6\linewidth]{scatter}
-  \caption{A - Scatter the bodies to the nodes}
-  \label{fig:A1}
-\end{figure}
-\FloatBarrier
 
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.6\linewidth]{MPI_all_gather}
-  \caption{B - Collect updated bodies from other nodes}
-  \label{fig:B1}
+  \caption{Collect updated positions from all the nodes}
+  \label{fig:posi}
 \end{figure}
 \FloatBarrier
 
 
 \begin{equation} \label{eq:comp_app2}
 \begin{split}
-Complexity (per step) & = O(\lceil\frac{N^2}{2P}\rceil)) + O(\lceil\frac{N}{P}\rceil) + O(\lceil\frac{N}{P}\rceil)\\
- & = O(\lceil\frac{N^2}{2P}\rceil)
+Complexity (per step) & = O(\lceil\frac{N^2}{P}\rceil)) + O(\lceil\frac{N}{P}\rceil) + O(\lceil\frac{N}{P}\rceil)
 \end{split}
 \end{equation}
 
 \begin{equation} \label{eq:com_app2}
 \begin{split}
-Communication (per step) & = O(N)*sizeof(bodyType)
+Communication (per step) & = O(4*N)*sizeof(double)
 \end{split}
 \end{equation}
 
 
 \subsubsection{Solutions comparison}
 \label{sec:sol_comp}
-The decision at this point, is between computing the N velocities and positions in all the nodes or exchange more data with the other nodes. 
+ 
 After a comparison of the two solutions for different size of inputs (steps and number of bodies), it's clear that the amount of data exchanged is the key point. In Tables \ref{tab:t_app1} and \ref{tab:t_app2} (corresponding graphs in Figure \ref{fig:G1}) and in Tables \ref{tab:t_app3} and \ref{tab:t_app4} (corresponding graphs in Figure \ref{fig:G2}) we can see execution times and speedups of the 2 approaches for different problem sizes. It's easy to understand that the first approach present lower execution times than the other and so better speedups. That means that is more convenient to duplicate a bit the work instead of exchange more data with the other nodes. The first approach so is better.
 \\
 
@@ -475,7 +467,7 @@ nodes\textbackslash bodies & 500 & 1000 & 10000 \\ \hline
 16 & 0.176 & 0.555 & 47.192 \\ 
     \hline
   \end{tabular}
-  \captionof{table}{100000 iterations - Exec. times}
+  \captionof{table}{100 iterations - Exec. times}
   \label{tab:R2_t1}
 \end{minipage} \qquad
 \begin{minipage}[b]{.40\textwidth}
@@ -487,7 +479,7 @@ nodes\textbackslash bodies & 500 & 1000 & 10000 \\ \hline
 8 & 6.65 & 7.26 & 7.76 \\ \hline
 16 & 10.32 & 13.10 & 15.37
   \end{tabular}
-  \captionof{table}{100000 iterations - Speedups}
+  \captionof{table}{100 iterations - Speedups}
   \label{tab:R2_t2}
 \end{minipage}	
 
