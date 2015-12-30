@@ -20,30 +20,33 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     unsigned int i = blockIdx.y;
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
     unsigned int globalIdx = j + (blockDim.x * gridDim.x * i);
+    unsigned int firstGlobalIdx = (blockIdx.x * blockDim.x);
     //unsigned int warpid = threadIdx.x / WARP_SIZE;
     int k;
+    int last = (width * height) - firstGlobalIdx - 1;
 
     // __shared__ unsigned int localHistogram[WARP_NUMBER][HISTOGRAM_SIZE];
 
     __shared__ unsigned char localImagePortion[THREAD_NUMBER * 3];
     __shared__ unsigned int localHistogram[HISTOGRAM_SIZE];
 
+    localHistogram[threadIdx.x] = histogram[threadIdx.x];
+
     if(j < width && i < height) {
-        localHistogram[threadIdx.x] = histogram[threadIdx.x];
         localImagePortion[threadIdx.x] = inputImage[globalIdx];
         localImagePortion[threadIdx.x + THREAD_NUMBER] = inputImage[(width * height) + globalIdx];
         localImagePortion[threadIdx.x + 2 * THREAD_NUMBER] = inputImage[(2 * width * height) + globalIdx];
         __syncthreads();
 
-        
-        for(k = 0; k < THREAD_NUMBER; k++) {
+
+        for(k = 0; k < THREAD_NUMBER && k < last; k++) {
             float grayPix = 0.0f;
             float r = static_cast< float >(localImagePortion[k]);
             float g = static_cast< float >(localImagePortion[THREAD_NUMBER + k]);
             float b = static_cast< float >(localImagePortion[2 * THREAD_NUMBER + k]);
-            /*grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
+            grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
             if(static_cast< unsigned int >(grayPix) == threadIdx.x)
-                localHistogram[threadIdx.x] += 1;*/
+                localHistogram[threadIdx.x] += 1;
         }
     }
 
