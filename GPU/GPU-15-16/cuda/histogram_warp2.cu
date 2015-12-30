@@ -13,6 +13,7 @@ const int HISTOGRAM_SIZE = 256;
 const unsigned int THREAD_NUMBER = 256;
 const int PIXELS_THREAD = 20;
 const int WARP_NUMBER = 8;
+const int WARP_SIZE = 32;
 
 __global__ void histogram1DKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram) {
 
