@@ -21,6 +21,76 @@ image03		0.001788	190.61
 image04		0.001290	117.38
 image05		0.002307	193.31
 image06		0.004403	133.73
+
+with only 1 row of indexes
+
+image00	0.000150
+image01	0.000246
+image02	0.000318
+image03	0.001661
+image04	0.001213
+image05	0.002231
+image06	0.004082
+
+with uni, 4 pixels per thread
+
+image01 0.000269
+image02	0.000315
+image03	0.001541
+image04	0.001109
+image05	0.001982
+image06	0.003750
+
+with uni, 8 pixels per thread
+
+image00	0.000147
+image01 0.000262
+image02	0.000289
+image03	0.001473
+image04	0.001052
+image05	0.001861
+image06	0.003532
+
+with uni, 11 pixels per thread
+
+image00	0.000148
+image01 0.000257
+image02	0.000301
+image03	0.001454
+image04	0.001043
+image05	0.001832
+image06	0.003531
+
+with uni, 14 pixels per thread
+
+image00	0.000150
+image01 0.000260
+image02	0.000309
+image03	0.001451
+image04	0.001042
+image05	0.001805
+image06	0.003553
+
+with uni, 20 pixels
+
+image00	0.000150
+image01	0.000253
+image02	0.000292
+image03	0.001427
+image04	0.001040
+image05	0.001817
+iamge06 0.003517
+
+with uni, 40 pixels
+
+image00	0.000672
+image01	0.001544
+image02	0.000991
+image03	0.002905
+image04	0.001800
+image05	0.003090
+iamge06 0.004672
+
 	
 
 histogram
@@ -45,7 +115,30 @@ image02		0 (0.00%)					0.043784	0.002071	v
 image03		24 (0.00%)					0.200681	0.011998		
 image04		0 (0.00%)					0.197973	0.013978						
 image05		12 (0.00%)					0.267590	0.005845	v	
-image06		48 (0.01%)					0.616924	0.012902	v		
+image06		48 (0.01%)					0.616924	0.012902	v
+
+image06_mono							0.616924		
+
+with square grid (2_) -> 20 pixels per thread
+
+image00		324 (0.04%)					0.003208	0.000085	  				
+image01		12 (0.00%)					0.032379	0.001183	v		
+image02		0 (0.00%)					0.043784	0.001747	v		
+image03		24 (0.00%)					0.200681	0.004445		
+image04		0 (0.00%)					0.197973	0.012535						
+image05		12 (0.00%)					0.267590	0.004407	v	
+image06		48 (0.01%)					0.616924	0.009452	v
+
+image06_mono							0.616924	0.076647
+
+40px
+
+0.000083
+0.001293
+0.001863
+
+0.075237
+
 
 with grid UNI
 image00		0.000420	7.63
@@ -54,7 +147,7 @@ image02		0.005623
 image03		0.034272
 image04		0.034269
 image05		0.033029
-image06		0.085662
+image06		0.085662 -> 0.063017
 
 BOH
 

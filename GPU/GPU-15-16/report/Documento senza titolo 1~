@@ -1,0 +1,24 @@
+Profiler
+
+module load cuda55/profiler
+
+BANK CONFLICTS
+prun -v -1 -np 1 -native '-l gpu=GTX480' nvprof --events l1_shared_bank_conflict /home/ssa223/project/GPU/GPU-15-16/bin/darker_uni_moreCUDA /home/ssa223/project/GPU/images/image00.png
+
+prun -v -1 -np 1 -native '-l gpu=GTX480' nvprof --events warps_launched /home/ssa223/project/GPU/GPU-15-16/bin/darker_uni_moreCUDA /home/ssa223/project/GPU/images/image00.png
+
+prun -v -1 -np 1 -native '-l gpu=GTX480' nvprof --output-profile uni_more.nvprof /home/ssa223/project/GPU/GPU-15-16/bin/darker_uni_moreCUDA /home/ssa223/project/GPU/images/image00.png
+
+prun -v -1 -np 1 -native '-l gpu=GTX480' nvprof --analysis-metrics -o uni_more2.nvprof /home/ssa223/project/GPU/GPU-15-16/bin/darker_uni_moreCUDA /home/ssa223/project/GPU/images/image00.png
+
+COUNT STORE INSTRUCTION
+prun -v -1 -np 1 -native '-l gpu=GTX480' nvprof --events gst_inst_8bit /home/ssa223/project/GPU/GPU-15-16/bin/darker_uni_moreCUDA /home/ssa223/project/GPU/images/image00.png
+
+COUNT LOAD INSTRUCTION
+prun -v -1 -np 1 -native '-l gpu=GTX480' nvprof --events gst_inst_8bit /home/ssa223/project/GPU/GPU-15-16/bin/darker_uni_moreCUDA /home/ssa223/project/GPU/images/image00.png
+
+
+active_warps
+achieved_occupancy
+
+
