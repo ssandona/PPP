@@ -32,12 +32,18 @@
 
 \section{GPUs: NVIDIA GTX480}
 \label{sec:nvidia}
-The aim of this assignement was to learn how to use many-core accelerators, GPUs in this particular case, to parallelize data-intensive code. All the implementations were written for the \textbf{NVIDIA GTX480}, using CUDA, a parallel computing platform and programming model invented by NVIDIA. Programming with CUDA, there is a straightforward mapping onto hardware, for this reason it is necessary to study the available HW before start developing an application. The main characteristics and the limits of the given accelerator, are showed in Table \ref{table:t1}.
+The aim of this assignment was to learn how to use many-core accelerators, GPUs in this particular case, to parallelize data-intensive code. All the implementations were written for the \textbf{NVIDIA GTX480}, using CUDA, a parallel computing platform and programming model invented by NVIDIA. Programming with CUDA, there is a straightforward mapping onto hardware, for this reason it is necessary to study the available HW before start developing an application. The architecture of the given accelerator is is shown in Figure \ref{fig:gtx}, its main characteristics and limits are shown in Table \ref{table:t1}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.7\linewidth]{gtx}
+    \caption{NVIDIA GTX480 Architecture}
+    \label{fig:gtx}
+\end{figure}
+\FloatBarrier
 
 \begin{table}[ht]
 \centering
-\caption{NVIDIA GTX480 Specifications}
-\label{table:t1}
 \begin{tabular}{l|l}
 Microarchitecture & Fermi \\ \hline
 Compute capability (version) & 2.0 \\ \hline
@@ -56,11 +62,14 @@ Maximum number of resident threads per multiprocessor & 1536 (48 * 32) \\ \hline
 Number of 32-bit registers per multiprocessor & 32K \\ \hline
 Maximum amount of shared memory per multiprocessor & 48K
 \end{tabular}
+\caption{NVIDIA GTX480 Specifications}
+\label{table:t1}
 \end{table}
+
 
 \section{CImg}
 \label{sec:cimg}
-The image processing library used in this project was CImg, a small, modern and open-source toolkit developed for C++. CImg implements the RGB color model, an additive color model in which red, green, and blue light are added together in various ways to reproduce a broad array of colors. Each colored image of size \textit{N x M} is composed by three parts (R,G,B) of the same size, so that \textit{N x M x 3} values are necessary to define an image. The Figure \ref{fig:rgb} shows an example of image composition.
+The image processing library used in this project was CImg, a small, modern and open-source toolkit developed for C++. CImg implements the RGB color model, an additive color model in which red, green, and blue light are added together in various ways to reproduce a broad array of colors. Each colored image of size \textit{N*M} is composed by three parts (R,G,B) of the same size, so that \textit{N*M*3} values are necessary to define an image. The Figure \ref{fig:rgb} shows an example of image composition.
 
 \begin{figure}[ht]
     \centering
@@ -72,7 +81,7 @@ The image processing library used in this project was CImg, a small, modern and 
 
 \section{The processing flow}
 \label{sec:cpf}
-Using CUDA there are two parts of the code: the device code, or GPU code, or Kernel, that is a sequential program write for one thread and execute for all and the HOST code, or CPU code, that is used to instantiate the grid, run the kernel, manage the memory. Figure \ref{fig:flow} shows the processing flow of a CUDA application. In the particular case of image processig, everything starts from the CPU, that store the image from a file into a local buffer, allocates IN and OUT buffers on the GPU (\textit{cudaMalloc}) and copy the image into the GPU's IN buffer (\textit{cudaMemCpy}). After that, the CPU launches the GPU kernel with a defined grid configuration (\textit{kernel\_function <<gridDim, blockDim>>(params)}), that is executed by the GPU following the SIMT (Single Instruction, Multiple Threads) NVIDIA model. The threads are executed in parallel in each core, and they read the assigned part of IN data and generates the assigned part of OUT data. At the end, the results are copied out back to the CPU (\textit{cudaMemCpy}) and the image is written to a file by the CPU.
+Using CUDA there are two parts of the code: the device code, or GPU code, or the Kernel, that is a sequential program, write for one thread and execute for all and the HOST code, or CPU code, that is used to instantiate the grid, run the kernel, manage the memory. Figure \ref{fig:flow} shows the processing flow of a CUDA application. In the particular case of image processig, everything starts from the CPU, that store the image from a file into a local buffer, allocates IN and OUT buffers on the GPU (\textit{cudaMalloc}) and copy the image into the GPU's IN buffer (\textit{cudaMemCpy}). After that, the CPU launches the GPU kernel with a defined grid configuration (\textit{kernel\_function <<gridDim, blockDim>>(params)}), that is executed by the GPU following the SIMT (Single Instruction, Multiple Threads) NVIDIA model. The threads are executed in parallel in each core, and they read the assigned part of IN data and generates the assigned part of OUT data. At the end, the results are copied out back to the CPU (\textit{cudaMemCpy}) and the image is written to a file by the CPU.
 
 \begin{figure}[ht]
     \centering
@@ -84,12 +93,44 @@ Using CUDA there are two parts of the code: the device code, or GPU code, or Ker
 
 \section{Algorithm 1: Grayscale Conversion and Darkening}
 \label{sec:gcd}
+From an RGB image, the output of this algorithm is a darker grayscale image.
+The gray value of a pixel is generated by weighting the three values (\texttt{0.3*R, 0.59*G, 0.11*B}) and then summing them together. To darken the obtained grayscale image, the final pixel value is multiplied by a constant (0.6). The Figure \ref{fig:dark} shows an example of the result. The sequential algorithm, simply go through the entire image and computes for each pixel the corresponding value.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.5\linewidth]{dark}
+    \caption{Grayscale Conversion and Darkening}
+    \label{fig:dark}
+\end{figure}
+\FloatBarrier
+
+\subsection{Parallelization}
+\label{sec:p1}
 
 \section{Algorithm 2: Histogram Computation}
 \label{sec:hc}
+From an RGB image, the output of this algorithm is a grayscale image with the relative histogram of 256 possible values of gray.
+The histogram measures how often a value of gray is used in an image. The sequential algorithm, simply go through the entire image, computing for each pixel the corresponding gray value and incrementing the corresponding counter. The Figure \ref{fig:histo} shows an example of the result.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.7\linewidth]{histo}
+    \caption{Histogram Computation}
+    \label{fig:histo}
+\end{figure}
+\FloatBarrier
 
 \section{Algorithm 3: Smoothing}
 \label{sec:smoo}
+Smoothing is the process of removing noise from an image by the means of statistical analysis. To remove the noise, each point is replaced by a weighted average of its neighbours. In this way small-scale structures are removed from the image. In this case a two-dimensional 5-point triangular smooth filter was used. The Figure \ref{fig:smooth} shows an example of the result.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.5\linewidth]{smooth}
+    \caption{Smoothing}
+    \label{fig:smooth}
+\end{figure}
+\FloatBarrier
 
 
 \printbibliography 
