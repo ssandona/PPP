@@ -18,7 +18,7 @@ ibis.pool.name = rubiks
 #ibis.pool.size = 2
 
 ## Address of the central ibis server
-ibis.server.address = 131.180.125.24-5658/192.168.122.1/10.149.3.254/10.148.3.254/10.141.3.254/10.103.255.254-5658~ssa223
+ibis.server.address = 131.180.125.24-5660/192.168.122.1/10.149.3.254/10.148.3.254/10.141.3.254/10.103.255.254-5660~ssa223
 ## Comma seperated list of hub addresses. The server address is appended to this list, and thus is the default hub if no hub is specified
 #ibis.hub.addresses = 130.37.199.7-5658
 

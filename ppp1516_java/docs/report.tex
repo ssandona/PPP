@@ -34,17 +34,16 @@
 \section{The Rubik's Cube}
 \label{sec:rubiks_cube}
 
-A Rubik's Cube is a puzzle designed by Mr Rubik. In a Rubik's Cube, each of the faces is covered by colored stickers and in the initial setting, all the stickers of a face are of the same color and different colors are used for different faces. After performing some random twists, the goal of the game is to twist the cube until every side returns to be of a single color. 
+A Rubik's Cube is a puzzle designed by Ernő Rubik. In a Rubik's Cube, each of the faces is covered by colored stickers and in the initial setting, all the stickers of a face are of the same color and different colors are used for different faces. After performing some random twists, the goal of the game is to twist the cube until every face returns to be of a single color. 
 
 \section{The Sequential Algorithm}
 \label{sec:seq_algo}
-The idea behind the sequential algorithm is simple. From a starting cube, we can twist it in each axis, row and direction (Figure \ref{fig:tw}) and from each cube of size \textit{S}, after a twist, there are \textit{6*(S-1)} new possible cubes. The evolution of the search can be represented as as a tree. 
-The used state space search strategy, is the \textbf{deepening depth-first search (IDDFS)}. A depth-limited search is run repeatedly, increasing the depth limit with each iteration until it reaches d, the depth of the shallowest goal state. When the bound is increased, the solution search starts again from the begin (the root), and continues until the bound level is reached. On each iteration, the algorithm visits the nodes in the search tree in the same order as depth-first search, but the cumulative order in which nodes are first visited is effectively breadth-first. The first 2 iterations of the algorithm, with the order of the cube's evaluation is shown in Figure \ref{fig:iterations}. At the tree level \textit{i} there are \textit{(6*(S-1))\textsuperscript{i}} nodes (cubes), so there is a rapid growth of the search tree. The time complexity of IDDFS is O(b\textsuperscript{d}) and its space complexity is O(d), where b is the branching factor (\textit{6*(S-1)}) and \textit{d} is the depth of the shallowest goal.
+From a starting Rubik's cube, we can twist it in each row, axis and direction (Figure \ref{fig:tw}) and from each cube of size \textit{S}, after a twist, there are \textit{6*(S-1)} new possible configurations. The evolution of the search can be represented as as a tree. The idea behind the given sequential algorithm to solve the Rubik's Cube is simple. The used state space search strategy, is the \textbf{deepening depth-first search (IDDFS)}. A depth-limited search is run repeatedly, increasing the depth limit with each iteration until it reaches \textit{m}, the depth of the shallowest goal state. When the bound is increased, the solution search starts again from the begin (the root) and continues until the bound level is reached. On each iteration, the algorithm visits the nodes in the search tree in the same order as depth-first search, but the cumulative order in which nodes are first visited is effectively breadth-first. The first 2 iterations of the algorithm, with the order of the cube's evaluation is shown in Figure \ref{fig:iterations}. At the tree level \textit{i} there are \textit{(6*(S-1))\textsuperscript{i}} nodes (cubes), so there is a rapid growth of the search tree. The time complexity of IDDFS is O(b\textsuperscript{m}) and its space complexity is O(m), where b is the branching factor (\textit{6*(S-1)}) and \textit{m} is the depth of the shallowest goal.
 
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.5\linewidth]{xyz}
-  \caption{Possible directions and axis for twists in a 3d cube}
+  \caption{Possible axis and directions for the twists in a 3d cube}
   \label{fig:tw}
 \end{figure}
 \FloatBarrier
@@ -59,27 +58,27 @@ The used state space search strategy, is the \textbf{deepening depth-first searc
 \includegraphics[width=\linewidth]{rubik_tree_eval2}
 \caption{Second itaration (bound=2)} \label{fig:itb}
 \end{subfigure}
-\caption{The IDDFS Algorithm} \label{fig:iterations}
+\caption{The IDDFS Algorithm (3d cube)} \label{fig:iterations}
 \end{figure}
 \FloatBarrier
 
 \section{The Parallel Algorithm}
 \label{sec:par_algo}
-An efficient parallelization of this algorithm is not trivial because of the work distribution. At each tree level, there are \textit{(6*(cubeSize-1))\textsuperscript{i}} cubes, and this number is most likely not a multiple of the available nodes involved in the computation. Another aspect, consist on the organization of the entire work, due to the fact that after a tree bound level is reached, the termination or the progress of the work has to be checked. The next paragraph was introduced to clarify terms and concepts that will be used in the rest of the report.
+An efficient parallelization of this algorithm is not trivial because of the work distribution. At each tree level \textit{i}, there are \textit{(6*(cubeSize-1))\textsuperscript{i}} cubes, and this number is most likely not a multiple of the available machines involved in the computation. Another aspect, consists on the organization of the entire work, due to the fact that after a tree bound level is reached, the termination or the progress of the work has to be checked. The next paragraph was introduced to clarify terms and concepts that will be used in the rest of the report.
 
 \subsection{The Ibis Portability Layer (IPL)}
 \label{sec:ibis}
-For this project was used an efficient platform for distributed computing: Ibis. This is a Java-centric communication system designed for grid computing, developed at VU University, Amsterdam. A fundamental concept in Ibis is the Pool, that is a set of one or more Ibis instances, often distributed in different machines. Each Ibis instance, that joined a specific pool, has an unique id and can cooperate with the others, running a single distributed application. With the election mechanism of Ibis, one machine can be elected as "master" and so be the "coordinator" or the central point of the entire work. Thanks to the registry mechanism, each Ibis instance can also know all the other Ibises that joined the same Pool and so communicate with them. The core of the Ibis system is the  Ibis Portability layer (IPL), that is a communication library specifically designed for usage in a grid environment. It is based on setting up connections. The programmer can create send/receive ports (with a name) and connect them in a flexible way: one-to-one, one-to-many, many-to-one. In addition, the programmer can define properties of connections and ports like reliability, FIFO ordering, ... . Proceeding in this way, after apply a certain configuration to a port, the only thing to do is to send a message through this port, the library will take care of the rest. 
+For this project was used an efficient platform for distributed computing: Ibis. This is a Java-centric communication system designed for grid computing, developed at VU University, Amsterdam. A fundamental concept in Ibis is the Pool, that is a set of one or more Ibis instances, often distributed in different machines. Each Ibis instance, that joined a specific pool, has an unique ID and can cooperate with the others, running a single distributed application. With the election mechanism of Ibis, one machine can be elected as "master" and be the "coordinator" or the central point of the entire work. Thanks to the registry mechanism, each Ibis instance, can also know all the other Ibises that joined the same Pool and communicate with them. The core of the Ibis system is the Ibis Portability layer (IPL), that is a communication library specifically designed for usage in a grid environment. It is based on setting up connections. The programmer can create send/receive ports (with a name) and connect them in a flexible way: one-to-one, one-to-many, many-to-one. In addition, the programmer can define properties of connections and ports like reliability, FIFO ordering, ... . Proceeding in this way, after applying a certain configuration to a port, the only thing to do is to send a message through this port, the library will take care of the rest. 
 
 \subsection{Cubes distribution}
 \label{sec:cubes_distr}
-The work distribution, or better the cubes distribution, is the central part of the parallel implementation. The more balanced is the work among the involved nodes and the more will be the achieved performance. The major problem with a static partitioning, is that at each tree level, a number multiple of 6 of cubes are generated, and this is often not perfect divisible by the number of involved machines. A naive approach could generate the first levels of the tree and when there are enough nodes (more than the number of Ibis instances involved), distribute them as fairly as possible. However, this could lead to a big load imbalance and, as conseguece, to have not good performance. For example, with a 3d cube and 5 machines, the tree will be unroll until level 1. The 12 resulting cubes would be divided into 3 3 2 2 2 and assigned to the 5 machines. This means that the first 2 machines would work 1.5 times the others. To outline the gravity of this, if \textit{m} (the tree level in which lives the solution) is big enough, it could be possible that the last 3 macchines worked for an entire day (24 hours), and the first two machines worked for one day and a half (36 hours). The total computational time would be 36 hours and for 12 hours the last 3 machines would be idle. 
-The basic idea of amplify the tree until there are enough nodes is correct and logical, but the load imbalance factor must be considered. 
+The work distribution, or better the cubes distribution, is the central part of the parallel implementation. The more balanced is the work among the involved nodes and the more will be the achieved performance. The major problem with a static partitioning, is that at each tree level, a number multiple of 6 of cubes is generated, and this is often not perfectly divisible by the number of machines involved. A naive approach could generate the first levels of the tree until there are enough nodes (more than the number of Ibis instances involved) and distribute them as fairly as possible. However, this could lead to a big load imbalance and, as a consequence, to have not good performance. For example, with a 3d cube and 5 machines, the tree will be unrolled until level 1. The 12 resulting cubes would be divided into 3 3 2 2 2 and assigned to the 5 machines. This means that the first 2 machines would work 1.5 times the others. To outline the gravity of this scenario, if \textit{m} (the tree level in which lives the solution) is big enough, it could be possible that the last 3 machines worked for an entire day (24 hours), while the first two machines worked for one day and a half (36 hours). The total computational time would be 36 hours and for 12 hours the last 3 machines would be idle. 
+The basic idea of amplifying the tree until there are enough nodes is correct and logical, but the load imbalance factor must be considered. 
 
 \subsubsection{Cube Weight}
 \label{sec:cw}
 
-To avoid the load imbalance, a way for measure the total amount of work assigned to a node is needed. To do this, to each cube could be assigned a "weight", based on the amount of the next cubes that will be generated from it. This weight is represented in Equation\ref{eq:eqWe}, where \textit{m} is the tree level in which there will be the solution(s) (unknown at the begin), \textit{n} is \textit{6*(cubeSize-1)} (the number of possible children per cube) and \textit{z} is the actual tree level of the cube.
+To avoid the load imbalance, a way to measure the total amount of work assigned to a node is needed. To do this, to each cube could be assigned a "weight", based on the amount of the next cubes that will be generated from it. This weight is represented in Equation\ref{eq:eqWe}, where \textit{m} is the tree level in which there will be the solution (unknown at the begin), \textit{n} is \textit{6*(cubeSize-1)} (the number of possible children per cube) and \textit{z} is the actual tree level of the cube.
 
 \begin{equation} 
 \label{eq:eqWe}
@@ -87,7 +86,7 @@ Weight = \sum_{i=0}^{m-z}{n^i}
 \end{equation}
 \FloatBarrier
 
-As clarification, a practical example is reported in Figure \ref{fig:treeBin}. In this example, that is not related to the Rubik's Cube, but just to explain the general idea, \textit{n=2}, \textit{z1=1}, \textit{z2=2}, \textit{m=4}. Applying the previous formula, the weight of the first cube (at z1 level) is \textit{2\textsuperscript{0}+2\textsuperscript{1}+2\textsuperscript{2}+2\textsuperscript{3}=15}, because from it 14 cubes will be generated, so 15 (counting also the root node) will be evaluated in total. The weight of the second cube (at z2 level), is \textit{2\textsuperscript{0}+2\textsuperscript{1}+2\textsuperscript{2}=7}. 
+As clarification, a practical example is reported in Figure \ref{fig:treeBin}. In this scenario, that is not related to the Rubik's Cube, but is presented just to explain the general idea, \textit{n=2}, \textit{z1=1}, \textit{z2=2}, \textit{m=4}. Applying the previous formula, the weight of the black node at \textit{z1} level is \textit{2\textsuperscript{0}+2\textsuperscript{1}+2\textsuperscript{2}+2\textsuperscript{3}=15}, because from it 14 other nodes will be generated and 15 (counting also the starting node) will be evaluated in total. The weight of the black node at \textit{z2} level, is \textit{2\textsuperscript{0}+2\textsuperscript{1}+2\textsuperscript{2}=7}. 
 
 \begin{figure}[ht]
   \centering
@@ -100,7 +99,7 @@ As clarification, a practical example is reported in Figure \ref{fig:treeBin}. I
 \subsubsection{Load balancing}
 \label{sec:lb}
 
-To have a fair ripartition of work. it is correct to assign to each Ibis instance more or less the same work to do. Given the fact that the number of cubes on a tree level often is not a multiple of the nodes involved on the computation, there will be load imbalance at a certain point. Also distributing the nodes at a specific tree level as fairly as possible, there will be one or more Ibis instances with one more cube than the others, for a gap of maximum one cube (e.g. with 9 cubes and 4 machines, 3 2 2 2). Accepting this, the best thing to do, is to select the correct tree level in which have this load imbalance, in order to limit the deriving damages. Looking at Equation\ref{eq:eqWe}, at the begin of the computation \textit{n} is known because it is the size of the cube, \textit{m} is unknown, is part of the solution, and \textit{z} is the value that we want to find. As just said, given enough cubes (more than the number of Ibis instances), the maximum difference of assigned cubes per node is one. This is possible using a simple \textit{for} construct (Listing \ref{fair}).
+To have a fair distribution of the work, it is correct to assign to each Ibis instance more or less the same cube weight. Given the fact that the number of cubes on a tree level often is not a multiple of the nodes involved in the computation, there will be load imbalance at a certain point. Also distributing the nodes at a specific tree level as fairly as possible, there will be one or more Ibis instances with one additional cube, for a difference of maximum one cube (e.g. with 9 cubes and 4 machines 3 2 2 2, with 17 cubes and 3 machines 6 6 5). Accepting this, the best thing to do, is to select the correct tree level in which have this load imbalance, in order to limit the deriving damages. Looking at Equation\ref{eq:eqWe}, at the begin of the computation \textit{n} is known because it is the size of the cube, \textit{m} is unknown, is part of the solution, and \textit{z} is the value that we want to find. As just said, given enough cubes (more than the number of Ibis instances), the maximum difference of assigned cubes per node is one. This is possible using a simple \textit{for} construct (Listing \ref{fair}).
 
 \begin{lstlisting}[label=fair, caption=fair distribution of cubes]
 int sum = 0;
@@ -131,7 +130,7 @@ HW=\sum_{i=0}^{m-z}{n^i}*\lfloor\frac{n^z}{k}\rfloor +  \sum_{i=0}^{m-z}{n^i}
 \end{equation}
 \FloatBarrier
 
-To reduce the load imbalance as much as possible, the two amounts of work should differ as little as possible. That means that \textit{HW*100/LW} has to be as near to 100 as possible, for example lower than 101, that means that a maximum of 1\% of load imbalance is permitted. Solving the inequality shown in Equation \ref{eq:eqIne}, the solution is the one shown in Equation \ref{eq:eqSol}. 
+To reduce the load imbalance as much as possible, the two amounts of work should differ as little as possible. That means that \textit{HW*100/LW} has to be as near to 100 as possible, for example lower than 101 (1\% of load imbalance permitted). Solving the inequality shown in Equation \ref{eq:eqIne}, the solution is the one shown in Equation \ref{eq:eqSol}. 
 
 \begin{equation} 
 \label{eq:eqIne}
@@ -145,7 +144,7 @@ To reduce the load imbalance as much as possible, the two amounts of work should
 \end{equation}
 \FloatBarrier
 
-At the begin \textit{n} (the size of the cube) is known and also \textit{k} (the number of Ibises that joined the pool), so the value to find is \textit{z}. In addition to reduce the load imbalance, it's useful to reduce the initial tree unroll at the minimum. For this reason, the final value to find is the one shown in Equation \ref{eq:eqSol2}.
+At the beginning \textit{n} (the size of the cube) is known and also \textit{k} (the number of Ibises that joined the pool), so the value to find is \textit{z}. In addition, to reduce the load imbalance, it's useful to reduce the initial tree unroll at the minimum. For this reason, the final value to find is the one shown in Equation \ref{eq:eqSol2}.
 
 \begin{equation} 
 \label{eq:eqSol2}
@@ -157,7 +156,7 @@ At the begin \textit{n} (the size of the cube) is known and also \textit{k} (the
 \label{sec:ws}
 
 Once found the correct value of \textit{z}, this is the tree level in which to have an imbalance of 1 cube, isn't such a big risk for the performance. 
-To reduce the unroll, the tree is extended (A) until the level \textit{z-1}, if at that level there are enough nodes (more than the Ibis instances), otherwise (B) until the level \textit{z}. If we are in case A, the \textit{n\textsuperscript{(z-1)}} resulting nodes are divided into equal parts to the machines (\textit{n\textsuperscript{(z-1)}/k} cubes per machine). If some nodes have left out (\textit{k} is not a divisor of the number of nodes of this level), these are expanded to the next tree level (Figure \ref{fig:ev1}), otherwise the splitting phase is terminated (Figure \ref{fig:ev2}). If we have expanded some nodes, we try to split their children among the Ibis instances. Until they are less than the number of ibis instances we generate another level of the tree from them (Figure \ref{fig:ev3}). When they are enough, we split them as fairly as possible (using the approach shown in Listing \ref{fair}). If we are in case B we just split the \textit{n\textsuperscript{(z)}} nodes as fairly as possible (Listing \ref{fair}). In Figure \ref{fig:ev1}, Table \ref{table:tev1} there is an example of work riparitition among 11 Ibis instances, in Figure \ref{fig:ev2}, Table \ref{table:tev2} among 16 Ibis instances and in Figure \ref{fig:ev3}, Table \ref{table:tev3} among 13 Ibis instances. 
+To reduce the initial unroll, the tree is extended (A) until the level \textit{z-1}, if at that level there are enough nodes (more than the Ibis instances), otherwise (B) until the level \textit{z}. If we are in case A, the \textit{n\textsuperscript{(z-1)}} resulting nodes are divided into equal parts to the machines (\textit{n\textsuperscript{(z-1)}/k} cubes per machine). If some nodes have left out (\textit{k} is not a divisor of the number of nodes of this level), these are expanded to the next tree level (Figure \ref{fig:ev1}), otherwise the splitting phase is terminated (Figure \ref{fig:ev2}). If we have expanded some nodes, we try to split their children among the Ibis instances. Until they are less than the number of ibis instances we generate another level of the tree from them (Figure \ref{fig:ev3}). When they are enough, we split them as fairly as possible (using the approach shown in Listing \ref{fair}). If we are in case B we just split the \textit{n\textsuperscript{(z)}} nodes as fairly as possible (Listing \ref{fair}). In Figure \ref{fig:ev1}, Table \ref{table:tev1} there is an example of work riparitition among 11 Ibis instances, in Figure \ref{fig:ev2}, Table \ref{table:tev2} among 16 Ibis instances and in Figure \ref{fig:ev3}, Table \ref{table:tev3} among 13 Ibis instances. 
 
 \begin{figure}[!ht]
   \centering
@@ -219,9 +218,9 @@ To reduce the unroll, the tree is extended (A) until the level \textit{z-1}, if 
 \end{table}
 \FloatBarrier
 
+After the cubes of the first levels are correclty splitted, each Ibis instance will have a work queue and for each cube inside it, the algorithm will proceed like in the sequential version.
 In Table \ref{table:tlow}, are reported the numbers of cubes evaluated by each Ibis instance, when the algorithm's bound is 7, with a Cube of size 3. These numbers were measured running the implementation with different number of Ibises. The Expanded Cubes, are the ones from which are generated other cubes during the initial splitting work phase while the Assigned Cubes are the ones effectively evaluated. As shown, for every launching configuration, the load imbalance is always under the 1\%.
 
-\centering
 \begin{table}[!ht]
 \centering
 \caption{Cubes distribution - Size=3, Twists=11, Bound=7}
@@ -238,32 +237,93 @@ In Table \ref{table:tlow}, are reported the numbers of cubes evaluated by each I
 \end{table}
 \FloatBarrier
 
+\subsubsection{Special cases}
+\label{sec:sc}
+The weakest part of this implementation, is the tree unrolling phase at the beginning of each bound increment, in order to better distribute the work. During this step, it could be possible to find the problem solution if the cube was previously twisted for few times. However, that would mean a small searching space, and so a non convenience on solving the cube in parallel. In the case a tree level is completely generated during the initial unrolling phase and a solution is found, the current algorithm will stop, and the master Ibis will show the problem solution, without performing any extra communication with the slaves. Another case that has to be considered is the one in which performing the second tree extension with the cubes left out by the distribution (in the Figure \ref{fig:ev1} the cube surrounded by the red square), these are solved cubes. The algorithm, correctly treat also this scenario, storing the partial results found at each level of the unrolling and adding these to the tree level results found during the next solving phase.
+
 \subsection{Solution search and Ibises coordination}
 \label{sec:ibis_setting}
-After the cubes of the first levels are correclty splitted, each Ibis instance will have a work queue and for each cubes inside it, the algorithm will proceed like in the sequential version. To avoid the initial send of the cubes, each Ibis instance will generate the same initial cube, will perform the splitting phase and will assign certain cubes to itself. To reach the final solution, the machines involved in the computation have to coordinate and cooperate. When a tree level bound is reached, the distributed results have to be summed, in order to decide if continue with the next bound or not. To do that, a "master slave" approach s adopted. The "master" Ibis instance collects and sums the partial results and decides if the work is finished or continue with the next bound. For what concerning the communication setting, 4 ports are used. On the master side 2 ports are needed, one to receive the results from the slaves and one to communicate them if the  the work is finisched. Specularly, on the slaves side, 2 ports are needed, one to communicate the solution found and one to receive if the next bound has to be evaluated or the work is finished. A graphic representation of the ports organization is presented in Figure \ref{fig:ports}.
+To avoid the sending of the cubes at the beginning, each Ibis instance generates the same initial cube, performs the splitting phase and assigns certain cubes to itself. To reach the final solution, the machines involved in the computation have to coordinate and cooperate. When a tree level bound is reached, the distributed results have to be summed, in order to decide if continue with the next bound or not. To do that, a "master slave" approach is adopted. The "master" Ibis instance collects and sums the partial results and decides if the work is finished or is necessary to continue with the next bound. For what concerns the communication setting, 4 ports are used. On the master side 2 ports are needed, one to receive the results from the slaves and one to communicate them if the work is finisched. Specularly, on the slaves side, 2 ports are needed, one to communicate the solution found and one to know if the next bound has to be evaluated or the work is finished. A graphic representation of the ports organization is presented in Figure \ref{fig:ports}.
 
-\begin{figure}
+\begin{figure}[!ht]
 \begin{subfigure}{0.5\textwidth}
 \centering
-\includegraphics[width=0.5\linewidth]{results}
-\caption{Results communication - Many to 1} \label{fig:ca}
+\includegraphics[width=0.35\linewidth]{results}
+\caption{Results communication - Many (Slaves) to 1 (Master)} \label{fig:ca}
 \end{subfigure}
 \hspace*{\fill} % separation between the subfigures
 \begin{subfigure}{0.5\textwidth}
 \centering
-\includegraphics[width=0.5\linewidth]{continue}
-\caption{Work status communication - 1 to Many} \label{fig:cb}
+\includegraphics[width=0.35\linewidth]{continue}
+\caption{Termination communication - 1 (Master) to Many (Slaves)} \label{fig:cb}
 \end{subfigure}
-\caption{Send (circle) and Receive (square) Ports organization} \label{fig:ports}
+\caption{Send Ports (circles) and Receive Ports (squares) Organization} \label{fig:ports}
 \end{figure}
 \FloatBarrier
 
-\subsubsection{Special cases}
-\label{sec:sc}
-The worst part of this implementation, is that it performs the tree unrolling phase at the begin of each bound increase, in order to better distribute the work. During this step, it's possible to find the problem solution if the cube was previously twisted for few times. However, that would means a small searching space, and so a non convenience on solving the cube in parallel. In the case a tree level is completely generated during the initial unrolling phase and a solution is found, the current algorithm will stops, and the master Ibis will show the problem solution, without performing any extra communication with the slaves. Another border case, is that we are unlucky and performing the second tree extension with the cubes left out by the division (in the Figure \ref{fig:ev1} the cube surrounded by the red square), these are solved cubes. The algorithm, correctly treat also this scenario, storing the partial results found at each level of the unrolling and adding these to the tree level results found during the next solving phase.
-
 \subsection{Results}
 \label{sec:results}
+The realized parallel implementation obtained very good results. As shown in Figure \ref{fig:speed} and Tables \ref{tab:exe_all}, \ref{tab:spe_all}, the speedups are almost linear for each configuration. The worst measured case is the configuration with 13 machines and cube size 4. In this situation, the tree is extended until level 2, the 324 resulting nodes are split into equal parts between the 13 Ibises, than the 12 cubes left out (324mod13=12) are further extended, obtaining 216 additional nodes, that are distributed as fairly as possible. Another interesting aspect is that in some cases, the speedup is superlinear (Figure \ref{fig:speed}, 12 twists, 3 machines), due to the more cache and memory resources available on parallel systems. In a single machine, in fact, if the memory is not enough there will be a lot of swapping and trashing, actions that are reduced having bigger available resources.
+
+\begin{figure}[!ht]
+\begin{subfigure}{0.5\textwidth}
+\centering
+\includegraphics[width=\linewidth]{results/standard}
+\end{subfigure} % separation between the subfigures
+\begin{subfigure}{0.5\textwidth}
+\centering
+\includegraphics[width=\linewidth]{results/twists12}
+\end{subfigure}
+ % separation between the subfigures
+\begin{subfigure}{0.5\textwidth}
+\centering
+\includegraphics[width=\linewidth]{results/size4}
+\end{subfigure}
+ % separation between the subfigures
+\begin{subfigure}{0.5\textwidth}
+\centering
+\includegraphics[width=\linewidth]{results/speedups_cube}
+\end{subfigure}
+\caption{Execution Time and Speedups}
+ \label{fig:speed}
+\end{figure}
+\FloatBarrier
+
+\begin{table}[!ht]
+\centering
+  \begin{tabular}{l|l|l|l}
+  
+\multicolumn{1}{c}{\bfseries nodes\textbackslash configuration} & 11 Twists (size 3) & 12 Twists (size 3) & 11 Twists (size 4) \\ \hline
+1 & 9863 & 121067 & 193453 \\ \hline
+2 & 5155 & 61350 & 97769 \\ \hline
+4 & 2576 & 29841 & 50208 \\ \hline
+8 & 1565 &  15899 & 25313 \\ \hline
+11 & 1185 & 11547 & 18391 \\ \hline
+13 & 1081 & 9710 & 16512 \\ \hline
+16 & 909 & 7931 &  12375	
+  \end{tabular}
+  \caption{Execution Times}
+  \label{tab:exe_all}
+\end{table}
+  
+  \begin{table}[!ht]
+\centering
+  \begin{tabular}{l|l|l|l}
+\multicolumn{1}{c}{\bfseries nodes\textbackslash configuration} & 11 Twists (size 3) & 12 Twists (size 3) & 11 Twists (size 4) \\ \hline
+2 & 1,91 & 1,97 & 1,97 \\ \hline
+4 & 3,82 & 4,05 & 3,85 \\ \hline
+8 & 6,30 & 7,61 & 7,64 \\ \hline
+11 & 8,32 & 10,48 & 10,51 \\ \hline
+13 & 9,12 & 12,46 & 11,71 \\ \hline
+16 & 10,85 & 15,26 & 15,63
+  \end{tabular}
+  \caption{Speedups}
+  \label{tab:spe_all}
+\end{table}
+
+\subsection{Final considerations}
+\label{sec:fc}
+The adopted solution is applicable to each number of machines paying the cost of the initial work distribution phase. The more is high the number of the Ibises that will join the pool and the more tree levels will be generated in order to balance the work. The powerful and the flexibility of the Ibis system were really helpful during the solution developement, hiding all the "problems" deriving from a distributed application like the communiation. 
 
 
 \printbibliography 
