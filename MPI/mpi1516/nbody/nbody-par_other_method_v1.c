@@ -38,18 +38,19 @@ typedef struct {
 
 int globalStartB;
 int globalStartC;
-forceType *forces;      /*list of forces per body*/
-forceType *new_forces;  /*ausiliar list of forces (MPI reduce)*/
-int bodyCt;             /*number of bodies*/
-int old = 0;            /* Flips between 0 and 1 */
-bodyType *bodies;       /*list of bodies*/
-int *displs;            /*list of the starting indexes of forces assigned per processor*/
-int *forces_per_proc;   /*list of the number of forces assigned per processor*/
-int myid;               /*MPI process ID*/
+forceType *forces;
+forceType *new_forces;
+int bodyCt;
+int old = 0;    /* Flips between 0 and 1 */
+bodyType *bodies;
+int *displs;
+int *forces_per_proc;
+int myid;
 int printed = 0;
-int numprocs;           /*number of MPI processes involeved in the computation*/
+int numprocs;
 MPI_Op mpi_sum;
-double totalNumberOfForcesComputed = 0;
+int totalNumberOfForcesComputed = 0;
+
 
 /*  Macros to hide memory layout
 */
