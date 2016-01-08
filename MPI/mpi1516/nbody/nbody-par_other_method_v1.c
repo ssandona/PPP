@@ -46,8 +46,8 @@ forceType *new_forces;
 forceType *new_forces2;
 int bodyCt;
 int old = 0;    /* Flips between 0 and 1 */
-bodyType *new_bodies;
-bodyType *new_bodies2;
+bodyType *bodies;
+//bodyType *bodies2;
 //bodyType *rec_bodies;
 int *displs;
 int *forces_per_proc;
@@ -72,16 +72,16 @@ int totalNumberOfForcesComputed = 0;
 
 /*  Macros to hide memory layout
 */
-#define X(B)       new_bodies[B].x[old]
-#define XN(B)      new_bodies[B].x[old^1]
-#define Y(B)       new_bodies[B].y[old]
-#define YN(B)      new_bodies[B].y[old^1]
+#define X(B)       bodies[B].x[old]
+#define XN(B)      bodies[B].x[old^1]
+#define Y(B)       bodies[B].y[old]
+#define YN(B)      bodies[B].y[old^1]
 #define XF(B)      new_forces[B].xf
 #define YF(B)      new_forces[B].yf
-#define XV(B)      new_bodies[B].xv
-#define YV(B)      new_bodies[B].yv
-#define R(B)       new_bodies[B].radius
-#define M(B)       new_bodies[B].mass
+#define XV(B)      bodies[B].xv
+#define YV(B)      bodies[B].yv
+#define R(B)       bodies[B].radius
+#define M(B)       bodies[B].mass
 
 /*  Dimensions of space (very finite, ain't it?)
 */
@@ -462,7 +462,7 @@ main(int argc, char **argv) {
     /*if(bodyCt > numprocs) {
         bodyCt = numprocs;
     }*/
-    new_bodies = malloc(sizeof(bodyType) * bodyCt);
+    bodies = malloc(sizeof(bodyType) * bodyCt);
 
     secsup = atoi(argv[2]);
     image = map_P6(argv[3], &xdim, &ydim);
@@ -569,7 +569,7 @@ main(int argc, char **argv) {
 
     fprintf(stderr, "B -> %d, C -> %d \n", globalStartB, globalStartC);
 
-    MPI_Bcast(new_bodies, bodyCt, mpi_body_type, 0, MPI_COMM_WORLD);
+    MPI_Bcast(bodies, bodyCt, mpi_body_type, 0, MPI_COMM_WORLD);
 
 
     int cont;
@@ -650,7 +650,7 @@ main(int argc, char **argv) {
 
     free(forces_per_proc);
     free(displs);
-    free(new_bodies);
+    free(bodies);
     //free(rec_bodies);
 
 
