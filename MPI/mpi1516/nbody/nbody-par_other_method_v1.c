@@ -41,7 +41,7 @@ int globalStartC;
 int globalStopB;
 int globalStopC;
 //bodyType bodies[MAXBODIES];
-forceType *forces;
+//forceType *forces;
 forceType *new_forces;
 forceType *new_forces2;
 int bodyCt;
