@@ -56,7 +56,6 @@ int myid;
 int printed = 0;
 int numprocs;
 MPI_Op mpi_sum;
-//int totalNumberOfForcesComputed = 0;
 
 /*  Macros to hide memory layout
 */
@@ -452,6 +451,11 @@ main(int argc, char **argv) {
         bodyCt = 2;
     }
 
+    MPI_Init(&argc, &argv);
+    MPI_Comm_size(MPI_COMM_WORLD, &numprocs);
+    MPI_Comm_rank(MPI_COMM_WORLD, &myid);
+    MPI_Get_processor_name(processor_name, &namelen);
+
     bodies = malloc(sizeof(bodyType) * bodyCt);
     positions = malloc(sizeof(bodyType) * bodyCt);
     forces = malloc(sizeof(forceType) * bodyCt);
@@ -488,10 +492,7 @@ main(int argc, char **argv) {
 
 
 
-    MPI_Init(&argc, &argv);
-    MPI_Comm_size(MPI_COMM_WORLD, &numprocs);
-    MPI_Comm_rank(MPI_COMM_WORLD, &myid);
-    MPI_Get_processor_name(processor_name, &namelen);
+    
 
     fprintf(stderr, "Process %d on %s\n", myid, processor_name);
 
@@ -596,7 +597,6 @@ main(int argc, char **argv) {
 
     rec_positions = malloc(sizeof(bodyPositionType) * bufSize);
     rec_bodies = malloc(sizeof(bodyType) * bufSize);
-
 
 
     calculateAssignedForces();
