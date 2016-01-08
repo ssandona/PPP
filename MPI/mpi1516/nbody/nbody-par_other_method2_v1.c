@@ -85,7 +85,7 @@ clear_forces(void) {
 
     /* Clear force accumulation variables */
     for (b = 0; b < bodyCt; ++b) {
-        _YF(b) = (_XF(b) = 0);
+        YF(b) = (XF(b) = 0);
     }
 }
 
@@ -112,10 +112,10 @@ compute_forces(void) {
         /* Slightly sneaky...
            force of b on c is negative of c on b;
         */
-        _XF(b) += xf;
-        _YF(b) += yf;
-        _XF(c) -= xf;
-        _YF(c) -= yf;
+        XF(b) += xf;
+        YF(b) += yf;
+        XF(c) -= xf;
+        YF(c) -= yf;
 
         count++;
         //totalNumberOfForcesComputed++;
@@ -137,10 +137,10 @@ compute_forces(void) {
             /* Slightly sneaky...
                force of b on c is negative of c on b;
             */
-            _XF(b) += xf;
-            _YF(b) += yf;
-            _XF(c) -= xf;
-            _YF(c) -= yf;
+            XF(b) += xf;
+            YF(b) += yf;
+            XF(c) -= xf;
+            YF(c) -= yf;
 
             count++;
             //totalNumberOfForcesComputed++;
@@ -183,8 +183,8 @@ compute_velocities(void) {
         double yv = YV(b);
         double force = sqrt(xv * xv + yv * yv) * FRICTION;
         double angle = atan2(yv, xv);
-        double xf = _XF(b) - (force * cos(angle));
-        double yf = _YF(b) - (force * sin(angle));
+        double xf = XF(b) - (force * cos(angle));
+        double yf = YF(b) - (force * sin(angle));
 
         XV(b) += (xf / M(b)) * DELTA_T;
         YV(b) += (yf / M(b)) * DELTA_T;
@@ -387,7 +387,7 @@ void
 print(void) {
     int b;
     for (b = 0; b < bodyCt; ++b) {
-        printf("%10.3f %10.3f %10.3f %10.3f %10.3f %10.3f\n", X(b), Y(b), _XF(b), _YF(b), XV(b), YV(b));
+        printf("%10.3f %10.3f %10.3f %10.3f %10.3f %10.3f\n", X(b), Y(b), XF(b), YF(b), XV(b), YV(b));
     }
 }
 
@@ -395,7 +395,7 @@ void
 print_forces(void) {
     int b;
     for (b = 0; b < bodyCt; ++b) {
-        printf("%10.3f %10.3f\n", _XF(b), _YF(b));
+        printf("%10.3f %10.3f\n", XF(b), YF(b));
     }
 }
 
@@ -634,7 +634,7 @@ main(int argc, char **argv) {
 
         /*fprintf(stderr, "TOTALForces -> ");
         for (i = 0; i < bodyCt; i++) {
-            fprintf(stderr, "[%10.3f,%10.3f] ", _XF(i), _YF(i));
+            fprintf(stderr, "[%10.3f,%10.3f] ", XF(i), YF(i));
         }
         fprintf(stderr, "\n");*/
 
