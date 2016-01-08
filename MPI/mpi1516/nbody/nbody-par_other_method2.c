@@ -411,6 +411,14 @@ print(void) {
     }
 }
 
+void
+print_forces(void) {
+    int b;
+    for (b = 0; b < bodyCt; ++b) {
+        printf("%10.3f %10.3f\n", _XF(b), _YF(b));
+    }
+}
+
 void sumForces(forceType *in, forceType *inout, int *len, MPI_Datatype *dtype) {
     int i;
     for (i = 0; i < *len; ++i) {
@@ -681,9 +689,13 @@ main(int argc, char **argv) {
         //MPI_Allgatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
         MPI_Allgatherv(rec_positions, bodies_per_proc[myid], mpi_position_type, new_positions, bodies_per_proc, displs2, mpi_position_type, MPI_COMM_WORLD);
 
-
         old ^= 1;
         rec_positions = new_positions + displs2[myid];
+
+        if(0 == myid) {
+            print_forces();
+            printf("------step %d-----\n",steps);
+        }
 
     }
 
