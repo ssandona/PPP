@@ -42,8 +42,8 @@ int globalStopB;
 int globalStopC;
 //bodyType bodies[MAXBODIES];
 //forceType *forces;
+forceType *forces;
 forceType *new_forces;
-forceType *new_forces2;
 int bodyCt;
 int old = 0;    /* Flips between 0 and 1 */
 bodyType *bodies;
@@ -76,8 +76,8 @@ int totalNumberOfForcesComputed = 0;
 #define XN(B)      bodies[B].x[old^1]
 #define Y(B)       bodies[B].y[old]
 #define YN(B)      bodies[B].y[old^1]
-#define XF(B)      new_forces[B].xf
-#define YF(B)      new_forces[B].yf
+#define XF(B)      forces[B].xf
+#define YF(B)      forces[B].yf
 #define XV(B)      bodies[B].xv
 #define YV(B)      bodies[B].yv
 #define R(B)       bodies[B].radius
@@ -574,10 +574,10 @@ main(int argc, char **argv) {
 
     int cont;
 
-    new_forces = malloc(sizeof(forceType) * bodyCt);
+    forces = malloc(sizeof(forceType) * bodyCt);
     for(i = 0; i < bodyCt; i++) {
-        new_forces[i].xf = 0;
-        new_forces[i].yf = 0;
+        forces[i].xf = 0;
+        forces[i].yf = 0;
     }
 
     if(gettimeofday(&start, 0) != 0) {
@@ -605,10 +605,10 @@ main(int argc, char **argv) {
         }
         fprintf(stderr, "\n");*/
 
-        new_forces2 = malloc(sizeof(forceType) * bodyCt);
-        MPI_Allreduce(new_forces, new_forces2, bodyCt, mpi_force_type, mpi_sum, MPI_COMM_WORLD);
-        free(new_forces);
-        new_forces = new_forces2;
+        new_forces = malloc(sizeof(forceType) * bodyCt);
+        MPI_Allreduce(forces, new_forces, bodyCt, mpi_force_type, mpi_sum, MPI_COMM_WORLD);
+        free(forces);
+        forces = new_forces;
 
         /*fprintf(stderr, "TOTALForces -> ");
         for (i = 0; i < bodyCt; i++) {
