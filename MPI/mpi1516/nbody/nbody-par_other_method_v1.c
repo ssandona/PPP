@@ -23,8 +23,8 @@ extern double   atan2(double, double);
 typedef struct {
     double x[2];        /* Old and new X-axis coordinates */
     double y[2];        /* Old and new Y-axis coordinates */
-    //double xf;          /* force along X-axis */
-    //double yf;          /* force along Y-axis */
+    double xf;          /* force along X-axis */
+    double yf;          /* force along Y-axis */
     double xv;          /* velocity along X-axis */
     double yv;          /* velocity along Y-axis */
     double mass;        /* Mass of the body */
@@ -48,7 +48,7 @@ int bodyCt;
 int old = 0;    /* Flips between 0 and 1 */
 bodyType *new_bodies;
 bodyType *new_bodies2;
-bodyType *rec_bodies;
+//bodyType *rec_bodies;
 int *displs;
 int *forces_per_proc;
 int myid;
@@ -651,7 +651,7 @@ main(int argc, char **argv) {
     free(forces_per_proc);
     free(displs);
     free(new_bodies);
-    free(rec_bodies);
+    //free(rec_bodies);
 
 
     return 0;
