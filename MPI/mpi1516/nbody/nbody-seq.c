@@ -315,7 +315,7 @@ void
 print_forces(void) {
     int b;
     for (b = 0; b < bodyCt; ++b) {
-        printf("%10.3f %10.3f\n\n", XF(b), YF(b));
+        printf("%10.3f %10.3f\n", XF(b), YF(b));
     }
 }
 
@@ -380,6 +380,7 @@ main(int argc, char **argv) {
         /* Flip old & new coordinates */
         old ^= 1;
         print_forces();
+        printf("------step %d-----\n",step);
         /*Time for a display update?*/
         if (secsup > 0 && (time(0) - lastup) > secsup) {
             display();

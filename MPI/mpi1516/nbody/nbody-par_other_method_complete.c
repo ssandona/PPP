@@ -385,7 +385,7 @@ void
 print_forces(void) {
     int b;
     for (b = 0; b < bodyCt; ++b) {
-        printf("%10.3f %10.3f\n\n", XF(b), YF(b));
+        printf("%10.3f %10.3f\n", XF(b), YF(b));
     }
 }
 
@@ -571,6 +571,7 @@ main(int argc, char **argv) {
         compute_positions();
         if(0 == myid) {
             print_forces();
+            printf("------step %d-----\n",step);
         }
 
         old ^= 1;
