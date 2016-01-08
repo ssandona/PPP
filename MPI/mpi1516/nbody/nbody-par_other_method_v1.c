@@ -49,7 +49,7 @@ int myid;               /*MPI process ID*/
 int printed = 0;
 int numprocs;           /*number of MPI processes involeved in the computation*/
 MPI_Op mpi_sum;
-int totalNumberOfForcesComputed = 0;
+//int totalNumberOfForcesComputed = 0;
 
 
 /*  Macros to hide memory layout
@@ -110,7 +110,7 @@ compute_forces(void) {
         YF(c) -= yf;
 
         count++;
-        totalNumberOfForcesComputed++;
+        //totalNumberOfForcesComputed++;
     }
 
     for (b = globalStartB + 1; b < bodyCt && count<forces_per_proc[myid]; ++b) {
@@ -135,7 +135,7 @@ compute_forces(void) {
             YF(c) -= yf;
 
             count++;
-            totalNumberOfForcesComputed++;
+            //totalNumberOfForcesComputed++;
         }
     }
 }
@@ -621,7 +621,7 @@ main(int argc, char **argv) {
         fprintf(stderr, "N-body took %10.3f seconds\n", rtime);
     }
 
-    fprintf(stderr, "Process %d compute %d forces\n, assigned %d bodies", myid, totalNumberOfForcesComputed, forces_per_proc[myid]);
+    //fprintf(stderr, "Process %d compute %d forces\n, assigned %d bodies", myid, totalNumberOfForcesComputed, forces_per_proc[myid]);
 
 
 
