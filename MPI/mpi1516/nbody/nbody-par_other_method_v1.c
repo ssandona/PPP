@@ -38,18 +38,20 @@ typedef struct {
 
 int globalStartB;
 int globalStartC;
-forceType *forces;      /*list of forces per body*/
-forceType *new_forces;  /*ausiliar list of forces (MPI reduce)*/
-int bodyCt;             /*number of bodies*/
-int old = 0;            /* Flips between 0 and 1 */
-bodyType *bodies;       /*list of bodies*/
-int *displs;            /*list of the starting indexes of forces assigned per processor*/
-int *forces_per_proc;   /*list of the number of forces assigned per processor*/
-int myid;               /*MPI process ID*/
+forceType *forces;
+forceType *new_forces;
+int bodyCt;
+int old = 0;    /* Flips between 0 and 1 */
+bodyType *bodies;
+int *displs;
+int *forces_per_proc;
+int myid;
 int printed = 0;
-int numprocs;           /*number of MPI processes involeved in the computation*/
+int numprocs;
 MPI_Op mpi_sum;
-double totalNumberOfForcesComputed = 0;
+int totalNumberOfForcesComputed = 0;
+
+
 
 /*  Macros to hide memory layout
 */
@@ -84,12 +86,11 @@ void
 compute_forces(void) {
     int b, c;
     int count = 0;
-    /* Incrementally accumulate forces from each assigned body pair,
-       skipping force of body on itself (c == b). The first loop is
-       separated to avoid an additional if construct
+    /* Incrementally accumulate forces from each body pair,
+       skipping force of body on itself (c == b)
     */
     b = globalStartB;
-    for (c = globalStartC; c < bodyCt && count < forces_per_proc[myid]; ++c) {
+    for (c = globalStartC; c < bodyCt && count<forces_per_proc[myid]; ++c) {
         double dx = X(c) - X(b);
         double dy = Y(c) - Y(b);
         double angle = atan2(dy, dx);
@@ -113,10 +114,8 @@ compute_forces(void) {
         totalNumberOfForcesComputed++;
     }
 
-    /*standard loop*/
-
-    for (b = globalStartB + 1; b < bodyCt && count < forces_per_proc[myid]; ++b) {
-        for (c = b + 1; c < bodyCt && count < forces_per_proc[myid]; ++c) {
+    for (b = globalStartB + 1; b < bodyCt && count<forces_per_proc[myid]; ++b) {
+        for (c = b + 1; c < bodyCt && count<forces_per_proc[myid]; ++c) {
             double dx = X(c) - X(b);
             double dy = Y(c) - Y(b);
             double angle = atan2(dy, dx);
@@ -144,14 +143,16 @@ compute_forces(void) {
 
 
 
-/**
-     * Function called at the begin to calculate the
-     * initial indexes for the assigned forces chunk
-*/
+
 void
 calculateAssignedForces() {
     int b, c;
     int count = 0;
+
+
+    /* Incrementally accumulate forces from each body pair,
+       skipping force of body on itself (c == b)
+    */
     for (b = 0; b < bodyCt; ++b) {
         for (c = b + 1; c < bodyCt; ++c) {
             if(count == displs[myid]) {
@@ -168,7 +169,9 @@ calculateAssignedForces() {
 void
 compute_velocities(void) {
     int b;
+
     for (b = 0; b < bodyCt; ++b) {
+        //for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
         double xv = XV(b);
         double yv = YV(b);
         double force = sqrt(xv * xv + yv * yv) * FRICTION;
@@ -185,6 +188,7 @@ void
 compute_positions(void) {
     int b;
     for (b = 0; b < bodyCt; ++b) {
+        //for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
         double xn = X(b) + (XV(b) * DELTA_T);
         double yn = Y(b) + (YV(b) * DELTA_T);
 
@@ -380,24 +384,6 @@ print(void) {
     }
 }
 
-/*void
-print_forces(void) {
-    int b;
-    for (b = 0; b < bodyCt; ++b) {
-        printf("%10.3f %10.3f\n", XF(b), YF(b));
-    }
-}*/
-
-/**
-     * Function called for the MPI reduce operation
-     *
-     * @param in
-     *            array of forces to sum
-     * @param inout
-     *            array of forces to which sum the 'in' array
-     * @param dtype
-     *            datatype
-*/
 void sumForces(forceType *in, forceType *inout, int *len, MPI_Datatype *dtype) {
     int i;
     for (i = 0; i < *len; ++i) {
