@@ -50,7 +50,7 @@ int myid;               /*MPI process ID*/
 int printed = 0;
 int numprocs;           /*number of MPI processes involeved in the computation*/
 MPI_Op mpi_sum;
-int totalNumberOfForcesComputed = 0;
+double totalNumberOfForcesComputed = 0;
 
 /*  Macros to hide memory layout
 */
