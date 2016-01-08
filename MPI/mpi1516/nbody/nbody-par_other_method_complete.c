@@ -381,13 +381,13 @@ print(void) {
     }
 }
 
-void
+/*void
 print_forces(void) {
     int b;
     for (b = 0; b < bodyCt; ++b) {
         printf("%10.3f %10.3f\n", XF(b), YF(b));
     }
-}
+}*/
 
 /**
      * Function called for the MPI reduce operation
@@ -569,10 +569,10 @@ main(int argc, char **argv) {
 
         compute_velocities();
         compute_positions();
-        if(0 == myid) {
+        /*if(0 == myid) {
             print_forces();
             printf("------step %d-----\n",steps);
-        }
+        }*/
 
         old ^= 1;
 
@@ -589,7 +589,7 @@ main(int argc, char **argv) {
     }
 
     if(0 == myid) {
-        //print();
+        print();
         fprintf(stderr, "fine\n");
         fprintf(stderr, "N-body took %10.3f seconds\n", rtime);
     }
