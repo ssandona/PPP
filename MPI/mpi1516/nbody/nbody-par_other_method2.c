@@ -65,7 +65,7 @@ int myid;
 int printed = 0;
 int numprocs;
 MPI_Op mpi_sum;
-int totalNumberOfForcesComputed = 0;
+//int totalNumberOfForcesComputed = 0;
 
 /*  Macros to hide memory layout
 */
@@ -138,7 +138,7 @@ compute_forces(void) {
         _YF(c) -= yf;
 
         count++;
-        totalNumberOfForcesComputed++;
+        //totalNumberOfForcesComputed++;
     }
 
     for (b = globalStartB + 1; b < bodyCt && count<forces_per_proc[myid]; ++b) {
@@ -163,7 +163,7 @@ compute_forces(void) {
             _YF(c) -= yf;
 
             count++;
-            totalNumberOfForcesComputed++;
+            //totalNumberOfForcesComputed++;
         }
     }
 }
@@ -729,7 +729,7 @@ main(int argc, char **argv) {
     }
 
     //fprintf(stderr, "ZIOOOOOO 1\n");
-    fprintf(stderr, "Process %d compute %d forces\n, assigned %d bodies", myid, totalNumberOfForcesComputed, bodies_per_proc[myid]);
+    //fprintf(stderr, "Process %d compute %d forces\n, assigned %d bodies", myid, totalNumberOfForcesComputed, bodies_per_proc[myid]);
     //fprintf(stderr, "ZIOOOOOO 2\n");
 
 
