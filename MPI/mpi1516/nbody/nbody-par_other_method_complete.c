@@ -571,7 +571,7 @@ main(int argc, char **argv) {
         compute_positions();
         if(0 == myid) {
             print_forces();
-            printf("------step %d-----\n",step);
+            printf("------step %d-----\n",steps);
         }
 
         old ^= 1;

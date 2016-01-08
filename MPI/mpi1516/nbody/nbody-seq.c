@@ -380,7 +380,7 @@ main(int argc, char **argv) {
         /* Flip old & new coordinates */
         old ^= 1;
         print_forces();
-        printf("------step %d-----\n",step);
+        printf("------step %d-----\n",steps);
         /*Time for a display update?*/
         if (secsup > 0 && (time(0) - lastup) > secsup) {
             display();
