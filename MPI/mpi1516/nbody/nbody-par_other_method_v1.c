@@ -40,7 +40,7 @@ int globalStartB;
 int globalStartC;
 int globalStopB;
 int globalStopC;
-bodyType bodies[MAXBODIES];
+//bodyType bodies[MAXBODIES];
 forceType *forces;
 forceType *new_forces;
 forceType *new_forces2;
@@ -454,11 +454,11 @@ main(int argc, char **argv) {
         bodyCt = 2;
     }
 
-    forces = malloc(sizeof(forceType) * bodyCt);
+    /*forces = malloc(sizeof(forceType) * bodyCt);
     for(i = 0; i < bodyCt; i++) {
         forces[i].xf = 0;
         forces[i].yf = 0;
-    }
+    }*/
     /*if(bodyCt > numprocs) {
         bodyCt = numprocs;
     }*/
