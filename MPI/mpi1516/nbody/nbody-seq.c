@@ -311,6 +311,14 @@ print(void) {
     }
 }
 
+void
+print_forces(void) {
+    int b;
+    for (b = 0; b < bodyCt; ++b) {
+        printf("%10.3f %10.3f\n\n", XF(b), YF(b));
+    }
+}
+
 
 /*	Main program...
 */
@@ -371,7 +379,7 @@ main(int argc, char **argv) {
 
         /* Flip old & new coordinates */
         old ^= 1;
-
+        print_forces();
         /*Time for a display update?*/
         if (secsup > 0 && (time(0) - lastup) > secsup) {
             display();
@@ -389,7 +397,7 @@ main(int argc, char **argv) {
             (start.tv_sec + (start.tv_usec / 1000000.0));
 
 
-    print();
+    //print();
 
     fprintf(stderr, "N-body took %10.3f seconds\n", rtime);
 

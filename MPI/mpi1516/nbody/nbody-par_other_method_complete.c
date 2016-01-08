@@ -86,8 +86,8 @@ compute_forces(void) {
     int b, c;
     int count = 0;
     /* Incrementally accumulate forces from each assigned body pair,
-       skipping force of body on itself (c == b). The first loop is 
-       separated to avoid an additional if construct 
+       skipping force of body on itself (c == b). The first loop is
+       separated to avoid an additional if construct
     */
     b = globalStartB;
     for (c = globalStartC; c < bodyCt && count < forces_per_proc[myid]; ++c) {
@@ -146,10 +146,10 @@ compute_forces(void) {
 
 
 /**
-     * Function called at the begin to calculate the  
+     * Function called at the begin to calculate the
      * initial indexes for the assigned forces chunk
 */
-void 
+void
 calculateAssignedForces() {
     int b, c;
     int count = 0;
@@ -381,6 +381,14 @@ print(void) {
     }
 }
 
+void
+print_forces(void) {
+    int b;
+    for (b = 0; b < bodyCt; ++b) {
+        printf("%10.3f %10.3f\n\n", XF(b), YF(b));
+    }
+}
+
 /**
      * Function called for the MPI reduce operation
      *
@@ -561,6 +569,9 @@ main(int argc, char **argv) {
 
         compute_velocities();
         compute_positions();
+        if(0 == myid) {
+            print_forces();
+        }
 
         old ^= 1;
 
@@ -577,7 +588,7 @@ main(int argc, char **argv) {
     }
 
     if(0 == myid) {
-        print();
+        //print();
         fprintf(stderr, "fine\n");
         fprintf(stderr, "N-body took %10.3f seconds\n", rtime);
     }
@@ -593,5 +604,5 @@ main(int argc, char **argv) {
     free(forces);
     //free(new_forces);
 
-   return 0;
+    return 0;
 }
