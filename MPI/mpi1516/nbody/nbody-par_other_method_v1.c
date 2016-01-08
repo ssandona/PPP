@@ -59,7 +59,7 @@ int totalNumberOfForcesComputed = 0;
 
 /*  Macros to hide memory layout
 */
-#define X(B)        bodies[B].x[old]
+/*#define X(B)        bodies[B].x[old]
 #define XN(B)       bodies[B].x[old^1]
 #define Y(B)        bodies[B].y[old]
 #define YN(B)       bodies[B].y[old^1]
@@ -68,7 +68,7 @@ int totalNumberOfForcesComputed = 0;
 #define XV(B)       bodies[B].xv
 #define YV(B)       bodies[B].yv
 #define R(B)        bodies[B].radius
-#define M(B)        bodies[B].mass
+#define M(B)        bodies[B].mass*/
 
 /*  Macros to hide memory layout
 */
