@@ -59,7 +59,7 @@ int totalNumberOfForcesComputed = 0;
 
 /*  Macros to hide memory layout
 */
-/*#define X(B)        bodies[B].x[old]
+#define X(B)        bodies[B].x[old]
 #define XN(B)       bodies[B].x[old^1]
 #define Y(B)        bodies[B].y[old]
 #define YN(B)       bodies[B].y[old^1]
@@ -68,7 +68,7 @@ int totalNumberOfForcesComputed = 0;
 #define XV(B)       bodies[B].xv
 #define YV(B)       bodies[B].yv
 #define R(B)        bodies[B].radius
-#define M(B)        bodies[B].mass*/
+#define M(B)        bodies[B].mass
 
 /*  Macros to hide memory layout
 */
@@ -77,7 +77,7 @@ int totalNumberOfForcesComputed = 0;
 #define Y(B)       new_bodies[B].y[old]
 #define YN(B)      new_bodies[B].y[old^1]
 #define XF(B)      new_forces[B].xf
-#define XF(B)      new_forces[B].yf
+#define YF(B)      new_forces[B].yf
 #define XV(B)      new_bodies[B].xv
 #define YV(B)      new_bodies[B].yv
 #define R(B)       new_bodies[B].radius
@@ -95,7 +95,7 @@ clear_forces(void) {
 
     /* Clear force accumulation variables */
     for (b = 0; b < bodyCt; ++b) {
-        XF(b) = (XF(b) = 0);
+        YF(b) = (XF(b) = 0);
     }
 }
 
@@ -123,9 +123,9 @@ compute_forces(void) {
            force of b on c is negative of c on b;
         */
         XF(b) += xf;
-        XF(b) += yf;
+        YF(b) += yf;
         XF(c) -= xf;
-        XF(c) -= yf;
+        YF(c) -= yf;
 
         count++;
         totalNumberOfForcesComputed++;
@@ -148,9 +148,9 @@ compute_forces(void) {
                force of b on c is negative of c on b;
             */
             XF(b) += xf;
-            XF(b) += yf;
+            YF(b) += yf;
             XF(c) -= xf;
-            XF(c) -= yf;
+            YF(c) -= yf;
 
             count++;
             totalNumberOfForcesComputed++;
@@ -194,7 +194,7 @@ compute_velocities(void) {
         double force = sqrt(xv * xv + yv * yv) * FRICTION;
         double angle = atan2(yv, xv);
         double xf = XF(b) - (force * cos(angle));
-        double yf = XF(b) - (force * sin(angle));
+        double yf = YF(b) - (force * sin(angle));
 
         XV(b) += (xf / M(b)) * DELTA_T;
         YV(b) += (yf / M(b)) * DELTA_T;
@@ -397,7 +397,7 @@ void
 print(void) {
     int b;
     for (b = 0; b < bodyCt; ++b) {
-        printf("%10.3f %10.3f %10.3f %10.3f %10.3f %10.3f\n", X(b), Y(b), XF(b), XF(b), XV(b), YV(b));
+        printf("%10.3f %10.3f %10.3f %10.3f %10.3f %10.3f\n", X(b), Y(b), XF(b), YF(b), XV(b), YV(b));
     }
 }
 
@@ -590,7 +590,7 @@ main(int argc, char **argv) {
 
     fprintf(stderr, "InitialForces2 -> ");
     for (i = 0; i < bodyCt; i++) {
-        fprintf(stderr, "[%10.3f,%10.3f] ", XF(i), XF(i));
+        fprintf(stderr, "[%10.3f,%10.3f] ", XF(i), YF(i));
     }
     fprintf(stderr, "\n");*/
 
@@ -601,7 +601,7 @@ main(int argc, char **argv) {
         compute_forces();
         /*fprintf(stderr, "CalculatedForces -> ");
         for (i = 0; i < bodyCt; i++) {
-            fprintf(stderr, "[%10.3f,%10.3f] ", XF(i), XF(i));
+            fprintf(stderr, "[%10.3f,%10.3f] ", XF(i), YF(i));
         }
         fprintf(stderr, "\n");*/
 
@@ -612,7 +612,7 @@ main(int argc, char **argv) {
 
         /*fprintf(stderr, "TOTALForces -> ");
         for (i = 0; i < bodyCt; i++) {
-            fprintf(stderr, "[%10.3f,%10.3f] ", XF(i), XF(i));
+            fprintf(stderr, "[%10.3f,%10.3f] ", XF(i), YF(i));
         }
         fprintf(stderr, "\n");*/
 
