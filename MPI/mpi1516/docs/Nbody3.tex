@@ -282,45 +282,37 @@ After a comparison of the two solutions for different size of inputs (steps and 
 
 \begin{minipage}[b]{.40\textwidth}
   \centering
-  \begin{tabular}{l|l|l}
-  \centering
-nodes\textbackslash approach & 1 & 2 \\ \hline
-1 & 107.856 & 107.856 \\ \hline
-2 & 63.612 & 83.450 \\ \hline
-4 & 33.939 & 45.068 \\ \hline
-8 & 19.566 & 26.229 \\ \hline
-10 & 16.916 & 23.593 \\ \hline
-16 & 12.584 & 17.523 \\ 
-    \hline
-  \end{tabular}
-  \captionof{table}{128 bodies and 100000 iterations - Execution times}
+  \begin{tabular}{llllllllllll}
+bodies{[}4{]} & 4-0 & 4-1 & 4-2 & 4-3 & 4-5 & 4-6 & 4-7  & 4-8  & 4-9  & 4-10 & 4-11 \\
+bodies{[}5{]} & 5-0 & 5-1 & 5-2 & 5-3 & 5-6 & 5-7 & 5-8  & 5-9  & 5-10 & 5-11 &      \\
+bodies{[}6{]} & 6-0 & 6-1 & 6-2 & 6-3 & 6-7 & 6-8 & 6-9  & 6-10 & 6-11 &      &      \\
+bodies{[}7{]} & 7-0 & 7-1 & 7-2 & 7-3 & 7-8 & 7-9 & 7-10 & 7-11 &      &      &     
+\end{tabular}
+  \captionof{table}{256 bodies and 100000 iterations - Execution times}
   \label{tab:t_app1}
 \end{minipage} \qquad
 \begin{minipage}[b]{.40\textwidth}
   \centering
-  \begin{tabular}{l|l|l}
-nodes\textbackslash approach & 1 & 2 \\ \hline
-2 & 1.69 & 1.29 \\ \hline
-4 & 3.17 & 2.39 \\ \hline
-8 & 5.51 & 4.11 \\ \hline
-10 & 6.37 & 4.57 \\ \hline
-16 & 8.57 & 6.15 \\ 
-  \hline
-  \end{tabular}
-  \captionof{table}{128 bodies and 100000 iterations - Speedups}
+\begin{tabular}{llllllllllll}
+bodies{[}4{]} & 4-0 & 4-1 & 4-2 & 4-3 & 4-5 & 4-6 & 4-7  & 4-8  & 4-9  & 4-10 & 4-11 \\
+bodies{[}5{]} & 5-0 & 5-1 & 5-2 & 5-3 & 5-6 & 5-7 & 5-8  & 5-9  & 5-10 & 5-11 &      \\
+bodies{[}6{]} & 6-0 & 6-1 & 6-2 & 6-3 & 6-7 & 6-8 & 6-9  & 6-10 & 6-11 &      &      \\
+bodies{[}7{]} & 7-0 & 7-1 & 7-2 & 7-3 & 7-8 & 7-9 & 7-10 & 7-11 &      &      &     
+\end{tabular}
+  \captionof{table}{256 bodies and 100000 iterations - Speedups}
   \label{tab:t_app2}
 \end{minipage}
 
 \begin{figure}[ht]
 \begin{subfigure}{.55\textwidth}
   \centering
-  \includegraphics[width=1\linewidth]{results/graph1}
+  \includegraphics[width=1\linewidth]{results/256_100000_cmp}
 \end{subfigure} %
 \begin{subfigure}{.35\textwidth}
   \centering
-  \includegraphics[width=1\linewidth]{results/graph1_sp}
+  \includegraphics[width=1\linewidth]{results/256_100000_cmp_sp}
 \end{subfigure} 
-  \caption{Execution Time and Speedups of the two approaches with 128 bodies and 100000 iterations}
+  \caption{Execution Time and Speedups of the two approaches with 256 bodies and 100000 iterations}
   \label{fig:G1}
 \end{figure}
 \FloatBarrier
@@ -330,31 +322,23 @@ nodes\textbackslash approach & 1 & 2 \\ \hline
 
 \begin{minipage}[b]{.40\textwidth}
   \centering
-  \begin{tabular}{l|l|l}
-  \centering
-nodes\textbackslash approach & 1 & 2 \\ \hline
-1 & 655.162 & 655.162 \\ \hline
-2 & 373.328 & 481.161 \\ \hline
-4 & 186.764 & 240.538 \\ \hline
-8 & 93.483 & 120.394 \\ \hline
-10 & 74.908 & 96.431 \\ \hline
-16 & 47.192 & 60.563 \\ 
-    \hline
-  \end{tabular}
+  \begin{tabular}{llllllllllll}
+bodies{[}4{]} & 4-0 & 4-1 & 4-2 & 4-3 & 4-5 & 4-6 & 4-7  & 4-8  & 4-9  & 4-10 & 4-11 \\
+bodies{[}5{]} & 5-0 & 5-1 & 5-2 & 5-3 & 5-6 & 5-7 & 5-8  & 5-9  & 5-10 & 5-11 &      \\
+bodies{[}6{]} & 6-0 & 6-1 & 6-2 & 6-3 & 6-7 & 6-8 & 6-9  & 6-10 & 6-11 &      &      \\
+bodies{[}7{]} & 7-0 & 7-1 & 7-2 & 7-3 & 7-8 & 7-9 & 7-10 & 7-11 &      &      &     
+\end{tabular}
   \captionof{table}{10000 bodies and 100 iterations - Execution times}
   \label{tab:t_app3}
 \end{minipage} \qquad
 \begin{minipage}[b]{.40\textwidth}
   \centering
-  \begin{tabular}{l|l|l}
-nodes\textbackslash approach & 1 & 2 \\ \hline
-2 & 1.75 & 1.36 \\ \hline
-4 & 3.5 & 2.72 \\ \hline
-8 & 7 & 5.44 \\ \hline
-10 & 8.74 & 6.79 \\ \hline
-16 & 13.88 & 10.81 \\ 
-  \hline
-  \end{tabular}
+\begin{tabular}{llllllllllll}
+bodies{[}4{]} & 4-0 & 4-1 & 4-2 & 4-3 & 4-5 & 4-6 & 4-7  & 4-8  & 4-9  & 4-10 & 4-11 \\
+bodies{[}5{]} & 5-0 & 5-1 & 5-2 & 5-3 & 5-6 & 5-7 & 5-8  & 5-9  & 5-10 & 5-11 &      \\
+bodies{[}6{]} & 6-0 & 6-1 & 6-2 & 6-3 & 6-7 & 6-8 & 6-9  & 6-10 & 6-11 &      &      \\
+bodies{[}7{]} & 7-0 & 7-1 & 7-2 & 7-3 & 7-8 & 7-9 & 7-10 & 7-11 &      &      &     
+\end{tabular}
   \captionof{table}{10000 bodies and 100 iterations - Speedups}
   \label{tab:t_app4}
 \end{minipage}
@@ -363,11 +347,11 @@ nodes\textbackslash approach & 1 & 2 \\ \hline
 \begin{figure}[ht]
 \begin{subfigure}{.55\textwidth}
   \centering
-  \includegraphics[width=1\linewidth]{results/graph2}
+  \includegraphics[width=1\linewidth]{results/10000_100_cmp}
 \end{subfigure} %
 \begin{subfigure}{.35\textwidth}
   \centering
-  \includegraphics[width=1\linewidth]{results/graph2_sp}
+  \includegraphics[width=1\linewidth]{results/10000_100_cmp_sp}
 \end{subfigure}
   \caption{Execution Time and Speedups of the two approaches with 10000 bodies and 100 iterations}
   \label{fig:G2}
@@ -382,19 +366,19 @@ In this section the most interesting results are reported. In Figure \ref{fig:R1
 \begin{figure}[ht]
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=1\linewidth]{results/graph3}
+  \includegraphics[width=1\linewidth]{results/64_100000}
 \end{subfigure} %
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=1\linewidth]{results/graph4}
+  \includegraphics[width=1\linewidth]{results/128_100000}
 \end{subfigure} \\ %
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=1\linewidth]{results/graph5}
+  \includegraphics[width=1\linewidth]{results/256_100000}
 \end{subfigure} %
 \begin{subfigure}{.4\textwidth}
   \centering
-  \includegraphics[width=1\linewidth]{results/graph5_sp}
+  \includegraphics[width=1\linewidth]{results/100000_sp}
 \end{subfigure}
   \caption{Execution Time and Speedups, 100000 iterations}
   \label{fig:R1}
@@ -403,31 +387,26 @@ In this section the most interesting results are reported. In Figure \ref{fig:R1
 
 \enspace
 
+
 \begin{minipage}[b]{.40\textwidth}
   \centering
-  \begin{tabular}{l|l|l|l}
-  \centering
-nodes\textbackslash bodies & 64 & 128 & 256 \\ \hline
-1 & 30.414  & 120.347 & 474.974 \\ \hline
-2 & 16.752 & 63.612 & 247.778 \\ \hline
-4 & 9.706 & 33.939 & 127.529 \\ \hline
-8 & 6.435 & 19.566 & 68.082 \\ \hline
-10 & 6.155 & 16.916 & 56.687 \\ \hline
-16 & 5.081 & 12.584 & 38.576 \\ 
-    \hline
-  \end{tabular}
+  \begin{tabular}{llllllllllll}
+bodies{[}4{]} & 4-0 & 4-1 & 4-2 & 4-3 & 4-5 & 4-6 & 4-7  & 4-8  & 4-9  & 4-10 & 4-11 \\
+bodies{[}5{]} & 5-0 & 5-1 & 5-2 & 5-3 & 5-6 & 5-7 & 5-8  & 5-9  & 5-10 & 5-11 &      \\
+bodies{[}6{]} & 6-0 & 6-1 & 6-2 & 6-3 & 6-7 & 6-8 & 6-9  & 6-10 & 6-11 &      &      \\
+bodies{[}7{]} & 7-0 & 7-1 & 7-2 & 7-3 & 7-8 & 7-9 & 7-10 & 7-11 &      &      &     
+\end{tabular}
   \captionof{table}{100000 iterations - Exec. times}
   \label{tab:R1_t1}
 \end{minipage} \qquad
 \begin{minipage}[b]{.40\textwidth}
   \centering
-  \begin{tabular}{l|l|l|l}
-nodes\textbackslash bodies & 64 & 128 & 256 \\ \hline
-2 & 1.81 & 1.89 & 1.91 \\ \hline
-4 & 3.13 & 3.54 & 3.72 \\ \hline
-8 & 4.72 & 6.15 & 6.97 \\ \hline
-16 & 5.98 & 9.56	 & 12.31 \\ 	\hline
-  \end{tabular}
+  \begin{tabular}{llllllllllll}
+bodies{[}4{]} & 4-0 & 4-1 & 4-2 & 4-3 & 4-5 & 4-6 & 4-7  & 4-8  & 4-9  & 4-10 & 4-11 \\
+bodies{[}5{]} & 5-0 & 5-1 & 5-2 & 5-3 & 5-6 & 5-7 & 5-8  & 5-9  & 5-10 & 5-11 &      \\
+bodies{[}6{]} & 6-0 & 6-1 & 6-2 & 6-3 & 6-7 & 6-8 & 6-9  & 6-10 & 6-11 &      &      \\
+bodies{[}7{]} & 7-0 & 7-1 & 7-2 & 7-3 & 7-8 & 7-9 & 7-10 & 7-11 &      &      &     
+\end{tabular}
   \captionof{table}{100000 iterations - Speedups}
   \label{tab:R1_t2}
 \end{minipage}
@@ -435,19 +414,19 @@ nodes\textbackslash bodies & 64 & 128 & 256 \\ \hline
 \begin{figure}[ht]
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=1\linewidth]{results/graph11}
+  \includegraphics[width=1\linewidth]{results/500_100}
 \end{subfigure} %
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=1\linewidth]{results/graph14}
+  \includegraphics[width=1\linewidth]{results/1000_100}
 \end{subfigure} \\ %
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=1\linewidth]{results/graph15}
+  \includegraphics[width=1\linewidth]{results/10000_100}
 \end{subfigure} %
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=1\linewidth]{results/graph16}
+  \includegraphics[width=1\linewidth]{results/100_sp}
 \end{subfigure} 
   \caption{Execution Time and Speedups, 100 iterations}
   \label{fig:R2}
@@ -456,29 +435,23 @@ nodes\textbackslash bodies & 64 & 128 & 256 \\ \hline
 
 \begin{minipage}[b]{.40\textwidth}
   \centering
-  \begin{tabular}{l|l|l|l}
-  \centering
-nodes\textbackslash bodies & 500 & 1000 & 10000 \\ \hline
-1 & 1.818 & 7.275 & 725.597 \\ \hline
-2 & 0.940 & 3.749 & 373.328 \\ \hline
-4 & 0.482 & 1.892 & 186.764 \\ \hline
-8 & 0.273 & 1.001 & 93.483 \\ \hline
-10 & 0.222 & 0.799 & 74.908 \\ \hline
-16 & 0.176 & 0.555 & 47.192 \\ 
-    \hline
-  \end{tabular}
+  \begin{tabular}{llllllllllll}
+bodies{[}4{]} & 4-0 & 4-1 & 4-2 & 4-3 & 4-5 & 4-6 & 4-7  & 4-8  & 4-9  & 4-10 & 4-11 \\
+bodies{[}5{]} & 5-0 & 5-1 & 5-2 & 5-3 & 5-6 & 5-7 & 5-8  & 5-9  & 5-10 & 5-11 &      \\
+bodies{[}6{]} & 6-0 & 6-1 & 6-2 & 6-3 & 6-7 & 6-8 & 6-9  & 6-10 & 6-11 &      &      \\
+bodies{[}7{]} & 7-0 & 7-1 & 7-2 & 7-3 & 7-8 & 7-9 & 7-10 & 7-11 &      &      &     
+\end{tabular}
   \captionof{table}{100 iterations - Exec. times}
   \label{tab:R2_t1}
 \end{minipage} \qquad
 \begin{minipage}[b]{.40\textwidth}
   \centering
-  \begin{tabular}{l|l|l|l}
-nodes\textbackslash bodies & 500 & 1000 & 10000 \\ \hline
-2 & 1.93 & 1.94 & 1.94 \\ \hline
-4 & 3.77 & 3.84 & 3.88 \\ \hline
-8 & 6.65 & 7.26 & 7.76 \\ \hline
-16 & 10.32 & 13.10 & 15.37
-  \end{tabular}
+  \begin{tabular}{llllllllllll}
+bodies{[}4{]} & 4-0 & 4-1 & 4-2 & 4-3 & 4-5 & 4-6 & 4-7  & 4-8  & 4-9  & 4-10 & 4-11 \\
+bodies{[}5{]} & 5-0 & 5-1 & 5-2 & 5-3 & 5-6 & 5-7 & 5-8  & 5-9  & 5-10 & 5-11 &      \\
+bodies{[}6{]} & 6-0 & 6-1 & 6-2 & 6-3 & 6-7 & 6-8 & 6-9  & 6-10 & 6-11 &      &      \\
+bodies{[}7{]} & 7-0 & 7-1 & 7-2 & 7-3 & 7-8 & 7-9 & 7-10 & 7-11 &      &      &     
+\end{tabular}
   \captionof{table}{100 iterations - Speedups}
   \label{tab:R2_t2}
 \end{minipage}	

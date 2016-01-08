@@ -42,8 +42,8 @@ forceType *forces;      /*list of forces per body*/
 forceType *new_forces;  /*ausiliar list of forces (MPI reduce)*/
 int bodyCt;             /*number of bodies*/
 int old = 0;            /* Flips between 0 and 1 */
-//bodyType *bodies;       /*list of bodies*/
-bodyType bodies[MAXBODIES];
+bodyType *bodies;       /*list of bodies*/
+//bodyType bodies[MAXBODIES];
 int *displs;            /*list of the starting indexes of forces assigned per processor*/
 int *forces_per_proc;   /*list of the number of forces assigned per processor*/
 int myid;               /*MPI process ID*/
@@ -442,7 +442,7 @@ main(int argc, char **argv) {
         bodyCt = 2;
     }
 
-    //bodies = malloc(sizeof(bodyType) * bodyCt);
+    bodies = malloc(sizeof(bodyType) * bodyCt);
     forces = malloc(sizeof(forceType) * bodyCt);
 
     //forces initialization
