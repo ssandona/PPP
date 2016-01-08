@@ -38,8 +38,8 @@ typedef struct {
 
 int globalStartB;
 int globalStartC;
-int globalStopB;
-int globalStopC;
+//int globalStopB;
+//int globalStopC;
 //bodyType bodies[MAXBODIES];
 //forceType *forces;
 forceType *forces;

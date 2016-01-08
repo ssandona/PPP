@@ -23,6 +23,8 @@ extern double   atan2(double, double);
 typedef struct {
     double x[2];        /* Old and new X-axis coordinates */
     double y[2];        /* Old and new Y-axis coordinates */
+    double xf;          /* force along X-axis */
+    double yf;          /* force along Y-axis */
     double xv;          /* velocity along X-axis */
     double yv;          /* velocity along Y-axis */
     double mass;        /* Mass of the body */
