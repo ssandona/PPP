@@ -21,10 +21,6 @@ extern double   atan2(double, double);
 #define SEED        27102015
 
 typedef struct {
-    //double x[2];        /* Old and new X-axis coordinates */
-    //double y[2];        /* Old and new Y-axis coordinates */
-    // double xf;          /* force along X-axis */
-    // double yf;          /* force along Y-axis */
     double xv;          /* velocity along X-axis */
     double yv;          /* velocity along Y-axis */
     double mass;        /* Mass of the body */
@@ -43,18 +39,13 @@ typedef struct {
 
 int globalStartB;
 int globalStartC;
-int globalStopB;
-int globalStopC;
-bodyType bodies[MAXBODIES];
-bodyPositionType positions[MAXBODIES];
+
+bodyType *bodies;
+bodyPositionType *positions;
 forceType *forces;
 forceType *new_forces;
-forceType *new_forces2;
 int bodyCt;
 int old = 0;    /* Flips between 0 and 1 */
-bodyType *new_bodies;
-bodyPositionType *new_positions;
-bodyType *new_bodies2;
 bodyType *rec_bodies;
 bodyPositionType *rec_positions;
 int *displs;
@@ -80,18 +71,7 @@ MPI_Op mpi_sum;
 #define R(B)        bodies[B].radius
 #define M(B)        bodies[B].mass
 
-/*  Macros to hide memory layout
-*/
-#define _X(B)       new_positions[B].x[old]
-#define _XN(B)      new_positions[B].x[old^1]
-#define _Y(B)       new_positions[B].y[old]
-#define _YN(B)      new_positions[B].y[old^1]
-#define _XF(B)      new_forces[B].xf
-#define _YF(B)      new_forces[B].yf
-#define _XV(B)      new_bodies[B].xv
-#define _YV(B)      new_bodies[B].yv
-#define _R(B)       new_bodies[B].radius
-#define _M(B)       new_bodies[B].mass
+
 
 /*  Dimensions of space (very finite, ain't it?)
 */
@@ -118,14 +98,14 @@ compute_forces(void) {
     */
     b = globalStartB;
     for (c = globalStartC; c < bodyCt && count<forces_per_proc[myid]; ++c) {
-        double dx = _X(c) - _X(b);
-        double dy = _Y(c) - _Y(b);
+        double dx = X(c) - X(b);
+        double dy = Y(c) - Y(b);
         double angle = atan2(dy, dx);
         double dsqr = dx * dx + dy * dy;
-        double mindist = _R(b) + _R(c);
+        double mindist = R(b) + R(c);
         double mindsqr = mindist * mindist;
         double forced = ((dsqr < mindsqr) ? mindsqr : dsqr);
-        double force = _M(b) * _M(c) * GRAVITY / forced;
+        double force = M(b) * M(c) * GRAVITY / forced;
         double xf = force * cos(angle);
         double yf = force * sin(angle);
 
@@ -143,14 +123,14 @@ compute_forces(void) {
 
     for (b = globalStartB + 1; b < bodyCt && count<forces_per_proc[myid]; ++b) {
         for (c = b + 1; c < bodyCt && count<forces_per_proc[myid]; ++c) {
-            double dx = _X(c) - _X(b);
-            double dy = _Y(c) - _Y(b);
+            double dx = X(c) - X(b);
+            double dy = Y(c) - Y(b);
             double angle = atan2(dy, dx);
             double dsqr = dx * dx + dy * dy;
-            double mindist = _R(b) + _R(c);
+            double mindist = R(b) + R(c);
             double mindsqr = mindist * mindist;
             double forced = ((dsqr < mindsqr) ? mindsqr : dsqr);
-            double force = _M(b) * _M(c) * GRAVITY / forced;
+            double force = M(b) * M(c) * GRAVITY / forced;
             double xf = force * cos(angle);
             double yf = force * sin(angle);
 
@@ -199,15 +179,15 @@ compute_velocities(void) {
 
     for (b = displs2[myid]; b < displs2[myid] + bodies_per_proc[myid]; ++b) {
         //for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
-        double xv = _XV(b);
-        double yv = _YV(b);
+        double xv = XV(b);
+        double yv = YV(b);
         double force = sqrt(xv * xv + yv * yv) * FRICTION;
         double angle = atan2(yv, xv);
         double xf = _XF(b) - (force * cos(angle));
         double yf = _YF(b) - (force * sin(angle));
 
-        _XV(b) += (xf / _M(b)) * DELTA_T;
-        _YV(b) += (yf / _M(b)) * DELTA_T;
+        XV(b) += (xf / M(b)) * DELTA_T;
+        YV(b) += (yf / M(b)) * DELTA_T;
     }
 }
 
@@ -216,28 +196,28 @@ compute_positions(void) {
     int b;
     for (b = displs2[myid]; b < displs2[myid] + bodies_per_proc[myid]; ++b) {
         //for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
-        double xn = _X(b) + (_XV(b) * DELTA_T);
-        double yn = _Y(b) + (_YV(b) * DELTA_T);
+        double xn = X(b) + (XV(b) * DELTA_T);
+        double yn = Y(b) + (YV(b) * DELTA_T);
 
         /* Bounce of image "walls" */
         if (xn < 0) {
             xn = 0;
-            _XV(b) = -_XV(b);
+            XV(b) = -XV(b);
         } else if (xn >= xdim) {
             xn = xdim - 1;
-            _XV(b) = -_XV(b);
+            XV(b) = -XV(b);
         }
         if (yn < 0) {
             yn = 0;
-            _YV(b) = -_YV(b);
+            YV(b) = -YV(b);
         } else if (yn >= ydim) {
             yn = ydim - 1;
-            _YV(b) = -_YV(b);
+            YV(b) = -YV(b);
         }
 
         /* Update position */
-        _XN(b) = xn;
-        _YN(b) = yn;
+        XN(b) = xn;
+        YN(b) = yn;
     }
 }
 
@@ -407,7 +387,7 @@ void
 print(void) {
     int b;
     for (b = 0; b < bodyCt; ++b) {
-        printf("%10.3f %10.3f %10.3f %10.3f %10.3f %10.3f\n", _X(b), _Y(b), _XF(b), _YF(b), _XV(b), _YV(b));
+        printf("%10.3f %10.3f %10.3f %10.3f %10.3f %10.3f\n", X(b), Y(b), _XF(b), _YF(b), XV(b), YV(b));
     }
 }
 
@@ -472,7 +452,11 @@ main(int argc, char **argv) {
         bodyCt = 2;
     }
 
+    bodies = malloc(sizeof(bodyType) * bodyCt);
+    positions = malloc(sizeof(bodyType) * bodyCt);
     forces = malloc(sizeof(forceType) * bodyCt);
+
+
     for(i = 0; i < bodyCt; i++) {
         forces[i].xf = 0;
         forces[i].yf = 0;
@@ -480,8 +464,6 @@ main(int argc, char **argv) {
     /*if(bodyCt > numprocs) {
         bodyCt = numprocs;
     }*/
-    new_bodies = malloc(sizeof(bodyType) * bodyCt);
-    new_positions = malloc(sizeof(bodyPositionType) * bodyCt);
     bodies_per_proc = malloc(sizeof(int) * numprocs);
 
     secsup = atoi(argv[2]);
@@ -621,26 +603,15 @@ main(int argc, char **argv) {
 
     fprintf(stderr, "B -> %d, C -> %d \n", globalStartB, globalStartC);
 
-    //MPI_Bcast(new_bodies, bodyCt, mpi_body_type, 0, MPI_COMM_WORLD);
+    MPI_Bcast(bodies, bodyCt, mpi_body_type, 0, MPI_COMM_WORLD);
+    MPI_Bcast(positions, bodyCt, mpi_body_type, 0, MPI_COMM_WORLD);
+
     MPI_Scatterv(bodies, bodies_per_proc, displs2, mpi_body_type, rec_bodies, bufSize, mpi_body_type, 0, MPI_COMM_WORLD);
     
 
     MPI_Scatterv(positions, bodies_per_proc, displs2, mpi_position_type, rec_positions, bufSize, mpi_position_type, 0, MPI_COMM_WORLD);
 
     int cont;
-
-    new_forces = malloc(sizeof(forceType) * bodyCt);
-    for(i = 0; i < bodyCt; i++) {
-        new_forces[i].xf = 0;
-        new_forces[i].yf = 0;
-    }
-
-    new_bodies = malloc(sizeof(bodyType) * bodyCt);
-    new_positions = malloc(sizeof(bodyPositionType) * bodyCt);
-
-    MPI_Allgatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs2, mpi_body_type, MPI_COMM_WORLD);
-    
-    MPI_Allgatherv(rec_positions, bodies_per_proc[myid], mpi_position_type, new_positions, bodies_per_proc, displs2, mpi_position_type, MPI_COMM_WORLD);
 
 
     if(gettimeofday(&start, 0) != 0) {
@@ -649,32 +620,17 @@ main(int argc, char **argv) {
     }
 
 
-
-
-    /*fprintf(stderr, "\n");
-
-    fprintf(stderr, "InitialForces2 -> ");
-    for (i = 0; i < bodyCt; i++) {
-        fprintf(stderr, "[%10.3f,%10.3f] ", _XF(i), _YF(i));
-    }
-    fprintf(stderr, "\n");*/
-
     while (steps--) {
         cont = 0;
         clear_forces();
 
         compute_forces();
 
-        /*fprintf(stderr, "CalculatedForces -> ");
-        for (i = 0; i < bodyCt; i++) {
-            fprintf(stderr, "[%10.3f,%10.3f] ", _XF(i), _YF(i));
-        }
-        fprintf(stderr, "\n");*/
 
-        new_forces2 = malloc(sizeof(forceType) * bodyCt);
-        MPI_Allreduce(new_forces, new_forces2, bodyCt, mpi_force_type, mpi_sum, MPI_COMM_WORLD);
-        free(new_forces);
-        new_forces = new_forces2;
+        new_forces = malloc(sizeof(forceType) * bodyCt);
+        MPI_Allreduce(forces, new_forces, bodyCt, mpi_force_type, mpi_sum, MPI_COMM_WORLD);
+        free(forces);
+        forces = new_forces;
 
         /*fprintf(stderr, "TOTALForces -> ");
         for (i = 0; i < bodyCt; i++) {
@@ -684,13 +640,12 @@ main(int argc, char **argv) {
 
         compute_velocities();
         compute_positions();
-        rec_positions = new_positions + displs2[myid];
-        new_positions = malloc(sizeof(bodyPositionType) * bodyCt);
-        //MPI_Allgatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs, mpi_body_type, MPI_COMM_WORLD);
-        MPI_Allgatherv(rec_positions, bodies_per_proc[myid], mpi_position_type, new_positions, bodies_per_proc, displs2, mpi_position_type, MPI_COMM_WORLD);
+        rec_positions = positions + displs2[myid];
+        positions = malloc(sizeof(bodyPositionType) * bodyCt);
+        MPI_Allgatherv(rec_positions, bodies_per_proc[myid], mpi_position_type, positions, bodies_per_proc, displs2, mpi_position_type, MPI_COMM_WORLD);
 
         old ^= 1;
-        rec_positions = new_positions + displs2[myid];
+        rec_positions = positions + displs2[myid];
 
         /*if(0 == myid) {
             print_forces();
@@ -712,15 +667,15 @@ main(int argc, char **argv) {
     }
 
 
-    new_positions = malloc(sizeof(bodyPositionType) * bodyCt);
+    positions = malloc(sizeof(bodyPositionType) * bodyCt);
 
-    MPI_Gatherv(rec_positions, bodies_per_proc[myid], mpi_position_type, new_positions, bodies_per_proc, displs2, mpi_position_type, 0, MPI_COMM_WORLD);
+    MPI_Gatherv(rec_positions, bodies_per_proc[myid], mpi_position_type, positions, bodies_per_proc, displs2, mpi_position_type, 0, MPI_COMM_WORLD);
 
-    rec_bodies = new_bodies + displs2[myid];
+    rec_bodies = bodies + displs2[myid];
 
-    new_bodies = malloc(sizeof(bodyType) * bodyCt);
+    bodies = malloc(sizeof(bodyType) * bodyCt);
 
-    MPI_Gatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, new_bodies, bodies_per_proc, displs2, mpi_body_type, 0, MPI_COMM_WORLD);
+    MPI_Gatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, bodies, bodies_per_proc, displs2, mpi_body_type, 0, MPI_COMM_WORLD);
 
     if(0 == myid) {
         print();
@@ -744,7 +699,6 @@ main(int argc, char **argv) {
     free(displs);
     
     free(displs2);
-        free(new_bodies);
     
     //free(rec_bodies);
     
