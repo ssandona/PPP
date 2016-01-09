@@ -40,21 +40,21 @@ typedef struct {
 int globalStartB;
 int globalStartC;
 
-bodyType *bodies;
-bodyPositionType *positions;
-forceType *forces;
-forceType *new_forces;
-int bodyCt;
-int old = 0;    /* Flips between 0 and 1 */
-bodyType *rec_bodies;
-bodyPositionType *rec_positions;
-int *displs;
-int *displs2;
-int *bodies_per_proc;
-int *forces_per_proc;
-int myid;
+bodyType *bodies;			/*list of bodies*/
+bodyPositionType *positions;/*list of bodies position*/
+forceType *forces;			/*list of forces per body*/
+forceType *new_forces;		/*ausiliar list of forces (MPI reduce)*/
+int bodyCt;					/*number of bodies*/
+int old = 0;    			/* Flips between 0 and 1 */
+bodyType *rec_bodies;		/*assigned portion of bodies*/
+bodyPositionType *rec_positions;	/*assigned portion of positions*/
+int *displs_forces;			/*list of the starting indexes of forces assigned per processor*/
+int *displs_bodies;			/*list of the starting indexes of bodies assigned per processor*/
+int *bodies_per_proc;		/*list of the number of bodies assigned per processor*/
+int *forces_per_proc;		/*list of the number of forces assigned per processor*/
+int myid;					/*MPI process ID*/
 int printed = 0;
-int numprocs;
+int numprocs;				/*number of MPI processes involeved in the computation*/
 MPI_Op mpi_sum;
 
 /*  Macros to hide memory layout
@@ -92,11 +92,12 @@ void
 compute_forces(void) {
     int b, c;
     int count = 0;
-    /* Incrementally accumulate forces from each body pair,
-       skipping force of body on itself (c == b)
+    /* Incrementally accumulate forces from each assigned body pair,
+       skipping force of body on itself (c == b). The first loop is
+       separated to avoid an additional if construct
     */
     b = globalStartB;
-    for (c = globalStartC; c < bodyCt && count<forces_per_proc[myid]; ++c) {
+    for (c = globalStartC; c < bodyCt && count < forces_per_proc[myid]; ++c) {
         double dx = X(c) - X(b);
         double dy = Y(c) - Y(b);
         double angle = atan2(dy, dx);
@@ -117,11 +118,12 @@ compute_forces(void) {
         YF(c) -= yf;
 
         count++;
-        //totalNumberOfForcesComputed++;
     }
 
-    for (b = globalStartB + 1; b < bodyCt && count<forces_per_proc[myid]; ++b) {
-        for (c = b + 1; c < bodyCt && count<forces_per_proc[myid]; ++c) {
+    /*standard loop*/
+
+    for (b = globalStartB + 1; b < bodyCt && count < forces_per_proc[myid]; ++b) {
+        for (c = b + 1; c < bodyCt && count < forces_per_proc[myid]; ++c) {
             double dx = X(c) - X(b);
             double dy = Y(c) - Y(b);
             double angle = atan2(dy, dx);
@@ -142,42 +144,35 @@ compute_forces(void) {
             YF(c) -= yf;
 
             count++;
-            //totalNumberOfForcesComputed++;
         }
     }
 }
 
-
-
-
+/**
+     * Function called at the begin to calculate the
+     * initial indexes for the assigned forces chunk
+*/
 void
 calculateAssignedForces() {
     int b, c;
     int count = 0;
-
-
-    /* Incrementally accumulate forces from each body pair,
-       skipping force of body on itself (c == b)
-    */
     for (b = 0; b < bodyCt; ++b) {
         for (c = b + 1; c < bodyCt; ++c) {
-            if(count == displs[myid]) {
+            if(count == displs_forces[myid]) {
                 globalStartB = b;
                 globalStartC = c;
                 b = bodyCt;
             }
             count++;
-
         }
     }
 }
 
+/*compute the velocity of the assigned chunk of bodies*/
 void
 compute_velocities(void) {
     int b;
-
-    for (b = displs2[myid]; b < displs2[myid] + bodies_per_proc[myid]; ++b) {
-        //for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
+    for (b = displs_bodies[myid]; b < displs_bodies[myid] + bodies_per_proc[myid]; ++b) {
         double xv = XV(b);
         double yv = YV(b);
         double force = sqrt(xv * xv + yv * yv) * FRICTION;
@@ -190,11 +185,11 @@ compute_velocities(void) {
     }
 }
 
+/*compute the position of the assigned chunk of bodies*/
 void
 compute_positions(void) {
     int b;
-    for (b = displs2[myid]; b < displs2[myid] + bodies_per_proc[myid]; ++b) {
-        //for (b = displs[myid]; b < displs[myid] + bodies_per_proc[myid]; ++b) {
+    for (b = displs_bodies[myid]; b < displs_bodies[myid] + bodies_per_proc[myid]; ++b) {
         double xn = X(b) + (XV(b) * DELTA_T);
         double yn = Y(b) + (YV(b) * DELTA_T);
 
@@ -390,14 +385,16 @@ print(void) {
     }
 }
 
-void
-print_forces(void) {
-    int b;
-    for (b = 0; b < bodyCt; ++b) {
-        printf("%10.3f %10.3f\n", XF(b), YF(b));
-    }
-}
-
+/**
+     * Function called for the MPI reduce operation
+     *
+     * @param in
+     *            array of forces to sum
+     * @param inout
+     *            array of forces to which sum the 'in' array
+     * @param dtype
+     *            datatype
+*/
 void sumForces(forceType *in, forceType *inout, int *len, MPI_Datatype *dtype) {
     int i;
     for (i = 0; i < *len; ++i) {
@@ -438,11 +435,7 @@ main(int argc, char **argv) {
                 argv[0]);
         exit(1);
     }
-    /*fprintf(stderr, "0 => %s\n", argv[0]);
-    fprintf(stderr, "1 => %s\n", argv[1]);
-    fprintf(stderr, "2 => %s\n", argv[2]);
-    fprintf(stderr, "3 => %s\n", argv[3]);
-    fprintf(stderr, "4 => %s\n", argv[4]);*/
+
     if ((bodyCt = atol(argv[1])) > MAXBODIES ) {
         fprintf(stderr, "Using only %d bodies...\n", MAXBODIES);
         bodyCt = MAXBODIES;
@@ -460,14 +453,12 @@ main(int argc, char **argv) {
     positions = malloc(sizeof(bodyType) * bodyCt);
     forces = malloc(sizeof(forceType) * bodyCt);
 
-
+    /*forces initialization*/
     for(i = 0; i < bodyCt; i++) {
         forces[i].xf = 0;
         forces[i].yf = 0;
     }
-    /*if(bodyCt > numprocs) {
-        bodyCt = numprocs;
-    }*/
+
     bodies_per_proc = malloc(sizeof(int) * numprocs);
 
     secsup = atoi(argv[2]);
@@ -477,39 +468,32 @@ main(int argc, char **argv) {
     fprintf(stderr, "Running N-body with %i bodies and %i steps\n", bodyCt, steps);
 
     /* Initialize simulation data */
-    srand(SEED);
-    for (b = 0; b < bodyCt; ++b) {
-        X(b) = (rand() % xdim);
-        Y(b) = (rand() % ydim);
-        R(b) = 1 + ((b * b + 1.0) * sqrt(1.0 * ((xdim * xdim) + (ydim * ydim)))) /
-               (25.0 * (bodyCt * bodyCt + 1.0));
-        M(b) = R(b) * R(b) * R(b);
-        XV(b) = ((rand() % 20000) - 10000) / 2000.0;
-        YV(b) = ((rand() % 20000) - 10000) / 2000.0;
+    if(myid == 0) {
+        srand(SEED);
+        for (b = 0; b < bodyCt; ++b) {
+            X(b) = (rand() % xdim);
+            Y(b) = (rand() % ydim);
+            R(b) = 1 + ((b * b + 1.0) * sqrt(1.0 * ((xdim * xdim) + (ydim * ydim)))) /
+                   (25.0 * (bodyCt * bodyCt + 1.0));
+            M(b) = R(b) * R(b) * R(b);
+            XV(b) = ((rand() % 20000) - 10000) / 2000.0;
+            YV(b) = ((rand() % 20000) - 10000) / 2000.0;
+        }
     }
-    //fprintf(stderr, "a\n");
-
-
-
-
-    
 
     fprintf(stderr, "Process %d on %s\n", myid, processor_name);
 
-
-
+    //calculate the number of total forces to compute*/
     int forceCt = 0;
     for(i = 0; i < bodyCt; i++) {
         forceCt += i;
     }
-    forces_per_proc = malloc(sizeof(int) * numprocs);
-    displs = malloc(sizeof(int) * numprocs);
-    displs2 = malloc(sizeof(int) * numprocs);
-    int rem = forceCt % numprocs; // elements remaining after division among processes
-    //fprintf(stderr, "rem => %d\n", rem);
-    fprintf(stderr, "Total Forces => %d\n", forceCt);
 
-    //fprintf(stderr, "b\n");
+    forces_per_proc = malloc(sizeof(int) * numprocs);
+    displs_forces = malloc(sizeof(int) * numprocs);
+    displs_bodies = malloc(sizeof(int) * numprocs);
+
+    /*custom MPI dataType for the Forces distribution*/
     const int nitems = 2;
     int blocklengths[2] = {1, 1};
     MPI_Datatype types[2] = {MPI_DOUBLE, MPI_DOUBLE};
@@ -522,7 +506,7 @@ main(int argc, char **argv) {
     MPI_Type_create_struct(nitems, blocklengths, offsets, types, &mpi_force_type);
     MPI_Type_commit(&mpi_force_type);
 
-
+    /*custom MPI dataType for the Positions distribution*/
     const int nitems2 = 2;
     int blocklengths2[2] = {2, 2};
     MPI_Datatype types2[2] = {MPI_DOUBLE, MPI_DOUBLE};
@@ -535,6 +519,7 @@ main(int argc, char **argv) {
     MPI_Type_create_struct(nitems2, blocklengths2, offsets2, types2, &mpi_position_type);
     MPI_Type_commit(&mpi_position_type);
 
+    /*custom MPI dataType for the Bodies distribution*/
     const int nitems3 = 4;
     int blocklengths3[4] = {1, 1, 1, 1};
     MPI_Datatype types3[4] = {MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE,};
@@ -549,47 +534,36 @@ main(int argc, char **argv) {
     MPI_Type_create_struct(nitems3, blocklengths3, offsets3, types3, &mpi_body_type);
     MPI_Type_commit(&mpi_body_type);
 
-
-
-
-    //fprintf(stderr, "c\n");
-
+    /*custom MPI reduce operation*/
     MPI_Op_create((MPI_User_function *) sumForces, 1, &mpi_sum);
 
+    /*calculate the forces to assign to each process and the displacements*/
     int avarage_forces_per_proc = forceCt / numprocs;
-    //fprintf(stderr, "avarage => %d\n", avarage_bodies_per_proc);
+    int rem = forceCt % numprocs;
     int sum = 0;
 
-    //fprintf(stderr, "d\n");
-    // calculate send counts and displacements
     for (i = 0; i < numprocs; i++) {
         forces_per_proc[i] = avarage_forces_per_proc;
         if (rem > 0) {
             forces_per_proc[i]++;
             rem--;
         }
-        displs[i] = sum;
+        displs_forces[i] = sum;
         sum += forces_per_proc[i];
     }
 
-    for (i = 0; i < numprocs; i++) {
-        fprintf(stderr, "[%d] Forces -> %d, displ -> %d \n", myid, forces_per_proc[i], displs[i]);
-    }
-
+    /*calculate the bodies to assign to each process and the displacements*/
     int avarage_bodies_per_proc = bodyCt / numprocs;
     rem = bodyCt % numprocs;
-    //fprintf(stderr, "avarage => %d\n", avarage_bodies_per_proc);
     sum = 0;
 
-    //fprintf(stderr, "d\n");
-    // calculate send counts and displacements
     for (i = 0; i < numprocs; i++) {
         bodies_per_proc[i] = avarage_bodies_per_proc;
         if (rem > 0) {
             bodies_per_proc[i]++;
             rem--;
         }
-        displs2[i] = sum;
+        displs_bodies[i] = sum;
         sum += bodies_per_proc[i];
     }
 
@@ -603,79 +577,60 @@ main(int argc, char **argv) {
 
     fprintf(stderr, "B -> %d, C -> %d \n", globalStartB, globalStartC);
 
+    /*broadcast the bodies and the positions to all the processes*/
     MPI_Bcast(bodies, bodyCt, mpi_body_type, 0, MPI_COMM_WORLD);
     MPI_Bcast(positions, bodyCt, mpi_body_type, 0, MPI_COMM_WORLD);
 
-    MPI_Scatterv(bodies, bodies_per_proc, displs2, mpi_body_type, rec_bodies, bufSize, mpi_body_type, 0, MPI_COMM_WORLD);
-    
-
-    MPI_Scatterv(positions, bodies_per_proc, displs2, mpi_position_type, rec_positions, bufSize, mpi_position_type, 0, MPI_COMM_WORLD);
+    /*scatter the bodies and the positions to the processes*/
+    MPI_Scatterv(bodies, bodies_per_proc, displs_bodies, mpi_body_type, rec_bodies, bufSize, mpi_body_type, 0, MPI_COMM_WORLD);
+    MPI_Scatterv(positions, bodies_per_proc, displs_bodies, mpi_position_type, rec_positions, bufSize, mpi_position_type, 0, MPI_COMM_WORLD);
 
     int cont;
-
 
     if(gettimeofday(&start, 0) != 0) {
         fprintf(stderr, "could not do timing\n");
         exit(1);
     }
 
-
     while (steps--) {
         cont = 0;
         clear_forces();
-
         compute_forces();
 
-
+        /*Reduce all the forces calculated by each process*/
         new_forces = malloc(sizeof(forceType) * bodyCt);
         MPI_Allreduce(forces, new_forces, bodyCt, mpi_force_type, mpi_sum, MPI_COMM_WORLD);
         free(forces);
         forces = new_forces;
 
-        /*fprintf(stderr, "TOTALForces -> ");
-        for (i = 0; i < bodyCt; i++) {
-            fprintf(stderr, "[%10.3f,%10.3f] ", XF(i), YF(i));
-        }
-        fprintf(stderr, "\n");*/
-
         compute_velocities();
         compute_positions();
-        rec_positions = positions + displs2[myid];
+
+        /*gather the updated positions from all the nodes to all the nodes */
+        rec_positions = positions + displs_bodies[myid];
         positions = malloc(sizeof(bodyPositionType) * bodyCt);
-        MPI_Allgatherv(rec_positions, bodies_per_proc[myid], mpi_position_type, positions, bodies_per_proc, displs2, mpi_position_type, MPI_COMM_WORLD);
+        MPI_Allgatherv(rec_positions, bodies_per_proc[myid], mpi_position_type, positions, bodies_per_proc, displs_bodies, mpi_position_type, MPI_COMM_WORLD);
 
         old ^= 1;
-        rec_positions = positions + displs2[myid];
-
-        /*if(0 == myid) {
-            print_forces();
-            printf("------step %d-----\n",steps);
-        }*/
-
+        rec_positions = positions + displs_bodies[myid];
     }
 
-    
-    if(0 == myid) {
-        if(gettimeofday(&end, 0) != 0) {
-            fprintf(stderr, "could not do timing\n");
-            exit(1);
-        }
-        rtime = (end.tv_sec + (end.tv_usec / 1000000.0)) -
-                (start.tv_sec + (start.tv_usec / 1000000.0));
-
-
+    if(gettimeofday(&end, 0) != 0) {
+        fprintf(stderr, "could not do timing\n");
+        exit(1);
     }
+    rtime = (end.tv_sec + (end.tv_usec / 1000000.0)) -
+            (start.tv_sec + (start.tv_usec / 1000000.0));
 
 
+    /*gather the updated positions from all the nodes to the master */
     positions = malloc(sizeof(bodyPositionType) * bodyCt);
+    MPI_Gatherv(rec_positions, bodies_per_proc[myid], mpi_position_type, positions, bodies_per_proc, displs_bodies, mpi_position_type, 0, 0);
 
-    MPI_Gatherv(rec_positions, bodies_per_proc[myid], mpi_position_type, positions, bodies_per_proc, displs2, mpi_position_type, 0, MPI_COMM_WORLD);
-
-    rec_bodies = bodies + displs2[myid];
-
+    /*gather the updated bodies from all the nodes to the master */
+    rec_bodies = bodies + displs_bodies[myid];
     bodies = malloc(sizeof(bodyType) * bodyCt);
-
-    MPI_Gatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, bodies, bodies_per_proc, displs2, mpi_body_type, 0, MPI_COMM_WORLD);
+    MPI_Gatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, bodies, bodies_per_proc, displs_bodies, mpi_body_type, 0, 0);
 
     if(0 == myid) {
         print();
@@ -683,26 +638,10 @@ main(int argc, char **argv) {
         fprintf(stderr, "N-body took %10.3f seconds\n", rtime);
     }
 
-    //fprintf(stderr, "ZIOOOOOO 1\n");
-    //fprintf(stderr, "Process %d compute %d forces\n, assigned %d bodies", myid, totalNumberOfForcesComputed, bodies_per_proc[myid]);
-    //fprintf(stderr, "ZIOOOOOO 2\n");
-
-
-
-
     MPI_Finalize();
 
-    
-
     free(forces_per_proc);
-    
-    free(displs);
-    
-    free(displs2);
-    
-    //free(rec_bodies);
-    
-
-
+    free(displs_forces);
+    free(displs_bodies);
     return 0;
 }

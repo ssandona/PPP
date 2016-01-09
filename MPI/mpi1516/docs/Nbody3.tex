@@ -114,7 +114,7 @@ A comparison of the two approaches was reported on the next paragraphs in order 
 The total amount of bodies (known at the beginning) is distributed as fairly as possible among the  MPI processes as shown in the Listing \ref{fair}. Then, to avoid a duplication of work, given a pair of bodies chunks, half of the forces are calculated by one MPI node, and half by the other. The repartition is clarified in the Figures \ref{fig:pr1}, \ref{fig:pr2} and \ref{fig:pr3}.
 
 
-\begin{figure}[ht]
+\begin{figure}[!ht]
 \centering
 \begin{subfigure}{.3\textwidth}
   \centering
@@ -133,8 +133,7 @@ The total amount of bodies (known at the beginning) is distributed as fairly as 
 \end{figure}
 \FloatBarrier
 
-
-\begin{figure}[ht]
+\begin{figure}[!ht]
 \centering
 \begin{subfigure}{.3\textwidth}
   \centering
@@ -153,8 +152,7 @@ The total amount of bodies (known at the beginning) is distributed as fairly as 
 \end{figure}
 \FloatBarrier
 
-
-\begin{figure}[ht]
+\begin{figure}[!ht]
 \centering
 \begin{subfigure}{.3\textwidth}
   \centering
@@ -204,7 +202,7 @@ As mentioned before, the load imbalance is a painful aspect of the parallel prog
 
 
 \subsection{The final solution}
-\label{sec:comm_comp}
+\label{sec:final_sol}
 
 \subsubsection{Communication VS Computation}
 \label{sec:comm_comp}
@@ -244,20 +242,29 @@ Communication (per step) & = O(2*N)*sizeof(double)
 \end{equation}
 
 \subsubsection{Approach two}
-\label{sec:app_1}
+\label{sec:app_2}
 The aim of this approach, is to avoid the work duplication during the positions and velocities computation step. To calculate the force that two bodies exert on each other, at each step their mass, radius and position are needed. As first thing, the position (x, y) and the force of each body are separated from the structure Body type, so at the beginning there are an array of N bodies, an array of N positions and an array of N forces. 
-After that, the bodies and the positions are broadcasted to all the nodes and each node calculates its range of assigned bodies and positions (with the method of Listing \ref{fair}).
-The force calculation step is the same as the one of the previous approach (calculation and MPI\_Allreduce), afterwards the assigned positions and bodies are updated. Before starting another iteration, with an MPI\_Allgatherv operation (Figure \ref{fig:posi}) the positions are gathered from all the nodes to all the nodes in order to have all the needed updated information for the next step. At the end, with an MPI\_Allgatherv operation the final bodies are gathered from all the nodes to the "master" node that prints the results.
+The bodies and the positions are broadcasted to all the nodes and, after the calculation of the range of bodies and positions to assign to each node (with the method of Listing \ref{fair}), they are Scattered (Figure \ref{fig:sca}).
+The force calculation step is the same as the one of the previous approach (calculation and \textit{MPI\_Allreduce}), afterwards the assigned positions and bodies are updated. Before starting another iteration, with an \textit{MPI\_Allgatherv} operation (Figure \ref{fig:posi}) the positions are gathered from all the nodes to all the nodes in order to have all the needed updated information for the next step. At the end, with an \textit{MPI\_Allgatherv} operation the final bodies are gathered from all the nodes to the "master" node that prints the results.
 An approximation of the complexity of a loop iteration and of the total amount of data exchanged per step is presented in Equations \ref{eq:comp_app2} and \ref{eq:com_app2}. In the first equation, the first \textit{O} represents the force computation step, the second the velocity computation and the third the position computation. In the second equation, the \textit{4} represents the (x, y) values of the force and the (x, y) values of the position.
 
-
 \begin{figure}[ht]
+\centering
+\begin{minipage}{.5\textwidth}
   \centering
-  \includegraphics[width=0.6\linewidth]{MPI_all_gather}
-  \caption{Collect updated positions from all the nodes}
+  \includegraphics[width=\linewidth]{scatter}
+  \caption{Distribute the N bodies to the nodes}
+  \label{fig:sca}
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{MPI_all_gather}
+  \captionof{figure}{Collect updated positions from all the nodes}
   \label{fig:posi}
+\end{minipage}
 \end{figure}
 \FloatBarrier
+
 
 
 \begin{equation} \label{eq:comp_app2}
@@ -276,28 +283,32 @@ Communication (per step) & = O(4*N)*sizeof(double)
 \subsubsection{Solutions comparison}
 \label{sec:sol_comp}
  
-After a comparison of the two solutions for different size of inputs (steps and number of bodies), it's clear that the amount of data exchanged is the key point. In Tables \ref{tab:t_app1} and \ref{tab:t_app2} (corresponding graphs in Figure \ref{fig:G1}) and in Tables \ref{tab:t_app3} and \ref{tab:t_app4} (corresponding graphs in Figure \ref{fig:G2}) we can see execution times and speedups of the 2 approaches for different problem sizes. It's easy to understand that the first approach present lower execution times than the other and so better speedups. That means that is more convenient to duplicate a bit the work instead of exchange more data with the other nodes. The first approach so is better.
+After a comparison of the two solutions for different size of inputs (steps and number of bodies), the second approach appears quite better, especially when the number of bodies is big, so that the cost of exchange more data is well covered. In Tables \ref{tab:t_app1} and \ref{tab:t_app2} (corresponding graphs in Figure \ref{fig:G1}) and in Tables \ref{tab:t_app3} and \ref{tab:t_app4} (corresponding graphs in Figure \ref{fig:G2}) are shown the execution times and speedups of the 2 approaches for different problem sizes. The lines in the graphs are almost overlapping, so that are not really clear the differences between the two approaches. Looking at the data in the tables, it is easy to understand that the second solution is better, especially when the size of the problem is big (10000 bodies) and for this reason it is the one adopted.
 \\
 
 
 \begin{minipage}[b]{.40\textwidth}
   \centering
-  \begin{tabular}{llllllllllll}
-bodies{[}4{]} & 4-0 & 4-1 & 4-2 & 4-3 & 4-5 & 4-6 & 4-7  & 4-8  & 4-9  & 4-10 & 4-11 \\
-bodies{[}5{]} & 5-0 & 5-1 & 5-2 & 5-3 & 5-6 & 5-7 & 5-8  & 5-9  & 5-10 & 5-11 &      \\
-bodies{[}6{]} & 6-0 & 6-1 & 6-2 & 6-3 & 6-7 & 6-8 & 6-9  & 6-10 & 6-11 &      &      \\
-bodies{[}7{]} & 7-0 & 7-1 & 7-2 & 7-3 & 7-8 & 7-9 & 7-10 & 7-11 &      &      &     
+\begin{tabular}{c|c|c}
+\centering
+\textbf{nodes/approaches} & \textbf{1} & \textbf{2} \\ \hline
+\textbf{1}                & 474.974    & 474.974    \\ \hline
+\textbf{2}                & 241.078    & 240.339    \\ \hline
+\textbf{4}                & 123.869    & 123.335    \\ \hline
+\textbf{8}                & 65.733     & 65.470     \\ \hline
+\textbf{16}               & 37.264     & 37.427    
 \end{tabular}
   \captionof{table}{256 bodies and 100000 iterations - Execution times}
   \label{tab:t_app1}
 \end{minipage} \qquad
 \begin{minipage}[b]{.40\textwidth}
   \centering
-\begin{tabular}{llllllllllll}
-bodies{[}4{]} & 4-0 & 4-1 & 4-2 & 4-3 & 4-5 & 4-6 & 4-7  & 4-8  & 4-9  & 4-10 & 4-11 \\
-bodies{[}5{]} & 5-0 & 5-1 & 5-2 & 5-3 & 5-6 & 5-7 & 5-8  & 5-9  & 5-10 & 5-11 &      \\
-bodies{[}6{]} & 6-0 & 6-1 & 6-2 & 6-3 & 6-7 & 6-8 & 6-9  & 6-10 & 6-11 &      &      \\
-bodies{[}7{]} & 7-0 & 7-1 & 7-2 & 7-3 & 7-8 & 7-9 & 7-10 & 7-11 &      &      &     
+\begin{tabular}{c|c|c}
+\textbf{nodes/approaches} & \textbf{1} & \textbf{2} \\ \hline
+\textbf{2}                & 1.97       & 1.97       \\ \hline
+\textbf{4}                & 3.83       & 3.85       \\ \hline
+\textbf{8}                & 7.22       & 7.25       \\ \hline
+\textbf{16}               & 12.74      & 12.69     
 \end{tabular}
   \captionof{table}{256 bodies and 100000 iterations - Speedups}
   \label{tab:t_app2}
@@ -306,11 +317,11 @@ bodies{[}7{]} & 7-0 & 7-1 & 7-2 & 7-3 & 7-8 & 7-9 & 7-10 & 7-11 &      &      &
 \begin{figure}[ht]
 \begin{subfigure}{.55\textwidth}
   \centering
-  \includegraphics[width=1\linewidth]{results/256_100000_cmp}
+  \includegraphics[width=1\linewidth]{results/256_100000_app}
 \end{subfigure} %
 \begin{subfigure}{.35\textwidth}
   \centering
-  \includegraphics[width=1\linewidth]{results/256_100000_cmp_sp}
+  \includegraphics[width=1\linewidth]{results/256_100000_app_sp}
 \end{subfigure} 
   \caption{Execution Time and Speedups of the two approaches with 256 bodies and 100000 iterations}
   \label{fig:G1}
@@ -322,22 +333,25 @@ bodies{[}7{]} & 7-0 & 7-1 & 7-2 & 7-3 & 7-8 & 7-9 & 7-10 & 7-11 &      &      &
 
 \begin{minipage}[b]{.40\textwidth}
   \centering
-  \begin{tabular}{llllllllllll}
-bodies{[}4{]} & 4-0 & 4-1 & 4-2 & 4-3 & 4-5 & 4-6 & 4-7  & 4-8  & 4-9  & 4-10 & 4-11 \\
-bodies{[}5{]} & 5-0 & 5-1 & 5-2 & 5-3 & 5-6 & 5-7 & 5-8  & 5-9  & 5-10 & 5-11 &      \\
-bodies{[}6{]} & 6-0 & 6-1 & 6-2 & 6-3 & 6-7 & 6-8 & 6-9  & 6-10 & 6-11 &      &      \\
-bodies{[}7{]} & 7-0 & 7-1 & 7-2 & 7-3 & 7-8 & 7-9 & 7-10 & 7-11 &      &      &     
+\begin{tabular}{c|c|c}
+\textbf{nodes/approaches} & \textbf{1} & \textbf{2} \\ \hline
+\textbf{1}                & 725.597    & 725.597    \\ \hline
+\textbf{2}                & 362.751    & 361,145    \\ \hline
+\textbf{4}                & 181.514    & 180.754    \\ \hline
+\textbf{8}                & 90.954     & 90.637     \\ \hline
+\textbf{16}               & 45.921     & 45.520    
 \end{tabular}
   \captionof{table}{10000 bodies and 100 iterations - Execution times}
   \label{tab:t_app3}
 \end{minipage} \qquad
 \begin{minipage}[b]{.40\textwidth}
   \centering
-\begin{tabular}{llllllllllll}
-bodies{[}4{]} & 4-0 & 4-1 & 4-2 & 4-3 & 4-5 & 4-6 & 4-7  & 4-8  & 4-9  & 4-10 & 4-11 \\
-bodies{[}5{]} & 5-0 & 5-1 & 5-2 & 5-3 & 5-6 & 5-7 & 5-8  & 5-9  & 5-10 & 5-11 &      \\
-bodies{[}6{]} & 6-0 & 6-1 & 6-2 & 6-3 & 6-7 & 6-8 & 6-9  & 6-10 & 6-11 &      &      \\
-bodies{[}7{]} & 7-0 & 7-1 & 7-2 & 7-3 & 7-8 & 7-9 & 7-10 & 7-11 &      &      &     
+\begin{tabular}{c|c|c}
+\textbf{nodes/approaches} & \textbf{1} & \textbf{2} \\ \hline
+\textbf{2}                & 2.0002     & 2.009      \\ \hline
+\textbf{4}                & 3.997      & 4.014      \\ \hline
+\textbf{8}                & 7.977      & 8.005      \\ \hline
+\textbf{16}               & 15.80      & 15.94     
 \end{tabular}
   \captionof{table}{10000 bodies and 100 iterations - Speedups}
   \label{tab:t_app4}
@@ -347,11 +361,11 @@ bodies{[}7{]} & 7-0 & 7-1 & 7-2 & 7-3 & 7-8 & 7-9 & 7-10 & 7-11 &      &      &
 \begin{figure}[ht]
 \begin{subfigure}{.55\textwidth}
   \centering
-  \includegraphics[width=1\linewidth]{results/10000_100_cmp}
+  \includegraphics[width=1\linewidth]{results/10000_100_app}
 \end{subfigure} %
 \begin{subfigure}{.35\textwidth}
   \centering
-  \includegraphics[width=1\linewidth]{results/10000_100_cmp_sp}
+  \includegraphics[width=1\linewidth]{results/10000_100_app_sp}
 \end{subfigure}
   \caption{Execution Time and Speedups of the two approaches with 10000 bodies and 100 iterations}
   \label{fig:G2}
@@ -361,7 +375,8 @@ bodies{[}7{]} & 7-0 & 7-1 & 7-2 & 7-3 & 7-8 & 7-9 & 7-10 & 7-11 &      &      &
 
 \subsubsection{Results}
 \label{sec:res}
-In this section the most interesting results are reported. In Figure \ref{fig:R1} and Tables \ref{tab:R1_t1}, \ref{tab:R1_t2} we have an example with a big number of iterations (fixed) and different numbers of bodies (small). In Figure \ref{fig:R2} and Tables \ref{tab:R2_t1}, \ref{tab:R2_t2} we have an example with a small number of iterations (fixed) and different numbers of bodies (big). As we can see, the more we increase the size of the problem (number of bodies) and the more the implementation obtains good speedups. The aim of parallel programming is to deal with big size problems, so this implementation is good due to the fact that the more we increase the number of bodies, the more the speedup is close to be linear. \\
+In this section the most interesting obtained results are reported. In Figure \ref{fig:R1} and Tables \ref{tab:R1_t1}, \ref{tab:R1_t2} we have an example with a big number of iterations (fixed) and different numbers of bodies (small). In Figure \ref{fig:R2} and Tables \ref{tab:R2_t1}, \ref{tab:R2_t2} we have an example with a small number of iterations (fixed) and different numbers of bodies (big). As we can see, the more we increase the size of the problem (number of bodies) and the more the implementation obtains good speedups. An interesting aspect is that in some cases, the speedup is superlinear (Figure \ref{fig:R2}, Table \ref{tab:R2_t2}, 1000 and 10000 bodies), due to the more cache and memory resources available on parallel systems. On a single machine, in fact, if the memory is not enough, there will be a lot of swapping and trashing, actions that are reduced having bigger available resources.
+The aim of parallel programming is to deal with big size problems, so this implementation is good because the more we increase the number of bodies, the more the speedup is close to be linear. \\
 
 \begin{figure}[ht]
 \begin{subfigure}{.5\textwidth}
@@ -390,22 +405,25 @@ In this section the most interesting results are reported. In Figure \ref{fig:R1
 
 \begin{minipage}[b]{.40\textwidth}
   \centering
-  \begin{tabular}{llllllllllll}
-bodies{[}4{]} & 4-0 & 4-1 & 4-2 & 4-3 & 4-5 & 4-6 & 4-7  & 4-8  & 4-9  & 4-10 & 4-11 \\
-bodies{[}5{]} & 5-0 & 5-1 & 5-2 & 5-3 & 5-6 & 5-7 & 5-8  & 5-9  & 5-10 & 5-11 &      \\
-bodies{[}6{]} & 6-0 & 6-1 & 6-2 & 6-3 & 6-7 & 6-8 & 6-9  & 6-10 & 6-11 &      &      \\
-bodies{[}7{]} & 7-0 & 7-1 & 7-2 & 7-3 & 7-8 & 7-9 & 7-10 & 7-11 &      &      &     
+\begin{tabular}{c|c|c|c}
+\textbf{nodes/bodies} & \textbf{64} & \textbf{128} & \textbf{256} \\ \hline
+\textbf{1}            & 30.414      & 120.347      & 474.974      \\ \hline
+\textbf{2}            & 16.463      & 61.939       & 240.339      \\ \hline
+\textbf{4}            & 10.095      & 33,231       & 123.335      \\ \hline
+\textbf{8}            & 7.336       & 19.477       & 65.470       \\ \hline
+\textbf{16}           & 6.708       & 13.44        & 37.427      
 \end{tabular}
   \captionof{table}{100000 iterations - Exec. times}
   \label{tab:R1_t1}
 \end{minipage} \qquad
 \begin{minipage}[b]{.40\textwidth}
   \centering
-  \begin{tabular}{llllllllllll}
-bodies{[}4{]} & 4-0 & 4-1 & 4-2 & 4-3 & 4-5 & 4-6 & 4-7  & 4-8  & 4-9  & 4-10 & 4-11 \\
-bodies{[}5{]} & 5-0 & 5-1 & 5-2 & 5-3 & 5-6 & 5-7 & 5-8  & 5-9  & 5-10 & 5-11 &      \\
-bodies{[}6{]} & 6-0 & 6-1 & 6-2 & 6-3 & 6-7 & 6-8 & 6-9  & 6-10 & 6-11 &      &      \\
-bodies{[}7{]} & 7-0 & 7-1 & 7-2 & 7-3 & 7-8 & 7-9 & 7-10 & 7-11 &      &      &     
+\begin{tabular}{c|c|c|c}
+\textbf{nodes/bodies} & \textbf{64} & \textbf{128} & \textbf{256} \\ \hline
+\textbf{2}            & 1.84        & 1.94         & 1.97         \\ \hline
+\textbf{4}            & 3.012       & 3.62         & 3.85         \\ \hline
+\textbf{8}            & 4.14        & 6.17         & 7.25         \\ \hline
+\textbf{16}           & 4.53        & 8.95         & 12.69       
 \end{tabular}
   \captionof{table}{100000 iterations - Speedups}
   \label{tab:R1_t2}
@@ -435,42 +453,46 @@ bodies{[}7{]} & 7-0 & 7-1 & 7-2 & 7-3 & 7-8 & 7-9 & 7-10 & 7-11 &      &      &
 
 \begin{minipage}[b]{.40\textwidth}
   \centering
-  \begin{tabular}{llllllllllll}
-bodies{[}4{]} & 4-0 & 4-1 & 4-2 & 4-3 & 4-5 & 4-6 & 4-7  & 4-8  & 4-9  & 4-10 & 4-11 \\
-bodies{[}5{]} & 5-0 & 5-1 & 5-2 & 5-3 & 5-6 & 5-7 & 5-8  & 5-9  & 5-10 & 5-11 &      \\
-bodies{[}6{]} & 6-0 & 6-1 & 6-2 & 6-3 & 6-7 & 6-8 & 6-9  & 6-10 & 6-11 &      &      \\
-bodies{[}7{]} & 7-0 & 7-1 & 7-2 & 7-3 & 7-8 & 7-9 & 7-10 & 7-11 &      &      &     
+\begin{tabular}{c|c|c|c}
+\textbf{nodes/bodies} & \textbf{500} & \textbf{1000} & \textbf{10000} \\ \hline
+\textbf{1}            & 1.818        & 7.275         & 725.597        \\ \hline
+\textbf{2}            & 0.911        & 3.636         & 361,145        \\ \hline
+\textbf{4}            & 0.466        & 1.849         & 180.754        \\ \hline
+\textbf{8}            & 0.257        & 0.969         & 90.637         \\ \hline
+\textbf{16}           & 0.166        & 0.530         & 45.520        
 \end{tabular}
   \captionof{table}{100 iterations - Exec. times}
   \label{tab:R2_t1}
 \end{minipage} \qquad
 \begin{minipage}[b]{.40\textwidth}
   \centering
-  \begin{tabular}{llllllllllll}
-bodies{[}4{]} & 4-0 & 4-1 & 4-2 & 4-3 & 4-5 & 4-6 & 4-7  & 4-8  & 4-9  & 4-10 & 4-11 \\
-bodies{[}5{]} & 5-0 & 5-1 & 5-2 & 5-3 & 5-6 & 5-7 & 5-8  & 5-9  & 5-10 & 5-11 &      \\
-bodies{[}6{]} & 6-0 & 6-1 & 6-2 & 6-3 & 6-7 & 6-8 & 6-9  & 6-10 & 6-11 &      &      \\
-bodies{[}7{]} & 7-0 & 7-1 & 7-2 & 7-3 & 7-8 & 7-9 & 7-10 & 7-11 &      &      &     
+\begin{tabular}{c|c|c|c}
+\textbf{nodes/bodies} & \textbf{500} & \textbf{1000} & \textbf{10000} \\ \hline
+\textbf{2}            & 1.99         & 2.0008        & 2.009          \\ \hline
+\textbf{4}            & 3.90         & 3.93          & 4.014          \\ \hline
+\textbf{8}            & 7.07         & 7.50          & 8.005          \\ \hline
+\textbf{16}           & 10.95        & 13.72         & 15.94         
 \end{tabular}
   \captionof{table}{100 iterations - Speedups}
   \label{tab:R2_t2}
 \end{minipage}	
 
+\vspace{8mm}
 
-As expected, if we fix the number of bodies and we change the number of iterations, we obtain the same speedup results (Figure \ref{fig:R3} and Tables \ref{tab:R3_t1}, \ref{tab:R3_t2}). This is due to the fact that we have to repeat the same work but for different times.
+With the same number of bodies, but different number of iterations, the obtained speedup was more or less the same (Figure \ref{fig:R3} and Tables \ref{tab:R3_t1}, \ref{tab:R3_t2}). However, this is not surprising, because, for the same amount of bodies, there is the same work to do, but this is repeated for a different number of times.
 
 \begin{figure}[ht]
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=1\linewidth]{results/graph19}
+  \includegraphics[width=1\linewidth]{results/10000_10}
 \end{subfigure} %
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=1\linewidth]{results/graph17}
+  \includegraphics[width=1\linewidth]{results/10000_100}
 \end{subfigure} \\ %
 \begin{subfigure}{\textwidth}
   \centering
-  \includegraphics[width=.4\linewidth]{results/graph18}
+  \includegraphics[width=.4\linewidth]{results/10000}
 \end{subfigure} 
   \caption{Execution Time and Speedups, 1000 bodies}
   \label{fig:R3}
@@ -480,40 +502,39 @@ As expected, if we fix the number of bodies and we change the number of iteratio
 
 \begin{minipage}[b]{.40\textwidth}
   \centering
-  \begin{tabular}{l|l|l}
-  \centering
-nodes\textbackslash iterations & 1000 & 10000 \\ \hline
-1 & 65.991 & 654.008 \\ \hline
-2 & 37.488 & 374.935 \\ \hline
-4 & 18.989 & 188.824 \\ \hline
-8 & 9.702 & 96.724 \\ \hline
-10 & 7.778 & 77.597 \\ \hline
-16 & 5.070 & 50.201 \\ 
-    \hline
-  \end{tabular}
-  \captionof{table}{1000 bodies - Execution times}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{nodes/iterations} & \textbf{10} & \textbf{100} \\ \hline
+\textbf{1}                & 72.539      & 725.597      \\ \hline
+\textbf{2}                & 36.111      & 361,145      \\ \hline
+\textbf{4}                & 18.076      & 180.754      \\ \hline
+\textbf{8}                & 9.076       & 90.637       \\ \hline
+\textbf{16}               & 4.562       & 45.520       \\ \hline
+\end{tabular}
+  \captionof{table}{10000 bodies - Execution times}
   \label{tab:R3_t1}
 \end{minipage} \qquad
 \begin{minipage}[b]{.40\textwidth}
   \centering
-  \begin{tabular}{l|l|l}
-nodes\textbackslash iterations & 1000 & 10000 \\ \hline
-2 & 1.76 & 1.74 \\ \hline
-4 & 3.47 & 3.46 \\ \hline
-8 & 6.8 & 6.76 \\ \hline
-10 & 8.48 & 8.42 \\ \hline
-16 & 13.01 & 13.02 \\ 
-  \hline
-  \end{tabular}
-  \captionof{table}{1000 bodies - Speedups}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{nodes/iterations} & \textbf{10} & \textbf{100} \\ \hline
+\textbf{2}                & 2.008       & 2.009        \\ \hline
+\textbf{4}                & 4.013       & 4.014        \\ \hline
+\textbf{8}                & 7.99        & 8.005        \\ \hline
+\textbf{16}               & 15.90       & 15.94        \\ \hline
+\end{tabular}
+  \captionof{table}{10000 bodies - Speedups}
   \label{tab:R3_t2}
-\end{minipage}	
+\end{minipage}
 
-All the tests were performed on the Leiden University cluster (fs1.das4.liacs.nl) and the execution times were measured using the "wall clock time". Data distribution and data gathering (as being part of the application's initialisation and de-initialisation) are not considered on the measured performance.
+\vspace{8mm}	
+
+All the tests were performed on the Delft University of Technology (TUD) cluster (fs3.das4.tudelft.nl) and the execution times were measured using the "wall clock time". The data distribution and the data gathering, as being part of the application initialisation and de-initialisation, were not considered measuring the performance.
 
 \section{Conclusions and Personal considerations}
 \label{sec:con}
-With the realized implementation, the speedups are close to be linear for big size problems and that means that is a good implementation. This was the first time for me to use the MPI programming model and the hardest part was to understand how the MPI operations work and use them to compute various tests (e.g. MPI\_Allgatherv, MPI\_Scatterv). From my work I understood the powerful of this programming model and that is interesting to have more than one implementation in order to compare the results and outline any weaknesses.  
+With the realized implementation, the speedups are close to be linear for big size problems and that means that is a good implementation. The MPI programming model dimonstrated to be optimal for this kind of works. At the beginning this model could appear hard to understand, especially for the MPI operations (e.g. MPI\_Allgatherv, MPI\_Scatterv), but after a short period of training it reveals all its power. Another interesting fact, is that programming using this library it could be useful, like in this particular project case, to have more than one implementation in order to compare the results and outline any weaknesses.  
 
 		
 \printbibliography 
