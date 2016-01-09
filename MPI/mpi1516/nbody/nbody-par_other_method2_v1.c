@@ -625,12 +625,12 @@ main(int argc, char **argv) {
 
     /*gather the updated positions from all the nodes to the master */
     positions = malloc(sizeof(bodyPositionType) * bodyCt);
-    MPI_Gatherv(rec_positions, bodies_per_proc[myid], mpi_position_type, positions, bodies_per_proc, displs_bodies, mpi_position_type, 0, 0);
+    MPI_Gatherv(rec_positions, bodies_per_proc[myid], mpi_position_type, positions, bodies_per_proc, displs_bodies, mpi_position_type, 0, MPI_COMM_WORLD);
 
     /*gather the updated bodies from all the nodes to the master */
     rec_bodies = bodies + displs_bodies[myid];
     bodies = malloc(sizeof(bodyType) * bodyCt);
-    MPI_Gatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, bodies, bodies_per_proc, displs_bodies, mpi_body_type, 0, 0);
+    MPI_Gatherv(rec_bodies, bodies_per_proc[myid], mpi_body_type, bodies, bodies_per_proc, displs_bodies, mpi_body_type, 0, MPI_COMM_WORLD);
 
     if(0 == myid) {
         print();
