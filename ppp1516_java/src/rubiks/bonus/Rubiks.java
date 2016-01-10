@@ -378,7 +378,7 @@ public class Rubiks {
 
             if(r != 0) {
                 for(i = 0; i < r; i++) {
-                    resultOnFirstPart += generateAnotherLevel(initialToDo.remove(0), initialToDo);
+                    resultOnFirstPart += generateAnotherLevel(initialToDo.remove(0), initialToDo, cache);
                 }
                 results.add(resultOnFirstPart);
             } else {
@@ -399,7 +399,7 @@ public class Rubiks {
                 if(m == 0) {
                     int s = initialToDo.size();
                     for(i = 0; i < s; i++) {
-                        resultOnFirstPart += generateAnotherLevel(initialToDo.remove(0), initialToDo);
+                        resultOnFirstPart += generateAnotherLevel(initialToDo.remove(0), initialToDo, cache);
                     }
                     results.add(resultOnFirstPart);
                     if(resultOnFirstPart != 0) {
