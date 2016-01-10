@@ -320,7 +320,7 @@ public class Rubiks {
             for(j = 0; j < levelCubes; j++) {
                 resultOnFirstPart += generateAnotherLevel(initialToDo.remove(0), initialToDo);
             }
-            levelOfResult = z;
+            levelOfResult = i;
             results.add(resultOnFirstPart);
             if(resultOnFirstPart != 0) {
                 return true;
@@ -421,13 +421,13 @@ public class Rubiks {
         while(result == 0) {
             bound++;
             initialCube.setBound(bound);
+            System.out.print(" " + bound);
             if(splitTheWork()) {
                 result = resultOnFirstPart;
                 bound = levelOfResult;
                 continue;
             }
 
-            System.out.print(" " + bound);
             result = solutionsServer(resultsReceiver);
             //add results found during the splitting phase
             if(results.size() > bound) {
@@ -443,7 +443,7 @@ public class Rubiks {
             }
         }
         long end = System.currentTimeMillis();
-        System.out.println("\nSolving cube possible in " + result + " ways of "
+        System.out.print("\nSolving cube possible in " + result + " ways of "
                            + bound + " steps");
 
         System.err.println("Solving cube took " + (end - start)
