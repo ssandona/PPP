@@ -446,7 +446,7 @@ public class Rubiks {
         System.out.print("\nSolving cube possible in " + result + " ways of "
                            + bound + " steps");
 
-        System.err.println("Solving cube took " + (end - start)
+        System.err.print("\nSolving cube took " + (end - start)
                            + " milliseconds");
 
         //say to all the ibis instances that the work is finished (if we have not found
