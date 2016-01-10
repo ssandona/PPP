@@ -121,7 +121,7 @@ public class Rubiks {
 
         for (Cube child : children) {
             // recursion step
-            int childSolutions = solutions(child);
+            int childSolutions = solutions(child,cache);
             if (childSolutions > 0) {
                 result += childSolutions;
                 if (PRINT_SOLUTION) {
@@ -145,7 +145,7 @@ public class Rubiks {
      *            initial queue of work
      * @return if the cube was solved or not
      */
-    public static int generateAnotherLevel(Cube cube, ArrayList<Cube> initialToDo) {
+    public static int generateAnotherLevel(Cube cube, ArrayList<Cube> initialToDo, CubeCache cache) {
         /*expandedCubes++;*/
         if (cube.isSolved()) {
             return 1;
@@ -334,7 +334,7 @@ public class Rubiks {
         initialToDo.add(initialCube);
         int result = 0;
         int i, j;
-
+        CubeCache cache=new CubeCache(initialCube.getSize());
         boolean levelFound = false;
         boolean terminated = false;
         levelOfResult = -1;
@@ -343,7 +343,7 @@ public class Rubiks {
             resultOnFirstPart = 0;
             int levelCubes = (int)Math.pow(n, i);
             for(j = 0; j < levelCubes; j++) {
-                resultOnFirstPart += generateAnotherLevel(initialToDo.remove(0), initialToDo);
+                resultOnFirstPart += generateAnotherLevel(initialToDo.remove(0), initialToDo, cache);
             }
             levelOfResult = i;
             results.add(resultOnFirstPart);
