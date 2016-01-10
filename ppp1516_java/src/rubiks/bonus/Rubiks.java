@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.lang.Math;
 
 class Worker extends Thread {
-    static res = 0;
+    static int res = 0;
     Object lock = new Object();
     Cube c;
     Worker(Cube c) {
