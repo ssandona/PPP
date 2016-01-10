@@ -425,6 +425,9 @@ public class Rubiks {
             if(splitTheWork()) {
                 result = resultOnFirstPart;
                 bound = levelOfResult;
+                if(bound==0){
+                    bound=1;
+                }
                 continue;
             }
 
