@@ -1,6 +1,6 @@
 package rubiks.bonus;
 
-import ibis.bonus.*;
+import ibis.ipl.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.io.IOException;
