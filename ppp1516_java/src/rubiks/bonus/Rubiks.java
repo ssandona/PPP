@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.lang.Math;
 
 class Worker extends Thread {
-    static int res = 0;
+    public static int res = 0;
     Object lock = new Object();
     Cube c;
     Worker(Cube c) {
@@ -107,7 +107,7 @@ public class Rubiks {
      *            cube to solve
      * @return the number of solutions found for the subtree rooted in cube
      */
-    private static int solutions(Cube cube) {
+    public static int solutions(Cube cube) {
         /*valuatedCubes++;*/
         if (cube.isSolved()) {
             return 1;
@@ -212,9 +212,9 @@ public class Rubiks {
         for (Worker thread : threads) {
             thread.join();
         }
-        int result = Worker.res;
+        result = Worker.res;
         Worker.res = 0;
-        return n;
+        return result;
     }
 
     /**
