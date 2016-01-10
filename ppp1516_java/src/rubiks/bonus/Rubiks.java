@@ -19,8 +19,10 @@ class Worker extends Thread {
 
     public void run() {
         synchronized(lock) {
-            res += Rubiks.solutions(c, cache);
+            int myres=Rubiks.solutions(c, cache);
+            res += myres;
         }
+        System.err.println("Thread "+getId()+" terminated, result found -> "+myres);
     }
 }
 
@@ -209,6 +211,7 @@ public class Rubiks {
             thread.join();
         }
         result = Worker.res;
+        System.err.println("RESULT: "+result);
         Worker.res = 0;
         return result;
     }
