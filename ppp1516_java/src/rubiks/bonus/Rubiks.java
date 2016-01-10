@@ -9,7 +9,7 @@ import java.lang.Math;
 
 class Worker extends Thread {
     public static int res = 0;
-    Object lock = new Object();
+    static Object lock = new Object();
     Cube c;
     CubeCache cache;
     Worker(Cube c, CubeCache cache) {
@@ -18,8 +18,8 @@ class Worker extends Thread {
     }
 
     public void run() {
+        int myres=Rubiks.solutions(c, cache);
         synchronized(lock) {
-            int myres=Rubiks.solutions(c, cache);
             res += myres;
         }
         System.err.println("Thread "+getId()+" terminated, result found -> "+myres);
