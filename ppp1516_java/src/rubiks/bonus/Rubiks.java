@@ -188,7 +188,7 @@ public class Rubiks {
      */
     public static int solutionsWorkers() throws Exception {
         ArrayList<Cube> actual;
-        ArrayList<Worker> threads;
+        ArrayList<Worker> threads=new ArrayList<Worker>();
         int result = 0;
         int i;
         Cube cube;
