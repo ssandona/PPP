@@ -443,8 +443,7 @@ public class Rubiks {
             }
         }
         long end = System.currentTimeMillis();
-        System.out.flush();
-        System.out.println("Solving cube possible in " + result + " ways of "
+        System.out.println("\nSolving cube possible in " + result + " ways of "
                            + bound + " steps");
 
         System.err.println("Solving cube took " + (end - start)
