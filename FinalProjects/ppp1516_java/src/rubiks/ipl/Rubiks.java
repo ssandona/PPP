@@ -447,7 +447,7 @@ public class Rubiks {
                            + bound + " steps\n");
 
         System.err.print("Solving cube took " + (end - start)
-                           + " milliseconds");
+                           + " milliseconds\n");
 
         //say to all the ibis instances that the work is finished (if we have not found
         //a solution splitting the work at the begin, otherwise they already know that
