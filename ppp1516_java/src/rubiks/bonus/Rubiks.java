@@ -16,15 +16,9 @@ class Worker extends Thread {
     }
 
     public void run() {
-        try {
-            synchronized(lock) {
-                res += Rubiks.solutions(c);
-            }
-        } catch(InterruptedException ext) {
-            System.out.println("PrintThreadCd was interrupted!");
-            ext.printStackTrace();
+        synchronized(lock) {
+            res += Rubiks.solutions(c);
         }
-
     }
 }
 
@@ -203,7 +197,7 @@ public class Rubiks {
             if(cube.getTwists() > cube.getBound()) {
                 continue;
             }
-            Worker w=new Worker(cube);
+            Worker w = new Worker(cube);
             threads.add(w);
             w.start();
             //result += solutions(cube);
