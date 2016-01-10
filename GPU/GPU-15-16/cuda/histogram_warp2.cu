@@ -38,7 +38,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
         localImagePortion[threadIdx.x + 2 * THREAD_NUMBER] = inputImage[(2 * width * height) + globalIdx];
         __syncthreads();
 
-
+        //peto
         for(k = 0; k < THREAD_NUMBER && k < last; k++) {
             float grayPix = 0.0f;
             float r = static_cast< float >(localImagePortion[k]);

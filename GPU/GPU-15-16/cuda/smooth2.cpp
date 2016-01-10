@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 	// Save output
-	smoothImage.save(("" + string(argv[1]) + ".smooth2.par.bmp").c_str());
+	smoothImage.save(("./" + string(argv[1]) + ".smooth2.par.bmp").c_str());
 
 	return 0;
 }
