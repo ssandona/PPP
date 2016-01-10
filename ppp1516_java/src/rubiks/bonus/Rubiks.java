@@ -11,13 +11,15 @@ class Worker extends Thread {
     public static int res = 0;
     Object lock = new Object();
     Cube c;
-    Worker(Cube c) {
+    CubeCache cache;
+    Worker(Cube c, CubeCache cache) {
         this.c = c;
+        this.cache=cache;
     }
 
     public void run() {
         synchronized(lock) {
-            res += Rubiks.solutions(c);
+            res += Rubiks.solutions(c, cache);
         }
     }
 }
@@ -45,7 +47,7 @@ public class Rubiks {
     static IbisIdentifier[] joinedIbises;   //Ibises that joned the pool
     static int myIntIbisId;                 //Ibis id of the current Ibis instance
     static Cube initialCube = null;         //Initial Rubik Cube
-    static CubeCache cache = null;          //CubeCache
+    //static CubeCache cache = null;          //CubeCache
 
     static String[] arguments;              //arguments provided by the user to generate the cube
     static int resultOnFirstPart;           //variable useful for the work splitting phase
@@ -101,7 +103,7 @@ public class Rubiks {
      *            cube to solve
      * @return the number of solutions found for the subtree rooted in cube
      */
-    public static int solutions(Cube cube) {
+    public static int solutions(Cube cube, CubeCache cache) {
         /*valuatedCubes++;*/
         if (cube.isSolved()) {
             return 1;
@@ -197,7 +199,7 @@ public class Rubiks {
             if(cube.getTwists() > cube.getBound()) {
                 continue;
             }
-            Worker w = new Worker(cube);
+            Worker w = new Worker(cube,new CubeCache(initialCube.getSize()));
             threads.add(w);
             w.start();
             //result += solutions(cube);
@@ -580,7 +582,6 @@ public class Rubiks {
 
         //generate the initial cube and from this initialize the cache
         initialCube = generateCube();
-        cache = new CubeCache(initialCube.getSize());
 
         // If I am the server, run solveServer, else run solveWorkers.
         if (server.equals(ibis.identifier())) {
