@@ -10,17 +10,21 @@ import java.lang.Math;
 class Worker extends Thread {
     public static int res = 0;
     static Object lock = new Object();
-    Cube c;
+    ArrayList<Cube> toDo;
     CubeCache cache;
-    Worker(Cube c, CubeCache cache) {
-        this.c = c;
-        this.cache=cache;
+    Worker(ArrayList<Cube> toDo, CubeCache cache) {
+        this.toDo = toDo;
+        this.cache = cache;
     }
 
     public void run() {
-        int myres=Rubiks.solutions(c, cache);
+        int i;
+        int myres = 0;
+        while(!toDo.isEmpty()) {
+            myres += Rubiks.solutions(toDo.remove(0), cache);
+        }
         synchronized(lock) {
-            res += myres;
+                res += myres;
         }
         //System.err.println("Thread "+getId()+" terminated, result found -> "+myres);
     }
@@ -123,7 +127,7 @@ public class Rubiks {
 
         for (Cube child : children) {
             // recursion step
-            int childSolutions = solutions(child,cache);
+            int childSolutions = solutions(child, cache);
             if (childSolutions > 0) {
                 result += childSolutions;
                 if (PRINT_SOLUTION) {
@@ -172,9 +176,9 @@ public class Rubiks {
         int n = 6 * (initialCube.getSize() - 1);
         int z = 0;
         while(Math.pow(n, z) / nodes < 100) {
-            if(Math.pow(n, z) % nodes == 0) {
+            /*if(Math.pow(n, z) % nodes == 0) {
                 return z;
-            }
+            }*/
             z = z + 1;
         }
         if(Math.pow(n, z - 1) < nodes) {
@@ -192,21 +196,49 @@ public class Rubiks {
      */
     public static int solutionsWorkers() throws Exception {
         ArrayList<Cube> actual;
-        ArrayList<Worker> threads=new ArrayList<Worker>();
+        ArrayList<Worker> threads = new ArrayList<Worker>();
         int result = 0;
         int i;
         Cube cube;
         boolean end = false;
-        while((cube = getFromPool()) != null) {
+
+        int THREAD_NUMBER = 4;
+        int i, j;
+        int[] cubes_per_thread = new int[THREADS_NUMBER];
+        int avarage_cubes_per_thread = toDo.size() / THREADS_NUMBER;
+        int rem = toDo.size() % THREAD_NUMBER;
+        for (i = 0; i < THREAD_NUMBER; i++) {
+            cubes_per_thread[i] = avarage_cubes_per_proc;
+            if (rem > 0) {
+                cubes_per_thread[i]++;
+                rem--;
+            }
+        }
+
+        for (i = 0; i < THREADS_NUMBER; i++) {
+            ArrayList<Cube> work = ne ArrayList<Cube>();
+            for(j = 0; j < avarage_cubes_per_thread[i]; j++) {
+                cube = getFromPool();
+                if(cube.getTwists() > cube.getBound()) {
+                    continue;
+                }
+                work.add(cube);
+            }
+            Worker w = new Worker(work, new CubeCache(initialCube.getSize()));
+            threads.add(w);
+            w.start();
+        }
+
+
+        /*while((cube = getFromPool()) != null) {
             if(cube.getTwists() > cube.getBound()) {
                 continue;
             }
             Worker w = new Worker(cube,new CubeCache(initialCube.getSize()));
             threads.add(w);
             w.start();
-            //result += solutions(cube);
 
-        }
+        }*/
         for (Worker thread : threads) {
             thread.join();
         }
@@ -337,7 +369,7 @@ public class Rubiks {
         initialToDo.add(initialCube);
         int result = 0;
         int i, j;
-        CubeCache cache=new CubeCache(initialCube.getSize());
+        CubeCache cache = new CubeCache(initialCube.getSize());
         boolean levelFound = false;
         boolean terminated = false;
         levelOfResult = -1;
