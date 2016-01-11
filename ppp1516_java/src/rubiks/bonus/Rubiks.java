@@ -12,19 +12,18 @@ class Worker extends Thread {
     static Object lock = new Object();
     Cube c;
     CubeCache cache;
-    Worker(ArrayList<Cube> toDo, CubeCache cache) {
-        this.toDo = toDo;
+    Worker(Cube c, CubeCache cache) {
+        this.c = c;
         this.cache = cache;
     }
 
     public void run() {
         int i;
         int myres = 0;
-        while(!toDo.isEmpty()) {
-            myres += Rubiks.solutions(toDo.remove(0), cache);
-        }
+        myres += Rubiks.solutions(c, cache);
+
         synchronized(lock) {
-                res += myres;
+            res += myres;
         }
     }
 }
@@ -224,39 +223,39 @@ public class Rubiks {
         Cube cube;
         boolean end = false;
 
-       /* int THREAD_NUMBER = 32;
-        int j;
-        int[] cubes_per_thread = new int[THREAD_NUMBER];
-        int avarage_cubes_per_thread = toDo.size() / THREAD_NUMBER;
-        int rem = toDo.size() % THREAD_NUMBER;
-        for (i = 0; i < THREAD_NUMBER; i++) {
-            cubes_per_thread[i] = avarage_cubes_per_thread;
-            if (rem > 0) {
-                cubes_per_thread[i]++;
-                rem--;
-            }
-        }
+        /* int THREAD_NUMBER = 32;
+         int j;
+         int[] cubes_per_thread = new int[THREAD_NUMBER];
+         int avarage_cubes_per_thread = toDo.size() / THREAD_NUMBER;
+         int rem = toDo.size() % THREAD_NUMBER;
+         for (i = 0; i < THREAD_NUMBER; i++) {
+             cubes_per_thread[i] = avarage_cubes_per_thread;
+             if (rem > 0) {
+                 cubes_per_thread[i]++;
+                 rem--;
+             }
+         }
 
-        for (i = 0; i < THREAD_NUMBER; i++) {
-            ArrayList<Cube> work = new ArrayList<Cube>();
-            for(j = 0; j < cubes_per_thread[i]; j++) {
-                cube = getFromPool();
-                if(cube.getTwists() > cube.getBound()) {
-                    continue;
-                }
-                work.add(cube);
-            }
-            Worker w = new Worker(work, new CubeCache(initialCube.getSize()));
-            threads.add(w);
-            w.start();
-        }*/
+         for (i = 0; i < THREAD_NUMBER; i++) {
+             ArrayList<Cube> work = new ArrayList<Cube>();
+             for(j = 0; j < cubes_per_thread[i]; j++) {
+                 cube = getFromPool();
+                 if(cube.getTwists() > cube.getBound()) {
+                     continue;
+                 }
+                 work.add(cube);
+             }
+             Worker w = new Worker(work, new CubeCache(initialCube.getSize()));
+             threads.add(w);
+             w.start();
+         }*/
 
 
         while((cube = getFromPool()) != null) {
             if(cube.getTwists() > cube.getBound()) {
                 continue;
             }
-            Worker w = new Worker(cube,new CubeCache(initialCube.getSize()));
+            Worker w = new Worker(cube, new CubeCache(initialCube.getSize()));
             threads.add(w);
             w.start();
 
