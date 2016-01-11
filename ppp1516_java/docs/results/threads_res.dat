@@ -1,0 +1,18 @@
+Twists 12
+	4 threads	8 threads	12 threads	16 threads	24 threads
+
+2	16117	
+4	10899
+8	4865
+16	3057
+
+Size 4
+
+	4 threads	8 threads	12 threads	16 threads	24 threads
+
+2	32647	
+4	13842
+8	9251
+16	5040
+
+
