@@ -196,7 +196,7 @@ public class Rubiks {
         boolean ok = false;
         int n = 6 * (initialCube.getSize() - 1);
         int z = 0;
-        while(Math.pow(n, z) / nodes < 100) {
+        while(Math.pow(n, z) / nodes < 100 && z>2) {
             /*if(Math.pow(n, z) % nodes == 0) {
                 return z;
             }*/
@@ -223,7 +223,7 @@ public class Rubiks {
         Cube cube;
         boolean end = false;
 
-         int THREAD_NUMBER = 40;
+         int THREAD_NUMBER = 24;
          int j;
          int[] cubes_per_thread = new int[THREAD_NUMBER];
          int avarage_cubes_per_thread = toDo.size() / THREAD_NUMBER;
