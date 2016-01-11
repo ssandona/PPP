@@ -196,7 +196,7 @@ public class Rubiks {
         boolean ok = false;
         int n = 6 * (initialCube.getSize() - 1);
         int z = 0;
-        while(Math.pow(n, z) / nodes < 100 && z>2) {
+        while(Math.pow(n, z) / nodes < 100 && z>1) {
             /*if(Math.pow(n, z) % nodes == 0) {
                 return z;
             }*/
