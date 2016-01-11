@@ -202,7 +202,7 @@ public class Rubiks {
         Cube cube;
         boolean end = false;
 
-        int THREAD_NUMBER = 24;
+        int THREAD_NUMBER = 32;
         int j;
         int[] cubes_per_thread = new int[THREAD_NUMBER];
         int avarage_cubes_per_thread = toDo.size() / THREAD_NUMBER;
