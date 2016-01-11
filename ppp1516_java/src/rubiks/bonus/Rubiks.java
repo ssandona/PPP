@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import java.lang.Math;
 
-/*class Worker extends Thread {
+class Worker extends Thread {
     public static int res = 0;
     static Object lock = new Object();
     Cube c;
@@ -26,8 +26,8 @@ import java.lang.Math;
             res += myres;
         }
     }
-}*/
-
+}
+/*
 class Worker extends Thread {
     public static int res = 0;
     static Object lock = new Object();
@@ -49,6 +49,7 @@ class Worker extends Thread {
         }
     }
 }
+*/
 
 
 /**
@@ -223,7 +224,7 @@ public class Rubiks {
         Cube cube;
         boolean end = false;
 
-         int THREAD_NUMBER = 24;
+         /*int THREAD_NUMBER = 24;
          int j;
          int[] cubes_per_thread = new int[THREAD_NUMBER];
          int avarage_cubes_per_thread = toDo.size() / THREAD_NUMBER;
@@ -248,10 +249,10 @@ public class Rubiks {
              Worker w = new Worker(work, new CubeCache(initialCube.getSize()));
              threads.add(w);
              w.start();
-         }
+         }*/
 
 
-        /*while((cube = getFromPool()) != null) {
+        while((cube = getFromPool()) != null) {
             if(cube.getTwists() > cube.getBound()) {
                 continue;
             }
@@ -259,7 +260,9 @@ public class Rubiks {
             threads.add(w);
             w.start();
 
-        }*/
+        }
+
+        
         for (Worker thread : threads) {
             thread.join();
         }
