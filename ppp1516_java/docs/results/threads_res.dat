@@ -1,18 +1,25 @@
 Twists 12
-	4 threads	8 threads	12 threads	16 threads	20 threads	24 threads
+	4 threads	8 threads	12 threads	16 threads	20 threads	24 threads	32 threads
 
-2	16199		8652		8080		7265		7226		7040
-4	8642		5019		4339		4146		3911		4251
+2	16199		8652		8080		7265		7226		7040		7347
+4	8642		5019		4339		4146		3911		4251		4716
 8	5325		3147		2704		2843		2478 X
 16	3289		2314		1805 X		1793 X		1820 X
 
 Size 4
 
-	4 threads	8 threads	12 threads	16 threads	20 threads	24 threads
+	4 threads	8 threads	12 threads	16 threads	20 threads	24 threads	32 threads
 
-2	32647		21673				15078		15189		14913
-4	13917		7620				6326		6620		6386
-8	9381		5687				4099		3769		3947
+2	32647		21673				15078		15189		14913		15111
+4	13917		7620				6326		6620		6386		6192
+8	9381		5687				4099		3769		3947		3665
 16	4964		3387				2422 P		2427 X		2586 X
+
+
+
+12 -> 144
+
+2 -> 72 72 -> 24 -> 3 cubes per thread (32 threads)
+4 -> 36 36 36 36 -> 1.8 cubes  (20 threads)
 
 

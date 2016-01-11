@@ -10,6 +10,28 @@ import java.lang.Math;
 class Worker extends Thread {
     public static int res = 0;
     static Object lock = new Object();
+    Cube c;
+    CubeCache cache;
+    Worker(ArrayList<Cube> toDo, CubeCache cache) {
+        this.toDo = toDo;
+        this.cache = cache;
+    }
+
+    public void run() {
+        int i;
+        int myres = 0;
+        while(!toDo.isEmpty()) {
+            myres += Rubiks.solutions(toDo.remove(0), cache);
+        }
+        synchronized(lock) {
+                res += myres;
+        }
+    }
+}
+/*
+class Worker extends Thread {
+    public static int res = 0;
+    static Object lock = new Object();
     ArrayList<Cube> toDo;
     CubeCache cache;
     Worker(ArrayList<Cube> toDo, CubeCache cache) {
@@ -26,9 +48,9 @@ class Worker extends Thread {
         synchronized(lock) {
                 res += myres;
         }
-        //System.err.println("Thread "+getId()+" terminated, result found -> "+myres);
     }
 }
+*/
 
 /**
  * Parallel solver for rubik's cube puzzle.
@@ -202,7 +224,7 @@ public class Rubiks {
         Cube cube;
         boolean end = false;
 
-        int THREAD_NUMBER = 32;
+       /* int THREAD_NUMBER = 32;
         int j;
         int[] cubes_per_thread = new int[THREAD_NUMBER];
         int avarage_cubes_per_thread = toDo.size() / THREAD_NUMBER;
@@ -227,10 +249,10 @@ public class Rubiks {
             Worker w = new Worker(work, new CubeCache(initialCube.getSize()));
             threads.add(w);
             w.start();
-        }
+        }*/
 
 
-        /*while((cube = getFromPool()) != null) {
+        while((cube = getFromPool()) != null) {
             if(cube.getTwists() > cube.getBound()) {
                 continue;
             }
@@ -238,7 +260,7 @@ public class Rubiks {
             threads.add(w);
             w.start();
 
-        }*/
+        }
         for (Worker thread : threads) {
             thread.join();
         }
