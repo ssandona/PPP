@@ -208,7 +208,7 @@ public class Rubiks {
         int avarage_cubes_per_thread = toDo.size() / THREADS_NUMBER;
         int rem = toDo.size() % THREAD_NUMBER;
         for (i = 0; i < THREAD_NUMBER; i++) {
-            cubes_per_thread[i] = avarage_cubes_per_proc;
+            cubes_per_thread[i] = avarage_cubes_per_thread;
             if (rem > 0) {
                 cubes_per_thread[i]++;
                 rem--;
@@ -216,8 +216,8 @@ public class Rubiks {
         }
 
         for (i = 0; i < THREADS_NUMBER; i++) {
-            ArrayList<Cube> work = ne ArrayList<Cube>();
-            for(j = 0; j < avarage_cubes_per_thread[i]; j++) {
+            ArrayList<Cube> work = new ArrayList<Cube>();
+            for(j = 0; j < cubes_per_thread[i]; j++) {
                 cube = getFromPool();
                 if(cube.getTwists() > cube.getBound()) {
                     continue;
