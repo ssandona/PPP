@@ -16,10 +16,42 @@ Size 4
 16	4964		3387				2422 P		2427 X		2586 X
 
 
+Other
+
+Twists 12
+
+2 	7060 -> 72 threads = 24 threads -> 
+4	3951 -> 36 threads = 20 threads
+8	2609 -> 18 threads = 18 threads
+16	1789 -> 9 threads
+
+Size 4
+
+2	15185 -> 8 threads -> 24 threads best
+4	6743 -> 64 threads -> 16 threads best
+8	3947 -> 32 threads -> 32 threads good
+16	2319 -> 16 threads -> best 
+
+Size 5
+
+4	76218
+8	23980 -> 72 threads
+16	12215 -> 36 threads
+
+
 
 12 -> 144
 
 2 -> 72 72 -> 24 -> 3 cubes per thread (32 threads)
 4 -> 36 36 36 36 -> 1.8 cubes  (20 threads)
+8 -> 18 18 18 18 -> 1 cube per thread -> (18 threads)
+16 -> 9 -> 1 cube per thread -> (9 threads)
+
+4 -> 256
+
+2 -> 
+4
+8
+16
 
 
