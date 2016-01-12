@@ -1,0 +1,24 @@
+DarkerCuda:
+image00.png: 0.000071
+image01: 0.000220
+image02: 0.000267
+image03: 0.001522
+image04: 0.001090
+image05: 0.002086
+image06: 0.003863
+HistogramCUDA
+image00.png: 0.000118
+image01: 0.001357
+image02: 0.001903
+image03: 0.004838
+image04: 0.012932
+image05: 0.004304
+image06: 0.010637
+SmoothCUDA
+image00: 0.000888
+image01: 0.007725
+image02: 0.010746
+image03: 0.072251
+image04: 0.049528
+image05: 0.094910
+image06: 0.187427

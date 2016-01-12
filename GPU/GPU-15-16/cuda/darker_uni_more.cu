@@ -162,7 +162,7 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
     //cout << "FUNC8\n";
     //darkGrayImage._data = outputImage;
     // Time GFLOP/s GB/s
-    cout << fixed << setprecision(6) << kernelTimer.getElapsed() << setprecision(3) << " " << (static_cast< long long unsigned int >(width) * height * 7) / 1000000000.0 / kernelTimer.getElapsed() << " " << (static_cast< long long unsigned int >(width) * height * (4 * sizeof(unsigned char))) / 1000000000.0 / kernelTimer.getElapsed() << endl;
+    cout << fixed << setprecision(6) << kernelTimer.getElapsed() << setprecision(3) << " " << (static_cast< long long unsigned int >(width) * height * (4+3)) / 1000000000.0 / kernelTimer.getElapsed() << " " << (static_cast< long long unsigned int >(width) * height * ((3+1) * sizeof(unsigned char))) / 1000000000.0 / kernelTimer.getElapsed() << endl;
 
 
     // Print the timers

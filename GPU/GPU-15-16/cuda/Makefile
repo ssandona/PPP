@@ -3,7 +3,7 @@ debug		:= 0
 include		../Makefile.inc
 
 
-all: smooth smooth2 histogram_warp2
+all: darker_uni_more darker_uni darker_square darker_square_more
 
 darker_square: darker_square.cpp darker_square.cu
 	$(NVCC) -c darker_square.cu $(INCLUDES) $(NVCCFLAGS)
