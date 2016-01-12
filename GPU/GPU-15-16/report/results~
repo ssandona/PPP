@@ -73,7 +73,7 @@ image04	0.001052	0.001070
 image05	0.001861	0.001874
 image06	0.003532	0.003552
 
-with uni, 12 pixels per thread
+with uni, 11/12 pixels per thread
 
 image00	0.002416 0.000148	16.32	0.000149
 image01 0.036925 0.000257	143.67	0.000246
@@ -102,6 +102,16 @@ with uni, 20 pixels
 0.000985
 0.001708
 0.003255
+
+with uni, 24 pixels
+
+0.000156
+0.000252
+0.000296
+0.001336
+0.001030
+0.001795
+0.003353
 
 
 with uni, 11 pixels per thread (fused for)

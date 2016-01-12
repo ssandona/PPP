@@ -103,6 +103,16 @@ with uni, 20 pixels
 0.001708
 0.003255
 
+with uni, 24 pixels
+
+0.000156
+0.000252
+0.000296
+0.001336
+0.001030
+0.001795
+0.003353
+
 
 with uni, 11 pixels per thread (fused for)
 
@@ -124,46 +134,6 @@ image03	0.340821 0.001351
 image04	0.151429 0.001059
 image05	0.445976 0.001709
 image06	0.588814 0.003229
-
-with uni, 14 pixels per thread
-
-image00	0.000150
-image01 0.000260
-image02	0.000309
-image03	0.001451
-image04	0.001042
-image05	0.001805
-image06	0.003553
-
-with uni, 20 pixels
-
-image00	0.000150
-image01	0.000253
-image02	0.000292
-image03	0.001427
-image04	0.001040
-image05	0.001817
-iamge06 0.003517
-
-with uni, 30 pixels (fused for)
-
-image00	0.000155
-image01	0.000266
-image02	0.000299
-image03	0.001383
-image04	0.001042
-image05	0.001784
-image06	0.003426
-
-with uni, 40 pixels
-
-image00	0.000672
-image01	0.001544
-image02	0.000991
-image03	0.002905
-image04	0.001800
-image05	0.003090
-iamge06 0.004672
 
 	
 
