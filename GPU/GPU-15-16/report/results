@@ -22,6 +22,16 @@ with square GRID
 0.003170
 0.006453
 
+with grid
+
+0.000158
+0.000341
+0.000432
+0.002270
+0.001911
+0.003222
+0.005883
+
 
 with grid UNI
 
@@ -45,12 +55,13 @@ image06	0.004082
 
 with uni, 4 pixels per thread
 
-image01 0.000269
-image02	0.000315
-image03	0.001541
-image04	0.001109
-image05	0.001982
-image06	0.003750
+image00			0.000149
+image01 0.000269	0.000256
+image02	0.000315	0.000293
+image03	0.001541	0.001441
+image04	0.001109	0.001067
+image05	0.001982	0.001873
+image06	0.003750	0.003541
 
 with uni, 8 pixels per thread
 
