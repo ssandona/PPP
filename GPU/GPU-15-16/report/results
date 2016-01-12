@@ -113,6 +113,16 @@ with uni, 24 pixels
 0.001795
 0.003353
 
+with uni, 30 pixels
+
+0.000161
+0.000258
+0.000280
+0.001364
+0.001045
+0.001785
+0.003430
+
 
 with uni, 11 pixels per thread (fused for)
 
