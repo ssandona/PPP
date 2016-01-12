@@ -3,7 +3,7 @@ debug		:= 0
 include		../Makefile.inc
 
 
-all: darker_uni_more darker_uni darker_square darker_square_more
+all: darker_uni_more darker_uni darker_square darker_square_more darker_grid
 
 darker_square: darker_square.cpp darker_square.cu
 	$(NVCC) -c darker_square.cu $(INCLUDES) $(NVCCFLAGS)
