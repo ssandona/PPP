@@ -66,7 +66,7 @@ void darkGray(const int width, const int height, const unsigned char * inputImag
     // Execute the kernel
     dim3 gridSize(grid_width, height);
     dim3 blockSize(nrThreads);
-    cout<<"grid size: "<<grid_width<<"x"<<height<<" -> threads doing nothing -> "<<(width*height-grid_width*height*nrThreads)<<endl;
+    cout<<"grid size: "<<grid_width<<"x"<<height<<" -> threads doing nothing -> "<<(grid_width*height*nrThreads)-width*height<<endl;
 	kernelTimer.start();
 	kernel<<< gridSize, blockSize >>>(width, height, devInputImage, devDarkGrayImage);
 	cudaDeviceSynchronize();
