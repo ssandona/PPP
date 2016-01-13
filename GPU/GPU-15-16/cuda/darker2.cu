@@ -65,7 +65,7 @@ void darkGray(const int width, const int height, const unsigned char * inputImag
 	unsigned int grid_width = static_cast< unsigned int >(ceil(width / static_cast< float >(nrThreads)));
     //unsigned int grid_height = static_cast< unsigned int >(ceil(height / static_cast< float >(B_HEIGHT)));
     // Execute the kernel
-    dim3 gridSize(grid_width, 1);
+    dim3 gridSize(grid_width, height);
     dim3 blockSize(nrThreads);
 	kernelTimer.start();
 	kernel<<< gridSize, blockSize >>>(width, height, devInputImage, devDarkGrayImage);
