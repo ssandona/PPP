@@ -110,6 +110,7 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
 
     dim3 gridSize(grid_size, grid_size);
     dim3 blockSize(B_WIDTH, B_HEIGHT);
+    cout<<"grid size: "<<grid_size<<"x"<<grid_size<<" -> threads doing nothing -> "<<(grid_size*grid_size*B_WIDTH*B_HEIGHT)-width*height<<endl;
 
     kernelTimer.start();
     //cout << "FUNC5\n";
