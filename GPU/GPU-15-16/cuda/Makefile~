@@ -3,7 +3,7 @@ debug		:= 0
 include		../Makefile.inc
 
 
-all: darker_uni_more darker_uni darker_square darker_square_more
+all: darker_uni_more
 
 darker_square: darker_square.cpp darker_square.cu
 	$(NVCC) -c darker_square.cu $(INCLUDES) $(NVCCFLAGS)
@@ -14,6 +14,11 @@ darker: darker.cpp darker.cu
 	$(NVCC) -c darker.cu $(INCLUDES) $(NVCCFLAGS)
 	$(LINKER) -o $(PROJ_BASE)/bin/darkerCUDA darker.cpp darker.o ../src/Timer.cpp $(INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./darker.o
+
+darker2: darker2.cpp darker2.cu
+	$(NVCC) -c darker2.cu $(INCLUDES) $(NVCCFLAGS)
+	$(LINKER) -o $(PROJ_BASE)/bin/darker2CUDA darker2.cpp darker2.o ../src/Timer.cpp $(INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
+	rm -f ./darker2.o
 
 darker_square_more: darker_square_more.cpp darker_square_more.cu
 	$(NVCC) -c darker_square_more.cu $(INCLUDES) $(NVCCFLAGS)
