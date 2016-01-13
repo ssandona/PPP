@@ -13,8 +13,7 @@ using std::setprecision;
 const unsigned int nrThreads = 256;
 
 __global__ void kernel(const int width, const int height, const unsigned char * inputImage, unsigned char * outputDarkGrayImage) {
-	unsigned int item = (blockIdx.x * blockDim.x + threadIdx.x)+(threadIdx.y * width);
-
+	unsigned int item = (blockIdx.x * blockDim.x + threadIdx.x)+(blockIdx.y * blockDim.y * width);
 
 	/*unsigned int i = ;
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
