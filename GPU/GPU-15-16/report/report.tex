@@ -164,7 +164,7 @@ for ( int y = 0; y < height; y++ ) {
 \label{sec:p1}
 \subsection{First method}
 \label{sec:fm}
-After copying the input image into the GPU global memory and allocating some memory to content the output image, the kernel is ready to be launched. The GPU code is the same as the code content inside the loop of the sequential version (Figure \ref{loop}), but instead of using the indexes of the loop to access the image pixels, it uses the index associated to the thread. To exploit the coalesced memory access, two consecutive threads computes/accesses the values of two consecutive pixels. Different grid configurations were tested launching this program.
+After copying the input image into the GPU global memory and allocating some memory to content the output image, the kernel is ready to be launched. The GPU code is the same as the code content inside the loop of the sequential version (Figure \ref{loop}), but instead of using the indexes of the loop to access the image pixels, it uses the index associated to the thread. To exploit the coalesced memory access, two consecutive threads computes/accesses the values of two consecutive pixels. Different grid configurations were tested launching this program. 
 
 
 
@@ -182,6 +182,22 @@ After copying the input image into the GPU global memory and allocating some mem
 From an RGB image, the output of this algorithm is a grayscale image with the relative histogram of 256 possible values of gray.
 The histogram measures how often a value of gray is used in an image. The sequential algorithm, simply go through the entire image, computing for each pixel the corresponding gray value and incrementing the corresponding counter. The Figure \ref{fig:histo} shows an example of the result.
 
+\begin{lstlisting}[label=loop2, caption=Sequential code]
+for ( int y = 0; y < height; y++ ) {
+		for ( int x = 0; x < width; x++ ) {
+			float grayPix = 0.0f;
+			float r = static_cast< float >(inputImage[(y * width) + x]);
+			float g = static_cast< float >(inputImage[(width * height) + (y * width) + x]);
+			float b = static_cast< float >(inputImage[(2 * width * height) + (y * width) + x]);
+
+			grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
+
+			grayImage[(y * width) + x] = static_cast< unsigned char >(grayPix);
+			histogram[static_cast< unsigned int >(grayPix)] += 1;
+		}
+}
+\end{lstlisting}
+
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.7\linewidth]{histo}
@@ -189,6 +205,16 @@ The histogram measures how often a value of gray is used in an image. The sequen
     \label{fig:histo}
 \end{figure}
 \FloatBarrier
+
+\subsection{Parallelization}
+\label{sec:p2}
+\subsection{First method}
+\label{sec:fm2}
+After copying the input image and the initial empty histogram into the GPU global memory and allocating some memory to content the output image, the kernel is ready to be launched. As for the previous algorithm, the GPU code is the same as the code content inside the loop of the sequential version (Figure \ref{loop2}), but instead of using the indexes of the loop to access the image pixels, it uses the index associated to the thread. Also in this case, to exploit the coalesced memory access, two consecutive threads computes/accesses the values of two consecutive pixels. The interesting aspect of the histograms, is that it is possible that two threads read at the same time read the same value of gray for a pixel, so that at the same time they try to increment the same corresponding histogram bin. For a correct execution, to avoid wrong updates, the increment has to be an atomic operation, so that only one thread at the time will modify the bin value. 
+
+The logic behind an atomic operations is that each thread "locks" the variable, modify it, and "unlocks" it, so that the other threads that try to modify the same variable has to wait that this will be "unlocked". The worst case, in the histogram scenario, is a monocromo image, in which all the threads try to modify the same bin, which implies a long waiting queue of threads.
+ Different grid configurations were tested launching this program. 
+
 
 \section{Algorithm 3: Smoothing}
 \label{sec:smoo}
