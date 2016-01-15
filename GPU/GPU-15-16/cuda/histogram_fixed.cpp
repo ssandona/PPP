@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
 	memset(reinterpret_cast< void * >(histogram), 0, HISTOGRAM_SIZE * sizeof(unsigned int));
 	
 
-	int r=histogram1D(inputImage.width(), inputImage.height(), inputImage.data(), grayImage.data(), histogram, atoi(argv[1]));
+	int r=histogram1D(inputImage.width(), inputImage.height(), inputImage.data(), grayImage.data(), histogram, atoi(argv[2]));
 	if(r==1){
 		cout << "ERROR\n";
 		return 1;
@@ -71,8 +71,8 @@ int main(int argc, char *argv[]) {
 	}
 
 	// Save output
-	grayImage.save(("./" + string(argv[1]) + ".gray.uni.more.par.bmp").c_str());
-	histogramImage.save(("./" + string(argv[1]) + ".hist.uni.more.par.bmp").c_str());
+	grayImage.save(("./" + string(argv[1]) + ".gray.uni.fixed.par.bmp").c_str());
+	histogramImage.save(("./" + string(argv[1]) + ".hist.uni.fixed.par.bmp").c_str());
 
 	return 0;
 }
