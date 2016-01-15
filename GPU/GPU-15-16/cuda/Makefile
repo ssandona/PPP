@@ -3,9 +3,9 @@ debug		:= 0
 include		../Makefile.inc
 
 
-all: darker3
+all: darker_fixed
 
-darker_square: darker_fixed.cpp
+darker_square: darker_square.cpp
 	$(NVCC) -c darker_square.cu $(INCLUDES) $(NVCCFLAGS)
 	$(LINKER) -o $(PROJ_BASE)/bin/darker_squareCUDA darker_square.cpp darker_square.o ../src/Timer.cpp $(INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./darker_square.o
