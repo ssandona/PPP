@@ -14,7 +14,7 @@ const unsigned int THREAD_NUMBER = 256;
 const int PIXELS_THREAD = 20;
 
 __global__ void histogram1DKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram) {
-
+    unsigned int i;
     /*unsigned int i = blockIdx.y;
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
     unsigned int globalIdx = j + (blockDim.x * gridDim.x * i);
@@ -27,17 +27,17 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
 
     for(i = ((blockIdx.y * gridDim.x + blockIdx.x) * blockDim.x) + threadIdx.x; i < width * height; i += (gridDim.x * blockDim.x) * (gridDim.y * blockDim.y)) {
 
-            float grayPix = 0.0f;
-            //if(blockIdx.x >= 10) {
-            float r = static_cast< float >(inputImage[i]);
-            float g = static_cast< float >(inputImage[(width * height) + i]);
-            float b = static_cast< float >(inputImage[(2 * width * height) + i]);
+        float grayPix = 0.0f;
+        //if(blockIdx.x >= 10) {
+        float r = static_cast< float >(inputImage[i]);
+        float g = static_cast< float >(inputImage[(width * height) + i]);
+        float b = static_cast< float >(inputImage[(2 * width * height) + i]);
 
-            grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
+        grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
 
-            grayImage[i] = static_cast< unsigned char >(grayPix);
-            atomicAdd((unsigned int *)&localHistogram[static_cast< unsigned int >(grayPix)], 1);
-        }
+        grayImage[i] = static_cast< unsigned char >(grayPix);
+        atomicAdd((unsigned int *)&localHistogram[static_cast< unsigned int >(grayPix)], 1);
+
     }
 
     __syncthreads();
