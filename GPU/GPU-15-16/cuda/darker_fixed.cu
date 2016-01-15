@@ -12,22 +12,22 @@ using std::setprecision;
 
 const unsigned int nrThreads = 256;
 
-__global__ void kernel(const int width, const int height, const unsigned char * inputImage, unsigned char * outputDarkGrayImage, int grid_size) {
-
+__global__ void kernel(const int width, const int height, const unsigned char * inputImage, unsigned char * outputDarkGrayImage) {
+	unsigned int i;
 	for(i = ((blockIdx.y * gridDim.x + blockIdx.x) * blockDim.x) + threadIdx.x; i < width * height; i += (gridDim.x * blockDim.x) * (gridDim.y * blockDim.y)) {
 		float grayPix = 0.0f;
-		float r = static_cast< float >(inputImage[item]);
-		float g = static_cast< float >(inputImage[(width * height) + item]);
-		float b = static_cast< float >(inputImage[(2 * width * height) + item]);
+		float r = static_cast< float >(inputImage[i]);
+		float g = static_cast< float >(inputImage[(width * height) + i]);
+		float b = static_cast< float >(inputImage[(2 * width * height) + i]);
 
 		grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
 		grayPix = (grayPix * 0.6f) + 0.5f;
 
-		outputDarkGrayImage[item] = static_cast< unsigned char >(grayPix);
+		outputDarkGrayImage[i] = static_cast< unsigned char >(grayPix);
 	}
 }	
 
-void darkGray(const int width, const int height, const unsigned char * inputImage, unsigned char * darkGrayImage) {
+void darkGray(const int width, const int height, const unsigned char * inputImage, unsigned char * darkGrayImage, int grid_size) {
 
 	cudaError_t devRetVal = cudaSuccess;
 	//Timers. 
