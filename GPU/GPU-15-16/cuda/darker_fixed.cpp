@@ -18,7 +18,7 @@ extern int darkGray(const int width, const int height, const unsigned char * inp
 int main(int argc, char *argv[]) {
 	int r=0;
 	//cout << "A\n";
-	if ( argc != 2 ) {
+	if ( argc != 3 ) {
 		//cout << "Err1\n";
 		cerr << "Usage: " << argv[0] << " <filename>" << endl;
 		return 1;
@@ -34,14 +34,14 @@ int main(int argc, char *argv[]) {
 	// Convert the input image to grayscale and make it darker
 	CImg< unsigned char > darkGrayImage = CImg< unsigned char >(inputImage.width(), inputImage.height(), 1, 1);
 	//cout << "D\n";
-	r=darkGray(inputImage.width(), inputImage.height(), inputImage.data(), darkGrayImage.data());
+	r=darkGray(inputImage.width(), inputImage.height(), inputImage.data(), darkGrayImage.data(), (int)argv[2]);
 	if(r==1){
 		cout << "ERRR\n";
 		return 1;
 	}
 	//cout << "Good\n";
 	// Save output
-	darkGrayImage.save(("./" + string(argv[1]) + ".dark.3.par.bmp").c_str());
+	darkGrayImage.save(("./" + string(argv[1]) + ".dark.fixed.par.bmp").c_str());
 
 	return 0;
 }
