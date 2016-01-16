@@ -228,6 +228,28 @@ Smoothing is the process of removing noise from an image by the means of statist
 \end{figure}
 \FloatBarrier
 
+\subsection{Parallelization}
+\label{sec:p2}
+This particular algorithm deals with square areas of the image (filter), so that using 2D blocks, the threads can efficiently share memory and prevent a lot of global memory accesses.
+
+\begin{figure}[!ht]
+\begin{subfigure}{0.5\textwidth}
+\centering
+\includegraphics[width=\linewidth]{filter}
+\caption{No square grid with 1D blocks}
+\label{fig:ns1}
+\end{subfigure} % separation between the subfigures
+\begin{subfigure}{0.5\textwidth}
+\centering
+\includegraphics[width=\linewidth]{filter_letters}
+\caption{Square grid with 1D blocks}
+\label{fig:s1}
+\end{subfigure}
+\caption{Possible kernel configurations}
+ \label{fig:speed}
+\end{figure}
+\FloatBarrier
+
 
 \printbibliography 
 
