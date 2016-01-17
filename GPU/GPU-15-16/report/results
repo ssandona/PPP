@@ -144,7 +144,7 @@ image06	0.004082
 
 with uni, 4 pixels per thread
 
-image00			0.000149
+image00				0.000149
 image01 0.000269	0.000256
 image02	0.000315	0.000293
 image03	0.001541	0.001441
