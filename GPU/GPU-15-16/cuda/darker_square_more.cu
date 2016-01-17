@@ -31,27 +31,23 @@ __global__ void darkGrayKernel(const int width, const int height, const unsigned
 
     unsigned int i = blockIdx.y * blockDim.y + threadIdx.y;
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
-    unsigned int globalIdx = j + (blockDim.x * gridDim.x * i);
-    int k;
+    //unsigned int globalIdx = j + (blockDim.x * gridDim.x * i);
+    unsigned int k;
 
-    for(k = 0; k < PIXELS_THREAD; k++) {
-        if(globalIdx >= width * height) return;
-        //if(j >= width || i >= height) return;
+    for(k = j + (blockDim.x * gridDim.x * i); k < width * height; k += (gridDim.x * blockDim.x) * (gridDim.y * blockDim.y)) {
         float grayPix = 0.0f;
-        float r = static_cast< float >(inputImage[globalIdx]);
-        float g = static_cast< float >(inputImage[(width * height) + globalIdx]);
-        float b = static_cast< float >(inputImage[(2 * width * height) + globalIdx]);
+        float r = static_cast< float >(inputImage[k]);
+        float g = static_cast< float >(inputImage[(width * height) + k]);
+        float b = static_cast< float >(inputImage[(2 * width * height) + k]);
         grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
         grayPix = (grayPix * 0.6f) + 0.5f;
         //}
-        darkGrayImage[globalIdx] = static_cast< unsigned char >(grayPix);
-        globalIdx += (gridDim.x * blockDim.x) * (gridDim.y * blockDim.y);
+        darkGrayImage[k] = static_cast< unsigned char >(grayPix);
     }
-}
 
 
 
-    int darkGray(const int width, const int height, const unsigned char *inputImage, unsigned char *darkGrayImage) {
+    int darkGray(const int width, const int height, const unsigned char *inputImage, unsigned char *darkGrayImage,int pixelThreads) {
         //cout << "FUNC\n";
         cudaError_t devRetVal = cudaSuccess;
         unsigned char *devInputImage = 0;
