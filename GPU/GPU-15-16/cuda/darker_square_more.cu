@@ -107,7 +107,7 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
     //unsigned int grid_width=static_cast< unsigned int >(ceil(width / static_cast< float >(B_WIDTH)));
     //unsigned int grid_height=static_cast< unsigned int >(ceil(height / static_cast< float >(B_HEIGHT)));
     // Execute the kernel
-    unsigned int grid_size = static_cast< unsigned int >(ceil(sqrt(ceil(width * height / PIXELS_THREAD) / (float)THREAD_NUMBER)));
+    unsigned int grid_size = static_cast< unsigned int >(ceil(sqrt(ceil(width * height / pixelThreads) / (float)THREAD_NUMBER)));
 
     dim3 gridSize(grid_size, grid_size);
     dim3 blockSize(B_WIDTH, B_HEIGHT);
