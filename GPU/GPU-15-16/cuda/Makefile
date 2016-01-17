@@ -3,7 +3,7 @@ debug		:= 0
 include		../Makefile.inc
 
 
-all: histogram_fixed darker_fixed histogram_fixed_square
+all: histogram_fixed histogram_square_more histogram_uni_more
 
 darker_square: darker_square.cpp
 	$(NVCC) -c darker_square.cu $(INCLUDES) $(NVCCFLAGS)
@@ -99,6 +99,11 @@ histogram_uni: histogram_uni.cpp histogram_uni.cu
 	$(NVCC) -c histogram_uni.cu $(INCLUDES) $(NVCCFLAGS)
 	$(LINKER) -o $(PROJ_BASE)/bin/histogram_uniCUDA histogram_uni.cpp histogram_uni.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./histogram_uni.o
+
+histogram_uni_more: histogram_uni_more.cpp histogram_uni_more.cu
+	$(NVCC) -c histogram_uni_more.cu $(INCLUDES) $(NVCCFLAGS)
+	$(LINKER) -o $(PROJ_BASE)/bin/histogram_uni_moreCUDA histogram_uni_more.cpp histogram_uni_more.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
+	rm -f ./histogram_uni_more.o
 
 smooth: smooth.cpp smooth.cu
 	$(NVCC) -c smooth.cu $(INCLUDES) $(NVCCFLAGS)

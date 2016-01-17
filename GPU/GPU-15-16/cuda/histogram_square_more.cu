@@ -72,7 +72,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
 
 
 
-int histogram1D(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram) {
+int histogram1D(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram, int pixelThreads) {
     cudaError_t devRetVal = cudaSuccess;
     unsigned char *devInputImage = 0;
     unsigned char *devGrayImage = 0;
@@ -138,7 +138,7 @@ int histogram1D(const int width, const int height, const unsigned char *inputIma
 
     //unsigned int grid_width = static_cast< unsigned int >(ceil(width / static_cast< float >(B_WIDTH)));
     //unsigned int grid_height = static_cast< unsigned int >(ceil(height / static_cast< float >(B_HEIGHT)));
-    unsigned int grid_size = static_cast< unsigned int >(ceil(sqrt(ceil(width * height / PIXELS_THREAD) / (float)THREAD_NUMBER)));
+    unsigned int grid_size = static_cast< unsigned int >(ceil(sqrt(ceil(width * height / pixelThreads) / (float)THREAD_NUMBER)));
     // Execute the kernel
     dim3 gridSize(grid_size, grid_size);
     dim3 blockSize(B_WIDTH, B_HEIGHT);
