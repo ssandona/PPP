@@ -3,7 +3,7 @@ debug		:= 0
 include		../Makefile.inc
 
 
-all: histogram_fixed histogram_square_more histogram_uni_more
+all: darker_square_more
 
 darker_square: darker_square.cpp
 	$(NVCC) -c darker_square.cu $(INCLUDES) $(NVCCFLAGS)
