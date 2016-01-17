@@ -11,13 +11,10 @@ using std::setprecision;
 
 const int HISTOGRAM_SIZE = 256;
 const unsigned int THREAD_NUMBER = 256;
-const int PIXELS_THREAD = 20;
 
 __global__ void histogram1DKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram) {
 
-    unsigned int i = blockIdx.y;
-    unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
-    unsigned int globalIdx = j + (blockDim.x * gridDim.x * i);
+    unsigned int i;
     int k;
 
     __shared__ unsigned int localHistogram[HISTOGRAM_SIZE];
@@ -25,20 +22,18 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     localHistogram[threadIdx.x] = 0;
     __syncthreads();
 
-    for(k = 0; k < PIXELS_THREAD; k++) {
-        if(globalIdx < width * height) {
-            float grayPix = 0.0f;
-            //if(blockIdx.x >= 10) {
-            float r = static_cast< float >(inputImage[globalIdx]);
-            float g = static_cast< float >(inputImage[(width * height) + globalIdx]);
-            float b = static_cast< float >(inputImage[(2 * width * height) + globalIdx]);
+    for(i = ((blockIdx.y * gridDim.x + blockIdx.x) * blockDim.x) + threadIdx.x; i < width * height; i += (gridDim.x * blockDim.x) * (gridDim.y * blockDim.y)) {
 
-            grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
+        float grayPix = 0.0f;
+        //if(blockIdx.x >= 10) {
+        float r = static_cast< float >(inputImage[i]);
+        float g = static_cast< float >(inputImage[(width * height) + i]);
+        float b = static_cast< float >(inputImage[(2 * width * height) + i]);
 
-            grayImage[globalIdx] = static_cast< unsigned char >(grayPix);
-            atomicAdd((unsigned int *)&localHistogram[static_cast< unsigned int >(grayPix)], 1);
-            globalIdx += (gridDim.x * blockDim.x) * (gridDim.y * blockDim.y);
-        }
+        grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
+
+        grayImage[i] = static_cast< unsigned char >(grayPix);
+        atomicAdd((unsigned int *)&localHistogram[static_cast< unsigned int >(grayPix)], 1);
     }
 
     __syncthreads();
