@@ -3,7 +3,7 @@ debug		:= 0
 include		../Makefile.inc
 
 
-all: darker_try histogram_try
+all: darker_try histogram_try histogram_try2
 
 darker_square: darker_square.cpp
 	$(NVCC) -c darker_square.cu $(INCLUDES) $(NVCCFLAGS)
@@ -19,6 +19,7 @@ darker_try: darker_try.cpp darker_try.cu
 	$(NVCC) -c darker_try.cu $(INCLUDES) $(NVCCFLAGS)
 	$(LINKER) -o $(PROJ_BASE)/bin/darker_tryCUDA darker_try.cpp darker_try.o ../src/Timer.cpp $(INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./darker_try.o
+
 
 darker_fixed: darker_fixed.cpp darker_fixed.cu
 	$(NVCC) -c darker_fixed.cu $(INCLUDES) $(NVCCFLAGS)
@@ -69,6 +70,11 @@ histogram_try: histogram_try.cpp histogram_try.cu
 	$(NVCC) -c histogram_try.cu $(INCLUDES) $(NVCCFLAGS)
 	$(LINKER) -o $(PROJ_BASE)/bin/histogram_tryCUDA histogram_try.cpp histogram_try.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./histogram_try.o
+
+histogram_try2: histogram_try2.cpp histogram_try2.cu
+	$(NVCC) -c histogram_try2.cu $(INCLUDES) $(NVCCFLAGS)
+	$(LINKER) -o $(PROJ_BASE)/bin/histogram_try2CUDA histogram_try2.cpp histogram_try2.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
+	rm -f ./histogram_try2.o
 
 histogram_fixed: histogram_fixed.cpp histogram_fixed.cu
 	$(NVCC) -c histogram_fixed.cu $(INCLUDES) $(NVCCFLAGS)
