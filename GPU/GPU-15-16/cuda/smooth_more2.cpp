@@ -13,12 +13,12 @@ using std::setprecision;
 using std::string;
 
 
-extern int triangularSmooth(const int width, const int height, const int spectrum, unsigned char * inputImage, unsigned char * smoothImage);
+extern int triangularSmooth(const int width, const int height, const int spectrum, unsigned char * inputImage, unsigned char * smoothImage, int pixelThreads);
 
 
 int main(int argc, char *argv[]) {
 
-	if ( argc != 2 ) {
+	if ( argc != 3 ) {
 		cerr << "Usage: " << argv[0] << " <filename>" << endl;
 		return 1;
 	}
@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
 	// Apply the triangular smooth
 	CImg< unsigned char > smoothImage = CImg< unsigned char >(inputImage.width(), inputImage.height(), 1, inputImage.spectrum());
 
-	int r=triangularSmooth(inputImage.width(), inputImage.height(), inputImage.spectrum(), inputImage.data(), smoothImage.data());
+	int r=triangularSmooth(inputImage.width(), inputImage.height(), inputImage.spectrum(), inputImage.data(), smoothImage.data(), atoi(argv[2]));
 
 	if(r==1){
 		cout<<"ERR";

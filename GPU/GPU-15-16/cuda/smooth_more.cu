@@ -98,7 +98,7 @@ int triangularSmooth(const int width, const int height, const int spectrum, unsi
     memoryTimer.stop();
 
     unsigned int grid_width = static_cast< unsigned int >(ceil(width / static_cast< float >(B_WIDTH)));
-    unsigned int grid_height = static_cast< unsigned int >(ceil(ceil(height / static_cast< float >(B_HEIGHT)) / static_cast< float >pixelThreads));
+    unsigned int grid_height = static_cast< unsigned int >(ceil(ceil(height / static_cast< float >(B_HEIGHT)) / static_cast< float >(pixelThreads)));
     // Execute the kernel
     dim3 gridSize(grid_width, grid_height);
     dim3 blockSize(B_WIDTH, B_HEIGHT);
