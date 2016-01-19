@@ -3,7 +3,7 @@ debug		:= 0
 include		../Makefile.inc
 
 
-all: darker_try histogram_try histogram_try2
+all: smooth_more2 smooth_more
 
 darker_square: darker_square.cpp
 	$(NVCC) -c darker_square.cu $(INCLUDES) $(NVCCFLAGS)
@@ -125,6 +125,16 @@ smooth: smooth.cpp smooth.cu
 	$(NVCC) -c smooth.cu $(INCLUDES) $(NVCCFLAGS)
 	$(LINKER) -o $(PROJ_BASE)/bin/smoothCUDA smooth.cpp smooth.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./smooth.o
+
+smooth_more: smooth_more.cpp smooth_more.cu
+	$(NVCC) -c smooth_more.cu $(INCLUDES) $(NVCCFLAGS)
+	$(LINKER) -o $(PROJ_BASE)/bin/smooth_moreCUDA smooth_more.cpp smooth_more.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
+	rm -f ./smooth_more.o
+
+smooth_more2: smooth_more2.cpp smooth_more2.cu
+	$(NVCC) -c smooth_more2.cu $(INCLUDES) $(NVCCFLAGS)
+	$(LINKER) -o $(PROJ_BASE)/bin/smooth_more2CUDA smooth_more2.cpp smooth_more2.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
+	rm -f ./smooth_more2.o
 
 smooth2: smooth2.cpp smooth2.cu
 	$(NVCC) -c smooth2.cu $(INCLUDES) $(NVCCFLAGS)
