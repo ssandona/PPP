@@ -13,22 +13,21 @@ using std::setprecision;
 const unsigned int nrThreads = 256;
 
 __global__ void kernel(const int width, const int height, const unsigned char * inputImage, unsigned char * outputDarkGrayImage) {
-	unsigned int item = (blockIdx.x * blockDim.x + threadIdx.x)+(blockIdx.y * width);
+	//unsigned int item = (blockIdx.x * blockDim.x + threadIdx.x)+(blockIdx.y * width);
 
-	/*unsigned int i = ;
-    unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
+	unsigned int i;
+    /*unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
     unsigned int globalIdx=(blockIdx.x * blockDim.x + threadIdx.x)+(threadIdx.y * width);*/
 
-	if ( item < width * height ) {
-		float grayPix = 0.0f;
-		float r = static_cast< float >(inputImage[item]);
-		float g = static_cast< float >(inputImage[(width * height) + item]);
-		float b = static_cast< float >(inputImage[(2 * width * height) + item]);
+    for(i = ((blockIdx.y * gridDim.x + blockIdx.x) * blockDim.x) + threadIdx.x; i < width * height; i += (gridDim.x * blockDim.x) *		float grayPix = 0.0f;
+		float r = static_cast< float >(inputImage[i]);
+		float g = static_cast< float >(inputImage[(width * height) + i]);
+		float b = static_cast< float >(inputImage[(2 * width * height) + i]);
 
 		grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
 		grayPix = (grayPix * 0.6f) + 0.5f;
 
-		outputDarkGrayImage[item] = static_cast< unsigned char >(grayPix);
+		outputDarkGrayImage[i] = static_cast< unsigned char >(grayPix);
 	}
 }	
 
