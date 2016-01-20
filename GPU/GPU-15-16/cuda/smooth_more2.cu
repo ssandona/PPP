@@ -33,17 +33,17 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
     //external pixels are needed. The filter is 5x5 so we need also the 2 px border of
     //the 16x16 portion.
     __shared__ unsigned char localImagePortion[20 * 20 * 3];
-
-    //while(j < width && i < height) {
+    int cont=0;
+    while(cont<10) {
     //if(j < width && i < height) {
 
         //coordinates of the top left pixel for the localImagePortion
-        //int topLeftPxI = (i - threadIdx.y) - 2;
-        //int topLeftPxJ = (j - threadIdx.x) - 2;
+        int topLeftPxI = (i - threadIdx.y) - 2;
+        int topLeftPxJ = (j - threadIdx.x) - 2;
 
         //coordinates of the top left pixel for the localImagePortion
-        int topLeftPxI = (blockIdx.y * blockDim.y) - 2;
-        int topLeftPxJ = (blockIdx.x * blockDim.x) - 2;
+        //int topLeftPxI = (blockIdx.y * blockDim.y) - 2;
+        //int topLeftPxJ = (blockIdx.x * blockDim.x) - 2;
 
         //coordinates of the first pixel to copy into the localImagePortion
         int pxAI = topLeftPxI + (inBlockIdx / 20);
@@ -119,8 +119,9 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
             smoothPix /= filterSum;
             smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(smoothPix + 0.5f);
         }
-        //i += (gridDim.y * blockDim.y);
-    //}
+        i += (gridDim.y * blockDim.y);
+        cont++;
+    }
 }
 
 
