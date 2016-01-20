@@ -368,6 +368,16 @@ images04	0 (0.00%)					4.233016	0.043625		97.03
 images05	0 (0.00%)					7.766216	0.081083		95.78
 images06	0 (0.00%)					16.743480	0.159923		104.69
 
+With method 2 (shared memory)
+
+0	0.000788
+1	0.006697
+2	0.009300
+3	0.062411
+4	0.042933
+5	0.081961
+6	0.161799
+
 Better 2d because we need square of pixels
 
 Consider an image processing algorithm. Some of these may be interested in lines, but most are interested in rectangular areas of the image (say, filters). If I make my threads 2D in a block, then all threads handling a certain rectangle end up on the same warp and can share memory efficiently, right?
