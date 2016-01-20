@@ -34,7 +34,8 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
     //the 16x16 portion.
     __shared__ unsigned char localImagePortion[20 * 20 * 3];
 
-    while(j < width && i < height) {
+    //while(j < width && i < height) {
+    if((j < width && i < height) {
 
         //coordinates of the top left pixel for the localImagePortion
         int topLeftPxI = (i - threadIdx.y) - 2;
@@ -82,9 +83,9 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
 
         __syncthreads();
 
-        smoothImage[(i * width) + j] = localImagePortion[(inLocalPortionI*20)+inLocalPortionJ];
+        //smoothImage[(i * width) + j] = localImagePortion[(inLocalPortionI*20)+inLocalPortionJ];
 
-        /*
+        
         //same code as the sequential, but with indexes of the localImagePortion
         for ( int z = 0; z < spectrum; z++ ) {
             unsigned int filterItem = 0;
@@ -113,8 +114,8 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
 
             smoothPix /= filterSum;
             smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(smoothPix + 0.5f);
-        }*/
-        i += (gridDim.y * blockDim.y);
+        }
+        //i += (gridDim.y * blockDim.y);
     }
 }
 
