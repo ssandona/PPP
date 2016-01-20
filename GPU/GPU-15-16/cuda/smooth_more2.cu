@@ -33,9 +33,9 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
     //external pixels are needed. The filter is 5x5 so we need also the 2 px border of
     //the 16x16 portion.
     __shared__ unsigned char localImagePortion[20 * 20 * 3];
-    int cont=0;
-    while(cont<10) {
-    //if(j < width && i < height) {
+    int cont = 0;
+    while(cont < 10) {
+        //if(j < width && i < height) {
 
         //coordinates of the top left pixel for the localImagePortion
         int topLeftPxI = (i - threadIdx.y) - 2;
@@ -87,8 +87,11 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
 
         __syncthreads();
 
-        smoothImage[(i * width) + j] = localImagePortion[(inLocalPortionI*20)+inLocalPortionJ];
-
+        if(j < width && i < height) {
+            smoothImage[(i * width) + j] = localImagePortion[(inLocalPortionI * 20) + inLocalPortionJ];
+            smoothImage[(i * width) + j + (width * height)] = localImagePortion[(inLocalPortionI * 20) + inLocalPortionJ + (20 * 20)];
+            smoothImage[(i * width) + j + (width * height * 2)] = localImagePortion[(inLocalPortionI * 20) + inLocalPortionJ + (20 * 20 * 2)];
+        }
         /*
         //same code as the sequential, but with indexes of the localImagePortion
         for ( int z = 0; z < spectrum; z++ ) {
