@@ -16,7 +16,7 @@ else
 endif
 
 LDFLAGS         := -lm -lX11 -lpthread
-CUDA_LDFLAGS	:= $(LDFLAGS) -lrt -lcudart 
+CUDA_LDFLAGS	:= $(LDFLAGS) -lrt -lcudart -lineinfo
 
 CC		:= g++
 NVCC	:= nvcc
