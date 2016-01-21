@@ -167,7 +167,14 @@ for ( int y = 0; y < height; y++ ) {
 After copying the input image into the GPU global memory and allocating some memory to content the output image, the kernel is ready to be launched. The GPU code is the same as the code content inside the loop of the sequential version (Figure \ref{loop}), but instead of using the indexes of the loop to access the image pixels, it uses the index associated to the thread. To exploit the coalesced memory access, two consecutive threads computes/accesses the values of two consecutive pixels. Different grid configurations were tested launching this program. 
 
 
-
+M1=uni block overflow M2=uni block square M3=square block overflow M4=square block square
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.9\linewidth]{res/darker_histo}
+    \caption{Normalized Speedup}
+    \label{fig:histo_darker}
+\end{figure}
+\FloatBarrier
 
 \begin{figure}[ht]
     \centering

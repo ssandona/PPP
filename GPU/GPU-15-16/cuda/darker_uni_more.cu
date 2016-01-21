@@ -76,7 +76,7 @@ __global__ void darkGrayKernel(const int width, const int height, const unsigned
 
 
 
-int darkGray(const int width, const int height, const unsigned char *inputImage, unsigned char *darkGrayImage) {
+int darkGray(const int width, const int height, const unsigned char *inputImage, unsigned char *darkGrayImage, int pixelThreads) {
     //cout << "FUNC\n";
     cudaError_t devRetVal = cudaSuccess;
     unsigned char *devInputImage = 0;
@@ -132,7 +132,7 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
     //cout << "Image size (w,h): (" << width << ", " << height << ")\n";
     //cout << "Grid size (w,h): (" << grid_width << ", " << grid_height << ")\n";
 
-    unsigned int grid_size = static_cast< unsigned int >(ceil(sqrt(ceil(width * height / PIXELS_THREAD) / (float)THREAD_NUMBER)));
+    unsigned int grid_size = static_cast< unsigned int >(ceil(sqrt(ceil(width * height / pixelThreads) / (float)THREAD_NUMBER)));
     // Execute the kernel
     dim3 gridSize(grid_size, grid_size);
     //dim3 blockSize(THREAD_NUMBER, 1);
