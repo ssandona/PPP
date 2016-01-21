@@ -22,10 +22,4 @@ active_warps
 achieved_occupancy
 sm_efficiency
 
---export-profile
-
-prun -v -1 -np 1 -native '-l gpu=GTX480' nvprof --analysis-metrics --output-profile darker_06_square_square /home/ssa223/project/GPU/GPU-15-16/bin/darker_squareCUDA image06.jpg
-
-than import on 
-
 
