@@ -3,7 +3,7 @@ debug		:= 0
 include		../Makefile.inc
 
 
-all: smooth_more2 smooth_more smooth2 smooth smooth2_bigger
+all: darker_uni_more
 
 darker_square: darker_square.cpp
 	$(NVCC) -c darker_square.cu $(INCLUDES) $(NVCCFLAGS)
