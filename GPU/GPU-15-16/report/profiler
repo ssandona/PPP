@@ -26,6 +26,10 @@ sm_efficiency
 
 prun -v -1 -np 1 -native '-l gpu=GTX480' nvprof --analysis-metrics --output-profile darker_06_square_square /home/ssa223/project/GPU/GPU-15-16/bin/darker_squareCUDA image06.jpg
 
+prun -v -1 -np 1 -native '-l gpu=GTX480' nvprof --events all --metrics all -o darker_05_all /home/ssa223/project/GPU/GPU-15-16/bin/darker_squareCUDA image06.jpg
+
+--aggregate-mode off
+
 than import on 
 
 

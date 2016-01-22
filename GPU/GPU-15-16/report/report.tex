@@ -275,6 +275,61 @@ This particular algorithm deals with square areas of the image (filter), so that
 \end{figure}
 \FloatBarrier
 
+\section{Algorithms analysis with the Visual Profiler}
+\label{sec:vp}
+
+\subsection{Application 1}
+\label{sec:a1}
+No issues for Divergent execution and Global Memory Access Pattern. All images, occupancy over 91\% except the first 82.5\%. Block size 256, 12 registers, 0 shared memory. Warp efficiency 
+Warp execution efficiency (100\%) is defined as "Ratio of the average active threads per warp to the maximum number of threads per warp supported on a multiprocessor." his will be low if you launch a non-multiple of 32 threads, if threads in a warp exit early, or if you have a divergent thread executionThreads within a warp can execute in a SIMD way, avoiding inactive threads within a warp.
+Blocks multiple of warps otherwise idle threads. Switching between concurrent warps (no overhead because registers and share memory are partitioned they are not stored/restored  to hide latency, if another warp is ready => switch, for this reason we need high number of warps or instruction level parallelism (2 dependents instruction, the second is waiting the output of a previous)
+
+1)Exposing sufficient parallelism
+HW more aritmetic throughput than memory bandwidth
+Maximize the use of bytes that travel from DRAM to SM => memory accesses per warp, memory accessed in discrete chunks, threads in a warp provide 32 addresses, hw convert addresses into memory transactions (expensive), a warp of threads consecutive and they fall in the same rigion (128bytes consecutives) => single memory transaction
+2) 
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.7\linewidth]{profiling/darker/darker_occupancy_00}
+    \caption{Img00}
+    \label{fig:histo}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.7\linewidth]{profiling/darker/darker_06_occupancy}
+    \caption{Img05}
+    \label{fig:histo}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.7\linewidth]{profiling/darker/darker_utilization_00}
+    \caption{Img05}
+    \label{fig:histo}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.7\linewidth]{profiling/darker/darker_varying}
+    \caption{Img05}
+    \label{fig:histo}
+\end{figure}
+\FloatBarrier
+
+
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.7\linewidth]{profiling/darker/darker_varying}
+    \caption{Img05}
+    \label{fig:histo}
+\end{figure}
+\FloatBarrier
 
 \printbibliography 
 
