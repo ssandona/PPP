@@ -280,9 +280,33 @@ This particular algorithm deals with square areas of the image (filter), so that
 
 \subsection{Application 1}
 \label{sec:a1}
-After collecting the profile of the applications using \textbf{nvprof}, the output files were evaluated using the \textbf{Nvidia Visual Profiler}.
+After collecting the profile of the applications using \textbf{nvprof}, the output files were evaluated using the \textbf{Nvidia Visual Profiler}. The choosen configuration, uses unidimensional \textit{Blocks} of 256 threads, 12 \textit{Registers} and 0 \textit{Shared Memory}. For all the images the profiler found no issues for \textit{Divergent Execution} (threads that follow different if branches) and a \textit{Warp Execution Efficiency} (ratio of the average active threads per warp to the maximum number of threads per warp supported on a multiprocessor) of 100\%. This last value comes from the fact that is used a block of 256 threads, that is a multiple of 32 (warp size), so no useless threads are launched and from the fact that there is no thread divergent execution, so the threads within a warp can execute in a SIMD way, avoiding inactive threads within the warp. Examples of occupancy results are shown in Figure, all the the images, obtained an occupancy over 91\% except the first that obtained 82.5\%. This is probably correlated to its small size, but in any case the occupancy is not limiting the performance of the application. For all the images exept the 5th, the Profiler found no issues related to Global Memory Access Pattern. The 5th image, is the only one of the given set that has an amount of pixels that is not a multiple of 128, the memory in the device is allocated with a 128-byte line granularity, so probably, the addresses fall within 2 cache lines, so 2 transaction insteads of one and so a decrease of the memory bandwidth utilization (Figure )
 
-\begin{lstlisting}[label=loop, caption=Sequential code]
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.7\linewidth]{profiling/darker/darker_occupancy_00}
+    \caption{Img00}
+    \label{fig:occ00}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.7\linewidth]{profiling/darker/darker_06_occupancy}
+    \caption{Img05}
+    \label{fig:occ06}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.7\linewidth]{profiling/darker/unaligned_load}
+    \caption{Img00}
+    \label{fig:unlo}
+\end{figure}
+\FloatBarrier
+
+\begin{lstlisting}[label=loop, caption=Unaligned accesses]
 
 float g = static_cast< float >(inputImage[(width * height) + (y * width) + x]);
 float b = static_cast< float >(inputImage[(2 * width * height) + (y * width) + x]);
@@ -290,11 +314,6 @@ float b = static_cast< float >(inputImage[(2 * width * height) + (y * width) + x
 \end{lstlisting}
 \FloatBarrier
 
-For all the images the profiler found no issues for \textit{Divergent Execution} (threads that follow different if branches) and a \textit{Warp Execution Efficiency} (ratio of the average active threads per warp to the maximum number of threads per warp supported on a multiprocessor) of 100\%. This last value comes from the fact that is used a block of 256 threads, that is a multiple of 32 (warp size), so no useless threads are launched and from the fact that there is no thread divergent execution, so the threads within a warp can execute in a SIMD way, avoiding inactive threads within a warp. 
-
-is defined as "." his will be low if you launch a non-multiple of 32 threads, if threads in a warp exit early, or if you have a divergent thread execution
-
- and Global Memory Access Pattern. All images, occupancy over 91\% except the first 82.5\%. Block size 256, 12 registers, 0 shared memory. Warp efficiency 
  
 
 
@@ -309,21 +328,9 @@ a warp of threads consecutive and they fall in the same rigion (128bytes consecu
 On image number 5 => no coalesced access for the 2 instructions.. because image pixels non a multiple of 128, so non aligned (threadID+pizelsOfImage) but not effect the computation, compiling with -Xptxas -dlcm=cg worst results, Changing the configuration (cudaDeviceSetCacheConfig(cudaFuncCachePreferL1);)
 2) 
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.7\linewidth]{profiling/darker/darker_occupancy_00}
-    \caption{Img00}
-    \label{fig:histo}
-\end{figure}
-\FloatBarrier
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.7\linewidth]{profiling/darker/darker_06_occupancy}
-    \caption{Img05}
-    \label{fig:histo}
-\end{figure}
-\FloatBarrier
+
+
 
 \begin{figure}[ht]
     \centering
