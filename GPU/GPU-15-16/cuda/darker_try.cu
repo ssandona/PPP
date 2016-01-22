@@ -10,7 +10,7 @@ using std::endl;
 using std::fixed;
 using std::setprecision;
 
-const unsigned int nrThreads = 128;
+const unsigned int nrThreads = 256;
 
 __global__ void kernel(const int width, const int height, const unsigned char * inputImage, unsigned char * outputDarkGrayImage) {
 	//unsigned int item = (blockIdx.x * blockDim.x + threadIdx.x)+(blockIdx.y * width);
@@ -33,7 +33,7 @@ __global__ void kernel(const int width, const int height, const unsigned char * 
 }	
 
 void darkGray(const int width, const int height, const unsigned char * inputImage, unsigned char * darkGrayImage, int pxPerThr) {
-
+	cudaDeviceSetCacheConfig(cudaFuncCachePreferL1);
 	cudaError_t devRetVal = cudaSuccess;
 	//Timers. 
 	NSTimer globalTimer("GlobalTimer", false, false);
