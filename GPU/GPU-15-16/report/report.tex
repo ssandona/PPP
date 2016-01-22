@@ -286,7 +286,11 @@ Blocks multiple of warps otherwise idle threads. Switching between concurrent wa
 
 1)Exposing sufficient parallelism
 HW more aritmetic throughput than memory bandwidth
-Maximize the use of bytes that travel from DRAM to SM => memory accesses per warp, memory accessed in discrete chunks, threads in a warp provide 32 addresses, hw convert addresses into memory transactions (expensive), a warp of threads consecutive and they fall in the same rigion (128bytes consecutives) => single memory transaction
+Maximize the use of bytes that travel from DRAM to SM => memory accesses per warp, memory accessed in discrete chunks, threads in a warp provide 32 addresses, hw convert addresses into memory transactions (expensive), 
+WRITE
+a warp of threads consecutive and they fall in the same rigion (128bytes consecutives) => single memory transaction
+
+On image number 5 => no coalesced access for the 2 instructions.. because image pixels non a multiple of 128, so non aligned (threadID+pizelsOfImage) but not effect the computation, compiling with -Xptxas -dlcm=cg worst results
 2) 
 
 \begin{figure}[ht]
