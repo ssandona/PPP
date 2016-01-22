@@ -280,8 +280,24 @@ This particular algorithm deals with square areas of the image (filter), so that
 
 \subsection{Application 1}
 \label{sec:a1}
-No issues for Divergent execution and Global Memory Access Pattern. All images, occupancy over 91\% except the first 82.5\%. Block size 256, 12 registers, 0 shared memory. Warp efficiency 
-Warp execution efficiency (100\%) is defined as "Ratio of the average active threads per warp to the maximum number of threads per warp supported on a multiprocessor." his will be low if you launch a non-multiple of 32 threads, if threads in a warp exit early, or if you have a divergent thread executionThreads within a warp can execute in a SIMD way, avoiding inactive threads within a warp.
+After collecting the profile of the applications using \textbf{nvprof}, the output files were evaluated using the \textbf{Nvidia Visual Profiler}.
+
+\begin{lstlisting}[label=loop, caption=Sequential code]
+
+float g = static_cast< float >(inputImage[(width * height) + (y * width) + x]);
+float b = static_cast< float >(inputImage[(2 * width * height) + (y * width) + x]);
+
+\end{lstlisting}
+\FloatBarrier
+
+For all the images the profiler found no issues for \textit{Divergent Execution} (threads that follow different if branches) and a \textit{Warp Execution Efficiency} (ratio of the average active threads per warp to the maximum number of threads per warp supported on a multiprocessor) of 100\%. This last value comes from the fact that is used a block of 256 threads, that is a multiple of 32 (warp size), so no useless threads are launched and from the fact that there is no thread divergent execution, so the threads within a warp can execute in a SIMD way, avoiding inactive threads within a warp. 
+
+is defined as "." his will be low if you launch a non-multiple of 32 threads, if threads in a warp exit early, or if you have a divergent thread execution
+
+ and Global Memory Access Pattern. All images, occupancy over 91\% except the first 82.5\%. Block size 256, 12 registers, 0 shared memory. Warp efficiency 
+ 
+
+
 Blocks multiple of warps otherwise idle threads. Switching between concurrent warps (no overhead because registers and share memory are partitioned they are not stored/restored  to hide latency, if another warp is ready => switch, for this reason we need high number of warps or instruction level parallelism (2 dependents instruction, the second is waiting the output of a previous)
 
 1)Exposing sufficient parallelism
