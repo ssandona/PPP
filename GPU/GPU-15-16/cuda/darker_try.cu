@@ -10,7 +10,7 @@ using std::endl;
 using std::fixed;
 using std::setprecision;
 
-const unsigned int nrThreads = 512;
+const unsigned int nrThreads = 128;
 
 __global__ void kernel(const int width, const int height, const unsigned char * inputImage, unsigned char * outputDarkGrayImage) {
 	//unsigned int item = (blockIdx.x * blockDim.x + threadIdx.x)+(blockIdx.y * width);
