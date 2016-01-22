@@ -33,7 +33,6 @@ __global__ void kernel(const int width, const int height, const unsigned char * 
 }	
 
 void darkGray(const int width, const int height, const unsigned char * inputImage, unsigned char * darkGrayImage, int pxPerThr) {
-	cudaDeviceSetCacheConfig(cudaFuncCachePreferL1);
 	cudaError_t devRetVal = cudaSuccess;
 	//Timers. 
 	NSTimer globalTimer("GlobalTimer", false, false);

@@ -290,7 +290,7 @@ Maximize the use of bytes that travel from DRAM to SM => memory accesses per war
 WRITE
 a warp of threads consecutive and they fall in the same rigion (128bytes consecutives) => single memory transaction
 
-On image number 5 => no coalesced access for the 2 instructions.. because image pixels non a multiple of 128, so non aligned (threadID+pizelsOfImage) but not effect the computation, compiling with -Xptxas -dlcm=cg worst results
+On image number 5 => no coalesced access for the 2 instructions.. because image pixels non a multiple of 128, so non aligned (threadID+pizelsOfImage) but not effect the computation, compiling with -Xptxas -dlcm=cg worst results, Changing the configuration (cudaDeviceSetCacheConfig(cudaFuncCachePreferL1);)
 2) 
 
 \begin{figure}[ht]
