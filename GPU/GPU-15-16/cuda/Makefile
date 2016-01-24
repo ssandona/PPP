@@ -3,7 +3,7 @@ debug		:= 0
 include		../Makefile.inc
 
 
-all:  darker_grid_32 histogram_square_more_32 darker_grid_32_overflow
+all:  darker_grid_32 histogram_square_more_32 darker_grid_32_overflow histogram_square_more_32_no_sq
 
 
 darker_square: darker_square.cpp
@@ -121,6 +121,11 @@ histogram_square_more_32: histogram_square_more_32.cpp histogram_square_more_32.
 	$(NVCC) -c histogram_square_more_32.cu $(INCLUDES) $(NVCCFLAGS)
 	$(LINKER) -o $(PROJ_BASE)/bin/histogram_square_more_32CUDA histogram_square_more_32.cpp histogram_square_more_32.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./histogram_square_more_32.o
+
+histogram_square_more_32_no_sq: histogram_square_more_32_no_sq.cpp histogram_square_more_32_no_sq.cu
+	$(NVCC) -c histogram_square_more_32_no_sq.cu $(INCLUDES) $(NVCCFLAGS)
+	$(LINKER) -o $(PROJ_BASE)/bin/histogram_square_more_32_no_sqCUDA histogram_square_more_32_no_sq.cpp histogram_square_more_32_no_sq.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
+	rm -f ./histogram_square_more_32_no_sq.o
 
 histogram_square_more2: histogram_square_more2.cpp histogram_square_more2.cu
 	$(NVCC) -c histogram_square_more2.cu $(INCLUDES) $(NVCCFLAGS)
