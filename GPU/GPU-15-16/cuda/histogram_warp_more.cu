@@ -123,11 +123,11 @@ int histogram1D(const int width, const int height, const unsigned char *inputIma
     //cout << "Image size (w,h): (" << width << ", " << height << ")\n";
     //cout << "Grid size (w,h): (" << grid_width << ", " << grid_height << ")\n";
 
-    unsigned int grid_width = static_cast< unsigned int >(ceil(width / static_cast< float >(256)));
+    unsigned int grid_width = static_cast< unsigned int >(ceil(width / static_cast< float >(nrThreads)));
     unsigned int grid_height = static_cast< unsigned int >(ceil(height / static_cast< float >(pixelThread)));
     // Execute the kernel
     dim3 gridSize(grid_width, grid_height);
-    dim3 blockSize(256);
+    dim3 blockSize(nrThreads);
 
     kernelTimer.start();
     //cout << "FUNC5\n";
