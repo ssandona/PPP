@@ -112,6 +112,11 @@ histogram_square: histogram_square.cpp histogram_square.cu
 	$(LINKER) -o $(PROJ_BASE)/bin/histogram_squareCUDA histogram_square.cpp histogram_square.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./histogram_square.o
 
+histogram_square_32: histogram_square_32.cpp histogram_square_32.cu
+	$(NVCC) -c histogram_square_32.cu $(INCLUDES) $(NVCCFLAGS)
+	$(LINKER) -o $(PROJ_BASE)/bin/histogram_square_32CUDA histogram_square_32.cpp histogram_square_32.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
+	rm -f ./histogram_square_32.o
+
 histogram_square_more: histogram_square_more.cpp histogram_square_more.cu
 	$(NVCC) -c histogram_square_more.cu $(INCLUDES) $(NVCCFLAGS)
 	$(LINKER) -o $(PROJ_BASE)/bin/histogram_square_moreCUDA histogram_square_more.cpp histogram_square_more.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
