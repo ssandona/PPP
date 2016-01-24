@@ -14,10 +14,10 @@ const unsigned int THREAD_NUMBER = 256;
 
 __global__ void histogram1DKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram) {
 
-    /*unsigned int i = blockIdx.y;
+    unsigned int i = blockIdx.y;
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
-    unsigned int globalIdx = j + (blockDim.x * gridDim.x * i);*/
-    unsigned int globalIdx = blockIdx.y * width+(blockIdx.x * blockDim.x + threadIdx.x);
+    unsigned int globalIdx = (width * i)+j;
+    //unsigned int globalIdx = blockIdx.y * width+(blockIdx.x * blockDim.x + threadIdx.x);
 
     __shared__ unsigned int localHistogram[HISTOGRAM_SIZE];
 

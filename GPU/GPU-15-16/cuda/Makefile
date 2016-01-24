@@ -3,7 +3,7 @@ debug		:= 0
 include		../Makefile.inc
 
 
-all:  histogram_square histogram_square_32
+all:  histogram_square histogram_square_32 histogram_grid histogram2 histogram_uni
 
 
 darker_square: darker_square.cpp
@@ -76,6 +76,11 @@ histogram: histogram.cpp histogram.cu
 	$(NVCC) -c histogram.cu $(INCLUDES) $(NVCCFLAGS)
 	$(LINKER) -o $(PROJ_BASE)/bin/histogramCUDA histogram.cpp histogram.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./histogram.o
+
+histogram_grid: histogram_grid.cpp histogram_grid.cu
+	$(NVCC) -c histogram_grid.cu $(INCLUDES) $(NVCCFLAGS)
+	$(LINKER) -o $(PROJ_BASE)/bin/histogram_gridCUDA histogram_grid.cpp histogram_grid.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
+	rm -f ./histogram_grid.o
 
 histogram_try: histogram_try.cpp histogram_try.cu
 	$(NVCC) -c histogram_try.cu $(INCLUDES) $(NVCCFLAGS)

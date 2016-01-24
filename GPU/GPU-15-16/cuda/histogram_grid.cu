@@ -10,8 +10,8 @@ using std::fixed;
 using std::setprecision;
 
 const int HISTOGRAM_SIZE = 256;
-const unsigned int B_WIDTH = 16;
-const unsigned int B_HEIGHT = 16;
+const unsigned int B_WIDTH = 32;
+const unsigned int B_HEIGHT = 8;
 //const int WARP_SIZE = 32;
 //const int WARPS=8;
 
@@ -19,6 +19,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
 
     unsigned int i = blockIdx.y * blockDim.y + threadIdx.y;
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
+    unsigned int globalIdx = (i * width) + j;
 
     __shared__ unsigned int localHistogram[HISTOGRAM_SIZE];
     unsigned int inBlockIdx = threadIdx.x + (blockDim.x * threadIdx.y);
@@ -31,13 +32,13 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     //unsigned int warpid = inBlockIdx / WARP_SIZE;
     //unsigned int inWarpId = inBlockIdx % WARP_SIZE;
 
-    if(j < width && i < height) {
+    if(globalIdx<width*height) {
 
         float grayPix = 0.0f;
         //if(blockIdx.x >= 10) {
-        float r = static_cast< float >(inputImage[(i * width) + j]);
-        float g = static_cast< float >(inputImage[(width * height) + (i * width) + j]);
-        float b = static_cast< float >(inputImage[(2 * width * height) + (i * width) + j]);
+        float r = static_cast< float >(inputImage[globalIdx]);
+        float g = static_cast< float >(inputImage[(width * height) + globalIdx]);
+        float b = static_cast< float >(inputImage[(2 * width * height) + globalIdx]);
 
         grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
         //}

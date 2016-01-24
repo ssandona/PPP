@@ -410,15 +410,22 @@ image04		0,034269
 image05		0,033029
 image06		0,085662 -> 0,063017
 
-BOH
 
-0,000086	22,66
-0,001510	12,54
-0,002200	11,90
-0,007944	22,80
-0,012946	9,19
-0,007465	33,25
-0,021255	21,93
+square grid square block (monocromo)
+
+image00_mono	0.000484
+image01_mono	0.004255
+image02_mono	0.005988
+image03_mono	0.040572
+image04_mono	0.026993
+image05_mono	0.053261
+image06_mono	0.105229
+
+
+
+
+
+
 
 
 
