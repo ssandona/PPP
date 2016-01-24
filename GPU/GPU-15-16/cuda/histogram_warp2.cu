@@ -10,52 +10,50 @@ using std::fixed;
 using std::setprecision;
 
 const int HISTOGRAM_SIZE = 256;
-const unsigned int THREAD_NUMBER = 256;
-const int PIXELS_THREAD = 1;
-const int WARP_NUMBER = 8;
-const int WARP_SIZE = 32;
+const unsigned int B_WIDTH = 16;
+const unsigned int B_HEIGHT = 16;
+const unsigned int WARP_SIZE=32;
+const int WARPS = 8;
 
 __global__ void histogram1DKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram) {
 
-    unsigned int i = blockIdx.y;
-    unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
-    unsigned int globalIdx = j + (blockDim.x * gridDim.x * i);
-    unsigned int firstGlobalIdx = (blockIdx.x * blockDim.x);
-    //unsigned int warpid = threadIdx.x / WARP_SIZE;
     int k;
-    int last = (width * height) - firstGlobalIdx - 1;
 
-    // __shared__ unsigned int localHistogram[WARP_NUMBER][HISTOGRAM_SIZE];
+    unsigned int inBlockIdx = threadIdx.x;
+    unsigned int globalIdx = (blockIdx.y * gridDim.x + blockIdx.x) * blockDim.x;
+    unsigned int warpid = inBlockIdx / WARP_SIZE;
+    unsigned int inWarpId = inBlockIdx % WARP_SIZE;
 
-    __shared__ unsigned char localImagePortion[THREAD_NUMBER * 3];
-    __shared__ unsigned int localHistogram[HISTOGRAM_SIZE];
+    __shared__ unsigned int localHistogram[WARP_SIZE * HISTOGRAM_SIZE];
 
-    localHistogram[threadIdx.x] = histogram[threadIdx.x];
-
-    if(j < width && i < height) {
-        localImagePortion[threadIdx.x] = inputImage[globalIdx];
-        localImagePortion[threadIdx.x + THREAD_NUMBER] = inputImage[(width * height) + globalIdx];
-        localImagePortion[threadIdx.x + 2 * THREAD_NUMBER] = inputImage[(2 * width * height) + globalIdx];
-        __syncthreads();
-
-        //peto
-        for(k = 0; k < THREAD_NUMBER && k < last; k++) {
-            float grayPix = 0.0f;
-            float r = static_cast< float >(localImagePortion[k]);
-            float g = static_cast< float >(localImagePortion[THREAD_NUMBER + k]);
-            float b = static_cast< float >(localImagePortion[2 * THREAD_NUMBER + k]);
-            grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
-            if(static_cast< unsigned int >(grayPix) == threadIdx.x)
-                localHistogram[threadIdx.x] += 1;
-        }
+    for(k = 0; k < WARP_SIZE; k++) {
+        localHistogram[k * 256 + inBlockIdx] = 0;
     }
-
 
     __syncthreads();
 
 
+    if(globalIdx < width * height) {
+        float grayPix = 0.0f;
+        float r = static_cast< float >(inputImage[globalIdx]);
+        float g = static_cast< float >(inputImage[(width * height) + globalIdx]);
+        float b = static_cast< float >(inputImage[(2 * width * height) + globalIdx]);
 
-    atomicAdd((unsigned int *)&histogram[threadIdx.x], localHistogram[threadIdx.x]);
+        grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
+        //}
+        grayImage[globalIdx] = static_cast< unsigned char >(grayPix);
+
+        atomicAdd((unsigned int *)&localHistogram[inWarpId * 256 + static_cast< unsigned int >(grayPix)], 1);
+    }
+    __syncthreads();
+
+
+    int s = 0;
+    for(k = 0; k < WARPS; k++) {
+        s += localHistogram[k*256+inBlockIdx];
+    }
+
+    atomicAdd((unsigned int *)&histogram[inBlockIdx], s);
 
 }
 
@@ -125,10 +123,11 @@ int histogram1D(const int width, const int height, const unsigned char *inputIma
     //cout << "Image size (w,h): (" << width << ", " << height << ")\n";
     //cout << "Grid size (w,h): (" << grid_width << ", " << grid_height << ")\n";
 
-    unsigned int grid_size = static_cast< unsigned int >(ceil(sqrt(ceil(width * height / PIXELS_THREAD) / (float)THREAD_NUMBER)));
+    unsigned int grid_width = static_cast< unsigned int >(ceil(width / static_cast< float >(256)));
+    //unsigned int grid_height = static_cast< unsigned int >(ceil(height / static_cast< float >(B_HEIGHT)));
     // Execute the kernel
-    dim3 gridSize(grid_size, height);
-    dim3 blockSize(THREAD_NUMBER);
+    dim3 gridSize(grid_width, height);
+    dim3 blockSize(256);
 
     kernelTimer.start();
     //cout << "FUNC5\n";

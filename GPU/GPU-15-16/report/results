@@ -456,6 +456,33 @@ image05_mono	0.053584
 image06_mono	0.105860
 
 
+uni, no square 10 pixels per thread
+
+image00_mono	0.000605	52x2
+image01_mono	0.004844	103x10
+image02_mono	0.006770	144x10
+image03_mono	0.045320 	503x20
+image04_mono	0.030306	410x16
+image05_mono	0.059685	367x36 
+image06_mono	0.117485	640x40
+
+uni, square 10 pixels per thread (32x8)
+
+image00_mono	0.000585	11x11
+image01_mono	0.004534	32x32
+image02_mono	0.006272	38x38
+image03_mono	0.041540	100x100
+image04_mono	0.027716	81x81
+image05_mono	0.054600	114x114
+image06_mono	0.107575	160x160
+
+	
+
+
+
+
+
+
 
 
 
