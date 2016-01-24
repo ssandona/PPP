@@ -42,7 +42,7 @@ __global__ void darkGrayKernel(const int width, const int height, const unsigned
         grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
         grayPix = (grayPix * 0.6f) + 0.5f;
         //}
-        darkGrayImage[globalIdx] = static_cast< unsigned char >(grayPix)
+        darkGrayImage[globalIdx] = static_cast< unsigned char >(grayPix);
     }
 }
 
