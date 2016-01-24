@@ -14,14 +14,15 @@ const unsigned int THREAD_NUMBER = 256;
 
 __global__ void histogram1DKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram) {
 
-    unsigned int i = blockIdx.y;
+    /*unsigned int i = blockIdx.y;
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
-    unsigned int globalIdx = (width * i)+j;
+    unsigned int globalIdx = j + (blockDim.x * gridDim.x * i);*/
     //unsigned int globalIdx = blockIdx.y * width+(blockIdx.x * blockDim.x + threadIdx.x);
+    unsigned int globalIdx = ((blockIdx.y * gridDim.x + blockIdx.x) * blockDim.x) + threadIdx.x;
 
     __shared__ unsigned int localHistogram[HISTOGRAM_SIZE];
-    unsigned int inBlockIdx = threadIdx.x;
-    localHistogram[inBlockIdx] = 0;
+
+    localHistogram[threadIdx.x] = 0;
     __syncthreads();
 
 
@@ -47,7 +48,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
     
     __syncthreads();
 
-    atomicAdd((unsigned int *)&histogram[inBlockIdx], localHistogram[inBlockIdx]);
+    atomicAdd((unsigned int *)&histogram[threadIdx.x], localHistogram[threadIdx.x]);
 
 }
 
@@ -117,9 +118,11 @@ int histogram1D(const int width, const int height, const unsigned char *inputIma
     //cout << "Image size (w,h): (" << width << ", " << height << ")\n";
     //cout << "Grid size (w,h): (" << grid_width << ", " << grid_height << ")\n";
 
-    unsigned int grid_width = static_cast< unsigned int >(ceil(width / static_cast< float >(THREAD_NUMBER)));
+    unsigned int grid_size = static_cast< unsigned int >(ceil(sqrt((width * height) / (float)256)));
+
+   // unsigned int grid_size = static_cast< unsigned int >(ceil(sqrt((width * height) / (float)THREAD_NUMBER)));
     // Execute the kernel
-    dim3 gridSize(grid_width, height);
+    dim3 gridSize(grid_size, grid_size);
     dim3 blockSize(THREAD_NUMBER);
 
     kernelTimer.start();
