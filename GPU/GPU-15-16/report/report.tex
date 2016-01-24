@@ -96,7 +96,9 @@ Using CUDA there are two parts of the code: the device code, or GPU code, or the
 In CUDA, as mentioned before, there is a strinct mapping with the hardware, so that an hardware virtualization model is fixed with the concepts of thread, block and grid.
 Each \textbf{thread} executes the kernel code, running on one CUDA core.
 The threads are logically grouped into \textbf{thread blocks}, so that the threads of the same block will run on the same multiprocessor. The thread blocks are logically organized in a \textbf{Grid}, that represent the entire dataset. The blocks and the grid can be of 1D, 2D or 3D.
-An image is a 2D structure and for this reason the most convenient choice is to set up also a 2D grid. However, setting up a 2D grid, there is not only one way to follow. For this particular project, 4 possible combinations were considered. The first was a non square grid of 1D blocks (Figure \ref{fig:ns1}), the second a square grid with 1D blocks (Figure \ref{fig:s1}), the third a non square grid of 2D blocks (Figure \ref{fig:ns2}) and the third a square grid of 2D blocks (Figure \ref{fig:s2}). Different configurations were tested in order to find the best to suit the particular case.
+The most important thing programming with GPUs, to make use of all their power, is to make them as busy as possible. Switching between concurrent warps has no overhead because registers and share memory are partitioned and not stored/restored, so that if one warp has to wait for example for a memory access and another warp is ready, there is a switch to hide the latency. The thread scheduling is really quick, and this allow the blocks to be swapped in and out really quickly. For this reason an high number of warps is needed and instantiating a grid, is good to have a number of blocks much bigger than the number of available multiprocessor and a block size that can be higher than the amount of cuda cores available per SM.
+Another interesting aspect to take into consideration, is the block size. The block is divided into warps, so that Threads 0..31 are part of Warp 0, Threads 32...63 are part of warp 1 and so on. Considering this, it is good to have blocks with a size multiple of 32, so that no useless threads are launched. After certain tests, a block of size 256 revealed to be optimal. For what concerning the grid configuration, an image is a 2D structure and for this reason it is intuitive to set up also a 2D grid. By the way, setting up a 2D grid, there is not only one way to follow. For this particular project two possible block configurations were considered, 1D (1x256) and 2D (16x16) and two possible grid configurations: square and non square. In the rest part of this document, \textbf{M1} indicates a non square grid of 1D blocks (Figure \ref{fig:ns1}), in which the grid has a height of \textit{image\_height} and a width of \textit{(ceil(image\_width / 256))}; \textbf{M2} indicates a square grid of 1D blocks (Figure \ref{fig:s1}), in which the size of the grid is \textit{ceil(sqrt((image\_width * image\_height)/256))}; \textbf{M3} indicates a non square grid of 2D blocks (Figure \ref{fig:ns2}), in which the grid has a width of \textit{ceil(image\_width / 16)} and a height of \textit{ceil(image\_height / 16)}; \textbf{M4} indicates a square grid of 2D blocks (Figure \ref{fig:s2}), in which the size of the grid is the same as M2. 
+
 
 \begin{figure}[!ht]
 \begin{subfigure}{0.5\textwidth}
@@ -132,13 +134,20 @@ An image is a 2D structure and for this reason the most convenient choice is to 
 
 \section{Coalesced memory access}
 \label{sec:cma}
-One of the main bottlenecks with the GPUs is the global memory access that is expensive. CUDA uses a SIMT approach, in which all threads of a warp execute the same instruction. If the kernel is correctly designed, when the threads of a warp ask a value stored in the global memory, instead of having one access per thread, these accesses can be grouped if consecutive threads access consecutive memory addresses. This practise, is very useful to reduce the memory overhead, so that it was adopted in each algorithm.
+One of the main bottlenecks with the GPUs are the global memory accesses that are expensive, for this reason it is better to maximize the use of bytes that travel from the DRAM to the Streaming Multiprocessor. CUDA uses a SIMT approach, in which all threads of a warp execute the same instruction, so that global memory accesses are effectuated "per warp". The threads in a warp (32) provide 32 addresses and the hardware converts these addresses into memory transactions. The memory is divided into regions of 128 bytes, so that bytes 0...127 are part of Region 0, bytes 128...255 are part of Region 1 and so on. The memory is accessed per region, that means if one thread wants the byte 0, the entire Region 0 is loaded. A kernel is correctly designed, if consecutive threads access consecutive memory addresses, so that all the requeted addresses fall on the same region and only one transaction is performed. Behaving in this "coalesced way" instead of having one access per thread, these accesses are grouped and the total memory overhead is reduced. Developing all the three algorithms this aspect was taken into consideration.
 
+\section{More work per thread}
+\label{sec:mwpt}
+The standard (and easyest) way to proceed on image computing is to use a grid large enough to cover all the image and than compute one thread per pixel. An aspect that is useful to consider establishing the amount of work per thread is the Arithmetic Intensity (AI) of the board. In fact, if we choose a number of operations per thread that allows to have a decent AI, that is, an AI that matches the one of the card, an increase of the performance can be obtained. Rea
+
+Check if darker uni is memory bound
+
+\# FLOP / byte -> arithmetic intensity (memory or compute bound)
 
 \section{Algorithm 1: Grayscale Conversion and Darkening}
 \label{sec:gcd}
 From an RGB image, the output of this algorithm is a darker grayscale image.
-The gray value of a pixel is generated by weighting the three values (\texttt{0.3*R, 0.59*G, 0.11*B}) and then summing them together. To darken the obtained grayscale image, the final pixel value is multiplied by a constant (0.6). The Figure \ref{fig:dark} shows an example of the result. The sequential algorithm, simply go through the entire image and computes for each pixel the corresponding value (Figure \ref{loop}).
+The gray value of a pixel is generated by weighting the three values (\texttt{0.3*R, 0.59*G, 0.11*B}) and then summing them together. To darken the obtained grayscale image, the final pixel value is multiplied by a constant (0.6). The Figure \ref{fig:dark} shows an example of the result. The sequential algorithm, simply go through the entire image and computes for each pixel the corresponding value (Listing \ref{dsc}).
 
 \begin{figure}[ht]
     \centering
@@ -148,33 +157,37 @@ The gray value of a pixel is generated by weighting the three values (\texttt{0.
 \end{figure}
 \FloatBarrier
 
-\begin{lstlisting}[label=loop, caption=Sequential code]
-for ( int y = 0; y < height; y++ ) {
-		for ( int x = 0; x < width; x++ ) {
-			...
-			float r = static_cast< float >(inputImage[(y * width) + x]);
-			float g = static_cast< float >(inputImage[(width * height) + (y * width) + x]);
-			float b = static_cast< float >(inputImage[(2 * width * height) + (y * width) + x]);
-			...
-			darkGrayImage[(y * width) + x] = static_cast< unsigned char >(grayPix);
+\begin{lstlisting}[label=dsc, caption=Darker Sequential code]
+//H=image_height, W=image_width
+for ( int y = 0; y < H; y++ ) {
+ for ( int x = 0; x < W; x++ ) {
+  float grayPix = 0.0f;
+  float r = static_cast< float >(inputImage[(y * W) + x]);
+  float g = static_cast< float >(inputImage[(W * H) + (y * W) + x]);
+  float b = static_cast< float >(inputImage[(2 * W * H) + (y * W) + x]);
+  grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
+  grayPix = (grayPix * 0.6f) + 0.5f;
+  darkGrayImage[(y * W) + x] = static_cast< unsigned char >(grayPix);
+ }
+}
 \end{lstlisting}
 \FloatBarrier
 
 \subsection{Parallelization}
 \label{sec:p1}
 \subsection{First method}
-\label{sec:fm}
-After copying the input image into the GPU global memory and allocating some memory to content the output image, the kernel is ready to be launched. The GPU code is the same as the code content inside the loop of the sequential version (Figure \ref{loop}), but instead of using the indexes of the loop to access the image pixels, it uses the index associated to the thread. To exploit the coalesced memory access, two consecutive threads computes/accesses the values of two consecutive pixels. Different grid configurations were tested launching this program. 
+\label{sec:dfm}
+After allocating into the GPU global memory some memory to contain the input image (\textit{3 * image\_width * image\_height * sizeof(unsigned char)}), copying the input image there and allocating some memory to content the output image (\textit{image\_width * image\_height * sizeof(unsigned char)}), the kernel is ready to be launched. The GPU code is the same as the code content inside the loop of the sequential version (Listing \ref{dsc}), but instead of using the indexes of the loop to access the image pixels, it uses the index associated to the thread. To exploit the coalesced memory access, two consecutive threads computes/accesses the values of two consecutive pixels. The 4 different grid configurations (explained in Section \ref{sec:grid}) were tested for this program, in order to establish the best. In Figure \ref{fig:histo_darker} are reported the obtained results. As shown methods M1 and M2 obtained the best results. 
 
 
-M1=uni block overflow M2=uni block square M3=square block overflow M4=square block square
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.9\linewidth]{res/darker_histo}
-    \caption{Normalized Speedup}
+    \caption{Speedups Comparison}
     \label{fig:histo_darker}
 \end{figure}
 \FloatBarrier
+
 
 Uni blocks, overflow (more) - M1 more
 \begin{figure}[ht]
@@ -184,6 +197,9 @@ Uni blocks, overflow (more) - M1 more
     \label{fig:norm_histo_darker}
 \end{figure}
 \FloatBarrier
+
+\subsection{Optimization - More pixels per thread}
+\label{sec:dfm}
 
 Uni blocks, square grid (more) - M2 more
 \begin{figure}[ht]
@@ -201,6 +217,41 @@ Uni blocks, square grid (more) - M2 more
     \label{fig:norm_histo_darker}
 \end{figure}
 \FloatBarrier
+
+\begin{lstlisting}[label=dpc, caption=Darker Parallel Code]
+for(i = ((blockIdx.y * gridDim.x + blockIdx.x) * blockDim.x) + threadIdx.x; 
+    i < width * height; 
+    i += (gridDim.x * blockDim.x) * (gridDim.y * blockDim.y)) {
+float grayPix = 0.0f;
+float r = static_cast< float >(inputImage[i]);
+float g = static_cast< float >(inputImage[(width * height) + i]);
+float b = static_cast< float >(inputImage[(2 * width * height) + i]);
+grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
+grayPix = (grayPix * 0.6f) + 0.5f;
+outputDarkGrayImage[i] = static_cast< unsigned char >(grayPix);
+}
+\end{lstlisting}
+\FloatBarrier
+
+Theoretical Throughput = 1345
+Theorretical Bandwidth = 177.4
+
+\begin{table}[]
+\centering
+\caption{My caption}
+\label{my-label}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+               & \textbf{\begin{tabular}[c]{@{}c@{}}Achieved Throughput\\ (GFLOPS/s)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Achieved Bandwidth \\ (GB/s)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Compute utilization \\ (\%)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Bandwidth utilization \\ (\%)\end{tabular}} \\ \hline
+\textbf{Img00} & 24,14                                                                             & 13,80                                                                         & 1,80                                                                         & 7,78                                                                           \\ \hline
+\textbf{Img01} & 95,08                                                                             & 54,33                                                                         & 7,07                                                                         & 30,63                                                                          \\ \hline
+\textbf{Img02} & 101,20                                                                            & 57,83                                                                         & 7,52                                                                         & 32,60                                                                          \\ \hline
+\textbf{Img03} & 136,02                                                                            & 77,72                                                                         & 10,11                                                                        & 43,81                                                                          \\ \hline
+\textbf{Img04} & 129,48                                                                            & 73,99                                                                         & 9,63                                                                         & 41,71                                                                          \\ \hline
+\textbf{Img05} & 137,11                                                                            & 78,35                                                                         & 10,19                                                                        & 44,16                                                                          \\ \hline
+\textbf{Img06} & 141,63                                                                            & 80,93                                                                         & 10,53                                                                        & 45,62                                                                          \\ \hline
+\end{tabular}
+\end{table}
 
 \section{Algorithm 2: Histogram Computation}
 \label{sec:hc}
@@ -239,8 +290,15 @@ After copying the input image and the initial empty histogram into the GPU globa
 
 The logic behind an atomic operations is that each thread "locks" the variable, modify it, and "unlocks" it, so that the other threads that try to modify the same variable has to wait that this will be "unlocked". The worst case, in the histogram scenario, is a monocromo image, in which all the threads try to modify the same bin, which implies a long waiting queue of threads.
  Different grid configurations were tested launching this program. 
+ 
+ 
+ What you have shown in your question is only correct for certain block sizes. Your "coalesced" access:
 
+int i = blockIdx.x * blockDim.x + threadIdx.x;
+float vx = in\_vector[i];
+will result in coalesced access of in\_vector from global memory only when blockDim.x is greater than or equal to 32. Even in the coalesced case, each thread within a block which shares the same threadIdx.x value reads the same word from global memory, which seems to be counter-intuitive and wasteful.
 
+Try histo with blocks 8x32
 \section{Algorithm 3: Smoothing}
 \label{sec:smoo}
 Smoothing is the process of removing noise from an image by the means of statistical analysis. To remove the noise, each point is replaced by a weighted average of its neighbours. In this way small-scale structures are removed from the image. In this case a two-dimensional 5-point triangular smooth filter was used. The Figure \ref{fig:smooth} shows an example of the result.
@@ -262,13 +320,13 @@ This particular algorithm deals with square areas of the image (filter), so that
 \centering
 \includegraphics[width=\linewidth]{filter}
 \caption{No square grid with 1D blocks}
-\label{fig:ns1}
+\label{fig:f1}
 \end{subfigure} % separation between the subfigures
 \begin{subfigure}{0.5\textwidth}
 \centering
 \includegraphics[width=\linewidth]{filter_letters}
 \caption{Square grid with 1D blocks}
-\label{fig:s1}
+\label{fig:f2}
 \end{subfigure}
 \caption{Possible kernel configurations}
  \label{fig:speed}
@@ -277,6 +335,8 @@ This particular algorithm deals with square areas of the image (filter), so that
 
 \section{Algorithms analysis with the Visual Profiler}
 \label{sec:vp}
+
+Instruction-level parallelism (ILP) is a measure of how many of the operations in a computer program can be performed simultaneously. The potential overlap among instructions is called instruction level parallelism.
 
 \subsection{Application 1}
 \label{sec:a1}
@@ -317,13 +377,9 @@ float b = static_cast< float >(inputImage[(2 * width * height) + (y * width) + x
  
 
 
-Blocks multiple of warps otherwise idle threads. Switching between concurrent warps (no overhead because registers and share memory are partitioned they are not stored/restored  to hide latency, if another warp is ready => switch, for this reason we need high number of warps or instruction level parallelism (2 dependents instruction, the second is waiting the output of a previous)
 
-1)Exposing sufficient parallelism
-HW more aritmetic throughput than memory bandwidth
-Maximize the use of bytes that travel from DRAM to SM => memory accesses per warp, memory accessed in discrete chunks, threads in a warp provide 32 addresses, hw convert addresses into memory transactions (expensive), 
-WRITE
-a warp of threads consecutive and they fall in the same rigion (128bytes consecutives) => single memory transaction
+
+
 
 On image number 5 => no coalesced access for the 2 instructions.. because image pixels non a multiple of 128, so non aligned (threadID+pizelsOfImage) but not effect the computation, compiling with -Xptxas -dlcm=cg worst results, Changing the configuration (cudaDeviceSetCacheConfig(cudaFuncCachePreferL1);)
 2) 
