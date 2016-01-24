@@ -26,7 +26,7 @@ __global__ void darkGrayKernel(const int width, const int height, const unsigned
     //M[i,j]
     unsigned int i = blockIdx.y * blockDim.y + threadIdx.y;
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
-    unsigned int globalIdx = (i * width) + j;
+    unsigned int globalIdx=(blockDim.x * gridDim.x * i)+j;
 
 
     if(globalIdx < width * height) {
