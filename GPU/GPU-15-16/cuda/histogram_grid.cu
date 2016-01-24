@@ -122,6 +122,7 @@ int histogram1D(const int width, const int height, const unsigned char *inputIma
     // Execute the kernel
     dim3 gridSize(grid_width, grid_height);
     dim3 blockSize(B_WIDTH, B_HEIGHT);
+    cout << "gridsize: "<<grid_height<<"x"<<grid_width<<" -> "<<(grid_width*grid_height*256)<<" threads"<<endl;
 
     kernelTimer.start();
     //cout << "FUNC5\n";
