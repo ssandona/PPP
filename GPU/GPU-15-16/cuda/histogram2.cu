@@ -16,7 +16,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
 
     unsigned int i = blockIdx.y;
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
-    unsigned int globalIdx = (i*width * i)+j;
+    unsigned int globalIdx = (width * i)+j;
     //unsigned int globalIdx = blockIdx.y * width+(blockIdx.x * blockDim.x + threadIdx.x);
 
     __shared__ unsigned int localHistogram[HISTOGRAM_SIZE];
