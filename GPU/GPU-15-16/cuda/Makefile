@@ -3,7 +3,7 @@ debug		:= 0
 include		../Makefile.inc
 
 
-all:  darker_grid_32 histogram_square_more_32
+all:  darker_grid_32 histogram_square_more_32 darker_grid_32_overflow
 
 
 darker_square: darker_square.cpp
@@ -66,6 +66,11 @@ darker_grid_32: darker_grid_32.cpp darker_grid_32.cu
 	$(NVCC) -c darker_grid_32.cu $(INCLUDES) $(NVCCFLAGS)
 	$(LINKER) -o $(PROJ_BASE)/bin/darker_grid_32CUDA darker_grid_32.cpp darker_grid_32.o ../src/Timer.cpp $(INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./darker_grid_32.o
+
+darker_grid_32_overflow: darker_grid_32_overflow.cpp darker_grid_32_overflow.cu
+	$(NVCC) -c darker_grid_32_overflow.cu $(INCLUDES) $(NVCCFLAGS)
+	$(LINKER) -o $(PROJ_BASE)/bin/darker_grid_32_overflowCUDA darker_grid_32_overflow.cpp darker_grid_32_overflow.o ../src/Timer.cpp $(INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
+	rm -f ./darker_grid_32_overflow.o
 
 histogram: histogram.cpp histogram.cu
 	$(NVCC) -c histogram.cu $(INCLUDES) $(NVCCFLAGS)
