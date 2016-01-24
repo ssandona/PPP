@@ -13,7 +13,6 @@ const int HISTOGRAM_SIZE = 256;
 const unsigned int B_WIDTH = 32;
 const unsigned int B_HEIGHT = 8;
 const unsigned int THREAD_NUMBER = 256;
-const int PIXELS_THREAD = 11;
 //const int WARP_SIZE = 32;
 //const int WARPS=8;
 
@@ -142,6 +141,8 @@ int histogram1D(const int width, const int height, const unsigned char *inputIma
     // Execute the kernel
     dim3 gridSize(grid_size, grid_size);
     dim3 blockSize(B_WIDTH, B_HEIGHT);
+
+    cout << "grid size: " << grid_size << "x" << grid_size << " -> threads -> " << (grid_size * grid_size * 256)  << endl;
 
     kernelTimer.start();
     //cout << "FUNC5\n";

@@ -426,13 +426,13 @@ image06_mono	0,105229
 
 standard square blocks (monocromo, consecutive)
 
-image00_mono	0,000476
-image01_mono	0,004257
-image02_mono	0,005971
-image03_mono	0,040444
-image04_mono	0,026967
-image05_mono	0,053127
-image06_mono	0,104968
+image00_mono	0.000491
+image01_mono	0.004327
+image02_mono	0.006063
+image03_mono	0.040413
+image04_mono	0.026800
+image05_mono	0.052464
+image06_mono	0.105837
 
 
 square grid uni block (monocromo)
@@ -448,12 +448,12 @@ image06_mono	0,105850
 standard grid uni block (monocromo, consecutive)
 
 image00_mono	0,000484
-image01_mono	0,004295
-image02_mono	0,006020
-image03_mono	0,041378
-image04_mono	0,027164
-image05_mono	0,054490
-image06_mono	0,105889
+image01_mono	0.004303
+image02_mono	0.006033
+image03_mono	0.040834
+image04_mono	0.027158
+image05_mono	0.053584
+image06_mono	0.105860
 
 
 
