@@ -17,7 +17,7 @@ using std::string;
 /*const unsigned int DIM = 16000000;
 const unsigned int nrThreads = 256;*/
 const unsigned int B_WIDTH = 32;
-const unsigned int B_HEIGHT = 16;
+const unsigned int B_HEIGHT = 8;
 
 __global__ void darkGrayKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *darkGrayImage) {
     /*unsigned int i = blockIdx.x * blockDim.x + threadIdx.x;

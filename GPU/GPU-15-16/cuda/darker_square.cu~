@@ -17,7 +17,7 @@ using std::string;
 /*const unsigned int DIM = 16000000;
 const unsigned int nrThreads = 256;*/
 const unsigned int B_WIDTH = 32;
-const unsigned int B_HEIGHT = 16;
+const unsigned int B_HEIGHT = 8;
 
 __global__ void darkGrayKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *darkGrayImage) {
     /*unsigned int i = blockIdx.x * blockDim.x + threadIdx.x;
@@ -31,18 +31,19 @@ __global__ void darkGrayKernel(const int width, const int height, const unsigned
     unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
     unsigned int globalIdx = j + (blockDim.x * gridDim.x * i);
 
-    if(globalIdx >= width * height) return;
+    if(globalIdx < width * height) {
 
 
-    //if(j >= width || i >= height) return;
-    float grayPix = 0.0f;
-    float r = static_cast< float >(inputImage[globalIdx]);
-    float g = static_cast< float >(inputImage[(width * height) + globalIdx]);
-    float b = static_cast< float >(inputImage[(2 * width * height) + globalIdx]);
-    grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
-    grayPix = (grayPix * 0.6f) + 0.5f;
-    //}
-    darkGrayImage[globalIdx] = static_cast< unsigned char >(grayPix);
+        //if(j >= width || i >= height) return;
+        float grayPix = 0.0f;
+        float r = static_cast< float >(inputImage[globalIdx]);
+        float g = static_cast< float >(inputImage[(width * height) + globalIdx]);
+        float b = static_cast< float >(inputImage[(2 * width * height) + globalIdx]);
+        grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b));
+        grayPix = (grayPix * 0.6f) + 0.5f;
+        //}
+        darkGrayImage[globalIdx] = static_cast< unsigned char >(grayPix);
+    }
 }
 
 
@@ -110,7 +111,7 @@ int darkGray(const int width, const int height, const unsigned char *inputImage,
 
     dim3 gridSize(grid_size, grid_size);
     dim3 blockSize(B_WIDTH, B_HEIGHT);
-    cout<<"grid size: "<<grid_size<<"x"<<grid_size<<" -> threads doing nothing -> "<<(grid_size*grid_size*B_WIDTH*B_HEIGHT)-width*height<<endl;
+    cout << "grid size: " << grid_size << "x" << grid_size << " -> threads doing nothing -> " << (grid_size * grid_size * B_WIDTH * B_HEIGHT) - width *height << endl;
 
     kernelTimer.start();
     //cout << "FUNC5\n";

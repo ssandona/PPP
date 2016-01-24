@@ -29,7 +29,7 @@ __global__ void darkGrayKernel(const int width, const int height, const unsigned
     unsigned int globalIdx=(i * width) + j;
 
 
-    if(j < width && i < height){
+    if(j >= width || i >= height) return;
 
     float grayPix = 0.0f;
     //if(blockIdx.x >= 10) {
@@ -41,7 +41,6 @@ __global__ void darkGrayKernel(const int width, const int height, const unsigned
     grayPix = (grayPix * 0.6f) + 0.5f;
     //}
     darkGrayImage[globalIdx] = static_cast< unsigned char >(grayPix);
-}
 }
 
 

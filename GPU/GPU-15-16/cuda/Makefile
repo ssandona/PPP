@@ -3,7 +3,7 @@ debug		:= 0
 include		../Makefile.inc
 
 
-all:  darker2 histogram2 darker_grid_32 histogram_grid
+all:  darker2 darker3 darker_uni darker_grid_32 darker_grid_32_overflow darker_square
 
 
 darker_square: darker_square.cpp
