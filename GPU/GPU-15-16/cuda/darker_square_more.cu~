@@ -16,8 +16,8 @@ using std::string;
 
 /*const unsigned int DIM = 16000000;
 const unsigned int nrThreads = 256;*/
-const unsigned int B_WIDTH = 32;
-const unsigned int B_HEIGHT = 8;
+const unsigned int B_WIDTH = 16;
+const unsigned int B_HEIGHT = 16;
 const unsigned int THREAD_NUMBER = 256;
 const int PIXELS_THREAD = 20;
 
