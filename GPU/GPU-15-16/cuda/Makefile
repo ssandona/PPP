@@ -3,7 +3,7 @@ debug		:= 0
 include		../Makefile.inc
 
 
-all:  histogram_warp histogram_warp2
+all:  histogram_warp histogram_warp2 histogram_warp_more
 
 
 darker_square: darker_square.cpp
@@ -116,6 +116,11 @@ histogram_warp: histogram_warp.cpp histogram_warp.cu
 	$(NVCC) -c histogram_warp.cu $(INCLUDES) $(NVCCFLAGS)
 	$(LINKER) -o $(PROJ_BASE)/bin/histogram_warpCUDA histogram_warp.cpp histogram_warp.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./histogram_warp.o
+
+histogram_warp_more: histogram_warp_more.cpp histogram_warp_more.cu
+	$(NVCC) -c histogram_warp_more.cu $(INCLUDES) $(NVCCFLAGS)
+	$(LINKER) -o $(PROJ_BASE)/bin/histogram_warp_moreCUDA histogram_warp_more.cpp histogram_warp_more.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
+	rm -f ./histogram_warp_more.o
 
 histogram_square: histogram_square.cpp histogram_square.cu
 	$(NVCC) -c histogram_square.cu $(INCLUDES) $(NVCCFLAGS)

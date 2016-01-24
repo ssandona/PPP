@@ -455,6 +455,29 @@ image04_mono	0.027158
 image05_mono	0.053584
 image06_mono	0.105860
 
+standard grid uni block (monocromo, cons, warp)
+
+
+image00_mono	0.000420
+image01_mono	0.003656
+image02_mono	0.005133
+image03_mono	0.034769
+image04_mono	0.023135
+image05_mono	0.045660
+image06_mono	0.090158
+
+the same as above but with real images00
+
+image00_mono	0.000220
+image01_mono	0.001940
+image02_mono	0.002881
+image03_mono	0.016112
+image04_mono	0.014625
+image05_mono	0.021048
+image06_mono	0.042456
+
+
+
 
 uni, no square 10 pixels per thread
 
@@ -476,7 +499,7 @@ image04_mono	0.027716	81x81
 image05_mono	0.054600	114x114
 image06_mono	0.107575	160x160
 
-	
+
 
 
 
