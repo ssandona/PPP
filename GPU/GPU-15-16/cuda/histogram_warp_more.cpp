@@ -16,7 +16,7 @@ using std::string;
 const int HISTOGRAM_SIZE = 256;
 const int BAR_WIDTH = 4;
 
-extern int histogram1D(const int width, const int height, const unsigned char * inputImage, unsigned char * grayImage, unsigned int * histogram, , int pixelThread);
+extern int histogram1D(const int width, const int height, const unsigned char * inputImage, unsigned char * grayImage, unsigned int * histogram, int pixelThread);
 
 
 int main(int argc, char *argv[]) {
