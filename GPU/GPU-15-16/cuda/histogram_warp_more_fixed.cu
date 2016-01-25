@@ -59,7 +59,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
 
 
 
-int histogram1D(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram, int pixelThread, int grid_height, int grid_width)) {
+int histogram1D(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram, int pixelThread, int grid_height, int grid_width) {
     cudaError_t devRetVal = cudaSuccess;
     unsigned char *devInputImage = 0;
     unsigned char *devGrayImage = 0;
