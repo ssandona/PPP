@@ -3,7 +3,7 @@ debug		:= 0
 include		../Makefile.inc
 
 
-all:  histogram_warp histogram_warp2 histogram_warp_more
+all:  histogram_grid_global_atomic
 
 
 darker_square: darker_square.cpp
@@ -82,6 +82,11 @@ histogram_grid: histogram_grid.cpp histogram_grid.cu
 	$(LINKER) -o $(PROJ_BASE)/bin/histogram_gridCUDA histogram_grid.cpp histogram_grid.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./histogram_grid.o
 
+histogram_grid_global_atomic: histogram_grid_global_atomic.cpp histogram_grid_global_atomic.cu
+	$(NVCC) -c histogram_grid_global_atomic.cu $(INCLUDES) $(NVCCFLAGS)
+	$(LINKER) -o $(PROJ_BASE)/bin/histogram_grid_global_atomicCUDA histogram_grid.cpp histogram_grid_global_atomic.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
+	rm -f ./histogram_grid_global_atomic.o
+
 histogram_try: histogram_try.cpp histogram_try.cu
 	$(NVCC) -c histogram_try.cu $(INCLUDES) $(NVCCFLAGS)
 	$(LINKER) -o $(PROJ_BASE)/bin/histogram_tryCUDA histogram_try.cpp histogram_try.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
@@ -106,6 +111,11 @@ histogram2: histogram2.cpp histogram2.cu
 	$(NVCC) -c histogram2.cu $(INCLUDES) $(NVCCFLAGS)
 	$(LINKER) -o $(PROJ_BASE)/bin/histogram2CUDA histogram2.cpp histogram2.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./histogram2.o
+
+histogram2_global_atomic: histogram2_global_atomic.cpp histogram2_global_atomic.cu
+	$(NVCC) -c histogram2_global_atomic.cu $(INCLUDES) $(NVCCFLAGS)
+	$(LINKER) -o $(PROJ_BASE)/bin/histogram2_global_atomicCUDA histogram2_global_atomic.cpp histogram2_global_atomic.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
+	rm -f ./histogram2_global_atomic.o
 
 histogram_warp2: histogram_warp2.cpp histogram_warp2.cu
 	$(NVCC) -c histogram_warp2.cu $(INCLUDES) $(NVCCFLAGS)

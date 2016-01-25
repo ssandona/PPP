@@ -60,7 +60,9 @@ Maximum number of resident blocks per multiprocessor & 8 \\ \hline
 Maximum number of resident warps per multiprocessor & 48 \\ \hline
 Maximum number of resident threads per multiprocessor & 1536 (48 * 32) \\ \hline
 Number of 32-bit registers per multiprocessor & 32K \\ \hline
-Maximum amount of shared memory per multiprocessor & 48K
+Maximum amount of shared memory per multiprocessor & 48K \\ \hline
+Theoretical Throughput & 1345 GFLOPS \\ \hline
+Theoretical Bandwidth & 177.4 GB/s
 \end{tabular}
 \caption{NVIDIA GTX480 Specifications}
 \label{table:t1}
@@ -97,38 +99,43 @@ In CUDA, as mentioned before, there is a strinct mapping with the hardware, so t
 Each \textbf{thread} executes the kernel code, running on one CUDA core.
 The threads are logically grouped into \textbf{thread blocks}, so that the threads of the same block will run on the same multiprocessor. The thread blocks are logically organized in a \textbf{Grid}, that represent the entire dataset. The blocks and the grid can be of 1D, 2D or 3D.
 The most important thing programming with GPUs, to make use of all their power, is to make them as busy as possible. Switching between concurrent warps has no overhead because registers and share memory are partitioned and not stored/restored, so that if one warp has to wait for example for a memory access and another warp is ready, there is a switch to hide the latency. The thread scheduling is really quick, and this allow the blocks to be swapped in and out really quickly. For this reason an high number of warps is needed and instantiating a grid, is good to have a number of blocks much bigger than the number of available multiprocessor and a block size that can be higher than the amount of cuda cores available per SM.
-Another interesting aspect to take into consideration, is the block size. The block is divided into warps, so that Threads 0..31 are part of Warp 0, Threads 32...63 are part of warp 1 and so on. Considering this, it is good to have blocks with a size multiple of 32, so that no useless threads are launched. After certain tests, a block of size 256 revealed to be optimal. For what concerning the grid configuration, an image is a 2D structure and for this reason it is intuitive to set up also a 2D grid. By the way, setting up a 2D grid, there is not only one way to follow. For this particular project two possible block configurations were considered, 1D (1x256) and 2D (16x16) and two possible grid configurations: square and non square. In the rest part of this document, \textbf{M1} indicates a non square grid of 1D blocks (Figure \ref{fig:ns1}), in which the grid has a height of \textit{image\_height} and a width of \textit{(ceil(image\_width / 256))}; \textbf{M2} indicates a square grid of 1D blocks (Figure \ref{fig:s1}), in which the size of the grid is \textit{ceil(sqrt((image\_width * image\_height)/256))}; \textbf{M3} indicates a non square grid of 2D blocks (Figure \ref{fig:ns2}), in which the grid has a width of \textit{ceil(image\_width / 16)} and a height of \textit{ceil(image\_height / 16)}; \textbf{M4} indicates a square grid of 2D blocks (Figure \ref{fig:s2}), in which the size of the grid is the same as M2. 
-
+Another interesting aspect to take into consideration, is the block size. The block is divided into warps, so that Threads 0..31 are part of Warp 0, Threads 32...63 are part of warp 1 and so on. Considering this, it is good to have blocks with a size multiple of 32, so that no useless threads are launched. After certain tests, a block of size 256 revealed to be optimal. For what concerning the grid configuration, an image is a 2D structure and for this reason it is intuitive to set up also a 2D grid. By the way, setting up a 2D grid, there is not only one way to follow. For this particular project two possible block configurations were considered, 1D (1x256) and 2D (32x8) and two possible grid configurations: dynamic and fixed. In the rest part of this document, \textbf{M1} indicates a dynamic grid of 1D blocks, in which the grid has a height of \textit{image\_height}, a width of \textit{(ceil(image\_width / 256))} and the threads on the right border if the image width is not a multiple of \textit{block\_width} are idle (Figure \ref{fig:m1}); \textbf{M2} indicates a dynamic grid of 1D blocks, in which the size of the grid is the same as M1, but the threads are consecutive and only the threads on the last block(s) are idle if the image's number of pixel is not a multiple of the size of the block (Figure \ref{fig:m2}); \textbf{M3} indicates a dynamic grid of 2D blocks, in which the grid has a width of \textit{ceil(image\_width / 16)}, a height of \textit{ceil(image\_height / 16)} and the overflow is the same as M1 (Figure \ref{fig:m3}); \textbf{M4} indicates a dynamic grid of 2D blocks, in which the size of the grid is the same as M3, but the oveflow is the same as M2 (Figure \ref{fig:m4}). 
 
 \begin{figure}[!ht]
 \begin{subfigure}{0.5\textwidth}
 \centering
-\includegraphics[width=\linewidth]{res/1D_no_square}
-\caption{No square grid with 1D blocks}
-\label{fig:ns1}
+\includegraphics[width=\linewidth]{res/M1}
+\caption{M1 - Right overflow}
+\label{fig:m1}
 \end{subfigure} % separation between the subfigures
 \begin{subfigure}{0.5\textwidth}
 \centering
-\includegraphics[width=\linewidth]{res/1D_square}
-\caption{Square grid with 1D blocks}
-\label{fig:s1}
+\includegraphics[width=\linewidth]{res/M2}
+\caption{M2 - Overflow at the end}
+\label{fig:m2}
+\end{subfigure}
+\caption{1D blocks, Kernel configurations, image of 16 pixels}
+ \label{fig:methods12}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[!ht]
+ % separation between the subfigures
+\begin{subfigure}{0.5\textwidth}
+\centering
+\includegraphics[width=\linewidth]{res/M3}
+\caption{M3 - Right overflow}
+\label{fig:m3}
 \end{subfigure}
  % separation between the subfigures
 \begin{subfigure}{0.5\textwidth}
 \centering
-\includegraphics[width=\linewidth]{res/2D_no_square}
-\caption{No square grid with 2D blocks}
-\label{fig:ns2}
+\includegraphics[width=\linewidth]{res/M4}
+\caption{M4 - overflow at the end}
+\label{fig:m4}
 \end{subfigure}
- % separation between the subfigures
-\begin{subfigure}{0.5\textwidth}
-\centering
-\includegraphics[width=\linewidth]{res/2D_square}
-\caption{Square grid with 2D blocks}
-\label{fig:s2}
-\end{subfigure}
-\caption{Possible kernel configurations}
- \label{fig:speed}
+\caption{2D blocks possible kernel configurations, image of 24 pixels}
+ \label{fig:methods34}
 \end{figure}
 \FloatBarrier
 
@@ -136,20 +143,12 @@ Another interesting aspect to take into consideration, is the block size. The bl
 \label{sec:cma}
 One of the main bottlenecks with the GPUs are the global memory accesses that are expensive, for this reason it is better to maximize the use of bytes that travel from the DRAM to the Streaming Multiprocessor. CUDA uses a SIMT approach, in which all threads of a warp execute the same instruction, so that global memory accesses are effectuated "per warp". The threads in a warp (32) provide 32 addresses and the hardware converts these addresses into memory transactions. The memory is divided into regions of 128 bytes, so that bytes 0...127 are part of Region 0, bytes 128...255 are part of Region 1 and so on. The memory is accessed per region, that means if one thread wants the byte 0, the entire Region 0 is loaded. A kernel is correctly designed, if consecutive threads access consecutive memory addresses, so that all the requeted addresses fall on the same region and only one transaction is performed. Behaving in this "coalesced way" instead of having one access per thread, these accesses are grouped and the total memory overhead is reduced. Developing all the three algorithms this aspect was taken into consideration.
 
-\section{More work per thread}
-\label{sec:mwpt}
-The standard (and easyest) way to proceed on image computing is to use a grid large enough to cover all the image and than compute one thread per pixel. An aspect that is useful to consider establishing the amount of work per thread is the Arithmetic Intensity (AI) of the board. In fact, if we choose a number of operations per thread that allows to have a decent AI, that is, an AI that matches the one of the card, an increase of the performance can be obtained. Rea
-
-Check if darker uni is memory bound
-
-\# FLOP / byte -> arithmetic intensity (memory or compute bound)
-
 \section{Algorithm 1: Grayscale Conversion and Darkening}
 \label{sec:gcd}
 From an RGB image, the output of this algorithm is a darker grayscale image.
 The gray value of a pixel is generated by weighting the three values (\texttt{0.3*R, 0.59*G, 0.11*B}) and then summing them together. To darken the obtained grayscale image, the final pixel value is multiplied by a constant (0.6). The Figure \ref{fig:dark} shows an example of the result. The sequential algorithm, simply go through the entire image and computes for each pixel the corresponding value (Listing \ref{dsc}).
 
-\begin{figure}[ht]
+\begin{figure}[!ht]
     \centering
     \includegraphics[width=\linewidth]{dark}
     \caption{Grayscale Conversion and Darkening}
@@ -177,45 +176,26 @@ for ( int y = 0; y < H; y++ ) {
 \label{sec:p1}
 \subsection{First method}
 \label{sec:dfm}
-After allocating into the GPU global memory some memory to contain the input image (\textit{3 * image\_width * image\_height * sizeof(unsigned char)}), copying the input image there and allocating some memory to content the output image (\textit{image\_width * image\_height * sizeof(unsigned char)}), the kernel is ready to be launched. The GPU code is the same as the code content inside the loop of the sequential version (Listing \ref{dsc}), but instead of using the indexes of the loop to access the image pixels, it uses the index associated to the thread. To exploit the coalesced memory access, two consecutive threads computes/accesses the values of two consecutive pixels. The 4 different grid configurations (explained in Section \ref{sec:grid}) were tested for this program, in order to establish the best. In Figure \ref{fig:histo_darker} are reported the obtained results. As shown methods M1 and M2 obtained the best results. 
+After allocating into the GPU global memory some memory to contain the input image (\textit{3 * image\_width * image\_height * sizeof(unsigned char)}), copying the input image there and allocating some memory to content the output image (\textit{image\_width * image\_height * sizeof(unsigned char)}), the kernel is ready to be launched. The GPU code is the same as the code content inside the loop of the sequential version (Listing \ref{dsc}), but instead of using the indexes of the loop to access the image pixels, it uses the index associated to the thread. In this first method, only one pixel is computed per thread. To exploit the coalesced memory access, two consecutive threads computes/accesses the values of two consecutive pixels. The 4 different grid configurations (explained in Section \ref{sec:grid}) were tested for this program, in order to establish the best. In Figure \ref{fig:histo_darker} are reported the obtained results. As shown methods M1 and M2 obtained the best results, so with unidimensional blocks the algorithm achieved better speedups, probably due to the few amount of operations to calculate the corresponding pixel.
 
 
-\begin{figure}[ht]
+\begin{figure}[!ht]
     \centering
-    \includegraphics[width=0.9\linewidth]{res/darker_histo}
+    \includegraphics[width=0.9\linewidth]{res/new/darker_confronto}
     \caption{Speedups Comparison}
     \label{fig:histo_darker}
 \end{figure}
 \FloatBarrier
 
 
-Uni blocks, overflow (more) - M1 more
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.9\linewidth]{res/darker_try_histo}
-    \caption{Normalized Speedup}
-    \label{fig:norm_histo_darker}
-\end{figure}
-\FloatBarrier
-
 \subsection{Optimization - More pixels per thread}
 \label{sec:dfm}
+To exploit all the power of CPUs, as said, they has to be as busy as possible. In fact, the warp scheduling is very fast on GPUs, anyway, reducing the number of thread blocks by increasing the work per thread revealed to achieve better results. Lots of experimets were performed to establish the right number of pixels to compute by each thread, all taking in account the coalesced memory access. The grid was set up with a width of \textit{ceil(width / 256)} and a height of \textit{ceil(height / pixels\_per\_thread)}. To mantain the coalescing, one thread computes the associated first pixel index with the formula shown in Listing \ref{cfp} and then for the following pixels, it adds each time to this the total amount of pixels contained in the grid(\textit{gridDim.x * blockDim.x * gridDim.y * blockDim.y}). The final code, is the one shown in Listing \ref{dpc}. 
 
-Uni blocks, square grid (more) - M2 more
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.9\linewidth]{res/darker_square_more_histo}
-    \caption{Normalized Speedup}
-    \label{fig:norm_histo_darker}
-\end{figure}
-\FloatBarrier
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.9\linewidth]{res/darker_best_comparison}
-    \caption{Normalized Speedup}
-    \label{fig:norm_histo_darker}
-\end{figure}
+\begin{lstlisting}[label=cfp, caption=Corresponding first pixel]
+unsigned int pixel=((blockIdx.y * gridDim.x + blockIdx.x) 
+                   * blockDim.x) + threadIdx.x
+\end{lstlisting}
 \FloatBarrier
 
 \begin{lstlisting}[label=dpc, caption=Darker Parallel Code]
@@ -233,16 +213,67 @@ outputDarkGrayImage[i] = static_cast< unsigned char >(grayPix);
 \end{lstlisting}
 \FloatBarrier
 
-Theoretical Throughput = 1345
-Theorretical Bandwidth = 177.4
+Figure \ref{fig:darker_try_histo} represents the speedups achieved for different thread loads. After a certain number of pixels computed per thread, the performance of the program started to decrese, for this reason the idea to use a grid with a fixed size, instead of a dynamic size was not taken into consideration. Following this approach, with a number of 10 pixels per thread, the program obtained often the best results, so this is a good thread load to help the scheduler. Figure \ref{fig:darker_single_more_comparison} shows the comparison between the best results obtained with a single pixel per thread and the results obtained with the new version. It si clear that the new version is an optimization, in fact for each image the speeedup increased. In Table \ref{darker_ex} and \ref{darker_sp} are shown the detailed execution times and speedups achieved. Table \ref{darker_t_b} exposes the Achieved Throughput and Bandwidth. In Section \ref{sec:vp} is reported a detailed analysis using the NVIDIA Virtual Profiler.
+    
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.9\linewidth]{res/new/darker_try_histo}
+    \caption{Speedup with more different number of pixels per thread}
+    \label{fig:darker_try_histo}
+\end{figure}
+\FloatBarrier
 
-\begin{table}[]
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.9\linewidth]{res/new/darker_single_more_comparison}
+    \caption{Solutions comparison}
+    \label{fig:darker_single_more_comparison}
+\end{figure}
+\FloatBarrier
+
+\begin{table}[!ht]
 \centering
-\caption{My caption}
-\label{my-label}
+\caption{Execution Times}
+\label{darker_ex}
+\begin{tabular}{|c|l|c|c|}
+\hline
+               & \textbf{Sequential} & \textbf{M2} & \textbf{10 pixels per thread} \\ \hline
+\textbf{img00} & 0.002416            & 0.000076    & 0,000076                      \\ \hline
+\textbf{img01} & 0.036925            & 0.000202    & 0,000193                      \\ \hline
+\textbf{img02} & 0.033726            & 0.000279    & 0,000255                      \\ \hline
+\textbf{img03} & 0.340821            & 0.001537    & 0,001299                      \\ \hline
+\textbf{img04} & 0.151429            & 0.001091    & 0,000907                      \\ \hline
+\textbf{img05} & 0.445976            & 0.002090    & 0,001692                      \\ \hline
+\textbf{img06} & 0.588814            & 0.003880    & 0,003239                      \\ \hline
+\end{tabular}
+\end{table}
+\FloatBarrier
+
+\begin{table}[!ht]
+\centering
+\caption{Speedups}
+\label{darker_sp}
+\begin{tabular}{|c|c|c|}
+\hline
+               & \textbf{M1} & \textbf{10 pixels per thread} \\ \hline
+\textbf{img00} & 31.79       & 31.79                         \\ \hline
+\textbf{img01} & 182.80      & 191.32                        \\ \hline
+\textbf{img02} & 120.88      & 132.26                        \\ \hline
+\textbf{img03} & 221.74      & 262.37                        \\ \hline
+\textbf{img04} & 138.80      & 166.96                        \\ \hline
+\textbf{img05} & 213.39      & 263.58                        \\ \hline
+\textbf{img06} & 151.76      & 181.79                        \\ \hline
+\end{tabular}
+\end{table}
+\FloatBarrier
+
+\begin{table}[!ht]
+\centering
+\caption{Achieved Throughput and Bandwidth}
+\label{darker_t_b}
 \begin{tabular}{|c|c|c|c|c|}
 \hline
-               & \textbf{\begin{tabular}[c]{@{}c@{}}Achieved Throughput\\ (GFLOPS/s)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Achieved Bandwidth \\ (GB/s)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Compute utilization \\ (\%)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Bandwidth utilization \\ (\%)\end{tabular}} \\ \hline
+               & \textbf{\begin{tabular}[c]{@{}c@{}}Ach. Throughput\\ (GFLOPS/s)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Ach. Bandwidth \\ (GB/s)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Compute utilization \\ (\%)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Bandwidth utilization \\ (\%)\end{tabular}} \\ \hline
 \textbf{Img00} & 24,14                                                                             & 13,80                                                                         & 1,80                                                                         & 7,78                                                                           \\ \hline
 \textbf{Img01} & 95,08                                                                             & 54,33                                                                         & 7,07                                                                         & 30,63                                                                          \\ \hline
 \textbf{Img02} & 101,20                                                                            & 57,83                                                                         & 7,52                                                                         & 32,60                                                                          \\ \hline
@@ -252,13 +283,17 @@ Theorretical Bandwidth = 177.4
 \textbf{Img06} & 141,63                                                                            & 80,93                                                                         & 10,53                                                                        & 45,62                                                                          \\ \hline
 \end{tabular}
 \end{table}
+\FloatBarrier
+
+
+
 
 \section{Algorithm 2: Histogram Computation}
 \label{sec:hc}
 From an RGB image, the output of this algorithm is a grayscale image with the relative histogram of 256 possible values of gray.
-The histogram measures how often a value of gray is used in an image. The sequential algorithm, simply go through the entire image, computing for each pixel the corresponding gray value and incrementing the corresponding counter. The Figure \ref{fig:histo} shows an example of the result.
+The histogram measures how often a value of gray is used in an image. The sequential algorithm, simply go through the entire image, computing for each pixel the corresponding gray value and incrementing the corresponding counter (Listing \ref{histo_loop}). The Figure \ref{fig:histo} shows an example of the result.
 
-\begin{lstlisting}[label=loop2, caption=Sequential code]
+\begin{lstlisting}[label=histo_loop, caption=Sequential code]
 for ( int y = 0; y < height; y++ ) {
 		for ( int x = 0; x < width; x++ ) {
 			float grayPix = 0.0f;
@@ -286,10 +321,9 @@ for ( int y = 0; y < height; y++ ) {
 \label{sec:p2}
 \subsection{First method}
 \label{sec:fm2}
-After copying the input image and the initial empty histogram into the GPU global memory and allocating some memory to content the output image, the kernel is ready to be launched. As for the previous algorithm, the GPU code is the same as the code content inside the loop of the sequential version (Figure \ref{loop2}), but instead of using the indexes of the loop to access the image pixels, it uses the index associated to the thread. Also in this case, to exploit the coalesced memory access, two consecutive threads computes/accesses the values of two consecutive pixels. The interesting aspect of the histograms, is that it is possible that two threads read at the same time read the same value of gray for a pixel, so that at the same time they try to increment the same corresponding histogram bin. For a correct execution, to avoid wrong updates, the increment has to be an atomic operation, so that only one thread at the time will modify the bin value. 
-
-The logic behind an atomic operations is that each thread "locks" the variable, modify it, and "unlocks" it, so that the other threads that try to modify the same variable has to wait that this will be "unlocked". The worst case, in the histogram scenario, is a monocromo image, in which all the threads try to modify the same bin, which implies a long waiting queue of threads.
- Different grid configurations were tested launching this program. 
+After copying the input image and the initial empty histogram into the GPU global memory and allocating some memory to content the output image, the kernel is ready to be launched. As for the previous algorithm, the GPU code is the same as the code content inside the loop of the sequential version (Figure \ref{loop2}), but instead of using the indexes of the loop to access the image pixels, it uses the index associated to the thread. Also in this case, to exploit the coalesced memory access, two consecutive threads computes/accesses the values of two consecutive pixels. The interesting aspect of the histograms, is that it is possible that two threads read at the same time the same value of gray for a pixel, so that at the same time they try to increment the corresponding histogram bin. For a correct execution, to avoid wrong updates, the increment has to be an atomic operation, so that only one thread at the time will modify the bin value. 
+The logic behind an atomic operations is that each thread "locks" the variable, modify it, and "unlocks" it, so that the other threads that try to modify the same variable has to wait that this will be "unlocked". The worst case, in the histogram scenario, is a monocromo image, in which all the threads try to modify the same bin, which implies a long waiting queue of threads. The general idea to have high performace, is to reduce the number of conflicts at the minimum.
+Different grid configurations were tested launching this program.
  
  
  What you have shown in your question is only correct for certain block sizes. Your "coalesced" access:
