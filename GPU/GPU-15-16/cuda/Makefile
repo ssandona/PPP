@@ -138,7 +138,7 @@ histogram_warp_more_2: histogram_warp_more_2.cpp histogram_warp_more_2.cu
 	rm -f ./histogram_warp_more_2.o
 
 histogram_warp_more_3: histogram_warp_more_3.cpp histogram_warp_more_3.cu
-	$(NVCC) -c histogram_warp_more3_.cu $(INCLUDES) $(NVCCFLAGS)
+	$(NVCC) -c histogram_warp_more_3.cu $(INCLUDES) $(NVCCFLAGS)
 	$(LINKER) -o $(PROJ_BASE)/bin/histogram_warp_more_3CUDA histogram_warp_more_3.cpp histogram_warp_more_3.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./histogram_warp_more_3.o
 
