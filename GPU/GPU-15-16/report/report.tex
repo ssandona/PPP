@@ -309,7 +309,7 @@ for ( int y = 0; y < height; y++ ) {
 }
 \end{lstlisting}
 
-\begin{figure}[ht]
+\begin{figure}[!ht]
     \centering
     \includegraphics[width=0.7\linewidth]{histo}
     \caption{Histogram Computation}
@@ -324,6 +324,22 @@ for ( int y = 0; y < height; y++ ) {
 After copying the input image and the initial empty histogram into the GPU global memory and allocating some memory to content the output image, the kernel is ready to be launched. As for the previous algorithm, the GPU code is the same as the code content inside the loop of the sequential version (Figure \ref{loop2}), but instead of using the indexes of the loop to access the image pixels, it uses the index associated to the thread. Also in this case, to exploit the coalesced memory access, two consecutive threads computes/accesses the values of two consecutive pixels. The interesting aspect of the histograms, is that it is possible that two threads read at the same time the same value of gray for a pixel, so that at the same time they try to increment the corresponding histogram bin. For a correct execution, to avoid wrong updates, the increment has to be an atomic operation, so that only one thread at the time will modify the bin value. 
 The logic behind an atomic operations is that each thread "locks" the variable, modify it, and "unlocks" it, so that the other threads that try to modify the same variable has to wait that this will be "unlocked". The worst case, in the histogram scenario, is a monocromo image, in which all the threads try to modify the same bin, which implies a long waiting queue of threads. The general idea to have high performace, is to reduce the number of conflicts at the minimum.
 Different grid configurations were tested launching this program.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.7\linewidth]{res/new/histogram_confronto}
+    \caption{Global Atomics vs Shared Atomics}
+    \label{fig:gavsa}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.7\linewidth]{res/new/histogram_warp}
+    \caption{Shared Atomics with Warp vs Shared Atomics}
+    \label{fig:sawvsa}
+\end{figure}
+\FloatBarrier
  
  
  What you have shown in your question is only correct for certain block sizes. Your "coalesced" access:
@@ -344,6 +360,7 @@ Smoothing is the process of removing noise from an image by the means of statist
     \label{fig:smooth}
 \end{figure}
 \FloatBarrier
+
 
 \subsection{Parallelization}
 \label{sec:p2}
