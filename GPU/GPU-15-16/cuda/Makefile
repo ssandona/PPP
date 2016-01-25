@@ -3,7 +3,7 @@ debug		:= 0
 include		../Makefile.inc
 
 
-all:  histogram_grid_global_atomic
+all:  histogram_grid_global_atomic histogram2_global_atomic
 
 
 darker_square: darker_square.cpp
