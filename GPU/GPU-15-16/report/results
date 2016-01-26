@@ -687,13 +687,13 @@ With method 2 (shared memory)
 
 block 32x8
 
-images00	
-images01	
-images02	
-images03	
-images04	
-images05	
-images06	
+images00	0,000781	87,06
+images01	0,006625	101,45
+images02	0,009229	102,64
+images03	0,061547 	105,55
+images04	0,042587	110,25
+images05	0,080832	105,95
+images06	0,159628	116,35
 
 
 block 32x16
@@ -708,14 +708,13 @@ images06	0,158552	117,13
 
 block 32x32
 
-images00	0.000805
-images01	0.006653
-images02	0.009286
-images03	0.061723
-images04	0.042895
-images05	0.081155
-images06	0.160441
-
+images00	0,000805	84,4
+images01	0,006653	101,0
+images02	0,009286	102,0
+images03	0,061723	105,2
+images04	0,042895	109,4
+images05	0,081155	105,5
+images06	0,160441	115,7
 
 
 
