@@ -488,54 +488,119 @@ image06_mono	0,090158	6,84
 
 the same as above but with real images00
 
-image00_mono	0,000220
-image01_mono	0,001940
-image02_mono	0,002881
-image03_mono	0,016112
-image04_mono	0,014625
-image05_mono	0,021048
-image06_mono	0,042456
+image00_mono	0,000220	14,58
+image01_mono	0,001940	16,69
+image02_mono	0,002881	15,20
+image03_mono	0,016112	12,46
+image04_mono	0,014625	13,54
+image05_mono	0,021048	12,71
+image06_mono	0,042456	14,53
 
-standard grid uni block (monocromo, cons, warp) -> 10px
+standard grid uni block (cons, warp) -> 10px
 
-image00		0.000076
-image01		0,001115
-image02		0,001634
-image03		0,004912
-image04		0,011365
-image05		0,004518 
-image06		0,010847
+image00		0,000076	42,21
+image01		0,001115	29,04
+image02		0,001634	26,80
+image03		0,004912	40,86
+image04		0,011365	17,42
+image05		0,004518 	59,23
+image06		0,010847	56,88
 
 20pix
 
-image00		0.000076
-image01		0.001151
-image02		0.001725
-image03		0.004777
-image04		0.011961
-image05		0.004312
-image06		0.010226
+image00		0,000076	42,21
+image01		0,001151	28,13
+image02		0,001725	25,38
+image03		0,004777	42,01
+image04		0,011961	16,55
+image05		0,004312	62,06
+image06		0,010226	60,33
 
 
 30px
 
-image00		0.000080
-image01		0.001264
-image02		0.001778
-image03		0.004724
-image04		0.012325
-image05		0.004278
-image06		0.010026
+image00		0,000080	40,10
+image01		0,001264	25,62
+image02		0,001778	24,63
+image03		0,004724	42,48
+image04		0,012325	16,06
+image05		0,004278	62,55
+image06		0,010026	61,53
 
 40px
 
-image00		0.000085
-image01		0.001361
-image02		0.001860
-image03		0.004720 
-image04		0.012538
-image05		0.004282
-image06		0.009964
+image00		0,000085	37,74
+image01		0,001361	23,79
+image02		0,001860	23,54
+image03		0,004720	42,52 
+image04		0,012538	15,79
+image05		0,004282	62,49
+image06		0,009964	61,92
+
+
+
+FIXED -> 30 30
+
+image00		0,000090	35,64
+image01		0,001160	27,91
+image02		0,001659	26,39
+image03		0,004705	42,65
+image04		0,012839	15,42
+image05		0,004266	62,73
+image06		0,009917	62,21
+
+FIXED -> 45 30
+
+image00		0,000101	31,76
+image01		0,001111	29,14
+image02		0,001640	26,70
+image03		0,004691	42,78
+image04		0,012411	15,95
+image05		0,004278	62,55
+image06		0,009895	62,35
+
+FIXED -> 45 45
+
+image00		0,000117	27,42
+image01		0,001057	30,63
+image02		0,001576	27,78
+image03		0,004715	42,56
+image04		0,012093	16,37
+image05		0,004299	62,24
+image06		0,009833	62,74
+
+FIXED -> 60 45
+
+image00		0,000127	25,26
+image01		0,001062	30,49
+image02		0,001553	28,19
+image03		0,004698	42,72
+image04		0,011871	16,68
+image05		0,004260	62,81
+image06		0,009756	63,24
+
+FIXED -> 60 60
+
+image00		0,000149	21,53
+image01		0,001095	29,57
+image02		0,001569	27,91
+image03		0,004727	42,45
+image04		0,011861	16,69
+image05		0,004727	56,61
+image06		0,011820	52,19
+
+FIXED -> 75 60
+
+image00		0,000166	19,3
+image01		0,001111	29,1
+image02		0,001588	27,5
+image03		0,004747	42,2
+image04		0,011514	17,1
+image05		0,004280	62,5
+image06		0,009832	62,7
+
+
+
 
 
 
@@ -569,6 +634,17 @@ image06_mono	0,107575	160x160
 
 
 
+fixed grid 15x15
+
+image00_mono	0,000511
+image01_mono	0,005220
+image02_mono	0,007104
+image03_mono	0,048425
+image04_mono
+image05_mono
+image06_mono
+
+15x15
 
 
 
