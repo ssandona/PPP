@@ -11,7 +11,7 @@ using std::fixed;
 using std::setprecision;
 
 const unsigned int B_WIDTH = 32;
-const unsigned int B_HEIGHT = 32;
+const unsigned int B_HEIGHT = 8;
 
 __constant__ float filter[] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2.0f, 1.0f, 1.0f, 2.0f, 3.0f, 2.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
 
