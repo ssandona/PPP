@@ -3,7 +3,7 @@ debug		:= 0
 include		../Makefile.inc
 
 
-all:  smooth smooth2_bigger
+all:  smooth_more2
 
 
 darker_square: darker_square.cpp
