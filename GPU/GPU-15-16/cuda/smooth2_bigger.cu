@@ -24,7 +24,7 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
     //index inside the block (from 0 to 511)
     int inBlockIdx = threadIdx.x + (blockDim.x * threadIdx.y);
 
-    //the block is 16x16, but to apply the filter over these 256 pixels, also some 
+    //the block is 16x16, but to apply the filter over these 256 pixels, also some
     //external pixels are needed. The filter is 5x5 so we need also the 2 px border of
     //the 16x16 portion.
     __shared__ unsigned char localImagePortion[36 * 20 * 3];
@@ -43,7 +43,7 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
     int inLocalPortionI = threadIdx.y + 2;
     int inLocalPortionJ = threadIdx.x + 2;
 
-    //coordinates of the localImagePortion in which copy the pixel 
+    //coordinates of the localImagePortion in which copy the pixel
     int imageIdxI = pxAI - topLeftPxI;
     int imageIdxJ = pxAJ - topLeftPxJ;
     int imageIdx = imageIdxJ + (36 * imageIdxI);
@@ -64,7 +64,7 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
     pxAJ = topLeftPxJ + (newInBlockIdx % 36);
     pxA = pxAJ + (width * pxAI);
 
-    //coordinates of the localImagePortion in which copy the pixel 
+    //coordinates of the localImagePortion in which copy the pixel
     imageIdxI = pxAI - topLeftPxI;
     imageIdxJ = pxAJ - topLeftPxJ;
     imageIdx = imageIdxJ + (36 * imageIdxI);
@@ -78,37 +78,38 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
 
     __syncthreads();
 
-    if(j >= width || i >= height) return;
+    if(j< width && i< height) {
 
-    //same code as the sequential, but with indexes of the localImagePortion
-    for ( int z = 0; z < spectrum; z++ ) {
-        unsigned int filterItem = 0;
-        float filterSum = 0.0f;
-        float smoothPix = 0.0f;
+        //same code as the sequential, but with indexes of the localImagePortion
+        for ( int z = 0; z < spectrum; z++ ) {
+            unsigned int filterItem = 0;
+            float filterSum = 0.0f;
+            float smoothPix = 0.0f;
 
-        for (int fy = i - 2, localFy = inLocalPortionI - 2 ; fy < i + 3; fy++, localFy++) {
-            if ( fy < 0 ) {
-                filterItem += 5;
-                continue;
-            } else if ( fy == height ) {
-                break;
-            }
-
-            for ( int fx = j - 2, localFx = inLocalPortionJ - 2; fx < j + 3; fx++, localFx++) {
-                if ( (fx < 0) || (fx >= width) ) {
-                    filterItem++;
+            for (int fy = i - 2, localFy = inLocalPortionI - 2 ; fy < i + 3; fy++, localFy++) {
+                if ( fy < 0 ) {
+                    filterItem += 5;
                     continue;
+                } else if ( fy == height ) {
+                    break;
                 }
 
-                smoothPix += static_cast< float >(localImagePortion[(z * 36 * 20) + (localFy * 36) + localFx]) * filter[filterItem];
-                filterSum += filter[filterItem];
-                filterItem++;
+                for ( int fx = j - 2, localFx = inLocalPortionJ - 2; fx < j + 3; fx++, localFx++) {
+                    if ( (fx < 0) || (fx >= width) ) {
+                        filterItem++;
+                        continue;
+                    }
+
+                    smoothPix += static_cast< float >(localImagePortion[(z * 36 * 20) + (localFy * 36) + localFx]) * filter[filterItem];
+                    filterSum += filter[filterItem];
+                    filterItem++;
+                }
             }
+
+            smoothPix /= filterSum;
+            smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(smoothPix + 0.5f);
+
         }
-
-        smoothPix /= filterSum;
-        smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(smoothPix + 0.5f);
-
     }
 }
 

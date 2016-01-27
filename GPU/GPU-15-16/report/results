@@ -685,7 +685,7 @@ With method 2 (shared memory)
 5	0,081961
 6	0,161799
 
-block 32x8
+block 32x8 => no shared
 
 images00	0,000781	87,06
 images01	0,006625	101,45
@@ -696,7 +696,7 @@ images05	0,080832	105,95
 images06	0,159628	116,35
 
 
-block 32x16
+block 32x16 => no shared
 
 images00	0,000781	87,06
 images01	0,006570	102,30
@@ -706,7 +706,7 @@ images04	0,042330	110,92
 images05	0,080214	106,76 
 images06	0,158552	117,13
 
-block 32x32
+block 32x32 => no shared
 
 images00	0,000805	84,4
 images01	0,006653	101,0
@@ -715,6 +715,18 @@ images03	0,061723	105,2
 images04	0,042895	109,4
 images05	0,081155	105,5
 images06	0,160441	115,7
+
+block 32x16 => shared
+
+images00	0.000791
+images01	0.006650
+images02	0.009268
+images03	0.061847
+images04	0.042608
+images05	0.081235
+images06	0.160371
+
+
 
 
 
