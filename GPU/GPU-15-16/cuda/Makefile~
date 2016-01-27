@@ -3,7 +3,7 @@ debug		:= 0
 include		../Makefile.inc
 
 
-all:  histogram_warp_more_fixed
+all:  smooth
 
 
 darker_square: darker_square.cpp
