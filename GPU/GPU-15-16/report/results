@@ -726,6 +726,16 @@ images04	0.042608
 images05	0.081235
 images06	0.160371
 
+block 32x8 => shared
+
+images00	0.000787
+images01	0.006702
+images02	0.009337 
+images03	0.062366
+images04	0.042970
+images05	0.081921
+images06	0.161783
+
 
 
 
