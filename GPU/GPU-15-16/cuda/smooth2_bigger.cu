@@ -11,7 +11,7 @@ using std::fixed;
 using std::setprecision;
 
 const unsigned int B_WIDTH = 32;
-const unsigned int B_HEIGHT = 16;
+const unsigned int B_HEIGHT = 8;
 
 __constant__ float filter[] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2.0f, 1.0f, 1.0f, 2.0f, 3.0f, 2.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
 
@@ -27,7 +27,7 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
     //the block is 16x16, but to apply the filter over these 256 pixels, also some
     //external pixels are needed. The filter is 5x5 so we need also the 2 px border of
     //the 16x16 portion.
-    __shared__ unsigned char localImagePortion[36 * 20 * 3];
+    __shared__ unsigned char localImagePortion[36 * 12 * 3];
 
     //coordinates of the top left pixel for the localImagePortion
     int topLeftPxI = (blockIdx.y * blockDim.y) - 2;
@@ -52,12 +52,12 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
     //if the first pixel to copy is not out of the image, copy it into the localImagePortion
     if(pxAI >= 0 && pxAI < height && pxAJ >= 0 && pxAJ < width) {
         localImagePortion[imageIdx] = inputImage[pxA];
-        localImagePortion[imageIdx + 36 * 20] = inputImage[pxA + (width * height)];
-        localImagePortion[imageIdx + 2 * 36 * 20] = inputImage[pxA + 2 * (width * height)];
+        localImagePortion[imageIdx + 36 * 12] = inputImage[pxA + (width * height)];
+        localImagePortion[imageIdx + 2 * 36 * 12] = inputImage[pxA + 2 * (width * height)];
     }
 
     //displacement to calculate the second pixel to add to the localImagePortion
-    int newInBlockIdx = inBlockIdx + 32 * 16;
+    int newInBlockIdx = inBlockIdx + 32 * 8;
 
     //coordinates of the second pixel to copy into the localImagePortion
     pxAI = topLeftPxI + (newInBlockIdx / 36);
@@ -70,10 +70,10 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
     imageIdx = imageIdxJ + (36 * imageIdxI);
 
     //if the second pixel to copy is not out of the image, copy it into the localImagePortion
-    if(pxAI >= 0 && pxAI < height && pxAJ >= 0 && pxAJ < width && imageIdx < 36 * 20) {
+    if(pxAI >= 0 && pxAI < height && pxAJ >= 0 && pxAJ < width && imageIdx < 36 * 12) {
         localImagePortion[imageIdx] = inputImage[pxA];
-        localImagePortion[imageIdx + 36 * 20] = inputImage[pxA + (width * height)];
-        localImagePortion[imageIdx + 2 * 36 * 20] = inputImage[pxA + 2 * (width * height)];
+        localImagePortion[imageIdx + 36 * 12] = inputImage[pxA + (width * height)];
+        localImagePortion[imageIdx + 2 * 36 * 12] = inputImage[pxA + 2 * (width * height)];
     }
 
     __syncthreads();
@@ -100,7 +100,7 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
                         continue;
                     }
 
-                    smoothPix += static_cast< float >(localImagePortion[(z * 36 * 20) + (localFy * 36) + localFx]) * filter[filterItem];
+                    smoothPix += static_cast< float >(localImagePortion[(z * 36 * 12) + (localFy * 36) + localFx]) * filter[filterItem];
                     filterSum += filter[filterItem];
                     filterItem++;
                 }
