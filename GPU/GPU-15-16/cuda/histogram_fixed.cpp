@@ -22,7 +22,7 @@ extern int histogram1D(const int width, const int height, const unsigned char * 
 int main(int argc, char *argv[]) {
 	unsigned int max = 0;
 
-	if ( argc != 3 ) {
+	if ( argc != 4 ) {
 		cerr << "Usage: " << argv[0] << " <filename>" << endl;
 		return 1;
 	}

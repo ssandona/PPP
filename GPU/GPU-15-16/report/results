@@ -489,12 +489,12 @@ image06_mono	0,801117	0,77
 as above, real images00
 
 image00		0,000213	15,06
-image01		0,009450	3,43
-image02		0,014056	3,11
-image03		0,031822	6,31
-image04		0,089310	2,22
-image05		0,029834	8,97
-image06		0,081793	7,54
+image01		0,009450	3,43 
+image02		0,014056	3,11 
+image03		0,031822	6,31 
+image04		0,089310	2,22 
+image05		0,029834	8,97 
+image06		0,081793	7,54 
 	
 standard grid uni block (monocromo, cons, warp)
 
@@ -507,7 +507,7 @@ image04_mono	0,023135	8,56
 image05_mono	0,045660	5,86
 image06_mono	0,090158	6,84
 
-the same as above but with real images00
+the same as above but with real images
 
 image00_mono	0,000220	14,58
 image01_mono	0,001940	16,69
@@ -622,6 +622,59 @@ image06		0,009832	62,7
 
 
 
+uni blocks, more only shared no warp
+
+10 pixels
+
+image00		0.000079
+image01		0.001473
+image02		0.002047
+image03		0.005909
+image04		0.013365
+image05		0.005450
+image06		0.013123
+
+20 pixels
+
+image00		0.000089
+image01		0.001521
+image02		0.002107
+image03		0.005617
+image04		0.013504
+image05		0.005120
+image06		0.011971
+
+30 pixels
+
+image00		0.000086 
+image01		0.001582
+image02		0.002166
+image03		0.005456 
+image04		0.013735
+image05		0.004990
+image06		0.011745
+
+40 pixels
+
+image00		0.000091
+image01		0.001595
+image02		0.002262
+image03		0.005432
+image04		0.013839
+image05		0.004935
+image06		0.011641
+
+uni shared only, fixed
+
+30x30
+
+image00		
+image01		
+image02		
+image03		
+image04		
+image05		
+image06		
 
 
 
