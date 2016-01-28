@@ -3,7 +3,7 @@ debug		:= 0
 include		../Makefile.inc
 
 
-all:  smooth_more2
+all:  histogram2_global_atomic histogram2 histogram_warp histogram_warp_more histogram_warp_more_fixed
 
 
 darker_square: darker_square.cpp
