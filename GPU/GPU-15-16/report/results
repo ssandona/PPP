@@ -466,6 +466,16 @@ image04_mono	0,027158	7,29
 image05_mono	0,053584	4,99
 image06_mono	0,105860	5,83
 
+as above, real images00
+
+image00		0,000089	36,04
+image01		0,001516	21,36
+image02		0,002193	19,97
+image03		0,007748	25,90
+image04		0,012874	15,38
+image05		0,007207	37,13
+image06		0,020951	29,45
+
 standard uni blocks (monocromo, consecutive) -> global atomic
 
 image00_mono	0,003254	0,99
@@ -476,6 +486,16 @@ image04_mono	0,205136	0,97
 image05_mono	0,405155	0,66
 image06_mono	0,801117	0,77
 
+as above, real images00
+
+image00		0,000213	15,06
+image01		0,009450	3,43
+image02		0,014056	3,11
+image03		0,031822	6,31
+image04		0,089310	2,22
+image05		0,029834	8,97
+image06		0,081793	7,54
+	
 standard grid uni block (monocromo, cons, warp)
 
 
@@ -719,23 +739,23 @@ images06	0,160441	115,7
 
 block 32x16 => shared
 
-images00	0.000791
-images01	0.006650
-images02	0.009268
-images03	0.061847
-images04	0.042608
-images05	0.081235
-images06	0.160371
+images00	0,000791
+images01	0,006650
+images02	0,009268
+images03	0,061847
+images04	0,042608
+images05	0,081235
+images06	0,160371
 
 block 32x8 => shared
 
-images00	0.000787
-images01	0.006702
-images02	0.009337 
-images03	0.062366
-images04	0.042970
-images05	0.081921
-images06	0.161783
+images00	0,000787
+images01	0,006702
+images02	0,009337 
+images03	0,062366
+images04	0,042970
+images05	0,081921
+images06	0,161783
 
 
 
