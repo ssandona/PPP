@@ -174,7 +174,7 @@ for ( int y = 0; y < H; y++ ) {
 
 \subsection{Parallelization}
 \label{sec:p1}
-\subsection{First method}
+\subsection{{One pixel per thread}}
 \label{sec:dfm}
 After allocating into the GPU global memory some space to contain the input image (\textit{3 * image\_width * image\_height * sizeof(unsigned char)}), copying the input image there and allocating some memory to content the output image (\textit{image\_width * image\_height * sizeof(unsigned char)}), the kernel is ready to be launched. The GPU code is the same as the code content inside the loop of the sequential version (Listing \ref{dsc}), but instead of using the indexes of the loop to access the image pixels, it uses the index associated to the thread. In this first method, only one pixel is computed per thread. To exploit the coalesced memory access, two consecutive threads computes/accesses the values of two consecutive pixels. The 4 different grid configurations (explained in Section \ref{sec:grid}) were tested for this program, in order to establish the best. In Figure \ref{fig:histo_darker} are reported the obtained results. As shown methods M1 and M2 obtained the best results, so with unidimensional blocks the algorithm achieved better speedups, probably due to the few amount of operations to calculate the index of the pixel associated to each thread. The speedups are not so different using a 1D or 2D block, because the performance for this particular task are not related to data locality. Except from the image size, that could advantage one configuration instead of another, there is no advantage using a 2D block or a 1D block if we are accessing the memory in a coalesced way.
 
@@ -326,27 +326,85 @@ for ( int y = 0; y < H; y++ ) {
 
 \subsection{Parallelization}
 \label{sec:p2}
-\subsection{First method}
+\subsection{One pixel per thread}
 \label{sec:fm2}
 After copying the input image and the initial empty histogram into the GPU global memory and allocating some memory to content the output image, the kernel is ready to be launched. As for the previous algorithm, the GPU code is the same as the code content inside the loop of the sequential version (Figure \ref{loop2}), but instead of using the indexes of the loop to access the image pixels, it uses the index associated to the thread. Also in this case, to exploit the coalesced memory access, two consecutive threads computes/accesses the values of two consecutive pixels. The interesting aspect of computing histograms in parallel, is that it is possible that two threads read at the same time the same value of gray for a pixel, so that at the same time they try to increment the corresponding histogram bin. For a correct execution, to avoid wrong updates, the increment has to be an atomic operation, so that only one thread at the time will modify the bin value. 
-The logic behind an atomic operation is that each thread "locks" the variable, modify it, and "unlocks" it, so that the other threads that try to modify the same variable has to wait that this will be "unlocked". The worst case, in the histogram scenario, is a monocromo image, in which all the threads try to modify the same bin, which implies a long waiting queue of threads. The general idea to have high performace, is to reduce the number of conflicts at the minimum.
-Different grid configurations were tested launching this program.
+The logic behind an atomic operation is that each thread "locks" the variable, modify it, and "unlocks" it, so that the other threads that try to modify the same variable has to wait that this will be "unlocked". The worst case, in the histogram scenario, is a monochrome image (only one color), in which all the threads try to modify the same bin, which implies a long waiting queue of threads. The general idea to have high performace, is to reduce the number of conflicts at the minimum. Also in this algorithm, the speedup is not related to the shape of the block, in fact the performance of the algorithm using the atomics depends on the image. Dealing with an image with horizontal stripes of different colors of 1 pixel for example, with a 1D block (1x256) there will be all the 256 threads that try to increment the same histogram bin. In the same scenario, using a 2D block (8x32) there will be only 32 threads that try to increment the same histogram value. If the image instead, is composed by vertical stripes of 32 pixels width, it happens the opposite, the 1D approach will obtain more performance. For these reasons, for the initial tests, the given images were substitute with images of the same sizes but composed by only one color (monochrome). Different implementations were tested. The first approach consisted on using only the histogram array stored on the global memory and modifying it with atomic add operations. The second approach consisted on using an additional histogram array stored in shared memory, performing the atomic add operations there and at the end, assigning a certain bin to a thread and reducing the shared histograms in the global one. Doing this, not all the launched threads will compete for the same bin, but only the threads inside the same block during the computation and the threads to which is assigned the same bin during the reduce phase. Figure \ref{fig:gavsa} shows the obtained results for the two approaches. From this image it is clear that the second approach drastically increased the performance and that the block configuration (1D or 2D) doesn't affect the performance.
 
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=0.7\linewidth]{res/new/histogram_confronto}
-    \caption{Global Atomics vs Shared Atomics}
+    \caption{Global Atomics vs Shared Atomics (Monochrome images)}
     \label{fig:gavsa}
+\end{figure}
+\FloatBarrier
+
+An additional "privatization" of the histogram could be performed. Instead of having one histogram per block, it is possible to assign one histogram per warp, so that the concurrency at the end is only among the 32 warp threads. Figure \ref{fig:sawvsa} shows the performance of this last method compared to the previous. 
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.7\linewidth]{res/new/histogram_warp}
+    \caption{Shared Atomics with Warp vs Shared Atomics (Monochrome images)}
+    \label{fig:sawvsa}
+\end{figure}
+\FloatBarrier
+
+After a testing phase with monochrome images, the tests were performed with the given images. Figure represents the obtained results. As it is possible to see, in this case the warp solution is much worst than the shared version, that means on standard images, the time spent to reduce the single warp histograms is bigger than the time spent for the atomic operations. 
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.7\linewidth]{res/new/histogram_confronto_real}
+    \caption{Global Atomics vs Shared Atomics vs Shared Atomics with Warp}
+    \label{fig:sawvsa}
+\end{figure}
+\FloatBarrier
+
+\subsection{Optimization - More pixels per thread}
+\label{sec:hop}
+
+Computing more pixels per thread, the number of the total reductions is reduced, so that the warp solution obtained more results
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.7\linewidth]{res/new/histogram_uni_more}
+    \caption{1D blocks, different number of assigned pixels per thread}
+    \label{fig:hum}
 \end{figure}
 \FloatBarrier
 
 \begin{figure}[!ht]
     \centering
-    \includegraphics[width=0.7\linewidth]{res/new/histogram_warp}
-    \caption{Shared Atomics with Warp vs Shared Atomics}
-    \label{fig:sawvsa}
+    \includegraphics[width=0.7\linewidth]{res/new/histogram_uni_fixed}
+    \caption{1D blocks, fixed grid}
+    \label{fig:hfm}
 \end{figure}
 \FloatBarrier
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.7\linewidth]{res/new/histogram_warp_more}
+    \caption{1D blocks, different number of assigned pixels per thread, warps optimization}
+    \label{fig:hwm}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.7\linewidth]{res/new/histogram_warp_fixed}
+    \caption{1D blocks, fixed grid, warps optimization}
+    \label{fig:hwf}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.7\linewidth]{res/new/histogram_more_confronto}
+    \caption{Best solutions comparison}
+    \label{fig:dbsc}
+\end{figure}
+\FloatBarrier
+
+
 
 \begin{table}[!ht]
 \centering

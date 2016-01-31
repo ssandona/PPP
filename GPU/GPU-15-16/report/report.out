@@ -5,12 +5,13 @@
 \BOOKMARK [1][-]{section.5}{Coalesced memory access}{}% 5
 \BOOKMARK [1][-]{section.6}{Algorithm 1: Grayscale Conversion and Darkening}{}% 6
 \BOOKMARK [2][-]{subsection.6.1}{Parallelization}{section.6}% 7
-\BOOKMARK [2][-]{subsection.6.2}{First method}{section.6}% 8
+\BOOKMARK [2][-]{subsection.6.2}{One pixel per thread}{section.6}% 8
 \BOOKMARK [2][-]{subsection.6.3}{Optimization - More pixels per thread}{section.6}% 9
 \BOOKMARK [1][-]{section.7}{Algorithm 2: Histogram Computation}{}% 10
 \BOOKMARK [2][-]{subsection.7.1}{Parallelization}{section.7}% 11
-\BOOKMARK [2][-]{subsection.7.2}{First method}{section.7}% 12
-\BOOKMARK [1][-]{section.8}{Algorithm 3: Smoothing}{}% 13
-\BOOKMARK [2][-]{subsection.8.1}{Parallelization}{section.8}% 14
-\BOOKMARK [1][-]{section.9}{Algorithms analysis with the Visual Profiler}{}% 15
-\BOOKMARK [2][-]{subsection.9.1}{Application 1}{section.9}% 16
+\BOOKMARK [2][-]{subsection.7.2}{One pixel per thread}{section.7}% 12
+\BOOKMARK [2][-]{subsection.7.3}{Optimization - More pixels per thread}{section.7}% 13
+\BOOKMARK [1][-]{section.8}{Algorithm 3: Smoothing}{}% 14
+\BOOKMARK [2][-]{subsection.8.1}{Parallelization}{section.8}% 15
+\BOOKMARK [1][-]{section.9}{Algorithms analysis with the Visual Profiler}{}% 16
+\BOOKMARK [2][-]{subsection.9.1}{Application 1}{section.9}% 17
