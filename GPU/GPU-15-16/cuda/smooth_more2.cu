@@ -66,7 +66,7 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
         }
 
         //displacement to calculate the second pixel to add to the localImagePortion
-        int newInBlockIdx = inBlockIdx + 36 * 20;
+        int newInBlockIdx = inBlockIdx + 32 * 16;
 
         //coordinates of the second pixel to copy into the localImagePortion
         pxAI = topLeftPxI + (newInBlockIdx / 36);
