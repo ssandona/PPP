@@ -34,7 +34,7 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
     //the 16x16 portion.
     __shared__ unsigned char localImagePortion[36 * 20 * 3];
     int cont = 0;
-    while(cont < 1) {
+    while(cont < 10) {
         //if(j < width && i < height) {
 
         //coordinates of the top left pixel for the localImagePortion
