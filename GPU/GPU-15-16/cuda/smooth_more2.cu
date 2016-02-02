@@ -89,8 +89,8 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
 
         if(j < width && i < height) {
                 smoothImage[(i * width) + j] = localImagePortion[(inLocalPortionI * 36) + inLocalPortionJ];
-                smoothImage[(i * width) + j + (width * height)] = localImagePortion[(inLocalPortionI * 36) + inLocalPortionJ + (20 * 20)];
-                smoothImage[(i * width) + j + (width * height * 2)] = localImagePortion[(inLocalPortionI * 36) + inLocalPortionJ + (20 * 20 * 2)];
+                smoothImage[(i * width) + j + (width * height)] = localImagePortion[(inLocalPortionI * 36) + inLocalPortionJ + (36 * 20)];
+                smoothImage[(i * width) + j + (width * height * 2)] = localImagePortion[(inLocalPortionI * 36) + inLocalPortionJ + (36 * 20 * 2)];
         }
 
         /*if(j < width && i < height) {
