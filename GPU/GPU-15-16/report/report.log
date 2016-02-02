@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.2.3)  1 FEB 2016 17:35
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.2.3)  2 FEB 2016 11:09
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1070,46 +1070,14 @@ LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
 File: res/new/darker_confronto.png Graphic file (type png)
 
 <use res/new/darker_confronto.png>
-Package pdftex.def Info: res/new/darker_confronto.png used on input line 183.
+Package pdftex.def Info: res/new/darker_confronto.png used on input line 182.
 (pdftex.def)             Requested size: 409.71692pt x 246.87614pt.
- [5 <./dark.png>]
-
-Package caption Warning: \label without proper \caption on input line 235.
-See the caption package documentation for explanation.
-
-
-LaTeX Warning: Reference `tab:darker_ex' on page 6 undefined on input line 215.
-
-
-
-Package caption Warning: \label without proper \caption on input line 253.
-See the caption package documentation for explanation.
-
-
-LaTeX Warning: Reference `tab:darker_sp' on page 6 undefined on input line 215.
-
-
-
-Package caption Warning: \label without proper \caption on input line 282.
-See the caption package documentation for explanation.
-
-
-LaTeX Warning: Reference `tab:darker_t_b' on page 6 undefined on input line 215
-.
-
-
-Package caption Warning: \label without proper \caption on input line 271.
-See the caption package documentation for explanation.
-
-
-LaTeX Warning: Reference `tab:pxabd' on page 6 undefined on input line 215.
-
-[6 <./res/new/darker_confronto.png (PNG copy)>]
+ [5 <./dark.png>] [6 <./res/new/darker_confronto.png (PNG copy)>]
 <res/new/darker_try_histo.png, id=184, 627.34375pt x 382.42876pt>
 File: res/new/darker_try_histo.png Graphic file (type png)
 
 <use res/new/darker_try_histo.png>
-Package pdftex.def Info: res/new/darker_try_histo.png used on input line 219.
+Package pdftex.def Info: res/new/darker_try_histo.png used on input line 218.
 (pdftex.def)             Requested size: 409.71692pt x 249.77199pt.
 
 <res/new/darker_single_more_comparison.png, id=185, 628.3475pt x 382.42876pt>
@@ -1117,11 +1085,11 @@ File: res/new/darker_single_more_comparison.png Graphic file (type png)
 
 <use res/new/darker_single_more_comparison.png>
 Package pdftex.def Info: res/new/darker_single_more_comparison.png used on inpu
-t line 227.
+t line 226.
 (pdftex.def)             Requested size: 409.71692pt x 249.36351pt.
  [7 <./res/new/darker_try_histo.png (PNG copy)> <./res/new/darker_single_more_c
 omparison.png>]
-Overfull \hbox (18.55067pt too wide) in paragraph at lines 283--294
+Overfull \hbox (18.55067pt too wide) in paragraph at lines 271--282
  [][] 
  []
 
@@ -1319,9 +1287,6 @@ Package rerunfilecheck Info: File `report.out' has not changed.
 (rerunfilecheck)             Checksum: 4022821688E239E60D96E5687B752350;1122.
 
 
-LaTeX Warning: There were undefined references.
-
-
 LaTeX Warning: There were multiply-defined labels.
 
 Package logreq Info: Writing requests to 'report.run.xml'.
@@ -1331,11 +1296,11 @@ Package logreq Info: Writing requests to 'report.run.xml'.
 Here is how much of TeX's memory you used:
  16180 strings out of 493304
  249899 string characters out of 6139872
- 697402 words of memory out of 5000000
+ 697235 words of memory out of 5000000
  19281 multiletter control sequences out of 15000+600000
  13177 words of font info for 33 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
- 42i,14n,49p,2211b,1868s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 42i,14n,49p,2236b,1868s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf/fonts/
 type1/public/cm-super/sfbx1000.pfb></usr/share/texmf/fonts/type1/public/cm-supe
@@ -1346,7 +1311,7 @@ ype1/public/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1/public/cm-super
 share/texmf/fonts/type1/public/cm-super/sfti1000.pfb></usr/share/texmf/fonts/ty
 pe1/public/cm-super/sfti1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/
 sftt1000.pfb>
-Output written on report.pdf (17 pages, 3656975 bytes).
+Output written on report.pdf (17 pages, 3656575 bytes).
 PDF statistics:
  386 PDF objects out of 1000 (max. 8388607)
  310 compressed objects within 4 object streams

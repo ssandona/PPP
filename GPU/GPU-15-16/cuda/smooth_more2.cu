@@ -79,7 +79,7 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
         imageIdx = imageIdxJ + (36 * imageIdxI);
 
         //if the second pixel to copy is not out of the image, copy it into the localImagePortion
-        if(pxAI >= 0 && pxAI < height && pxAJ >= 0 && pxAJ < width && imageIdx < 20 * 20) {
+        if(pxAI >= 0 && pxAI < height && pxAJ >= 0 && pxAJ < width && imageIdx < 36 * 20) {
             localImagePortion[imageIdx] = inputImage[pxA];
             localImagePortion[imageIdx + 36 * 20] = inputImage[pxA + (width * height)];
             localImagePortion[imageIdx + 2 * 36 * 20] = inputImage[pxA + 2 * (width * height)];
