@@ -10,8 +10,6 @@ using std::fixed;
 using std::setprecision;
 
 const int HISTOGRAM_SIZE = 256;
-const unsigned int B_WIDTH = 16;
-const unsigned int B_HEIGHT = 16;
 const int WARPS = 8;
 const unsigned int WARP_SIZE=32;
 const unsigned int PIXELS_THREAD=30;
