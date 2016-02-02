@@ -14,6 +14,7 @@ const unsigned int B_WIDTH = 16;
 const unsigned int B_HEIGHT = 16;
 const int WARPS = 8;
 const unsigned int WARP_SIZE=32;
+const unsigned int PIXELS_THREAD=30;
 
 
 __global__ void histogram1DKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram) {
@@ -59,7 +60,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
 
 
 
-int histogram1D(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram, int pixelThread) {
+int histogram1D(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram) {
     cudaError_t devRetVal = cudaSuccess;
     unsigned char *devInputImage = 0;
     unsigned char *devGrayImage = 0;
@@ -124,7 +125,7 @@ int histogram1D(const int width, const int height, const unsigned char *inputIma
     //cout << "Grid size (w,h): (" << grid_width << ", " << grid_height << ")\n";
 
     unsigned int grid_width = static_cast< unsigned int >(ceil(width / static_cast< float >(256)));
-    unsigned int grid_height = static_cast< unsigned int >(ceil(height / static_cast< float >(pixelThread)));
+    unsigned int grid_height = static_cast< unsigned int >(ceil(height / static_cast< float >(PIXELS_THREAD)));
     // Execute the kernel
     dim3 gridSize(grid_width, grid_height);
     dim3 blockSize(256);

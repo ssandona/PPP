@@ -11,6 +11,7 @@ using std::fixed;
 using std::setprecision;
 
 const unsigned int nrThreads = 256;
+unsigned int PIXELS_THREAD = 10;
 
 __global__ void kernel(const int width, const int height, const unsigned char * inputImage, unsigned char * outputDarkGrayImage) {
 	//unsigned int item = (blockIdx.x * blockDim.x + threadIdx.x)+(blockIdx.y * width);
@@ -32,7 +33,7 @@ __global__ void kernel(const int width, const int height, const unsigned char * 
 	}
 }	
 
-void darkGray(const int width, const int height, const unsigned char * inputImage, unsigned char * darkGrayImage, int pxPerThr) {
+void darkGray(const int width, const int height, const unsigned char * inputImage, unsigned char * darkGrayImage) {
 	cudaError_t devRetVal = cudaSuccess;
 	//Timers. 
 	NSTimer globalTimer("GlobalTimer", false, false);
@@ -61,7 +62,7 @@ void darkGray(const int width, const int height, const unsigned char * inputImag
 	memoryTimer.stop();
 	//Kernel
 	unsigned int grid_width = static_cast< unsigned int >(ceil(width / static_cast< float >(nrThreads)));
-    unsigned int grid_height = static_cast< unsigned int >(ceil(height / static_cast< float >(pxPerThr)));
+    unsigned int grid_height = static_cast< unsigned int >(ceil(height / static_cast< float >(PIXELS_THREAD)));
     // Execute the kernel
     dim3 gridSize(grid_width, grid_height);
     dim3 blockSize(nrThreads);
