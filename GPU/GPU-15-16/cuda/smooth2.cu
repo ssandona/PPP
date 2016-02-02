@@ -30,8 +30,12 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
     __shared__ unsigned char localImagePortion[20 * 20 * 3];
 
     //coordinates of the top left pixel for the localImagePortion
-    int topLeftPxI = (blockIdx.y * blockDim.y) - 2;
-    int topLeftPxJ = (blockIdx.x * blockDim.x) - 2;
+    
+    /*int topLeftPxI = (blockIdx.y * blockDim.y) - 2;
+    int topLeftPxJ = (blockIdx.x * blockDim.x) - 2;*/
+
+    int topLeftPxI = (i - threadIdx.y) - 2;
+    int topLeftPxJ = (j - threadIdx.x) - 2;
 
     //coordinates of the first pixel to copy into the localImagePortion
     int pxAI = topLeftPxI + (inBlockIdx / 20);
