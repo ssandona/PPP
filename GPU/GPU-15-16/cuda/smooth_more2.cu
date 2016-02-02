@@ -122,8 +122,8 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
                 }
 
                 smoothPix /= filterSum;
-                //smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(smoothPix + 0.5f);
-                smoothImage[(z * width * height) + (i * width) + j] =localImagePortion[(z * 36 * 20) + (inLocalPortionI*36) + inLocalPortionJ];
+                smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(smoothPix + 0.5f);
+                //smoothImage[(z * width * height) + (i * width) + j] =localImagePortion[(z * 36 * 20) + (inLocalPortionI*36) + inLocalPortionJ];
             }
         }
 
