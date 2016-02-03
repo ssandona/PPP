@@ -10,7 +10,7 @@ using std::endl;
 using std::fixed;
 using std::setprecision;
 
-const unsigned int B_WIDTH = 32;
+const unsigned int B_WIDTH = 16;
 const unsigned int B_HEIGHT = 16;
 
 __constant__ float filter[] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2.0f, 1.0f, 1.0f, 2.0f, 3.0f, 2.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
@@ -21,79 +21,70 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
     int i = blockIdx.y * blockDim.y + threadIdx.y;
     int j = blockIdx.x * blockDim.x + threadIdx.x;
 
+    int firstI = blockIdx.y * blockDim.y;
+
     //index inside the block (from 0 to 255)
     int inBlockIdx = threadIdx.x + (blockDim.x * threadIdx.y);
 
+    //the block is 16x16, but to apply the filter over these 256 pixels, also some
+    //external pixels are needed. The filter is 5x5 so we need also the 2 px border of
+    //the 16x16 portion.
+    __shared__ unsigned char localImagePortion[20 * 20 * 3];
+
+    //coordinates of the top left pixel for the localImagePortion
     //coordinates of the pixel inside the localImagePortion to which this thread has to apply
     //the filter
     int inLocalPortionI = threadIdx.y + 2;
     int inLocalPortionJ = threadIdx.x + 2;
 
-    //the block is 16x16, but to apply the filter over these 256 pixels, also some
-    //external pixels are needed. The filter is 5x5 so we need also the 2 px border of
-    //the 16x16 portion.
-    __shared__ unsigned char localImagePortion[36 * 20 * 3];
-    int cont = 0;
-    while(cont < 10) {
-        //if(j < width && i < height) {
+    /*int topLeftPxI = (blockIdx.y * blockDim.y) - 2;
+    int topLeftPxJ = (blockIdx.x * blockDim.x) - 2;*/
 
-        //coordinates of the top left pixel for the localImagePortion
+    while(firstI < height) {
+
         int topLeftPxI = (i - threadIdx.y) - 2;
         int topLeftPxJ = (j - threadIdx.x) - 2;
 
-        //coordinates of the top left pixel for the localImagePortion
-        //int topLeftPxI = (blockIdx.y * blockDim.y) - 2;
-        //int topLeftPxJ = (blockIdx.x * blockDim.x) - 2;
-
         //coordinates of the first pixel to copy into the localImagePortion
-        int pxAI = topLeftPxI + (inBlockIdx / 36);
-        int pxAJ = topLeftPxJ + (inBlockIdx % 36);
+        int pxAI = topLeftPxI + (inBlockIdx / 20);
+        int pxAJ = topLeftPxJ + (inBlockIdx % 20);
         int pxA = pxAJ + (width * pxAI);
-
 
 
         //coordinates of the localImagePortion in which copy the pixel
         int imageIdxI = pxAI - topLeftPxI;
         int imageIdxJ = pxAJ - topLeftPxJ;
-        int imageIdx = imageIdxJ + (36 * imageIdxI);
+        int imageIdx = imageIdxJ + (20 * imageIdxI);
 
 
         //if the first pixel to copy is not out of the image, copy it into the localImagePortion
         if(pxAI >= 0 && pxAI < height && pxAJ >= 0 && pxAJ < width) {
             localImagePortion[imageIdx] = inputImage[pxA];
-            localImagePortion[imageIdx + 36 * 20] = inputImage[pxA + (width * height)];
-            localImagePortion[imageIdx + 2 * 36 * 20] = inputImage[pxA + 2 * (width * height)];
+            localImagePortion[imageIdx + 20 * 20] = inputImage[pxA + (width * height)];
+            localImagePortion[imageIdx + 2 * 20 * 20] = inputImage[pxA + 2 * (width * height)];
         }
 
         //displacement to calculate the second pixel to add to the localImagePortion
-        int newInBlockIdx = inBlockIdx + 32 * 16;
+        int newInBlockIdx = inBlockIdx + 16 * 16;
 
         //coordinates of the second pixel to copy into the localImagePortion
-        pxAI = topLeftPxI + (newInBlockIdx / 36);
-        pxAJ = topLeftPxJ + (newInBlockIdx % 36);
+        pxAI = topLeftPxI + (newInBlockIdx / 20);
+        pxAJ = topLeftPxJ + (newInBlockIdx % 20);
         pxA = pxAJ + (width * pxAI);
 
         //coordinates of the localImagePortion in which copy the pixel
         imageIdxI = pxAI - topLeftPxI;
         imageIdxJ = pxAJ - topLeftPxJ;
-        imageIdx = imageIdxJ + (36 * imageIdxI);
+        imageIdx = imageIdxJ + (20 * imageIdxI);
 
         //if the second pixel to copy is not out of the image, copy it into the localImagePortion
-        if(pxAI >= 0 && pxAI < height && pxAJ >= 0 && pxAJ < width && imageIdx < 36 * 20) {
+        if(pxAI >= 0 && pxAI < height && pxAJ >= 0 && pxAJ < width && imageIdx < 20 * 20) {
             localImagePortion[imageIdx] = inputImage[pxA];
-            localImagePortion[imageIdx + 36 * 20] = inputImage[pxA + (width * height)];
-            localImagePortion[imageIdx + 2 * 36 * 20] = inputImage[pxA + 2 * (width * height)];
+            localImagePortion[imageIdx + 20 * 20] = inputImage[pxA + (width * height)];
+            localImagePortion[imageIdx + 2 * 20 * 20] = inputImage[pxA + 2 * (width * height)];
         }
 
         __syncthreads();
-
-        /*if(j < width && i < height) {
-                smoothImage[(i * width) + j] = localImagePortion[(inLocalPortionI * 36) + inLocalPortionJ];
-                smoothImage[(i * width) + j + (width * height)] = localImagePortion[(inLocalPortionI * 36) + inLocalPortionJ + (36 * 20)];
-                smoothImage[(i * width) + j + (width * height * 2)] = localImagePortion[(inLocalPortionI * 36) + inLocalPortionJ + (36 * 20 * 2)];
-        }*/
-        /*until here correct*/
-
 
         if(j < width && i < height) {
 
@@ -117,7 +108,7 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
                             continue;
                         }
 
-                        smoothPix += static_cast< float >(localImagePortion[(z * 36 * 20) + (localFy * 36) + localFx]) * filter[filterItem];
+                        smoothPix += static_cast< float >(localImagePortion[(z * 20 * 20) + (localFy * 20) + localFx]) * filter[filterItem];
                         filterSum += filter[filterItem];
                         filterItem++;
                     }
@@ -125,14 +116,12 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
 
                 smoothPix /= filterSum;
                 smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(smoothPix + 0.5f);
-                //smoothImage[(z * width * height) + (i * width) + j] =localImagePortion[(z * 36 * 20) + (inLocalPortionI*36) + inLocalPortionJ];
+
             }
         }
-
         i += (gridDim.y * blockDim.y);
-        cont++;
+        firstI += (gridDim.y * blockDim.y);
     }
-    
 }
 
 

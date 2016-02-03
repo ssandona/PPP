@@ -31,60 +31,58 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
 
     //coordinates of the top left pixel for the localImagePortion
 
-    /*int topLeftPxI = (blockIdx.y * blockDim.y) - 2;
-    int topLeftPxJ = (blockIdx.x * blockDim.x) - 2;*/
-    int cont = 0;
-    while(cont < 1) {
+    int topLeftPxI = (blockIdx.y * blockDim.y) - 2;
+    int topLeftPxJ = (blockIdx.x * blockDim.x) - 2;
 
-        int topLeftPxI = (i - threadIdx.y) - 2;
-        int topLeftPxJ = (j - threadIdx.x) - 2;
+    /*int topLeftPxI = (i - threadIdx.y) - 2;
+    int topLeftPxJ = (j - threadIdx.x) - 2;*/
 
-        //coordinates of the first pixel to copy into the localImagePortion
-        int pxAI = topLeftPxI + (inBlockIdx / 20);
-        int pxAJ = topLeftPxJ + (inBlockIdx % 20);
-        int pxA = pxAJ + (width * pxAI);
+    //coordinates of the first pixel to copy into the localImagePortion
+    int pxAI = topLeftPxI + (inBlockIdx / 20);
+    int pxAJ = topLeftPxJ + (inBlockIdx % 20);
+    int pxA = pxAJ + (width * pxAI);
 
-        //coordinates of the pixel inside the localImagePortion to which this thread has to apply
-        //the filter
-        int inLocalPortionI = threadIdx.y + 2;
-        int inLocalPortionJ = threadIdx.x + 2;
+    //coordinates of the pixel inside the localImagePortion to which this thread has to apply
+    //the filter
+    int inLocalPortionI = threadIdx.y + 2;
+    int inLocalPortionJ = threadIdx.x + 2;
 
-        //coordinates of the localImagePortion in which copy the pixel
-        int imageIdxI = pxAI - topLeftPxI;
-        int imageIdxJ = pxAJ - topLeftPxJ;
-        int imageIdx = imageIdxJ + (20 * imageIdxI);
+    //coordinates of the localImagePortion in which copy the pixel
+    int imageIdxI = pxAI - topLeftPxI;
+    int imageIdxJ = pxAJ - topLeftPxJ;
+    int imageIdx = imageIdxJ + (20 * imageIdxI);
 
 
-        //if the first pixel to copy is not out of the image, copy it into the localImagePortion
-        if(pxAI >= 0 && pxAI < height && pxAJ >= 0 && pxAJ < width) {
-            localImagePortion[imageIdx] = inputImage[pxA];
-            localImagePortion[imageIdx + 20 * 20] = inputImage[pxA + (width * height)];
-            localImagePortion[imageIdx + 2 * 20 * 20] = inputImage[pxA + 2 * (width * height)];
-        }
+    //if the first pixel to copy is not out of the image, copy it into the localImagePortion
+    if(pxAI >= 0 && pxAI < height && pxAJ >= 0 && pxAJ < width) {
+        localImagePortion[imageIdx] = inputImage[pxA];
+        localImagePortion[imageIdx + 20 * 20] = inputImage[pxA + (width * height)];
+        localImagePortion[imageIdx + 2 * 20 * 20] = inputImage[pxA + 2 * (width * height)];
+    }
 
-        //displacement to calculate the second pixel to add to the localImagePortion
-        int newInBlockIdx = inBlockIdx + 16 * 16;
+    //displacement to calculate the second pixel to add to the localImagePortion
+    int newInBlockIdx = inBlockIdx + 16 * 16;
 
-        //coordinates of the second pixel to copy into the localImagePortion
-        pxAI = topLeftPxI + (newInBlockIdx / 20);
-        pxAJ = topLeftPxJ + (newInBlockIdx % 20);
-        pxA = pxAJ + (width * pxAI);
+    //coordinates of the second pixel to copy into the localImagePortion
+    pxAI = topLeftPxI + (newInBlockIdx / 20);
+    pxAJ = topLeftPxJ + (newInBlockIdx % 20);
+    pxA = pxAJ + (width * pxAI);
 
-        //coordinates of the localImagePortion in which copy the pixel
-        imageIdxI = pxAI - topLeftPxI;
-        imageIdxJ = pxAJ - topLeftPxJ;
-        imageIdx = imageIdxJ + (20 * imageIdxI);
+    //coordinates of the localImagePortion in which copy the pixel
+    imageIdxI = pxAI - topLeftPxI;
+    imageIdxJ = pxAJ - topLeftPxJ;
+    imageIdx = imageIdxJ + (20 * imageIdxI);
 
-        //if the second pixel to copy is not out of the image, copy it into the localImagePortion
-        if(pxAI >= 0 && pxAI < height && pxAJ >= 0 && pxAJ < width && imageIdx < 20 * 20) {
-            localImagePortion[imageIdx] = inputImage[pxA];
-            localImagePortion[imageIdx + 20 * 20] = inputImage[pxA + (width * height)];
-            localImagePortion[imageIdx + 2 * 20 * 20] = inputImage[pxA + 2 * (width * height)];
-        }
+    //if the second pixel to copy is not out of the image, copy it into the localImagePortion
+    if(pxAI >= 0 && pxAI < height && pxAJ >= 0 && pxAJ < width && imageIdx < 20 * 20) {
+        localImagePortion[imageIdx] = inputImage[pxA];
+        localImagePortion[imageIdx + 20 * 20] = inputImage[pxA + (width * height)];
+        localImagePortion[imageIdx + 2 * 20 * 20] = inputImage[pxA + 2 * (width * height)];
+    }
 
-        __syncthreads();
+    __syncthreads();
 
-        if(j >= width || i >= height) return;
+    if(j < width && i < height) {
 
         //same code as the sequential, but with indexes of the localImagePortion
         for ( int z = 0; z < spectrum; z++ ) {
@@ -116,8 +114,6 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
             smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(smoothPix + 0.5f);
 
         }
-        cont += 1;
-        i += (gridDim.y * blockDim.y);
     }
 }
 
