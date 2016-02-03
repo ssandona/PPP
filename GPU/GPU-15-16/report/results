@@ -845,6 +845,73 @@ images04	0,042970	109,27
 images05	0,081921	104,54
 images06	0,161783	114,80
 
+more no shared (32x16)
+
+4px
+
+images00	0.000868
+images01	0.006552
+images02	0.009114
+images03	0.060738
+images04	0.042152
+images05	0.079795
+images06	0.157640
+
+8px
+
+images00	0.001015
+images01	0.006550
+images02	0.009092
+images03	0.060870
+images04	0.042172
+images05	0.079766
+images06	0.157433
+
+
+10px
+
+images00	0.001010
+images01	0.006635
+images02	0.009089
+images03	0.060878
+images04	0.042190
+images05	0.079691
+images06	0.157472
+
+16px
+
+images00	0.001313
+images01	0.006685
+images02	0.009096 
+images03	0.060855
+images04	0.042160
+images05	0.079621
+images06	0.157478
+
+20pix
+
+images00	0.001312
+images01	0.006684
+images02	0.009480
+images03	0.060854
+images04	0.042066 
+images05	0.079829
+images06	0.157467
+
+30px
+
+images00	0.001312
+images01	0.006521
+images02	0.009112
+images03	0.061081
+images04	0.042148
+images05	0.079715
+images06	0.157500
+
+
+
+
+
 
 
 

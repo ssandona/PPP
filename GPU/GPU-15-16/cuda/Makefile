@@ -3,7 +3,7 @@ debug		:= 0
 include		../Makefile.inc
 
 
-all:  smooth_more
+all:  smooth_more smooth_more_fixed
 
 darker_square: darker_square.cpp
 	$(NVCC) -c darker_square.cu $(INCLUDES) $(NVCCFLAGS)
@@ -195,6 +195,11 @@ smooth_more: smooth_more.cpp smooth_more.cu
 	$(NVCC) -c smooth_more.cu $(INCLUDES) $(NVCCFLAGS)
 	$(LINKER) -o $(PROJ_BASE)/bin/smooth_moreCUDA smooth_more.cpp smooth_more.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./smooth_more.o
+
+smooth_more_fixed: smooth_more_fixed.cpp smooth_more_fixed.cu
+	$(NVCC) -c smooth_more_fixed.cu $(INCLUDES) $(NVCCFLAGS)
+	$(LINKER) -o $(PROJ_BASE)/bin/smooth_more_fixedCUDA smooth_more_fixed.cpp smooth_more_fixed.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
+	rm -f ./smooth_more_fixed.o
 
 smooth_more2: smooth_more2.cpp smooth_more2.cu
 	$(NVCC) -c smooth_more2.cu $(INCLUDES) $(NVCCFLAGS)
