@@ -10,8 +10,8 @@ using std::fixed;
 using std::setprecision;
 
 const int HISTOGRAM_SIZE = 256;
-const unsigned int B_WIDTH = 16;
-const unsigned int B_HEIGHT = 16;
+const unsigned int B_WIDTH = 32;
+const unsigned int B_HEIGHT = 8;
 const int WARPS = 8;
 const unsigned int WARP_SIZE=32;
 
@@ -59,7 +59,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
 
 
 
-int histogram1D(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram, int grid_height, int grid_width) {
+int histogram1D(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram, int pixelThreads) {
     cudaError_t devRetVal = cudaSuccess;
     unsigned char *devInputImage = 0;
     unsigned char *devGrayImage = 0;
@@ -122,6 +122,9 @@ int histogram1D(const int width, const int height, const unsigned char *inputIma
 
     //cout << "Image size (w,h): (" << width << ", " << height << ")\n";
     //cout << "Grid size (w,h): (" << grid_width << ", " << grid_height << ")\n";
+
+    unsigned int grid_width = static_cast< unsigned int >(ceil(width / static_cast< float >(256)));
+    unsigned int grid_height = static_cast< unsigned int >(pixelThreads);
 
     // Execute the kernel
     dim3 gridSize(grid_width, grid_height);
