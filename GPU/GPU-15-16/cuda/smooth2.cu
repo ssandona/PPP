@@ -116,9 +116,9 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
             smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(smoothPix + 0.5f);
 
         }
+        cont += 1;
+        i += (gridDim.y * blockDim.y);
     }
-    cont+=1;
-    i += (gridDim.y * blockDim.y);
 }
 
 
