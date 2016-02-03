@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.2.3)  2 FEB 2016 11:49
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.2.3)  3 FEB 2016 12:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1142,7 +1142,7 @@ Package pdftex.def Info: res/new/histogram_confronto_real.png used on input lin
 e 380.
 (pdftex.def)             Requested size: 318.66948pt x 197.88565pt.
  [11 <./histo_warp.png (PNG copy)> <./res/new/histogram_warp.png (PNG copy)>]
-<res/new/histogram_uni_more.png, id=257, 623.32875pt x 377.41pt>
+<res/new/histogram_uni_more.png, id=258, 623.32875pt x 377.41pt>
 File: res/new/histogram_uni_more.png Graphic file (type png)
 
 <use res/new/histogram_uni_more.png>
@@ -1150,7 +1150,7 @@ Package pdftex.def Info: res/new/histogram_uni_more.png used on input line 393.
 
 (pdftex.def)             Requested size: 295.90588pt x 179.16219pt.
 
-<res/new/histogram_uni_fixed.png, id=258, 624.3325pt x 379.4175pt>
+<res/new/histogram_uni_fixed.png, id=259, 624.3325pt x 379.4175pt>
 File: res/new/histogram_uni_fixed.png Graphic file (type png)
 
 <use res/new/histogram_uni_fixed.png>
@@ -1159,7 +1159,7 @@ Package pdftex.def Info: res/new/histogram_uni_fixed.png used on input line 401
 (pdftex.def)             Requested size: 295.90588pt x 179.8315pt.
  [12 <./res/new/histogram_confronto_real.png (PNG copy)> <./res/new/histogram_u
 ni_more.png (PNG copy)>]
-<res/new/histogram_warp_more.png, id=270, 627.34375pt x 374.39874pt>
+<res/new/histogram_warp_more.png, id=272, 627.34375pt x 374.39874pt>
 File: res/new/histogram_warp_more.png Graphic file (type png)
 
 <use res/new/histogram_warp_more.png>
@@ -1167,7 +1167,7 @@ Package pdftex.def Info: res/new/histogram_warp_more.png used on input line 409
 .
 (pdftex.def)             Requested size: 295.90588pt x 176.60156pt.
 
-<res/new/histogram_warp_fixed.png, id=271, 625.33624pt x 377.41pt>
+<res/new/histogram_warp_fixed.png, id=273, 625.33624pt x 377.41pt>
 File: res/new/histogram_warp_fixed.png Graphic file (type png)
 
 <use res/new/histogram_warp_fixed.png>
@@ -1175,7 +1175,7 @@ Package pdftex.def Info: res/new/histogram_warp_fixed.png used on input line 41
 7.
 (pdftex.def)             Requested size: 318.66948pt x 192.33258pt.
 
-<res/new/histogram_more_confronto.png, id=272, 621.32124pt x 379.4175pt>
+<res/new/histogram_more_confronto.png, id=274, 621.32124pt x 379.4175pt>
 File: res/new/histogram_more_confronto.png Graphic file (type png)
 
 <use res/new/histogram_more_confronto.png>
@@ -1184,19 +1184,19 @@ e 425.
 (pdftex.def)             Requested size: 318.66948pt x 194.60034pt.
  [13 <./res/new/histogram_uni_fixed.png (PNG copy)> <./res/new/histogram_warp_m
 ore.png (PNG copy)> <./res/new/histogram_warp_fixed.png (PNG copy)>]
-<smooth.png, id=279, 7216.67572pt x 2632.69286pt>
+<smooth.png, id=281, 7216.67572pt x 2632.69286pt>
 File: smooth.png Graphic file (type png)
  <use smooth.png>
 Package pdftex.def Info: smooth.png used on input line 487.
 (pdftex.def)             Requested size: 227.62206pt x 83.0347pt.
  [14 <./res/new/histogram_more_confronto.png (PNG copy)>]
-<filter.png, id=287, 170.6375pt x 171.64125pt>
+<filter.png, id=288, 170.6375pt x 171.64125pt>
 File: filter.png Graphic file (type png)
  <use filter.png>
 Package pdftex.def Info: filter.png used on input line 501.
 (pdftex.def)             Requested size: 227.62206pt x 228.97662pt.
 
-<filter_letters.png, id=288, 170.6375pt x 171.64125pt>
+<filter_letters.png, id=289, 170.6375pt x 171.64125pt>
 File: filter_letters.png Graphic file (type png)
 
 <use filter_letters.png>
@@ -1207,82 +1207,110 @@ Overfull \hbox (2.22168pt too wide) in paragraph at lines 499--511
 []$[]$ $[]$ 
  []
 
-[15 <./smooth.png> <./filter.png> <./filter_letters.png>]
-<profiling/darker/darker_occupancy_00.png, id=298, 933.4875pt x 237.88875pt>
+<res/new/smooth_more.png, id=290, 628.3475pt x 376.40625pt>
+File: res/new/smooth_more.png Graphic file (type png)
+
+<use res/new/smooth_more.png>
+Package pdftex.def Info: res/new/smooth_more.png used on input line 518.
+(pdftex.def)             Requested size: 318.66948pt x 190.89635pt.
+ [15 <./smooth.png> <./filter.png> <./filter_letters.png>] <res/new/smooth_fixe
+d_more.png, id=299, 628.3475pt x 374.39874pt>
+File: res/new/smooth_fixed_more.png Graphic file (type png)
+
+<use res/new/smooth_fixed_more.png>
+Package pdftex.def Info: res/new/smooth_fixed_more.png used on input line 526.
+(pdftex.def)             Requested size: 318.66948pt x 189.87823pt.
+
+<res/new/smooth_compare.png, id=300, 626.34pt x 376.40625pt>
+File: res/new/smooth_compare.png Graphic file (type png)
+
+<use res/new/smooth_compare.png>
+Package pdftex.def Info: res/new/smooth_compare.png used on input line 534.
+(pdftex.def)             Requested size: 318.66948pt x 191.5109pt.
+ [16 <./res/new/smooth_more.png (PNG copy)> <./res/new/smooth_fixed_more.png (P
+NG copy)>]
+<profiling/darker/darker_occupancy_00.png, id=307, 933.4875pt x 237.88875pt>
 File: profiling/darker/darker_occupancy_00.png Graphic file (type png)
 
 <use profiling/darker/darker_occupancy_00.png>
 Package pdftex.def Info: profiling/darker/darker_occupancy_00.png used on input
- line 538.
+ line 562.
 (pdftex.def)             Requested size: 318.66948pt x 81.20778pt.
 
-<profiling/darker/darker_06_occupancy.png, id=299, 935.495pt x 239.89626pt>
+<profiling/darker/darker_06_occupancy.png, id=308, 935.495pt x 239.89626pt>
 File: profiling/darker/darker_06_occupancy.png Graphic file (type png)
 
 <use profiling/darker/darker_06_occupancy.png>
 Package pdftex.def Info: profiling/darker/darker_06_occupancy.png used on input
- line 546.
+ line 570.
 (pdftex.def)             Requested size: 318.66948pt x 81.71738pt.
-
-<profiling/darker/unaligned_load.png, id=300, 624.3325pt x 108.405pt>
+ [17 <./res/new/smooth_compare.png (PNG copy)> <./profiling/darker/darker_occup
+ancy_00.png (PNG copy)>]
+<profiling/darker/unaligned_load.png, id=316, 624.3325pt x 108.405pt>
 File: profiling/darker/unaligned_load.png Graphic file (type png)
 
 <use profiling/darker/unaligned_load.png>
 Package pdftex.def Info: profiling/darker/unaligned_load.png used on input line
- 554.
+ 578.
 (pdftex.def)             Requested size: 318.66948pt x 55.33212pt.
 
-Overfull \hbox (18.64378pt too wide) in paragraph at lines 562--563
+Overfull \hbox (18.64378pt too wide) in paragraph at lines 586--587
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (42.6381pt too wide) in paragraph at lines 563--565
+Overfull \hbox (42.6381pt too wide) in paragraph at lines 587--589
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][] 
  []
 
 
-Overfull \hbox (6.8375pt too wide) in paragraph at lines 575--577
+Overfull \hbox (6.8375pt too wide) in paragraph at lines 609--611
 \T1/cmr/m/n/10 dlcm=cg worst re-sults, Chang-ing the con-fig-u-ra-tion (cu-d-aD
 e-vice-Set-CacheCon-fig(cudaFuncCachePreferL1);)
  []
 
 
-<profiling/darker/darker_utilization_00.png, id=301, 909.3975pt x 388.45125pt>
+<profiling/darker/darker_utilization_00.png, id=317, 909.3975pt x 388.45125pt>
 File: profiling/darker/darker_utilization_00.png Graphic file (type png)
 
 <use profiling/darker/darker_utilization_00.png>
 Package pdftex.def Info: profiling/darker/darker_utilization_00.png used on inp
-ut line 584.
+ut line 618.
 (pdftex.def)             Requested size: 318.66948pt x 136.12pt.
- [16 <./profiling/darker/darker_occupancy_00.png (PNG copy)> <./profiling/darke
-r/darker_06_occupancy.png (PNG copy)> <./profiling/darker/unaligned_load.png (P
-NG copy)>]
-<profiling/darker/darker_varying.png, id=313, 931.48pt x 369.38pt>
+
+<profiling/darker/darker_varying.png, id=318, 931.48pt x 369.38pt>
 File: profiling/darker/darker_varying.png Graphic file (type png)
 
 <use profiling/darker/darker_varying.png>
 Package pdftex.def Info: profiling/darker/darker_varying.png used on input line
- 592.
+ 626.
 (pdftex.def)             Requested size: 318.66948pt x 126.36534pt.
+ [18 <./profiling/darker/darker_06_occupancy.png (PNG copy)> <./profiling/darke
+r/unaligned_load.png (PNG copy)> <./profiling/darker/darker_utilization_00.png 
+(PNG copy)>]
 File: profiling/darker/darker_varying.png Graphic file (type png)
 
 <use profiling/darker/darker_varying.png>
 Package pdftex.def Info: profiling/darker/darker_varying.png used on input line
- 602.
+ 636.
 (pdftex.def)             Requested size: 318.66948pt x 126.36534pt.
 
 
-LaTeX Warning: Empty bibliography on input line 608.
+LaTeX Warning: Empty bibliography on input line 642.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 610.
-[17 <./profiling/darker/darker_utilization_00.png (PNG copy)> <./profiling/dark
-er/darker_varying.png (PNG copy)>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 610.
+
+Overfull \hbox (60.43918pt too wide) in paragraph at lines 644--647
+[]\T1/cmr/m/n/10 https://developer.nvidia.com/cuda-zone https://devblogs.nvidia
+.com/parallelforall/ http://www.gputechconf.com/ 
+ []
+
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 649.
+[19 <./profiling/darker/darker_varying.png (PNG copy)>]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 649.
  (./report.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 610.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 610.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 649.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 649.
 Package rerunfilecheck Info: File `report.out' has not changed.
 (rerunfilecheck)             Checksum: 4022821688E239E60D96E5687B752350;1122.
 
@@ -1294,10 +1322,10 @@ Package logreq Info: Writing requests to 'report.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 16180 strings out of 493304
- 249899 string characters out of 6139872
- 697235 words of memory out of 5000000
- 19281 multiletter control sequences out of 15000+600000
+ 16203 strings out of 493304
+ 250421 string characters out of 6139872
+ 697391 words of memory out of 5000000
+ 19296 multiletter control sequences out of 15000+600000
  13177 words of font info for 33 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
  42i,14n,49p,2236b,1868s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1311,10 +1339,10 @@ ype1/public/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1/public/cm-super
 share/texmf/fonts/type1/public/cm-super/sfti1000.pfb></usr/share/texmf/fonts/ty
 pe1/public/cm-super/sfti1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/
 sftt1000.pfb>
-Output written on report.pdf (17 pages, 3656705 bytes).
+Output written on report.pdf (19 pages, 3698556 bytes).
 PDF statistics:
- 386 PDF objects out of 1000 (max. 8388607)
- 310 compressed objects within 4 object streams
- 118 named destinations out of 1000 (max. 500000)
- 292 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 403 PDF objects out of 1000 (max. 8388607)
+ 322 compressed objects within 4 object streams
+ 123 named destinations out of 1000 (max. 500000)
+ 307 words of extra memory for PDF output out of 10000 (max. 10000000)
 

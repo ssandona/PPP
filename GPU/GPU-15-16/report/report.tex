@@ -513,6 +513,30 @@ This particular algorithm deals with square areas of the image (filter), so that
 \end{figure}
 \FloatBarrier
 
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.7\linewidth]{res/new/smooth_more}
+    \caption{More pixels per thread}
+    \label{fig:smmo}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.7\linewidth]{res/new/smooth_fixed_more}
+    \caption{Fixed Height}
+    \label{fig:smhf}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.7\linewidth]{res/new/smooth_compare}
+    \caption{Solutions comparison}
+    \label{fig:smco}
+\end{figure}
+\FloatBarrier
+
 \begin{table}[!ht]
 \centering
 \begin{tabular}{|c|l|c|c|l|l|l|l|}
@@ -569,7 +593,17 @@ float b = static_cast< float >(inputImage[(2 * width * height) + (y * width) + x
 
 
 
+HISTO -> Atomic implementation in CUDA may vary by GPU architecture. On the GTX 480 (a Fermi-class GPU), \_\_shared\_\_ memory atomics are implemented not as a single machine instruction, but in fact by a sequence of machine (SASS) instructions that form a loop.
 
+This loop is essentially contending for a lock. When the lock is acquired by a particular thread, that thread will then complete the requested memory operation atomically on the identified shared memory cell, and then release the lock.
+
+The process of looping to acquire the lock necessarily involves branch divergence. The possibility for branch divergence in this case is not evident from the C/C++ source code, but will be evident if you inspect the SASS code.
+
+Global atomics are generally implemented as a single (ATOM or RED) SASS instruction. However global atomics may still involve serialization of access if executed by multiple threads in the warp. 
+
+For this reason profiler outlined branch divergence
+
+can't avoid banc conflics because the accesses are random for us, they depend on the image
 
 
 On image number 5 => no coalesced access for the 2 instructions.. because image pixels non a multiple of 128, so non aligned (threadID+pizelsOfImage) but not effect the computation, compiling with -Xptxas -dlcm=cg worst results, Changing the configuration (cudaDeviceSetCacheConfig(cudaFuncCachePreferL1);)
@@ -606,6 +640,11 @@ On image number 5 => no coalesced access for the 2 instructions.. because image 
 \FloatBarrier
 
 \printbibliography 
+
+https://developer.nvidia.com/cuda-zone
+https://devblogs.nvidia.com/parallelforall/
+http://www.gputechconf.com/
+
 
 \end{document}
 

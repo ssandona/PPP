@@ -27,7 +27,7 @@ __global__ void kernel(const int width, const int height, const unsigned char * 
 	}
 }	
 
-void darkGray(const int width, const int height, const unsigned char * inputImage, unsigned char * darkGrayImage, int grid_size) {
+void darkGray(const int width, const int height, const unsigned char * inputImage, unsigned char * darkGrayImage, int grid_height, int grid_width) {
 
 	cudaError_t devRetVal = cudaSuccess;
 	//Timers. 
@@ -56,7 +56,7 @@ void darkGray(const int width, const int height, const unsigned char * inputImag
 	}
 	memoryTimer.stop();
 	//Kernel
-	dim3 gridSize( grid_size, grid_size );
+	dim3 gridSize( grid_width, grid_height);
 	dim3 blockSize(nrThreads);
 	kernelTimer.start();
 	kernel<<< gridSize, blockSize >>>(width, height, devInputImage, devDarkGrayImage);

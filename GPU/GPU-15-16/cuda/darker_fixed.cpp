@@ -12,13 +12,13 @@ using std::fixed;
 using std::setprecision;
 using std::string;
 
-extern int darkGray(const int width, const int height, const unsigned char * inputImage, unsigned char * darkGrayImage, int grid_size);
+extern int darkGray(const int width, const int height, const unsigned char * inputImage, unsigned char * darkGrayImage, int grid_height, int grid_width);
 
 
 int main(int argc, char *argv[]) {
 	int r=0;
 	//cout << "A\n";
-	if ( argc != 3 ) {
+	if ( argc != 4 ) {
 		//cout << "Err1\n";
 		cerr << "Usage: " << argv[0] << " <filename>" << endl;
 		return 1;
@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
 	// Convert the input image to grayscale and make it darker
 	CImg< unsigned char > darkGrayImage = CImg< unsigned char >(inputImage.width(), inputImage.height(), 1, 1);
 	//cout << "D\n";
-	r=darkGray(inputImage.width(), inputImage.height(), inputImage.data(), darkGrayImage.data(), atoi(argv[2]));
+	r=darkGray(inputImage.width(), inputImage.height(), inputImage.data(), darkGrayImage.data(), atoi(argv[2]), atoi(argv[3]));
 	if(r==1){
 		cout << "ERRR\n";
 		return 1;
