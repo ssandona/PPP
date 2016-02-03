@@ -87,13 +87,15 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
 
         __syncthreads();
 
-        if(j < width && i < height) {
+        /*if(j < width && i < height) {
                 smoothImage[(i * width) + j] = localImagePortion[(inLocalPortionI * 36) + inLocalPortionJ];
                 smoothImage[(i * width) + j + (width * height)] = localImagePortion[(inLocalPortionI * 36) + inLocalPortionJ + (36 * 20)];
                 smoothImage[(i * width) + j + (width * height * 2)] = localImagePortion[(inLocalPortionI * 36) + inLocalPortionJ + (36 * 20 * 2)];
-        }
+        }*/
+        /*until here correct*/
 
-        /*if(j < width && i < height) {
+
+        if(j < width && i < height) {
 
             //same code as the sequential, but with indexes of the localImagePortion
             for ( int z = 0; z < spectrum; z++ ) {
@@ -125,7 +127,7 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
                 smoothImage[(z * width * height) + (i * width) + j] = static_cast< unsigned char >(smoothPix + 0.5f);
                 //smoothImage[(z * width * height) + (i * width) + j] =localImagePortion[(z * 36 * 20) + (inLocalPortionI*36) + inLocalPortionJ];
             }
-        }*/
+        }
 
         i += (gridDim.y * blockDim.y);
         cont++;
