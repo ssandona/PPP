@@ -99,7 +99,7 @@ In CUDA, as mentioned before, there is a strinct mapping with the hardware, so t
 Each \textbf{thread} executes the kernel code, running on one CUDA core.
 The threads are logically grouped into \textbf{thread blocks}, so that the threads of the same block will run on the same multiprocessor. The thread blocks are logically organized in a \textbf{Grid}, that represent the entire dataset. The blocks and the grid can be of 1D, 2D or 3D.
 The most important thing programming with GPUs, to make use of all their power, is to make them as busy as possible. Switching between concurrent warps has no overhead because registers and share memory are partitioned and not stored/restored, so that if one warp has to wait for example for a memory access and another warp is ready, there is a switch to hide the latency. The thread scheduling is really quick, and this allow the blocks to be swapped in and out really quickly. For this reason an high number of warps is needed and instantiating a grid, is good to have a number of blocks much bigger than the number of available multiprocessor and a block size that can be higher than the amount of cuda cores available per SM.
-Another interesting aspect to take into consideration, is the block size. The block is divided into warps, so that Threads 0..31 are part of Warp 0, Threads 32...63 are part of Warp 1 and so on. Considering this, it is good to have blocks with a size multiple of 32, so that no useless threads are launched. After certain tests, a block of size 256 revealed to be optimal. For what concerning the grid configuration, an image is a 2D structure and for this reason it is intuitive to set up also a 2D grid. By the way, setting up a 2D grid, there is not only one way to follow. For this particular project two possible block configurations were considered, 1D (1x256), 2D (32x8), 2D (32x16) and two possible grid configurations: dynamic and fixed. In the rest part of this document, \textbf{M1} indicates a dynamic grid of 1D blocks, in which the grid has a height of \textit{image\_height}, a width of \textit{(ceil(image\_width / 256))} and the threads on the right border if the image width is not a multiple of \textit{block\_width} are idle (Figure \ref{fig:m1}); \textbf{M2} indicates a dynamic grid of 1D blocks, in which the size of the grid is the same as M1, but the threads are consecutive and only the threads on the last block(s) are idle if the image's number of pixel is not a multiple of the size of the block (Figure \ref{fig:m2}); \textbf{M3} indicates a dynamic grid of 2D blocks, in which the grid has a width of \textit{ceil(image\_width / 16)}, a height of \textit{ceil(image\_height / 16)} and the overflow is the same as M1 (Figure \ref{fig:m3}); \textbf{M4} indicates a dynamic grid of 2D blocks, in which the size of the grid is the same as M3, but the oveflow is the same as M2 (Figure \ref{fig:m4}). 
+Another interesting aspect to take into consideration, is the block size. The block is divided into warps, so that Threads 0..31 are part of Warp 0, Threads 32...63 are part of Warp 1 and so on. Considering this, it is good to have blocks with a size multiple of 32, so that no useless threads are launched. After certain tests, a block of size 256 revealed to be optimal. For what concerning the grid configuration, an image is a 2D structure and for this reason it is intuitive to set up also a 2D grid. By the way, setting up a 2D grid, there is not only one way to follow. For this particular project three possible block configurations were considered, 1D (1x256), 2D (32x8), 2D (32x16) and two possible grid configurations: dynamic and fixed. In the rest part of this document, for dynamic grid configurations, \textbf{M1} indicates a dynamic grid of 1D blocks, in which the grid has a height of \textit{image\_height}, a width of \textit{(ceil(image\_width / 256))} and the threads on the right border if the image width is not a multiple of \textit{block\_width} are idle (Figure \ref{fig:m1}); \textbf{M2} indicates a dynamic grid of 1D blocks, in which the size of the grid is the same as M1, but the threads are consecutive and only the threads on the last block(s) are idle if the image's number of pixel is not a multiple of the size of the block (Figure \ref{fig:m2}); \textbf{M3} indicates a dynamic grid of 2D blocks, in which the grid has a width of \textit{ceil(image\_width / 16)}, a height of \textit{ceil(image\_height / 16)} and the overflow is the same as M1 (Figure \ref{fig:m3}); \textbf{M4} indicates a dynamic grid of 2D blocks, in which the size of the grid is the same as M3, but the oveflow is the same as M2 (Figure \ref{fig:m4}). The advantages using a fixed grid configuration are that it is possible to support any problem size even if it exceeds the largest grid size the CUDA device supports and that it is possible to limit the number of blocks, for example launching a number of blocks that is a multiple of the number of multiprocessors on the device, to balance utilization.
 
 \begin{figure}[!ht]
 \begin{subfigure}{0.5\textwidth}
@@ -211,19 +211,35 @@ for(i = ((blockIdx.y * gridDim.x + blockIdx.x) * blockDim.x) + threadIdx.x;
 \end{lstlisting}
 \FloatBarrier
 
-Figure \ref{fig:darker_try_histo} represents the speedups achieved for different thread loads. After a certain number of pixels computed per thread, the performance of the program started to decrease, for this reason the idea to use a grid with a fixed size, instead of a dynamic size was not taken into consideration. Following this approach, with a number of 10 pixels per thread, the program obtained often the best results, so this is a good thread load to help the scheduler. This load was sufficient to both hide the latency and reduce the warp scheduling overhead. Figure \ref{fig:darker_single_more_comparison} shows the comparison between the best results obtained with a single pixel per thread and the results obtained with the new version. It is clear that the new version is an optimization, in fact for each image the speedup increased. This solution is the one adopted. In Table \ref{tab:darker_ex} and \ref{tab:darker_sp} are shown the detailed execution times and speedups achieved. Table \ref{tab:darker_t_b} exposes the Achieved Throughput and Bandwidth. Table \ref{tab:pxabd} exposes the differences obtained comparing the output of the sequential algorithm with output of the parallel algorithm. These differences could derive from a difference in floating point precision between the CPU and GPU, or from different ordering of floating point operations. In Section \ref{sec:vp} is reported a detailed analysis using the NVIDIA Virtual Profiler.
+Figures \ref{fig:darker_try_histo} and \ref{fig:darker_fixed} represent the speedups achieved for different thread loads, considering both a dynamic and a fixed grid. Figure \ref{fig:compare_darker} compares the best results for the two configurations. As it is possible to see, the first approach achieved better results. With a number of 10 pixels per thread, the program obtained the best results, so this is a good thread load to help the scheduler. This load was sufficient to both hide the latency and reduce the warp scheduling overhead. Figure \ref{fig:darker_single_more_comparison} shows the comparison between the best results obtained with a single pixel per thread and the results obtained with the new version. It is clear that the new version is an optimization, in fact for each image the speedup increased. This solution is the one adopted. In Table \ref{tab:darker_ex} and \ref{tab:darker_sp} are shown the detailed execution times and speedups achieved. Table \ref{dmt} shows the total time considering also the memory overhead. Table \ref{tab:darker_t_b} exposes the Achieved Throughput and Bandwidth. Table \ref{tab:pxabd} exposes the differences obtained comparing the output of the sequential algorithm with the output of the parallel algorithm. These differences could derive from a difference in floating point precision between the CPU and GPU, or from different ordering of floating point operations. In Section \ref{sec:vp} is reported a detailed analysis using the NVIDIA Virtual Profiler.
     
 \begin{figure}[!ht]
     \centering
-    \includegraphics[width=0.9\linewidth]{res/new/darker_try_histo}
-    \caption{Speedup with more different number of pixels per thread}
+    \includegraphics[width=0.8\linewidth]{res/new/darker_try_histo}
+    \caption{Speedup with different number of pixels per thread}
     \label{fig:darker_try_histo}
 \end{figure}
 \FloatBarrier
 
 \begin{figure}[!ht]
     \centering
-    \includegraphics[width=0.9\linewidth]{res/new/darker_single_more_comparison}
+    \includegraphics[width=0.8\linewidth]{res/new/darker_fixed}
+    \caption{Speedup with fixed grid}
+    \label{fig:darker_fixed}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.7\linewidth]{res/new/darker_best_compare}
+    \caption{Solutions Comparison}
+    \label{fig:compare_darker}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.7\linewidth]{res/new/darker_single_more_comparison}
     \caption{Solutions comparison}
     \label{fig:darker_single_more_comparison}
 \end{figure}
@@ -264,6 +280,26 @@ Figure \ref{fig:darker_try_histo} represents the speedups achieved for different
 \label{tab:darker_sp}
 \end{table}
 \FloatBarrier
+
+
+\begin{table}[]
+\centering
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Images} & \textbf{Execution Time (s)} & \textbf{Memory Time(s)} & \textbf{Total(s)} \\ \hline
+\textbf{Img00}  & 0,000076                    & 0,000547                & 0,077502          \\ \hline
+\textbf{Img01}  & 0,000193                    & 0,004562                & 0,081866          \\ \hline
+\textbf{Img02}  & 0,000255                    & 0,006141                & 0,072205          \\ \hline
+\textbf{Img03}  & 0,001299                    & 0,031491                & 0,108873          \\ \hline
+\textbf{Img04}  & 0,000907                    & 0,025354                & 0,103170          \\ \hline
+\textbf{Img05}  & 0,001692                    & 0,049163                & 0,125342          \\ \hline
+\textbf{Img06}  & 0,003239                    & 0,079937                & 0,158472          \\ \hline
+\end{tabular}
+\caption{Measured times}
+\label{dmt}
+\end{table}
+
+
 
 
 \begin{table}[!ht]
@@ -328,7 +364,7 @@ for ( int y = 0; y < H; y++ ) {
 \label{sec:p2}
 \subsection{One pixel per thread}
 \label{sec:fm2}
-After copying the input image and the initial empty histogram into the GPU global memory and allocating some memory to content the output image, the kernel is ready to be launched. As for the previous algorithm, the GPU code is almost the same as the code content inside the loop of the sequential version (Figure \ref{histo_loop}), but instead of using the indexes of the loop to access the image pixels, it uses the index associated with the thread. Also in this case, to exploit the coalesced memory access, two consecutive threads computes/accesses the values of two consecutive pixels. The interesting aspect of computing histograms in parallel, is that it is possible that two threads read at the same time the same value of gray for a pixel, so that at the same time they try to increment the corresponding histogram bin. For a correct execution, to avoid wrong updates, the increment has to be an atomic operation, so that only one thread at the time will modify the bin value. 
+After copying the input image and the initial empty histogram into the GPU global memory and allocating some memory to content the output image, the kernel is ready to be launched. As for the previous algorithm, the GPU code is almost the same as the code content inside the loop of the sequential version (Listing \ref{histo_loop}), but instead of using the indexes of the loop to access the image pixels, it uses the index associated with the thread. Also in this case, to exploit the coalesced memory access, two consecutive threads computes/accesses the values of two consecutive pixels. The interesting aspect of computing histograms in parallel, is that it is possible that two threads read at the same time the same value of gray for a pixel, so that at the same time they try to increment the corresponding histogram bin. For a correct execution, to avoid wrong updates, the increment has to be an atomic operation, so that only one thread at the time will modify the bin value. 
 The logic behind an atomic operation is that each thread "locks" the variable, modify it, and "unlocks" it, so that the other threads that try to modify the same variable has to wait that this will be "unlocked". The worst case, in the histogram scenario, is a monochrome image (only one color), in which all the threads try to modify the same bin, which implies a long waiting queue of threads. The general idea to have high performance, is to reduce the number of conflicts at the minimum. Also in this algorithm, the speedup is not related to the shape of the block, in fact the performance of the algorithm using the atomics depends on the image. Dealing with an image with horizontal stripes of different colors of 1 pixel, for example, with a 1D block (1x256) there will be all the 256 threads that try to increment the same histogram bin. In the same scenario, using a 2D block (8x32) there will be only 32 threads that try to increment the same histogram value. If the image instead, is composed of vertical stripes of 32 pixels wide, it happens the opposite, the 1D approach will obtain more performance. For these reasons, for the initial tests, to remove the fortuity, the given images were substituted with images of the same sizes but composed by only one color (monochrome). Different implementations were tested. The first approach consisted of using only the histogram array stored in the global memory and modifying it with atomic add operations (Figure \ref{fig:ghgh}). The second approach consisted of using an additional histogram array stored in shared memory, performing the atomic add operations there and at the end, assigning a certain bin to a thread and reducing the shared histograms in the global one (Figure \ref{fig:shsh}). Doing this, not all the launched threads will compete for the same bin, but only the threads in the same block during the computation and the threads to which is assigned the same bin during the reduction phase. Figure \ref{fig:gavsa} shows the obtained results for the two approaches. From this image it is clear that the second approach drastically increased the speedups and that the block configuration (1D or 2D) doesn't affect the performance.
 
 \begin{figure}[!ht]
@@ -385,7 +421,7 @@ After a testing phase with monochrome images, the tests were performed with the 
 
 \subsection{Optimization - More pixels per thread}
 \label{sec:hop}
-As for the previous algorithm, some additional tests were performed assigning the computation of more pixels per thread. The last two approaches (Shared Atomics and Shared Atomics with Warps) were improved to test this solution and both on the real images obtained better results. This is due to a reduction of the scheduling load and on the reduction of global histogram reductions. Different work loads were assigned to each thread and measured. A dynamic grid and fixed grid configurations were tested and Figures \ref{fig:hum}, \ref{fig:hfm}, \ref{fig:hwm} and \ref{fig:hwf} show the obtained results. Figure \ref{fig:dbsc} compares the best obtained configurations for the two approaches. As shown, the second approach (Shared Atomics with Warps), differently than the one pixel per thread version, obtains for almost all the images the best results. This result could surprise, but means that the decrement on the total number of reduction operations is critical for this approach. For the small images (e.g. Img00) the time spent for the final reduction remains high in comparison with the total computation due to the low amount of pixels to compute. The final adopted solution is the Shared Atomics with Warps with 30pxs computed per threads, because it is good also for small images (not a big amount of useless launched blocks) and the difference with the 60x45 grid version is not so evident. Tables \ref{tab:histo_exe} and \ref{tab:histo_sp} show the detailed obtained results. Table \ref{tab:pxabh} shows the differences obtained comparing the output of the sequential algorithm with output of the parallel algorithm.
+As for the previous algorithm, some additional tests were performed assigning the computation of more pixels per thread. The last two approaches (Shared Atomics and Shared Atomics with Warps) were improved to test this solution and both on the real images obtained better results. This is due to the reduction of the scheduling load and to the decrease of histograms reduction operations. Different work loads were assigned to each thread and measured. A dynamic grid and fixed grid configurations were tested and Figures \ref{fig:hum}, \ref{fig:hfm}, \ref{fig:hwm} and \ref{fig:hwf} show the obtained results. Figure \ref{fig:dbsc} compares the best obtained configurations for the two approaches. As shown, the second approach (Shared Atomics with Warps), differently than the one pixel per thread version, obtains for almost all the images the best results. This result could surprise, but means that the decrement on the total number of reduction operations is critical for this approach. For the small images (e.g. Img00) the time spent for the final reduction remains high in comparison with the total computation due to the low amount of pixels to compute. The final adopted solution is the Shared Atomics with Warps with 30pxs computed per threads, because it is good also for small images (not a big amount of useless launched blocks) and the difference with the 60x45 grid version is not so evident. Tables \ref{tab:histo_exe} and \ref{tab:histo_sp} show the detailed obtained results. Table \ref{tab:pxabh} shows the differences obtained comparing the output of the sequential algorithm with output of the parallel algorithm.
 
 
 \begin{figure}[!ht]
@@ -432,7 +468,7 @@ As for the previous algorithm, some additional tests were performed assigning th
 \centering
 \begin{tabular}{|l|l|l|l|}
 \hline
-\multicolumn{1}{|c|}{\textbf{}}      & \textbf{Sequential} & \textbf{30px}                 & \multicolumn{1}{c|}{\textbf{65x40}} \\ \hline
+\multicolumn{1}{|c|}{\textbf{}}      & \textbf{Sequential} & \textbf{30px}                 & \multicolumn{1}{c|}{\textbf{60x45}} \\ \hline
 \multicolumn{1}{|c|}{\textbf{Img00}} & 0,003208            & \multicolumn{1}{c|}{0,000080} & \multicolumn{1}{c|}{0,000127}       \\ \hline
 \textbf{Img01}                       & 0,032379            & 0,001264                      & 0,001062                            \\ \hline
 \textbf{Img02}                       & 0,043784            & 0,001778                      & 0,001553                            \\ \hline
@@ -450,7 +486,7 @@ As for the previous algorithm, some additional tests were performed assigning th
 \centering
 \begin{tabular}{|l|l|l|}
 \hline
-\multicolumn{1}{|c|}{}               & \textbf{30px}              & \multicolumn{1}{c|}{\textbf{65x40}} \\ \hline
+\multicolumn{1}{|c|}{}               & \textbf{30px}              & \multicolumn{1}{c|}{\textbf{60x45}} \\ \hline
 \multicolumn{1}{|c|}{\textbf{Img00}} & \multicolumn{1}{c|}{40.10} & \multicolumn{1}{c|}{25.26}          \\ \hline
 \textbf{Img01}                       & 25.62                      & 30.49                               \\ \hline
 \textbf{Img02}                       & 24.63                      & 28.19                               \\ \hline
@@ -480,7 +516,7 @@ As for the previous algorithm, some additional tests were performed assigning th
 
 \section{Algorithm 3: Smoothing}
 \label{sec:smoo}
-Smoothing is the process of removing noise from an image by the means of statistical analysis. To remove the noise, each point is replaced by a weighted average of its neighbours. In this way small-scale structures are removed from the image. In this case a two-dimensional 5-point triangular smooth filter was used. The Figure \ref{fig:smooth} shows an example of the result.
+Smoothing is the process of removing noise from an image by the means of statistical analysis. To remove the noise, each point is replaced by a weighted average of its neighbours. In this way small-scale structures are removed from the image. In this case a two-dimensional 5-points triangular smooth filter was used. The Figure \ref{fig:smooth} shows an example of the result.
 
 \begin{figure}[ht]
     \centering
@@ -492,26 +528,32 @@ Smoothing is the process of removing noise from an image by the means of statist
 
 
 \subsection{Parallelization}
-\label{sec:p2}
-This particular algorithm deals with square areas of the image (filter), so that using 2D blocks, the threads can efficiently share memory and prevent a lot of global memory accesses.
+\label{sec:p3}
+\subsection{One pixel per thread}
+\label{sec:opts}
+After copying the input image into the GPU global memory and allocating some memory to content the output image, the kernel is ready to be launched. As for the previous algorithms, the GPU code is almost the same as the code content inside the loop of the sequential version, but instead of using the indexes of the loop to access the image pixels, it uses the index associated with the thread. Also in this case, to exploit the coalesced memory access, two consecutive threads computes/accesses the values of two consecutive pixels.
+This particular algorithm (filter) deals with square areas of the image (5*5 pixels), so that using 2D blocks, the threads can efficiently share memory and prevent a lot of global memory accesses. Figure \ref{fig:smoothpa} shows two threads (Blue and Red) that apply the filter to the assigned pixel (A and B). To apply the filter to the assigned pixel, a thread has to read the 25 neighboor pixels. With a proper access, while one thread reads a neighboor (for example the top left as shown), the following thread in the same warp, in the same moment reads the following pixel, so that the global memory is accessed in a coalasced way. Another advantage, using 2D blocks, is that the algorithm is more readable, in fact it is very similar to the sequential one. The first consideration is that a filter is a structure of data that doesn't change during the computation, that is read lots of time and that is small. For this reason it is a perfect candidate to be stored in the constant memory. Another insteresting aspect, is that the same pixel is read multiple times by different threads reading the matrix of neighboor to compute the filter. For this reason two different approaches were tested at the begin. The first approach is more simple, very similar to the sequential version and uses only global memory accesses; the second approach, first copies in the shared memory the image portion owned by a block and than compute the filter accessing the shared memory. Figure \ref{fig:smoothsn} shows the obtained results. As it is possible to understand, using bigger blocks (32x16 instead of 32x8) the performance increased. The explanation is that this algorithm is based on data locality so that using bigger blocks the memory is better shared. Another insteresting aspect, is that the approach that doesn't use the Shared Memory obtained better results. This could surprise but means the global memory accesses are so well done that the time spent to load the image in shared memory and to access the shared memory is bigger. For this reason the first approach is adopted.
 
-\begin{figure}[!ht]
-\begin{subfigure}{0.5\textwidth}
-\centering
-\includegraphics[width=\linewidth]{filter}
-\caption{No square grid with 1D blocks}
-\label{fig:f1}
-\end{subfigure} % separation between the subfigures
-\begin{subfigure}{0.5\textwidth}
-\centering
-\includegraphics[width=\linewidth]{filter_letters}
-\caption{Square grid with 1D blocks}
-\label{fig:f2}
-\end{subfigure}
-\caption{Possible kernel configurations}
- \label{fig:speed}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.5\linewidth]{grid_smooth_colored}
+    \caption{Pixels access}
+    \label{fig:smoothpa}
 \end{figure}
 \FloatBarrier
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.7\linewidth]{res/new/smooth_shared_no}
+    \caption{Image Portion in Shared Memory VS Global Memory Accesses (different block sizes)}
+    \label{fig:smoothsn}
+\end{figure}
+\FloatBarrier
+
+\subsection{Optimization - More pixels per thread}
+\label{sec:sop}
+As for the previous algorithms, some additional tests were performed assigning the computation of more pixels per thread. Different thread loads were tested, considering both a dynamic and a fixed grid. Figures \ref{fig:smmo} and \ref{fig:smhf} show the obtained results. With a dynamic approach, varying the number of pixels computed per thread doesn't change a lot the final speedups, except for small images. With a fixed grid the results are almost the same for every configuration. Figure \ref{fig:smco} shows the comparison of the best dynamic and fixed grid configurations. The results are not so different but the fixed grid approach achieved a little more speedups. For this reason and because it is more scalable, it is the one choosen.
 
 \begin{figure}[ht]
     \centering
@@ -524,7 +566,7 @@ This particular algorithm deals with square areas of the image (filter), so that
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.7\linewidth]{res/new/smooth_fixed_more}
-    \caption{Fixed Height}
+    \caption{Fixed Height and Dynamic width}
     \label{fig:smhf}
 \end{figure}
 \FloatBarrier

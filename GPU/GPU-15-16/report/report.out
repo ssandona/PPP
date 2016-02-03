@@ -13,5 +13,7 @@
 \BOOKMARK [2][-]{subsection.7.3}{Optimization - More pixels per thread}{section.7}% 13
 \BOOKMARK [1][-]{section.8}{Algorithm 3: Smoothing}{}% 14
 \BOOKMARK [2][-]{subsection.8.1}{Parallelization}{section.8}% 15
-\BOOKMARK [1][-]{section.9}{Algorithms analysis with the Visual Profiler}{}% 16
-\BOOKMARK [2][-]{subsection.9.1}{Application 1}{section.9}% 17
+\BOOKMARK [2][-]{subsection.8.2}{One pixel per thread}{section.8}% 16
+\BOOKMARK [2][-]{subsection.8.3}{Optimization - More pixels per thread}{section.8}% 17
+\BOOKMARK [1][-]{section.9}{Algorithms analysis with the Visual Profiler}{}% 18
+\BOOKMARK [2][-]{subsection.9.1}{Application 1}{section.9}% 19
