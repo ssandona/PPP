@@ -45,7 +45,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
         grayPix = ((0.3f * r) + (0.59f * g) + (0.11f * b)) + 0.5f;
         //}
         grayImage[i] = static_cast< unsigned char >(grayPix);
-        if(cont==0 || graypx == last_gray_px){
+        if(cont==0 || grayPix == last_gray_px){
         	last_gray_px=grayPix;
         	cont+=1;
         }
