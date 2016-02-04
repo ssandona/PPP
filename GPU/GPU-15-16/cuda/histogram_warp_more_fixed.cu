@@ -19,7 +19,7 @@ const int grid_width = 45;
 
 
 __global__ void histogram1DKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram) {
-
+    if((blockIdx.y * gridDim.x + blockIdx.x) * blockDim.x > width*height) return;
     int k;
     unsigned int i;
 
@@ -157,7 +157,7 @@ int histogram1D(const int width, const int height, const unsigned char *inputIma
     //cout << "FUNC8\n";
     //darkGrayImage._data = outputImage;
     // Time GFLOP/s GB/s
-    long Gflops = ((long)width * (long)height) * (long)(3 + 3);
+    long Gflops = ((long)width * (long)height) * (long)(3 + 3 +1);
     long GB = ((long)width * (long)height) * (long)(3 + 1) * (float)sizeof(unsigned char);
     cout << fixed << setprecision(6);
     cout << endl;

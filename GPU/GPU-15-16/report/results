@@ -785,6 +785,54 @@ image04		0,011871	16,68
 image05		0,004260	62,81
 image06		0,009756	63,24
 
+
+Memory
+
+image00		
+
+Total (s): 	0.070765
+Kernel (s): 	0.000127
+Memory (s): 	0.000645
+
+image01	
+
+Total (s): 	0.070738
+Kernel (s): 	0.001062
+Memory (s): 	0.003966
+
+image02		
+
+Total (s): 	0.073200
+Kernel (s): 	0.001553
+Memory (s): 	0.006266
+
+
+image03	
+
+Total (s): 	0.118953
+Kernel (s): 	0.004698
+Memory (s): 	0.037846
+
+image04		
+
+Total (s): 	0.096683
+Kernel (s): 	0.011871
+Memory (s): 	0.019135
+
+image05		
+
+Total (s): 	0.105514
+Kernel (s): 	0.004260
+Memory (s): 	0.036651
+
+image06		
+
+Total (s): 	0.182628
+Kernel (s): 	0.009756
+Memory (s): 	0.097466
+
+
+
 FIXED -> 60 60
 
 image00		0,000149	21,53
