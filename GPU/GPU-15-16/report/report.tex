@@ -9,9 +9,7 @@
 \lstset{language=c,frame=single,captionpos=b}
 \usepackage{hyperref}
 \usepackage{amsmath}
-\usepackage[backend=biber, sorting=none,maxbibnames=40]{biblatex}
-\renewbibmacro{in:}{}
-\addbibresource{ref.bib}
+\usepackage[backend=biber,sorting=none,maxbibnames=9]{biblatex}
 \usepackage{graphicx}
 \usepackage{placeins}
 \usepackage[margin=2.5cm]{geometry}
@@ -426,7 +424,7 @@ After a testing phase with monochrome images, the tests were performed with the 
 \subsection{Optimization - More pixels per thread}
 \label{sec:hop}
 As for the previous algorithm, some additional tests were performed assigning the computation of more pixels per thread. The last two approaches (Shared Atomics and Shared Atomics with Warps) were improved to test this solution and both on the real images obtained better results. This is due to the reduction of the scheduling load and to the decrease of histograms reduction operations. Different work loads were assigned to each thread and measured. A dynamic grid and fixed grid configurations were tested and Figures \ref{fig:hum}, \ref{fig:hfm}, \ref{fig:hwm} and \ref{fig:hwf} show the obtained results. Figure \ref{fig:dbsc} compares the best obtained configurations for the two approaches. As shown, the second approach (Shared Atomics with Warps), differently than the one pixel per thread version, obtains for almost all the images the best results. This result could surprise, but means that the decrement on the total number of reduction operations is critical for this approach. For the small images (e.g. Img00) the time spent for the final reduction remains high in comparison with the total computation due to the low amount of pixels to compute. The final adopted solution is the Shared Atomics with Warps with with a fixed grid, because obtained better results for almost all the images and it is a more scalable solution. Tables \ref{tab:histo_exe} and \ref{tab:histo_sp} show the detailed obtained results. Table \ref{tab:histo_me} shows the total time of the adopted solution, considering also the memory overhead. Table \ref{tab:histo_mtb} exposes the Achieved Throughput and Bandwidth. For the Throughput, for each pixel there are 3 additions, 3 multiplications and 1 shared memory atomic add operation and for each block there are 256*8 additions (warps histogram reduction) and 256 global memory atomic add operations. For the Bandwidth, for each pixel there are 3 reads and 1 write (of 1 byte) and for each block there are 256 writes (of 4 bytes) for the atomic add operations.
-Table \ref{tab:pxabh} shows the differences obtained comparing the output of the sequential algorithm with output of the parallel algorithm.
+Tables \ref{tab:pxabh} and \ref{tab:pxabhg} show the differences obtained comparing the outputs of the sequential algorithm with the outputs of the parallel algorithm.
 
 
 \begin{figure}[!ht]
@@ -549,12 +547,23 @@ Table \ref{tab:pxabh} shows the differences obtained comparing the output of the
 \textbf{}                        & \textbf{img00}           & \textbf{img01} & \textbf{img02} & \textbf{img03}          & \textbf{img04}         & \textbf{img05}          & \textbf{img06}          \\ \hline
 \textbf{Pixels above  threshold} & \multicolumn{1}{c|}{324} & 12             & 0              & \multicolumn{1}{c|}{24} & \multicolumn{1}{c|}{0} & \multicolumn{1}{c|}{12} & \multicolumn{1}{c|}{48} \\ \hline
 \end{tabular}
-\caption{Differences between the Sequential and the Parallel output}
+\caption{Differences between the Sequential and the Parallel output (histogram)}
 \label{tab:pxabh}
 \end{table}
 \FloatBarrier
+
+\begin{table}[!ht]
+\centering
+\begin{tabular}{|c|c|c|c|c|l|l|l|}
+\hline
+\textbf{Images}                 & \textbf{Img00} & \textbf{Img01} & \textbf{Img02} & \textbf{Img03} & \textbf{Img04} & \textbf{Img05} & \textbf{Img06} \\ \hline
+\textbf{Pixels above threshold} & 777            & 5322           & 849            & 3450           & 8004           & 1431           & 28956          \\ \hline
+\end{tabular}
+\caption{Differences between the Sequential and the Parallel output (gray image)}
+\label{tab:pxabhg}
+\end{table}
+\FloatBarrier
  
-\newpage
 \section{Algorithm 3: Smoothing}
 \label{sec:smoo}
 Smoothing is the process of removing noise from an image by the means of statistical analysis. To remove the noise, each point is replaced by a weighted average of its neighbours. In this way small-scale structures are removed from the image. In this case a two-dimensional 5-points triangular smooth filter was used. The Figure \ref{fig:smooth} shows an example of the result.
@@ -712,98 +721,116 @@ Table \ref{tab:pxabs} shows the differences obtained comparing the output of the
 \section{Algorithms analysis with the Visual Profiler}
 \label{sec:vp}
 After collecting the profile of the applications using \textbf{nvprof}, the output files were evaluated using the \textbf{Nvidia Visual Profiler}.
-\subsection{Application 1}
+
+\subsection{Darker}
 \label{sec:a1}
- The choosen configuration, uses unidimensional \textit{Blocks} of 256 threads, 12 \textit{Registers} and 0 \textit{Shared Memory}. For all the images the profiler found no issues for \textit{Divergent Execution} (threads that follow different if branches) and a \textit{Warp Execution Efficiency} (ratio of the average active threads per warp to the maximum number of threads per warp supported on a multiprocessor) of 100\%. This last value comes from the fact that is used a block of 256 threads, that is a multiple of 32 (warp size), so no useless threads are launched and from the fact that there is no thread divergent execution, so the threads within a warp can execute in a SIMT way, avoiding inactive threads within the warp. Examples of occupancy results are shown in Figure, all the the images, obtained an occupancy over 91\% except the first that obtained 82.5\%. This is probably correlated to its small size, but in any case the occupancy is not limiting the performance of the application. For all the images exept the 5th, the Profiler found no issues related to Global Memory Access Pattern. The 5th image, is the only one of the given set that has an amount of pixels that is not a multiple of 128, the memory in the device is allocated with a 128-byte line granularity, so probably, the addresses fall within 2 cache lines, so 2 transaction insteads of one and so a decrease of the memory bandwidth utilization (Figure )
-
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=0.7\linewidth]{profiling/darker/darker_occupancy_00}
-    \caption{Img00}
-    \label{fig:occ00}
-\end{figure}
+ The choosen configuration, uses unidimensional \textit{Blocks} of (1x256) threads, 12 \textit{Registers} and 0 bytes of \textit{Shared Memory}. Table \ref{tab:darker_vp} shows some interesting measurements.
+ For all the images the profiler found no issues for \textit{Divergent Execution} (threads that follow different if branches) and a \textit{Warp Execution Efficiency} (ratio of the average active threads per warp to the maximum number of threads per warp supported on a multiprocessor) of 100\%. This last value comes from the fact that is used a block of 256 threads, that is a multiple of 32 (warp size), so no useless threads are launched and from the fact that there is no thread divergent execution, so the threads within a warp can execute in a SIMT way, avoiding inactive threads within the warp. All the the images, obtained an occupancy over 91\% except the first that obtained 80.2\%. This is probably correlated to its small size, but in any case the occupancy is not limiting the performance of the application. For all the images exept the 5th, the Profiler found no issues related to Global Memory Access Pattern. The 5th image, is the only one of the given set that has an amount of pixels that is not a multiple of 128. The memory in the device is allocated with a 128-byte line granularity, so probably, the addresses fall within 2 cache lines when try to read the G and B values and 2 transaction insteads of one are performed (Figure \ref{fig:ucca}). The 2 lines of code in the Listing \ref{div} are the source of the uncoalesced access for \textit{image05}. 
+ 
+ \begin{table}[!ht]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Images} & \textbf{\begin{tabular}[c]{@{}c@{}}Warp Execution Efficiency\\ (\%)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Occupancy\\ (\%)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Branch Divergence\\ (\%)\end{tabular}} \\ \hline
+\textbf{Img00}  & 100                                                                               & 80.2                                                              & 0                                                                         \\ \hline
+\textbf{Img01}  & 100                                                                               & 91.9                                                              & 0                                                                         \\ \hline
+\textbf{Img02}  & 100                                                                               & 92.3                                                              & 0                                                                         \\ \hline
+\textbf{Img03}  & 100                                                                               & 93                                                                & 0                                                                         \\ \hline
+\textbf{Img04}  & 100                                                                               & 92.5                                                              & 0                                                                         \\ \hline
+\textbf{Img05}  & 100                                                                               & 92.3                                                              & 0                                                                         \\ \hline
+\textbf{Img06}  & 100                                                                               & 92.8                                                              & 0                                                                         \\ \hline
+\end{tabular}
+\caption{Visual Profiler Results}
+\label{tab:darker_vp}
+\end{table}
 \FloatBarrier
 
 \begin{figure}[!ht]
-    \centering
-    \includegraphics[width=0.7\linewidth]{profiling/darker/darker_06_occupancy}
-    \caption{Img05}
-    \label{fig:occ06}
+ % separation between the subfigures
+\begin{subfigure}{0.5\textwidth}
+\centering
+\includegraphics[width=\linewidth]{caching}
+\caption{Aligned access}
+\label{fig:ca}
+\end{subfigure}
+ % separation between the subfigures
+\begin{subfigure}{0.5\textwidth}
+\centering
+\includegraphics[width=\linewidth]{caching2}
+\caption{Unaligned access}
+\label{fig:uca}
+\end{subfigure}
+\caption{Possible access alignements}
+ \label{fig:ucca}
 \end{figure}
 \FloatBarrier
 
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=0.7\linewidth]{profiling/darker/unaligned_load}
-    \caption{Img00}
-    \label{fig:unlo}
-\end{figure}
-\FloatBarrier
+\begin{lstlisting}[label=div, caption=Unaligned accesses]
 
-\begin{lstlisting}[label=loop, caption=Unaligned accesses]
-
-float g = static_cast< float >(inputImage[(width * height) + (y * width) + x]);
-float b = static_cast< float >(inputImage[(2 * width * height) + (y * width) + x]);
+float g = static_cast< float >(inputImage[(width * height) +
+                                          (y * width) + x]);
+float b = static_cast< float >(inputImage[(2 * width * height) +
+                                          (y * width) + x]);
 
 \end{lstlisting}
 \FloatBarrier
 
+\subsection{Histogram}
+\label{sec:a2}
+The choosen configuration, uses unidimensional \textit{Blocks} of (1x256) threads, 14 \textit{Registers} and 8192 bytes of \textit{Shared Memory}. Table \ref{tab:histo_vp} show some interesting measurements.
+For all the images the profiler found issues for \textit{Divergent Execution} and this is due to atomic operations on the shared memory. On the GTX 480, in fact, \_shared\_ memory atomics are implemented not as a single machine instruction, but by a sequence of machine (SASS) instructions that form a loop.
+This loop is essentially contending for a lock. When the lock is acquired by a particular thread, that thread will then complete the requested memory operation atomically on the identified shared memory cell, and then release the lock. The process of looping to acquire the lock necessarily involves branch divergence. This problem there would not be using global atomics, that are generally implemented as a single atomic SASS instruction, but as shown before with global atomics worst results were obtained. The profiler, in addition, shows a \textit{Warp Execution Efficiency} that is variable from 50 to 90\%.
+This last value comes directly from the fact that there is thread divergent execution, so that some threads within a warp are inactive during the execution. All the images, obtained an occupancy over 91.5\% so the occupancy is not limiting the performance of the application. As for the previous algorithm and for the same reason, for all the images exept the 5th, the Profiler found no issues related to Global Memory Access Pattern. The 2 lines of code that lead to uncoalesced accesses for \textit{image05} are the same as the ones for the previous algorithm (Listing \ref{div2}). For what concerning \textit{bank conflicts}, no optimization can be done, because the accesses to the histograms in shared memory depends on the image.
  
 
-
-
-HISTO -> Atomic implementation in CUDA may vary by GPU architecture. On the GTX 480 (a Fermi-class GPU), \_\_shared\_\_ memory atomics are implemented not as a single machine instruction, but in fact by a sequence of machine (SASS) instructions that form a loop.
-
-This loop is essentially contending for a lock. When the lock is acquired by a particular thread, that thread will then complete the requested memory operation atomically on the identified shared memory cell, and then release the lock.
-
-The process of looping to acquire the lock necessarily involves branch divergence. The possibility for branch divergence in this case is not evident from the C/C++ source code, but will be evident if you inspect the SASS code.
-
-Global atomics are generally implemented as a single (ATOM or RED) SASS instruction. However global atomics may still involve serialization of access if executed by multiple threads in the warp. 
-
-For this reason profiler outlined branch divergence
-
-can't avoid banc conflics because the accesses are random for us, they depend on the image
-
-
-On image number 5 => no coalesced access for the 2 instructions.. because image pixels non a multiple of 128, so non aligned (threadID+pizelsOfImage) but not effect the computation, compiling with -Xptxas -dlcm=cg worst results, Changing the configuration (cudaDeviceSetCacheConfig(cudaFuncCachePreferL1);)
-2) 
-
-
-
-
-
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=0.7\linewidth]{profiling/darker/darker_utilization_00}
-    \caption{Img05}
-    \label{fig:du}
-\end{figure}
+\begin{table}[!ht]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Images} & \textbf{\begin{tabular}[c]{@{}c@{}}Warp Execution Efficiency\\ (\%)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Occupancy\\ (\%)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Branch Divergence\\ (\%)\end{tabular}} \\ \hline
+\textbf{Img00}  & 90.7                                                                              & 91.5                                                              & 74.6                                                                      \\ \hline
+\textbf{Img01}  & 60.9                                                                              & 98.8                                                              & 93.1                                                                      \\ \hline
+\textbf{Img02}  & 52.3                                                                              & 99                                                                & 91.2                                                                      \\ \hline
+\textbf{Img03}  & 55.2                                                                              & 99.4                                                              & 90                                                                        \\ \hline
+\textbf{Img04}  & 72.5                                                                              & 99.6                                                              & 90                                                                        \\ \hline
+\textbf{Img05}  & 64.2                                                                              & 99.4                                                              & 82.2                                                                      \\ \hline
+\textbf{Img06}  & 59.5                                                                              & 99.5                                                              & 86.1                                                                      \\ \hline
+\end{tabular}
+\caption{Visual Profiler Results}
+\label{tab:histo_vp}
+\end{table}
 \FloatBarrier
 
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=0.7\linewidth]{profiling/darker/darker_varying}
-    \caption{Img05}
-    \label{fig:dv}
-\end{figure}
+\subsection{Smooth}
+\label{sec:a3}
+The choosen configuration, uses bidimensional \textit{Blocks} of (16x32) threads, 21 \textit{Registers} and 0 bytes of \textit{Shared Memory}. Table \ref{tab:smooth_vp} show some interesting measurements. The results seem to be worst than the previous algorithms and there is an explanation. Using 21 registers for each thread, means 10752 registers for each block and this register usage is likely preventing the kernel from fully utilizing the GPU because the \textbf{GTX 480} provide "just" up to 32768 registers for each block. By the way, as suggested by the Profiler the occupacy "is large enough that an increment may not improve performance". The number of registers for the algorithm can't be reduced and testing the same program with smaller blocks the occupancy increased but the overall program obtained worst results as shown before. The explanation is that, if it is possible to achieve fully coalesced accesses to global memory, then a lower occupancy will be sufficient to hide the latency to global memory. As for the previous algorithm and for the same reason, for all the images exept the 5th, the Profiler found no issues related to Global Memory Access Pattern. The 2 lines of code in the Listing \ref{div2} are the source of the uncoalesced access for \textit{image05}.
+
+\begin{table}[!ht]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Images} & \textbf{\begin{tabular}[c]{@{}c@{}}Warp Execution Efficiency\\ (\%)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Occupancy\\ (\%)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Branch Divergence\\ (\%)\end{tabular}} \\ \hline
+\textbf{Img00}  & 100                                                                               & 66.1                                                              & 0                                                                         \\ \hline
+\textbf{Img01}  & 99.9                                                                              & 66.3                                                              & 3.9                                                                       \\ \hline
+\textbf{Img02}  & 99.4                                                                              & 66.3                                                              & 13.8                                                                      \\ \hline
+\textbf{Img03}  & 100                                                                               & 66.6                                                              & 0                                                                         \\ \hline
+\textbf{Img04}  & 99.6                                                                              & 66.4                                                              & 7.4                                                                       \\ \hline
+\textbf{Img05}  & 99.9                                                                              & 66.6                                                              & 0                                                                         \\ \hline
+\textbf{Img06}  & 100                                                                               & 66.5                                                              & 0                                                                         \\ \hline
+\end{tabular}
+\caption{Visual Profiler Results}
+\label{tab:smooth_vp}
+\end{table}
 \FloatBarrier
 
-
-
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=0.7\linewidth]{profiling/darker/darker_varying}
-    \caption{Img05}
-    \label{fig:img05Prof}
-\end{figure}
+\begin{lstlisting}[label=div2, caption=Unaligned accesses]
+smoothPix += static_cast< float >(inputImage[(z * width * height) + 
+                                             (fy * width) + fx]) * 
+                                             filter[filterItem];
+smoothImage[(z * width * height) + (i * width) + j] = 
+                     static_cast< unsigned char >(smoothPix + 0.5f);
+\end{lstlisting}
 \FloatBarrier
-
-\printbibliography 
-
-https://developer.nvidia.com/cuda-zone
-https://devblogs.nvidia.com/parallelforall/
-http://www.gputechconf.com/
-
 
 \end{document}
 
