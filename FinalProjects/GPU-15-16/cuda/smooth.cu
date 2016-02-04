@@ -10,6 +10,9 @@ using std::endl;
 using std::fixed;
 using std::setprecision;
 
+const unsigned int B_WIDTH = 32;
+const unsigned int B_HEIGHT = 8;
+const unsigned int grid_height=15;
 
 __constant__ float filter[] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2.0f, 1.0f, 1.0f, 2.0f, 3.0f, 2.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
 
@@ -59,10 +62,6 @@ int triangularSmooth(const int width, const int height, const int spectrum, unsi
     cudaError_t devRetVal = cudaSuccess;
     unsigned char *devInputImage = 0;
     unsigned char *devSmoothImage = 0;
-
-    unsigned int B_WIDTH = 32;
-    unsigned int B_HEIGHT = 16;
-    unsigned int grid_height=15;
 
     int pixel_numbers;
 
