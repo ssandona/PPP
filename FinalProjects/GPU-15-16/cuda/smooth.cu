@@ -10,9 +10,6 @@ using std::endl;
 using std::fixed;
 using std::setprecision;
 
-const unsigned int B_WIDTH = 32;
-const unsigned int B_HEIGHT = 16;
-const unsigned int grid_height=15;
 
 __constant__ float filter[] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2.0f, 1.0f, 1.0f, 2.0f, 3.0f, 2.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
 
@@ -21,17 +18,14 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
     //indexes of the first assigned pixel
     int i = blockIdx.y * blockDim.y + threadIdx.y;
     int j = blockIdx.x * blockDim.x + threadIdx.x;
-    unsigned int filterItem;
-    float filterSum;
-    float smoothPix;
 
     //loop over different pixels associated per thread
     while(j < width && i < height) {
 
         for ( int z = 0; z < spectrum; z++ ) {
-            filterItem = 0;
-            filterSum = 0.0f;
-            smoothPix = 0.0f;
+            unsigned int filterItem = 0;
+            float filterSum = 0.0f;
+            float smoothPix = 0.0f;
 
             for (int fy = i - 2; fy < i + 3; fy++ ) {
                 if ( fy < 0 ) {
@@ -65,6 +59,10 @@ int triangularSmooth(const int width, const int height, const int spectrum, unsi
     cudaError_t devRetVal = cudaSuccess;
     unsigned char *devInputImage = 0;
     unsigned char *devSmoothImage = 0;
+
+    unsigned int B_WIDTH = 32;
+    unsigned int B_HEIGHT = 16;
+    unsigned int grid_height=15;
 
     int pixel_numbers;
 
