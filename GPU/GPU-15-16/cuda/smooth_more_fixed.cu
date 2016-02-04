@@ -12,7 +12,7 @@ using std::setprecision;
 
 const unsigned int B_WIDTH = 32;
 const unsigned int B_HEIGHT = 16;
-const grid_height=15;
+const unsigned int grid_height=15;
 
 __constant__ float filter[] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2.0f, 1.0f, 1.0f, 2.0f, 3.0f, 2.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
 
