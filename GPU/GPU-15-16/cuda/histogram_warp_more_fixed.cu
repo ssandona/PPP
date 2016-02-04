@@ -11,7 +11,7 @@ using std::setprecision;
 
 const int HISTOGRAM_SIZE = 256;
 const unsigned int B_WIDTH = 32;
-const unsigned int B_HEIGHT = 8;
+const unsigned int B_HEIGHT = 16;
 const int WARPS = 8;
 const unsigned int WARP_SIZE=32;
 const int grid_height = 60;
@@ -156,8 +156,8 @@ int histogram1D(const int width, const int height, const unsigned char *inputIma
     //cout << "FUNC8\n";
     //darkGrayImage._data = outputImage;
     // Time GFLOP/s GB/s
-    long Gflops = ((long)width * (long)height) * (long)(3 + 3 +1);
-    long GB = ((long)width * (long)height) * (long)(3 + 1) * (float)sizeof(unsigned char);
+    long Gflops = ((long)width * (long)height) * (long)(3 + 3 +1) + (grid_height*grid_width)*(HISTOGRAM_SIZE+(HISTOGRAM_SIZE*WARPS));
+    long GB = ((long)width * (long)height) * (long)(3 + 1) * (float)sizeof(unsigned char) + (grid_height*grid_width)*(HISTOGRAM_SIZE*(float)sizeof(unsigned int));
     cout << fixed << setprecision(6);
     cout << endl;
     cout << "Total (s): \t" << globalTimer.getElapsed() << endl;

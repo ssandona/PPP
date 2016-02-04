@@ -1154,12 +1154,46 @@ images06	0,157342	118,04
 Memory
 
 images00	
+
+Total (s): 	0.071893
+Kernel (s): 	0.000797
+Memory (s): 	0.000977
+
 images01	
+
+Total (s): 	0.090151
+Kernel (s): 	0.006553
+Memory (s): 	0.006250
+
 images02	
-images03	
+
+Total (s): 	0.094102
+Kernel (s): 	0.009093
+Memory (s): 	0.009142
+
+images03
+
+Total (s): 	0.194930
+Kernel (s): 	0.061039
+Memory (s): 	0.057633
+
 images04	
-images05	
+
+Total (s): 	0.156782
+Kernel (s): 	0.042040
+Memory (s): 	0.038645
+
+images05
+
+Total (s): 	0.209716
+Kernel (s): 	0.079630
+Memory (s): 	0.061299
+
 images06	
+
+Total (s): 	0.381236
+Kernel (s): 	0.157342
+Memory (s): 	0.147982
 
 
 	

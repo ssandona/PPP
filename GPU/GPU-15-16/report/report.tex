@@ -210,7 +210,7 @@ for(i = ((blockIdx.y * gridDim.x + blockIdx.x) * blockDim.x) + threadIdx.x;
 \end{lstlisting}
 \FloatBarrier
 
-Figures \ref{fig:darker_try_histo} and \ref{fig:darker_fixed} represent the speedups achieved for different thread loads, considering both a dynamic and a fixed grid. Figure \ref{fig:compare_darker} compares the best results for the two configurations. As it is possible to see, the first approach achieved better results. With a number of 10 pixels per thread, the program obtained the best results, so this is a good thread load to help the scheduler. This load was sufficient to both hide the latency and reduce the warp scheduling overhead. Figure \ref{fig:darker_single_more_comparison} shows the comparison between the best results obtained with a single pixel per thread and the results obtained with the new version. It is clear that the new version is an optimization, in fact for each image the speedup increased. This solution is the one adopted. In Table \ref{tab:darker_ex} and \ref{tab:darker_sp} are shown the detailed execution times and speedups achieved. Table \ref{dmt} shows the total time considering also the memory overhead. Table \ref{tab:darker_t_b} exposes the Achieved Throughput and Bandwidth. For the Throughput, for each pixel there are 3 additions and 4 multiplications (7 in total). For the Bandwidth, for each pixel there are 3 byte reads and 1 byte write (4 in total).  Table \ref{tab:pxabd} exposes the differences obtained comparing the output of the sequential algorithm with the output of the parallel algorithm. These differences could derive from a difference in floating point precision between the CPU and GPU, or from different ordering of floating point operations. In Section \ref{sec:vp} is reported a detailed analysis using the NVIDIA Virtual Profiler.
+Figures \ref{fig:darker_try_histo} and \ref{fig:darker_fixed} represent the speedups achieved for different thread loads, considering both a dynamic and a fixed grid. Figure \ref{fig:compare_darker} compares the best results for the two configurations. As it is possible to see, the first approach achieved better results. With a number of 10 pixels per thread, the program obtained the best results, so this is a good thread load to help the scheduler. This load was sufficient to both hide the latency and reduce the warp scheduling overhead. Figure \ref{fig:darker_single_more_comparison} shows the comparison between the best results obtained with a single pixel per thread and the results obtained with the new version. It is clear that the new version is an optimization, in fact for each image the speedup increased. This solution is the one adopted. In Table \ref{tab:darker_ex} and \ref{tab:darker_sp} are shown the detailed execution times and speedups achieved. Table \ref{dmt} shows the total time considering also the memory overhead. Table \ref{tab:darker_t_b} exposes the Achieved Throughput and Bandwidth. For the Throughput, for each pixel there are 3 additions and 4 multiplications. For the Bandwidth, for each pixel there are 3 reads and 1 write of 1 byte.  Table \ref{tab:pxabd} exposes the differences obtained comparing the output of the sequential algorithm with the output of the parallel algorithm. These differences could derive from a difference in floating point precision between the CPU and GPU, or from different ordering of floating point operations. In Section \ref{sec:vp} is reported a detailed analysis using the NVIDIA Virtual Profiler.
     
 \begin{figure}[!ht]
     \centering
@@ -423,7 +423,7 @@ After a testing phase with monochrome images, the tests were performed with the 
 
 \subsection{Optimization - More pixels per thread}
 \label{sec:hop}
-As for the previous algorithm, some additional tests were performed assigning the computation of more pixels per thread. The last two approaches (Shared Atomics and Shared Atomics with Warps) were improved to test this solution and both on the real images obtained better results. This is due to the reduction of the scheduling load and to the decrease of histograms reduction operations. Different work loads were assigned to each thread and measured. A dynamic grid and fixed grid configurations were tested and Figures \ref{fig:hum}, \ref{fig:hfm}, \ref{fig:hwm} and \ref{fig:hwf} show the obtained results. Figure \ref{fig:dbsc} compares the best obtained configurations for the two approaches. As shown, the second approach (Shared Atomics with Warps), differently than the one pixel per thread version, obtains for almost all the images the best results. This result could surprise, but means that the decrement on the total number of reduction operations is critical for this approach. For the small images (e.g. Img00) the time spent for the final reduction remains high in comparison with the total computation due to the low amount of pixels to compute. The final adopted solution is the Shared Atomics with Warps with with a fixed grid, because obtained better results for almost all the images and it is a more scalable solution. Tables \ref{tab:histo_exe} and \ref{tab:histo_sp} show the detailed obtained results. Table \ref{tab:histo_me} shows the total time of the adopted solution, considering also the memory overhead. Table \ref{dmt} shows the total time considering also the memory overhead. Table \ref{tab:histo_t_b} exposes the Achieved Throughput and Bandwidth. For the Throughput, for each pixel there are 3 additions, 3 multiplications and 1 shared memory atomic add operation and for each block there are 256*8 additions (warps histogram reduction) and 256 global memory atomic add operations. For the Bandwidth, for each pixel there are 3 reads and 1 write (of 1 byte) and for each block there are 256 writes (of 4 bytes) for the atomic add operations.
+As for the previous algorithm, some additional tests were performed assigning the computation of more pixels per thread. The last two approaches (Shared Atomics and Shared Atomics with Warps) were improved to test this solution and both on the real images obtained better results. This is due to the reduction of the scheduling load and to the decrease of histograms reduction operations. Different work loads were assigned to each thread and measured. A dynamic grid and fixed grid configurations were tested and Figures \ref{fig:hum}, \ref{fig:hfm}, \ref{fig:hwm} and \ref{fig:hwf} show the obtained results. Figure \ref{fig:dbsc} compares the best obtained configurations for the two approaches. As shown, the second approach (Shared Atomics with Warps), differently than the one pixel per thread version, obtains for almost all the images the best results. This result could surprise, but means that the decrement on the total number of reduction operations is critical for this approach. For the small images (e.g. Img00) the time spent for the final reduction remains high in comparison with the total computation due to the low amount of pixels to compute. The final adopted solution is the Shared Atomics with Warps with with a fixed grid, because obtained better results for almost all the images and it is a more scalable solution. Tables \ref{tab:histo_exe} and \ref{tab:histo_sp} show the detailed obtained results. Table \ref{tab:histo_me} shows the total time of the adopted solution, considering also the memory overhead. Table \ref{tab:histo_mtb} exposes the Achieved Throughput and Bandwidth. For the Throughput, for each pixel there are 3 additions, 3 multiplications and 1 shared memory atomic add operation and for each block there are 256*8 additions (warps histogram reduction) and 256 global memory atomic add operations. For the Bandwidth, for each pixel there are 3 reads and 1 write (of 1 byte) and for each block there are 256 writes (of 4 bytes) for the atomic add operations.
 Table \ref{tab:pxabh} shows the differences obtained comparing the output of the sequential algorithm with output of the parallel algorithm.
 
 
@@ -516,8 +516,26 @@ Table \ref{tab:pxabh} shows the differences obtained comparing the output of the
 \textbf{Img05}  & 0,004260                    & 0.036651                & 0.105514          \\ \hline
 \textbf{Img06}  & 0,009756                    & 0.097466                & 0.182628          \\ \hline
 \end{tabular}
-\caption{Measurements}
+\caption{Measured times}
 \label{tab:histo_me}
+\end{table}
+\FloatBarrier
+
+\begin{table}[!ht]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Images} & \textbf{\begin{tabular}[c]{@{}c@{}}Ach. Throughput\\ (GFLOPS/s)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Ach. Bandwidth\\ (GB/s)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Compute utilization\\ (\%)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Bandwidth utilization\\ (\%)\end{tabular}} \\ \hline
+\textbf{Img00}  & 63,43                                                                         & 30,03                                                                    & 4,72                                                                        & 16,93                                                                         \\ \hline
+\textbf{Img01}  & 23,14                                                                         & 12,48                                                                    & 1,72                                                                        & 7,03                                                                          \\ \hline
+\textbf{Img02}  & 20,62                                                                         & 11,28                                                                    & 1,53                                                                        & 6,36                                                                          \\ \hline
+\textbf{Img03}  & 38,93                                                                         & 22,08                                                                    & 2,89                                                                        & 12,45                                                                         \\ \hline
+\textbf{Img04}  & 10,42                                                                         & 5,89                                                                     & 0,77                                                                        & 3,32                                                                          \\ \hline
+\textbf{Img05}  & 55,92                                                                         & 31,77                                                                    & 4,16                                                                        & 17,91                                                                         \\ \hline
+\textbf{Img06}  & 47,66                                                                         & 27,15                                                                    & 3,54                                                                        & 15,31                                                                         \\ \hline
+\end{tabular}
+\caption{Achieved Throughput and Bandwidth}
+\label{tab:histo_mtb}
 \end{table}
 \FloatBarrier
 
@@ -574,7 +592,8 @@ This particular algorithm (filter) deals with square areas of the image (5*5 pix
 
 \subsection{Optimization - More pixels per thread}
 \label{sec:sop}
-As for the previous algorithms, some additional tests were performed assigning the computation of more pixels per thread. Different thread loads were tested, considering both a dynamic and a fixed grid. Figures \ref{fig:smmo} and \ref{fig:smhf} show the obtained results. With a dynamic approach, varying the number of pixels computed per thread doesn't change a lot the final speedups, except for small images. With a fixed grid the results are almost the same for every configuration. Figure \ref{fig:smco} shows the comparison of the best dynamic and fixed grid configurations. The results are not so different but the fixed (height) grid approach achieved a little more speedups. For this reason and because it is a more scalable solution, it is the one choosen.
+As for the previous algorithms, some additional tests were performed assigning the computation of more pixels per thread. Different thread loads were tested, considering both a dynamic and a fixed grid. Figures \ref{fig:smmo} and \ref{fig:smhf} show the obtained results. With a dynamic approach, varying the number of pixels computed per thread doesn't change a lot the final speedups, except for small images. With a fixed grid the results are almost the same for every configuration. Figure \ref{fig:smco} shows the comparison of the best dynamic and fixed grid configurations. The results are not so different but the fixed (height) grid approach achieved a little more speedups. For this reason and because it is a more scalable solution, it is the one choosen. Tables \ref{tab:smooth_exe} and \ref{tab:smooth_sp} show the detailed obtained results. Table \ref{tab:smooth_me} shows the total time of the adopted solution, considering also the memory overhead. Table \ref{tab:histo_mtb} exposes the Achieved Throughput and Bandwidth. For the Throughput, for each pixel there are 3 additions, 3 multiplications and 1 shared memory atomic add operation and for each block there are 256*8 additions (warps histogram reduction) and 256 global memory atomic add operations. For the Bandwidth, for each pixel there are 3 reads and 1 write (of 1 byte) and for each block there are 256 writes (of 4 bytes) for the atomic add operations.
+Table \ref{tab:pxabs} shows the differences obtained comparing the output of the sequential algorithm with output of the parallel algorithm.
 
 \begin{figure}[!ht]
     \centering
@@ -602,13 +621,69 @@ As for the previous algorithms, some additional tests were performed assigning t
 
 \begin{table}[!ht]
 \centering
+\begin{tabular}{|l|l|c|c|}
+\hline
+\textbf{Images} & \textbf{Sequential} & \textbf{15px (height)} & \textbf{4px} \\ \hline
+\textbf{Img00}  & 0,067991            & 0,000797               & 0,000868     \\ \hline
+\textbf{Img01}  & 0,672104            & 0,006553               & 0,006552     \\ \hline
+\textbf{Img02}  & 0,947251            & 0,009093               & 0,009114     \\ \hline
+\textbf{Img03}  & 6,496388            & 0,061039               & 0,060738     \\ \hline
+\textbf{Img04}  & 4,695295            & 0,042040               & 0,042152     \\ \hline
+\textbf{Img05}  & 8,563947            & 0,079630               & 0,079795     \\ \hline
+\textbf{Img06}  & 18,571981           & 0,157342               & 0,157640     \\ \hline
+\end{tabular}
+\caption{Execution Times}
+\label{tab:smooth_exe}
+\end{table}
+\FloatBarrier
+
+\begin{table}[!ht]
+\centering
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Images} & \textbf{15px (height)} & \textbf{4px} \\ \hline
+\textbf{Img00}  & 85,31                  & 78,33        \\ \hline
+\textbf{Img01}  & 102,56                 & 102,58       \\ \hline
+\textbf{Img02}  & 104,17                 & 103,93       \\ \hline
+\textbf{Img03}  & 106,43                 & 106,96       \\ \hline
+\textbf{Img04}  & 111,69                 & 111,39       \\ \hline
+\textbf{Img05}  & 107,55                 & 107,32       \\ \hline
+\textbf{Img06}  & 118,04                 & 117,81       \\ \hline
+\end{tabular}
+\caption{Speedups}
+\label{tab:smooth_sp}
+\end{table}
+\FloatBarrier
+
+
+
+\begin{table}[!ht]
+\centering
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Images} & \textbf{Execution Time (s)} & \textbf{Memory Time(s)} & \textbf{Total(s)} \\ \hline
+\textbf{Img00}  & 0,000797                    & 0.000977                & 0.071893          \\ \hline
+\textbf{Img01}  & 0,006553                    & 0.006250                & 0.090151          \\ \hline
+\textbf{Img02}  & 0,009093                    & 0.009142                & 0.094102          \\ \hline
+\textbf{Img03}  & 0,061039                    & 0.057633                & 0.194930          \\ \hline
+\textbf{Img04}  & 0,042040                    & 0.038645                & 0.156782          \\ \hline
+\textbf{Img05}  & 0,079630                    & 0.061299                & 0.209716          \\ \hline
+\textbf{Img06}  & 0,157342                    & 0.147982                & 0.381236          \\ \hline
+\end{tabular}
+\caption{Measured times}
+\label{tab:smooth_me}
+\end{table}
+\FloatBarrier
+
+\begin{table}[!ht]
+\centering
 \begin{tabular}{|c|l|c|c|l|l|l|l|}
 \hline
 \textbf{}                        & \textbf{img00}         & \textbf{img01} & \textbf{img02} & \textbf{img03}         & \textbf{img04}         & \textbf{img05}         & \textbf{img06}         \\ \hline
 \textbf{Pixels above  threshold} & \multicolumn{1}{c|}{0} & 0              & 0              & \multicolumn{1}{c|}{0} & \multicolumn{1}{c|}{0} & \multicolumn{1}{c|}{0} & \multicolumn{1}{c|}{0} \\ \hline
 \end{tabular}
 \caption{Differences between the Sequential and the Parallel output}
-\label{pxabs}
+\label{tab:pxabs}
 \end{table}
 \FloatBarrier
 
