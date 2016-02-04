@@ -3,7 +3,7 @@ debug		:= 0
 include		../Makefile.inc
 
 
-all:  smooth_more smooth_more_fixed histogram_warp_more_fixed histogram_warp_more
+all:  histogram_warp_more_fixed_opt
 
 darker_square: darker_square.cpp
 	$(NVCC) -c darker_square.cu $(INCLUDES) $(NVCCFLAGS)
@@ -135,6 +135,11 @@ histogram_warp_more_fixed: histogram_warp_more_fixed.cpp histogram_warp_more_fix
 	$(NVCC) -c histogram_warp_more_fixed.cu $(INCLUDES) $(NVCCFLAGS)
 	$(LINKER) -o $(PROJ_BASE)/bin/histogram_warp_more_fixedCUDA histogram_warp_more_fixed.cpp histogram_warp_more_fixed.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./histogram_warp_more_fixed.o
+
+histogram_warp_more_fixed_opt: histogram_warp_more_fixed_opt.cpp histogram_warp_more_fixed_opt.cu
+	$(NVCC) -c histogram_warp_more_fixed_opt.cu $(INCLUDES) $(NVCCFLAGS)
+	$(LINKER) -o $(PROJ_BASE)/bin/histogram_warp_more_fixed_optCUDA histogram_warp_more_fixed_opt.cpp histogram_warp_more_fixed.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
+	rm -f ./histogram_warp_more_fixed_opt.o
 
 histogram_warp_more_2: histogram_warp_more_2.cpp histogram_warp_more_2.cu
 	$(NVCC) -c histogram_warp_more_2.cu $(INCLUDES) $(NVCCFLAGS)
