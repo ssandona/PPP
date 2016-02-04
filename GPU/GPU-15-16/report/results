@@ -407,48 +407,48 @@ image06		0,096631
 
 image00
 
-Total (s): 	0.077502
-Kernel (s): 	0.000076
-Memory (s): 	0.000547
+Total (s): 	0,077502
+Kernel (s): 	0,000076
+Memory (s): 	0,000547
 
 
 image01
 
-Total (s): 	0.081866
-Kernel (s): 	0.000193
-Memory (s): 	0.004562
+Total (s): 	0,081866
+Kernel (s): 	0,000193
+Memory (s): 	0,004562
 
 
 image02
 
-Total (s): 	0.072205
-Kernel (s): 	0.000255
-Memory (s): 	0.006141
+Total (s): 	0,072205
+Kernel (s): 	0,000255
+Memory (s): 	0,006141
 
 
 image03
 
-Total (s): 	0.108873
-Kernel (s): 	0.001299
-Memory (s): 	0.031491
+Total (s): 	0,108873
+Kernel (s): 	0,001299
+Memory (s): 	0,031491
 
 image04
 
-Total (s): 	0.103170
-Kernel (s): 	0.000907
-Memory (s): 	0.025354
+Total (s): 	0,103170
+Kernel (s): 	0,000907
+Memory (s): 	0,025354
 
 image05
 
-Total (s): 	0.125342
-Kernel (s): 	0.001692
-Memory (s): 	0.049163
+Total (s): 	0,125342
+Kernel (s): 	0,001692
+Memory (s): 	0,049163
 
 img06
 
-Total (s): 	0.158472
-Kernel (s): 	0.003239
-Memory (s): 	0.079937
+Total (s): 	0,158472
+Kernel (s): 	0,003239
+Memory (s): 	0,079937
 
 	
 
@@ -686,6 +686,52 @@ image03		0,004724	42,48
 image04		0,012325	16,06
 image05		0,004278	62,55
 image06		0,010026	61,53
+
+
+Memory
+
+image00	
+
+Total (s): 	0.076120
+Kernel (s): 	0.000080
+Memory (s): 	0.000688
+
+image01	
+
+Total (s): 	0.083041
+Kernel (s): 	0.001264
+Memory (s): 	0.004925
+
+image02	
+
+Total (s): 	0.083588
+Kernel (s): 	0.001778
+Memory (s): 	0.006303
+
+image03	
+
+Total (s): 	0.118635
+Kernel (s): 	0.004724
+Memory (s): 	0.037854
+
+image04	
+
+Total (s): 	0.106888
+Kernel (s): 	0.012325
+Memory (s): 	0.028085
+
+image05	
+
+Total (s): 	0.120172
+Kernel (s): 	0.004278
+Memory (s): 	0.040832
+
+image06	
+
+Total (s): 	0.182224
+Kernel (s): 	0.010026
+Memory (s): 	0.096847
+
 
 40px
 

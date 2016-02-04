@@ -16,13 +16,13 @@ using std::string;
 const int HISTOGRAM_SIZE = 256;
 const int BAR_WIDTH = 4;
 
-extern int histogram1D(const int width, const int height, const unsigned char * inputImage, unsigned char * grayImage, unsigned int * histogram, int grid_height, int grid_width);
+extern int histogram1D(const int width, const int height, const unsigned char * inputImage, unsigned char * grayImage, unsigned int * histogram);
 
 
 int main(int argc, char *argv[]) {
 	unsigned int max = 0;
 
-	if ( argc != 4 ) {
+	if ( argc != 2 ) {
 		cerr << "Usage: " << argv[0] << " <filename>" << endl;
 		return 1;
 	}
@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
 	memset(reinterpret_cast< void * >(histogram), 0, HISTOGRAM_SIZE * sizeof(unsigned int));
 	
 
-	int r=histogram1D(inputImage.width(), inputImage.height(), inputImage.data(), grayImage.data(), histogram, atoi(argv[2]), atoi(argv[3]));
+	int r=histogram1D(inputImage.width(), inputImage.height(), inputImage.data(), grayImage.data(), histogram);
 	if(r==1){
 		cout << "ERROR\n";
 		return 1;

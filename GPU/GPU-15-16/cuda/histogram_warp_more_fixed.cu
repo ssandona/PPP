@@ -14,6 +14,8 @@ const unsigned int B_WIDTH = 32;
 const unsigned int B_HEIGHT = 8;
 const int WARPS = 8;
 const unsigned int WARP_SIZE=32;
+const int grid_height = 60;
+const int grid_width = 45;
 
 
 __global__ void histogram1DKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram) {
@@ -59,7 +61,7 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
 
 
 
-int histogram1D(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram, int grid_height, int grid_width) {
+int histogram1D(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram) {
     cudaError_t devRetVal = cudaSuccess;
     unsigned char *devInputImage = 0;
     unsigned char *devGrayImage = 0;
