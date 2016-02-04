@@ -19,7 +19,6 @@ const int grid_width = 45;
 
 
 __global__ void histogram1DKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram) {
-    if((blockIdx.y * gridDim.x + blockIdx.x) * blockDim.x >= width*height) return;
     int k;
     unsigned int i;
 
