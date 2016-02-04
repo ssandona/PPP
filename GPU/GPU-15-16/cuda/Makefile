@@ -138,7 +138,7 @@ histogram_warp_more_fixed: histogram_warp_more_fixed.cpp histogram_warp_more_fix
 
 histogram_warp_more_fixed_opt: histogram_warp_more_fixed_opt.cpp histogram_warp_more_fixed_opt.cu
 	$(NVCC) -c histogram_warp_more_fixed_opt.cu $(INCLUDES) $(NVCCFLAGS)
-	$(LINKER) -o $(PROJ_BASE)/bin/histogram_warp_more_fixed_optCUDA histogram_warp_more_fixed_opt.cpp histogram_warp_more_fixed.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
+	$(LINKER) -o $(PROJ_BASE)/bin/histogram_warp_more_fixed_optCUDA histogram_warp_more_fixed_opt.cpp histogram_warp_more_fixed_opt.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./histogram_warp_more_fixed_opt.o
 
 histogram_warp_more_2: histogram_warp_more_2.cpp histogram_warp_more_2.cu
