@@ -3,7 +3,7 @@ debug		:= 0
 include		../Makefile.inc
 
 
-all:  histogram_warp_more_fixed_opt
+all:  histogram_warp_more_fixed_opt histogram_try_opt
 
 darker_square: darker_square.cpp
 	$(NVCC) -c darker_square.cu $(INCLUDES) $(NVCCFLAGS)
@@ -90,6 +90,11 @@ histogram_try: histogram_try.cpp histogram_try.cu
 	$(NVCC) -c histogram_try.cu $(INCLUDES) $(NVCCFLAGS)
 	$(LINKER) -o $(PROJ_BASE)/bin/histogram_tryCUDA histogram_try.cpp histogram_try.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./histogram_try.o
+
+histogram_try_opt: histogram_try_opt.cpp histogram_try_opt.cu
+	$(NVCC) -c histogram_try_opt.cu $(INCLUDES) $(NVCCFLAGS)
+	$(LINKER) -o $(PROJ_BASE)/bin/histogram_try_optCUDA histogram_try_opt.cpp histogram_try_opt.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
+	rm -f ./histogram_try_opt.o
 
 histogram_try2: histogram_try2.cpp histogram_try2.cu
 	$(NVCC) -c histogram_try2.cu $(INCLUDES) $(NVCCFLAGS)
