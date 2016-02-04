@@ -12,8 +12,8 @@ using std::setprecision;
 const int HISTOGRAM_SIZE = 256;
 const int WARPS = 8; //number of warps in which is divided a block of 256 threads (256/32)
 const unsigned int WARP_SIZE=32;
-int grid_height = 60;
-int grid_width = 45;
+const int grid_height = 60;
+const int grid_width = 45;
 
 
 __global__ void histogram1DKernel(const int width, const int height, const unsigned char *inputImage, unsigned char *grayImage, unsigned int *histogram) {
