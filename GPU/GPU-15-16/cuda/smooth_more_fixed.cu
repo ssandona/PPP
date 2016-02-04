@@ -12,6 +12,7 @@ using std::setprecision;
 
 const unsigned int B_WIDTH = 32;
 const unsigned int B_HEIGHT = 16;
+const grid_height=15;
 
 __constant__ float filter[] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2.0f, 1.0f, 1.0f, 2.0f, 3.0f, 2.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
 
@@ -56,7 +57,7 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
 }
 
 
-int triangularSmooth(const int width, const int height, const int spectrum, unsigned char *inputImage, unsigned char *smoothImage,  int pixelThreads) {
+int triangularSmooth(const int width, const int height, const int spectrum, unsigned char *inputImage, unsigned char *smoothImage) {
     cudaError_t devRetVal = cudaSuccess;
     unsigned char *devInputImage = 0;
     unsigned char *devSmoothImage = 0;
@@ -98,7 +99,6 @@ int triangularSmooth(const int width, const int height, const int spectrum, unsi
     memoryTimer.stop();
 
     unsigned int grid_width = static_cast< unsigned int >(ceil(width / static_cast< float >(B_WIDTH)));
-    unsigned int grid_height = static_cast< unsigned int >(pixelThreads);
     // Execute the kernel
     dim3 gridSize(grid_width, grid_height);
     dim3 blockSize(B_WIDTH, B_HEIGHT);
