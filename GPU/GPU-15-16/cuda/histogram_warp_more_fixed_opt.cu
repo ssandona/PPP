@@ -46,15 +46,16 @@ __global__ void histogram1DKernel(const int width, const int height, const unsig
         //}
         grayImage[i] = static_cast< unsigned char >(grayPix);
         if(cont==0 || grayPix == last_gray_px){
-        	last_gray_px=grayPix;
         	cont+=1;
         }
         else {
             atomicAdd((unsigned int *)&localHistogram[warpid * 256 + static_cast< unsigned int >(last_gray_px)], cont);
         	cont=1;
-        	last_gray_px=grayPix;
         }
+        last_gray_px=grayPix;
     }
+    atomicAdd((unsigned int *)&localHistogram[warpid * 256 + static_cast< unsigned int >(last_gray_px)], cont);
+
     __syncthreads();
 
 
