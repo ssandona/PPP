@@ -126,13 +126,17 @@ int triangularSmooth(const int width, const int height, const int spectrum, unsi
     //cout << "FUNC8\n";
     //darkGrayImage._data = outputImage;
     // Time GFLOP/s GB/s
-    cout << fixed << setprecision(6) << kernelTimer.getElapsed() << setprecision(3) << " " << (static_cast< long long unsigned int >(width) * height * 6) / 1000000000.0 / kernelTimer.getElapsed() << " " << (static_cast< long long unsigned int >(width) * height * ((4 * sizeof(unsigned char)) + (1 * sizeof(unsigned int)))) / 1000000000.0 / kernelTimer.getElapsed() << endl;
-
-
-    // Print the timers
+    long Gflops = ((long)width * (long)height) * (long)(4 + 3);
+    long GB = ((long)width * (long)height) * (long)(3 + 1) * (float)sizeof(unsigned char);
+    cout << fixed << setprecision(6);
+    cout << endl;
     cout << "Total (s): \t" << globalTimer.getElapsed() << endl;
     cout << "Kernel (s): \t" << kernelTimer.getElapsed() << endl;
     cout << "Memory (s): \t" << memoryTimer.getElapsed() << endl;
+    cout << endl;
+    cout << setprecision(3);
+    cout << "GFLOP/s: \t" << (float)Gflops /  (1000000000.0f * kernelTimer.getElapsed()) << endl;
+    cout << "GB/s: \t\t" << (float)GB / (kernelTimer.getElapsed() * 1000000000.0f) << endl;
     cout << endl;
 
     cudaFree(devInputImage);
