@@ -21,14 +21,17 @@ __global__ void triangularSmoothDKernel(const int width, const int height, const
     //indexes of the first assigned pixel
     int i = blockIdx.y * blockDim.y + threadIdx.y;
     int j = blockIdx.x * blockDim.x + threadIdx.x;
+    unsigned int filterItem;
+    float filterSum;
+    float smoothPix;
 
     //loop over different pixels associated per thread
     while(j < width && i < height) {
 
         for ( int z = 0; z < spectrum; z++ ) {
-            unsigned int filterItem = 0;
-            float filterSum = 0.0f;
-            float smoothPix = 0.0f;
+            filterItem = 0;
+            filterSum = 0.0f;
+            smoothPix = 0.0f;
 
             for (int fy = i - 2; fy < i + 3; fy++ ) {
                 if ( fy < 0 ) {
