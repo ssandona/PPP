@@ -14,12 +14,8 @@ const unsigned int nrThreads = 256;
 unsigned int PIXELS_THREAD = 10;
 
 __global__ void kernel(const int width, const int height, const unsigned char * inputImage, unsigned char * outputDarkGrayImage) {
-	//unsigned int item = (blockIdx.x * blockDim.x + threadIdx.x)+(blockIdx.y * width);
 	unsigned int i;
-	/*unsigned int i = ;
-    unsigned int j = blockIdx.x * blockDim.x + threadIdx.x;
-    unsigned int globalIdx=(blockIdx.x * blockDim.x + threadIdx.x)+(threadIdx.y * width);*/
-
+	//loop over different pixels assigned per thread
 	for(i = ((blockIdx.y * gridDim.x + blockIdx.x) * blockDim.x) + threadIdx.x; i < width * height; i += (gridDim.x * blockDim.x) * (gridDim.y * blockDim.y)) {
 		float grayPix = 0.0f;
 		float r = static_cast< float >(inputImage[i]);
@@ -85,7 +81,7 @@ void darkGray(const int width, const int height, const unsigned char * inputImag
 	memoryTimer.stop();
 	globalTimer.stop();
 	// Print the timers
-	long Gflops = ((long)width * (long)height) * (long)(4 + 3);
+	long GFLOPS = ((long)width * (long)height) * (long)(4 + 3);
 	long GB = ((long)width * (long)height) * (long)(3 + 1) * (float)sizeof(unsigned char);
 	cout << fixed << setprecision(6);
 	cout << endl;
@@ -94,7 +90,7 @@ void darkGray(const int width, const int height, const unsigned char * inputImag
 	cout << "Memory (s): \t" << memoryTimer.getElapsed() << endl;
 	cout << endl;
 	cout << setprecision(3);
-	cout << "GFLOP/s: \t" << (float)Gflops /  (1000000000.0f * kernelTimer.getElapsed()) << endl;
+	cout << "GFLOP/s: \t" << (float)GFLOPS /  (1000000000.0f * kernelTimer.getElapsed()) << endl;
 	cout << "GB/s: \t\t" << (float)GB / (kernelTimer.getElapsed() * 1000000000.0f) << endl;
 	cout << endl;
 }
