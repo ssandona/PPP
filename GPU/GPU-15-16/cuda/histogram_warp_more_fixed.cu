@@ -11,7 +11,7 @@ using std::setprecision;
 
 const int HISTOGRAM_SIZE = 256;
 const unsigned int B_WIDTH = 32;
-const unsigned int B_HEIGHT = 16;
+const unsigned int B_HEIGHT = 8;
 const int WARPS = 8;
 const unsigned int WARP_SIZE=32;
 const int grid_height = 60;
