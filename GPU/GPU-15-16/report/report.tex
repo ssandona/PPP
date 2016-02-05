@@ -720,7 +720,8 @@ Table \ref{tab:pxabs} shows the differences obtained comparing the output of the
 
 \section{Algorithms analysis with the Visual Profiler}
 \label{sec:vp}
-After collecting the profile of the applications using \textbf{nvprof}, the output files were evaluated using the \textbf{Nvidia Visual Profiler}.
+After collecting the profile of the applications using \textbf{nvprof} (\textit{prun -v -np 1 -native '-l gpu=GTX480' nvprof --analysis-metrics --output-profile file_name CUDAapp image})
+}), the output files were evaluated using the \textbf{Nvidia Visual Profiler} to better understand the applications bottlnecks.
 
 \subsection{Darker}
 \label{sec:a1}
