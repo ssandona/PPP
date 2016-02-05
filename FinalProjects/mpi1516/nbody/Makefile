@@ -1,8 +1,8 @@
 SOURCES_C = nbody-par.c nbody-seq.c
 EXEC = nbody-par nbody-seq
 
-build: $(EXEC) 
 all: clean build 
+build: $(EXEC) 
 
 nbody-par: nbody-par.c
 	mpicc -O2 -o nbody-par nbody-par.c

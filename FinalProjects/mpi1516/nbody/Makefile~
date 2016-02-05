@@ -11,4 +11,4 @@ nbody-seq: nbody-seq.c
 	gcc -Wall -O3 -o nbody-seq nbody-seq.c -lm
 
 clean:
-	rm -f *.o nbody-seq *~ *core
+	rm -f *.o nbody-seq nbody-par *~ *core
