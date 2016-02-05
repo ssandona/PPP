@@ -568,8 +568,6 @@ main(int argc, char **argv) {
 
     calculateAssignedForces();
 
-    fprintf(stderr, "B -> %d, C -> %d \n", globalStartB, globalStartC);
-
     /*broadcast the bodies and the positions to all the processes*/
     MPI_Bcast(bodies, bodyCt, mpi_body_type, 0, MPI_COMM_WORLD);
     MPI_Bcast(positions, bodyCt, mpi_body_type, 0, MPI_COMM_WORLD);
@@ -627,7 +625,6 @@ main(int argc, char **argv) {
 
     if(0 == myid) {
         print();
-        fprintf(stderr, "fine\n");
         fprintf(stderr, "N-body took %10.3f seconds\n", rtime);
     }
 
