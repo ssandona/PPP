@@ -16,7 +16,7 @@ histogram: histogram.cpp histogram.cu
 	rm -f ./histogram.o
 
 smooth: smooth.cpp smooth.cu
-	$(NVCC) -lineinfo -c smooth.cu $(INCLUDES) $(NVCCFLAGS)
+	$(NVCC) -ptx prova -lineinfo -c smooth.cu $(INCLUDES) $(NVCCFLAGS)
 	$(LINKER) -o $(PROJ_BASE)/bin/smoothCUDA smooth.cpp smooth.o ../src/Timer.cpp $(INCLUDES) $(CUDA_INCLUDES) $(LIBS) $(CUDA_LIBS) $(CFLAGS) $(CUDA_LDFLAGS)
 	rm -f ./smooth.o
 
