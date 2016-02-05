@@ -10,7 +10,7 @@ using std::endl;
 using std::fixed;
 using std::setprecision;
 
-const unsigned int B_WIDTH = 32;
+const unsigned int B_WIDTH = 28;
 const unsigned int B_HEIGHT = 16;
 const unsigned int grid_height=15;
 
