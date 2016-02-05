@@ -21,7 +21,7 @@ smooth: smooth.cpp smooth.cu
 	rm -f ./smooth.o
 
 smooth-dis: smooth.cu
-	$(NVCC) -ptx prova histogram.cu
+	$(NVCC) -ptx histogram.cu
 
 clean:
 	rm -f $(PROJ_BASE)/bin/darkerCUDA
