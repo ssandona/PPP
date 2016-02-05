@@ -1,7 +1,7 @@
 Twists 12
-	4 threads	8 threads	12 threads	16 threads	20 threads	24 threads	32 threads
+	4 threads	8 threads	12 threads	16 threads	20 threads	24 threads	32 threads	36 threads
 
-2	16199		8652		8080		7265		7226		7040		7347
+2	16199		8652		8080		7265		7226		7040		7347		7208
 4	8642		5019		4339		4146		3911		4251		4716
 8	5325		3147		2704		2843		2478 X
 16	3289		2314		1805 X		1793 X		1820 X
@@ -10,7 +10,7 @@ Size 4
 
 	4 threads	8 threads	12 threads	16 threads	20 threads	24 threads	32 threads
 
-2	32647		21673		14400		15078		15189		14913		15111
+2	32647		21673		14400		15078		15189		14913		15111 //all row to change
 4	13917		7620		7000		6326		6620		6386		6192
 8	9381		5687		4381		4099		3769		3947		3665
 16	4964		3387		2907		2422 P		2427 X		2586 X
@@ -37,7 +37,7 @@ Twists 12
 
 Size 4
 
-2	15185 -> 8 threads -> 24 threads best -> 
+2	15244 -> 128 threads -> 24 threads best -> 
 4	6743 -> 64 threads -> 16 threads best
 8	3947 -> 32 threads -> 32 threads good -> 1 cube per thread
 16	2319 -> 16 threads -> best -> 1 cube per thread
