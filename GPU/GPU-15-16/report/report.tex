@@ -9,7 +9,9 @@
 \lstset{language=c,frame=single,captionpos=b}
 \usepackage{hyperref}
 \usepackage{amsmath}
-\usepackage[backend=biber,sorting=none,maxbibnames=9]{biblatex}
+\usepackage[backend=bibtex, sorting=none,maxbibnames=40]{biblatex}
+\renewbibmacro{in:}{}
+\addbibresource{references.bib}
 \usepackage{graphicx}
 \usepackage{placeins}
 \usepackage[margin=2.5cm]{geometry}
@@ -19,6 +21,7 @@
 \usepackage{amssymb,amsmath}
 \usepackage{subfloat}
 \usepackage{float}
+
 
 \begin{document}
 \title{GPU Assignment: Image processing}
@@ -720,26 +723,25 @@ Table \ref{tab:pxabs} shows the differences obtained comparing the output of the
 
 \section{Algorithms analysis with the Visual Profiler}
 \label{sec:vp}
-After collecting the profile of the applications using \textbf{nvprof} (\textit{prun -v -np 1 -native '-l gpu=GTX480' nvprof --analysis-metrics --output-profile file_name CUDAapp image})
-}), the output files were evaluated using the \textbf{Nvidia Visual Profiler} to better understand the applications bottlnecks.
+After collecting the profile of the applications using \textbf{nvprof} (\textit{prun -v -np 1 -native '-l gpu=GTX480' nvprof --analysis-metrics --output-profile file\_name CUDAapp image}), the output files were evaluated using the \textbf{Nvidia Visual Profiler} to better understand the applications bottlnecks. To have information about the lines of code that cause divergence execution or some uncoalesced issues the option \textit{-lineinfo} was included for the compiling phase.
 
 \subsection{Darker}
 \label{sec:a1}
  The choosen configuration, uses unidimensional \textit{Blocks} of (1x256) threads, 12 \textit{Registers} and 0 bytes of \textit{Shared Memory}. Table \ref{tab:darker_vp} shows some interesting measurements.
- For all the images the profiler found no issues for \textit{Divergent Execution} (threads that follow different if branches) and a \textit{Warp Execution Efficiency} (ratio of the average active threads per warp to the maximum number of threads per warp supported on a multiprocessor) of 100\%. This last value comes from the fact that is used a block of 256 threads, that is a multiple of 32 (warp size), so no useless threads are launched and from the fact that there is no thread divergent execution, so the threads within a warp can execute in a SIMT way, avoiding inactive threads within the warp. All the the images, obtained an occupancy over 91\% except the first that obtained 80.2\%. This is probably correlated to its small size, but in any case the occupancy is not limiting the performance of the application. For all the images exept the 5th, the Profiler found no issues related to Global Memory Access Pattern. The 5th image, is the only one of the given set that has an amount of pixels that is not a multiple of 128. The memory in the device is allocated with a 128-byte line granularity, so probably, the addresses fall within 2 cache lines when try to read the G and B values and 2 transaction insteads of one are performed (Figure \ref{fig:ucca}). The 2 lines of code in the Listing \ref{div} are the source of the uncoalesced access for \textit{image05}. 
+ For all the images the profiler found no issues for \textit{Divergent Execution} (threads that follow different if branches) and a \textit{Warp Execution Efficiency} (ratio of the average active threads per warp to the maximum number of threads per warp supported on a multiprocessor) of 100\%. This last value comes from the fact that is used a block of 256 threads, that is a multiple of 32 (warp size), so that no useless threads are launched and from the fact that there is no thread divergent execution, so that the threads within a warp can execute in a SIMT way, avoiding inactive threads within the warp. All the images, obtained an occupancy over 91\% except the first that obtained 80.2\%. This is probably correlated to its small size, but in any case the occupancy is not limiting the performance of the application. For all the images exept the 5th, the Profiler found no issues related to Global Memory Access Pattern. The 5th image, is the only one of the given set that has an amount of pixels that is not a multiple of 128. The memory in the device is allocated with a 128-byte line granularity, so probably, the addresses fall within 2 cache lines when try to read the G and B values and 2 transaction insteads of one are performed. Figures \ref{fig:ca} and \ref{fig:uca} show an example in which 32 consecutive words of 4 bytes are requested by the threads in a warp. In the first case, the accesses are perfeclty aligned, so that only 128 bytes move when there is a miss (100\% of utilization). In the second case, the accesses are not aligned and 256 bytes move (50\% utilization). The 2 lines of code in the Listing \ref{div} are the source of the uncoalesced access for \textit{image05}. To check the differences, a compilation with the option \textit{-Xptxas -dlcm=cg} was tried. With this option, the search of data go directly to L2, and on L2 miss go to DRAM. In addition, the transactions are not performed by 128 byte lines but by segments of 32 byte, that for unaligned accesses means a better bus utilization. Figures \ref{fig:ca2} and \ref{fig:uca2} show what happens in the same scenario of aligned and unaligned accesses explained before. In the first case, 128 bytes move on a miss (100\% utilization), while in the second case at most 160 bytes move (at least 80\% of utilization). By the way, using this method, worst results are obtained for all the images. In fact, this last method is very good when the accesses are very scattered and this is not the case.
  
  \begin{table}[!ht]
 \centering
 \begin{tabular}{|c|c|c|c|}
 \hline
 \textbf{Images} & \textbf{\begin{tabular}[c]{@{}c@{}}Warp Execution Efficiency\\ (\%)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Occupancy\\ (\%)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Branch Divergence\\ (\%)\end{tabular}} \\ \hline
-\textbf{Img00}  & 100                                                                               & 80.2                                                              & 0                                                                         \\ \hline
-\textbf{Img01}  & 100                                                                               & 91.9                                                              & 0                                                                         \\ \hline
-\textbf{Img02}  & 100                                                                               & 92.3                                                              & 0                                                                         \\ \hline
-\textbf{Img03}  & 100                                                                               & 93                                                                & 0                                                                         \\ \hline
-\textbf{Img04}  & 100                                                                               & 92.5                                                              & 0                                                                         \\ \hline
-\textbf{Img05}  & 100                                                                               & 92.3                                                              & 0                                                                         \\ \hline
-\textbf{Img06}  & 100                                                                               & 92.8                                                              & 0                                                                         \\ \hline
+\textbf{Img00}  & 100                                                                               & 80.2                                                              & No issues                                                                         \\ \hline
+\textbf{Img01}  & 100                                                                               & 91.9                                                              & No issues                                                                         \\ \hline
+\textbf{Img02}  & 100                                                                               & 92.3                                                              & No issues                                                                         \\ \hline
+\textbf{Img03}  & 100                                                                               & 93                                                                & No issues                                                                         \\ \hline
+\textbf{Img04}  & 100                                                                               & 92.5                                                              & No issues                                                                         \\ \hline
+\textbf{Img05}  & 100                                                                               & 92.3                                                              & No issues                                                                         \\ \hline
+\textbf{Img06}  & 100                                                                               & 92.8                                                              & No issues                                                                         \\ \hline
 \end{tabular}
 \caption{Visual Profiler Results}
 \label{tab:darker_vp}
@@ -751,15 +753,29 @@ After collecting the profile of the applications using \textbf{nvprof} (\textit{
 \begin{subfigure}{0.5\textwidth}
 \centering
 \includegraphics[width=\linewidth]{caching}
-\caption{Aligned access}
+\caption{Aligned access - default caching version (100\% utilization)}
 \label{fig:ca}
 \end{subfigure}
  % separation between the subfigures
 \begin{subfigure}{0.5\textwidth}
 \centering
 \includegraphics[width=\linewidth]{caching2}
-\caption{Unaligned access}
+\caption{Unaligned access - default caching version (100\% utilization)}
 \label{fig:uca}
+\end{subfigure}
+% separation between the subfigures
+\begin{subfigure}{0.5\textwidth}
+\centering
+\includegraphics[width=\linewidth]{non_caching}
+\caption{Aligned access - non caching version (50\% utilization)}
+\label{fig:ca2}
+\end{subfigure}
+ % separation between the subfigures
+\begin{subfigure}{0.5\textwidth}
+\centering
+\includegraphics[width=\linewidth]{non_caching2}
+\caption{Unaligned access - non caching version (80\% utilization)}
+\label{fig:uca2}
 \end{subfigure}
 \caption{Possible access alignements}
  \label{fig:ucca}
@@ -778,10 +794,10 @@ float b = static_cast< float >(inputImage[(2 * width * height) +
 
 \subsection{Histogram}
 \label{sec:a2}
-The choosen configuration, uses unidimensional \textit{Blocks} of (1x256) threads, 14 \textit{Registers} and 8192 bytes of \textit{Shared Memory}. Table \ref{tab:histo_vp} show some interesting measurements.
-For all the images the profiler found issues for \textit{Divergent Execution} and this is due to atomic operations on the shared memory. On the GTX 480, in fact, \_shared\_ memory atomics are implemented not as a single machine instruction, but by a sequence of machine (SASS) instructions that form a loop.
+The choosen configuration, uses unidimensional \textit{Blocks} of (1x256) threads, 14 \textit{Registers} and 8192 bytes of \textit{Shared Memory} (8 histograms of 256 unsigned int). Table \ref{tab:histo_vp} shows some interesting measurements.
+For all the images the profiler found issues for \textit{Divergent Execution} and this is due to atomic operations on the shared memory. On the \textit{GTX 480}, in fact, \textit{\_shared\_ memory atomics} are implemented not as a single machine instruction, but by a sequence of machine (SASS) instructions that form a loop.
 This loop is essentially contending for a lock. When the lock is acquired by a particular thread, that thread will then complete the requested memory operation atomically on the identified shared memory cell, and then release the lock. The process of looping to acquire the lock necessarily involves branch divergence. This problem there would not be using global atomics, that are generally implemented as a single atomic SASS instruction, but as shown before with global atomics worst results were obtained. The profiler, in addition, shows a \textit{Warp Execution Efficiency} that is variable from 50 to 90\%.
-This last value comes directly from the fact that there is thread divergent execution, so that some threads within a warp are inactive during the execution. All the images, obtained an occupancy over 91.5\% so the occupancy is not limiting the performance of the application. As for the previous algorithm and for the same reason, for all the images exept the 5th, the Profiler found no issues related to Global Memory Access Pattern. The 2 lines of code that lead to uncoalesced accesses for \textit{image05} are the same as the ones for the previous algorithm (Listing \ref{div2}). For what concerning \textit{bank conflicts}, no optimization can be done, because the accesses to the histograms in shared memory depends on the image.
+This last value comes directly from the fact that there is thread divergent execution, so that some threads within a warp are inactive during the execution. All the images, obtained an occupancy over 91.5\% so the occupancy is not limiting the performance of the application. As for the previous algorithm and for the same reason, for all the images exept the 5th, the Profiler found no issues related to Global Memory Access Pattern. The 2 lines of code that lead to uncoalesced accesses for \textit{image05} are the same as the ones for the previous algorithm (Listing \ref{div}). For what concerning \textit{bank conflicts}, no optimization can be done, because the accesses to the histograms in shared memory depends on the image.
  
 
 \begin{table}[!ht]
@@ -804,20 +820,20 @@ This last value comes directly from the fact that there is thread divergent exec
 
 \subsection{Smooth}
 \label{sec:a3}
-The choosen configuration, uses bidimensional \textit{Blocks} of (16x32) threads, 21 \textit{Registers} and 0 bytes of \textit{Shared Memory}. Table \ref{tab:smooth_vp} show some interesting measurements. The results seem to be worst than the previous algorithms and there is an explanation. Using 21 registers for each thread, means 10752 registers for each block and this register usage is likely preventing the kernel from fully utilizing the GPU because the \textbf{GTX 480} provide "just" up to 32768 registers for each block. By the way, as suggested by the Profiler the occupacy "is large enough that an increment may not improve performance". The number of registers for the algorithm can't be reduced and testing the same program with smaller blocks the occupancy increased but the overall program obtained worst results as shown before. The explanation is that, if it is possible to achieve fully coalesced accesses to global memory, then a lower occupancy will be sufficient to hide the latency to global memory. As for the previous algorithm and for the same reason, for all the images exept the 5th, the Profiler found no issues related to Global Memory Access Pattern. The 2 lines of code in the Listing \ref{div2} are the source of the uncoalesced access for \textit{image05}.
+The choosen configuration, uses bidimensional \textit{Blocks} of (16x32) threads, 21 \textit{Registers} and 0 bytes of \textit{Shared Memory}. Table \ref{tab:smooth_vp} shows some interesting measurements. The results seem to be worst than the previous algorithms and there is an explanation. Using 21 registers for each thread, means 10752 registers for each block and this register usage is likely preventing the kernel from fully utilizing the GPU because the \textit{GTX 480} provides "just" up to 32768 registers for each block. By the way, as suggested by the Profiler, the occupacy "is large enough that an increment may not improve performance". The number of registers for the algorithm can't be reduced and testing the same program with smaller blocks the occupancy increased but the overall program obtained worst results as shown before. The explanation is that, if it is possible to achieve coalesced accesses to global memory, then a lower occupancy will be sufficient to hide the latency to global memory. For all the images the profiles outlined some issues for global memory accces patterns. The source of uncoalescing is the first line of code of Listing \ref{div2}. The problem is that even if are used blocks of 32 threads wide, to apply the filter each thread has to read the 25 pixels matrix of neighboors and, due to the fact that the memory in the device is allocated with a 128-byte line granularity, doing this for certain blocks the addresses to read fall within 2 cache lines and 2 transaction insteads of one are performed. For \textit{image5} in addition to the first line of Listing \ref{div2}, also the second is a source of uncoalescing, for the same reason of the previous algorithms. Also in this case, to check the differences, a compilation with the option \textit{-Xptxas -dlcm=cg} was tried, but also for this program, worst results are obtained for all the images, so the accesses are not sufficiently scattered to achieve performance. For what concerning the \textit{branch divergence}, is strange that is reported only for some images, because following the code structure, reading the matrix of neighboors, there should be problems of divergence in all the blocks in the first and last colum of the grid. The results of the \textit{Warps Execution Efficiency} derived from the branch divergence.
 
 \begin{table}[!ht]
 \centering
 \begin{tabular}{|c|c|c|c|}
 \hline
 \textbf{Images} & \textbf{\begin{tabular}[c]{@{}c@{}}Warp Execution Efficiency\\ (\%)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Occupancy\\ (\%)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Branch Divergence\\ (\%)\end{tabular}} \\ \hline
-\textbf{Img00}  & 100                                                                               & 66.1                                                              & 0                                                                         \\ \hline
+\textbf{Img00}  & 100                                                                               & 66.1                                                              & No issues                                                                         \\ \hline
 \textbf{Img01}  & 99.9                                                                              & 66.3                                                              & 3.9                                                                       \\ \hline
 \textbf{Img02}  & 99.4                                                                              & 66.3                                                              & 13.8                                                                      \\ \hline
-\textbf{Img03}  & 100                                                                               & 66.6                                                              & 0                                                                         \\ \hline
+\textbf{Img03}  & 100                                                                               & 66.6                                                              & No issues                                                                         \\ \hline
 \textbf{Img04}  & 99.6                                                                              & 66.4                                                              & 7.4                                                                       \\ \hline
-\textbf{Img05}  & 99.9                                                                              & 66.6                                                              & 0                                                                         \\ \hline
-\textbf{Img06}  & 100                                                                               & 66.5                                                              & 0                                                                         \\ \hline
+\textbf{Img05}  & 99.9                                                                              & 66.6                                                              & No issues                                                                         \\ \hline
+\textbf{Img06}  & 100                                                                               & 66.5                                                              & No issues                                                                         \\ \hline
 \end{tabular}
 \caption{Visual Profiler Results}
 \label{tab:smooth_vp}
@@ -832,6 +848,9 @@ smoothImage[(z * width * height) + (i * width) + j] =
                      static_cast< unsigned char >(smoothPix + 0.5f);
 \end{lstlisting}
 \FloatBarrier
+
+\nocite{*}
+\printbibliography
 
 \end{document}
 

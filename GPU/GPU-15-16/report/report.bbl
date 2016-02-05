@@ -1,0 +1,81 @@
+% $ biblatex auxiliary file $
+% $ biblatex version 2.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\entry{cheng2014professional}{book}{}
+  \name{author}{3}{}{%
+    {{}%
+     {Cheng}{C.}%
+     {John}{J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Grossman}{G.}%
+     {Max}{M.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {McKercher}{M.}%
+     {Ty}{T.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {John Wiley \& Sons}%
+  }
+  \strng{namehash}{CJGMMT1}
+  \strng{fullhash}{CJGMMT1}
+  \field{title}{Professional Cuda C Programming}
+  \field{year}{2014}
+\endentry
+
+\entry{website:pf}{misc}{}
+  \field{title}{Parallel Forall}
+  \verb{url}
+  \verb https://devblogs.nvidia.com/parallelforall/
+  \endverb
+  \field{year}{2016}
+\endentry
+
+\entry{website:ndf}{misc}{}
+  \field{title}{NVIDIA Developer Forum}
+  \verb{url}
+  \verb https://devtalk.nvidia.com/
+  \endverb
+  \field{year}{2016}
+\endentry
+
+\entry{website:nd}{misc}{}
+  \field{title}{NVIDIA Developer}
+  \verb{url}
+  \verb https://developer.nvidia.com/
+  \endverb
+  \field{year}{2016}
+\endentry
+
+\entry{website:ndoc}{misc}{}
+  \field{title}{NVIDIA Documentation}
+  \verb{url}
+  \verb http://docs.nvidia.com/
+  \endverb
+  \field{year}{2016}
+\endentry
+
+\lossort
+\endlossort
+
+\endinput

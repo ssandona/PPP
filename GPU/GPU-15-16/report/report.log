@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.2.3)  4 FEB 2016 21:54
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.2.3)  5 FEB 2016 12:48
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -551,9 +551,9 @@ LaTeX Info: Redefining \] on input line 2666.
 (/usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex.sty
 Package: biblatex 2013/11/25 v2.8a programmable bibliographies (PK/JW/AB)
 
-(/usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex2.sty
-Package: biblatex2 2013/11/25 v2.8a programmable bibliographies (biber) (PK/JW/
-AB)
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex1.sty
+Package: biblatex1 2013/11/25 v2.8a programmable bibliographies (bibtex) (PK/JW
+/AB)
 
 (/usr/share/texlive/texmf-dist/tex/latex/logreq/logreq.sty
 Package: logreq 2010/08/04 v1.0 xml request logger
@@ -585,24 +585,21 @@ Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
 \c@uniquename=\count153
 \c@refsection=\count154
 \c@refsegment=\count155
-\c@maxextratitle=\count156
-\c@maxextratitleyear=\count157
-\c@maxextrayear=\count158
-\c@maxextraalpha=\count159
-\c@abbrvpenalty=\count160
-\c@highnamepenalty=\count161
-\c@lownamepenalty=\count162
-\c@maxparens=\count163
-\c@parenlevel=\count164
-\blx@tempcnta=\count165
-\blx@tempcntb=\count166
-\blx@tempcntc=\count167
-\blx@maxsection=\count168
-\blx@maxsegment@0=\count169
-\blx@notetype=\count170
-\blx@parenlevel@text=\count171
-\blx@parenlevel@foot=\count172
-\blx@sectionciteorder@0=\count173
+\c@maxextrayear=\count156
+\c@maxextraalpha=\count157
+\c@abbrvpenalty=\count158
+\c@highnamepenalty=\count159
+\c@lownamepenalty=\count160
+\c@maxparens=\count161
+\c@parenlevel=\count162
+\blx@tempcnta=\count163
+\blx@tempcntb=\count164
+\blx@tempcntc=\count165
+\blx@maxsection=\count166
+\blx@maxsegment=\count167
+\blx@notetype=\count168
+\blx@parenlevel@text=\count169
+\blx@parenlevel@foot=\count170
 \labelnumberwidth=\skip49
 \labelalphawidth=\skip50
 \shorthandwidth=\skip51
@@ -612,84 +609,78 @@ Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
 \bibinitsep=\skip55
 \bibparsep=\skip56
 \bibhang=\skip57
-\blx@bcfin=\read1
-\blx@bcfout=\write3
-\c@mincomprange=\count174
-\c@maxcomprange=\count175
-\c@mincompwidth=\count176
-Package biblatex Info: Trying to load biblatex default data model...
-Package biblatex Info: ... file 'blx-dm.def' found.
-
-(/usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-dm.def)
-Package biblatex Info: Trying to load biblatex custom data model...
-Package biblatex Info: ... file 'biblatex-dm.cfg' not found.
-\c@afterword=\count177
-\c@savedafterword=\count178
-\c@annotator=\count179
-\c@savedannotator=\count180
-\c@author=\count181
-\c@savedauthor=\count182
-\c@bookauthor=\count183
-\c@savedbookauthor=\count184
-\c@commentator=\count185
-\c@savedcommentator=\count186
-\c@editor=\count187
-\c@savededitor=\count188
-\c@editora=\count189
-\c@savededitora=\count190
-\c@editorb=\count191
-\c@savededitorb=\count192
-\c@editorc=\count193
-\c@savededitorc=\count194
-\c@foreword=\count195
-\c@savedforeword=\count196
-\c@holder=\count197
-\c@savedholder=\count198
-\c@introduction=\count199
-\c@savedintroduction=\count200
-\c@namea=\count201
-\c@savednamea=\count202
-\c@nameb=\count203
-\c@savednameb=\count204
-\c@namec=\count205
-\c@savednamec=\count206
-\c@shortauthor=\count207
-\c@savedshortauthor=\count208
-\c@shorteditor=\count209
-\c@savedshorteditor=\count210
-\c@translator=\count211
-\c@savedtranslator=\count212
-\c@labelname=\count213
-\c@savedlabelname=\count214
-\c@institution=\count215
-\c@savedinstitution=\count216
-\c@lista=\count217
-\c@savedlista=\count218
-\c@listb=\count219
-\c@savedlistb=\count220
-\c@listc=\count221
-\c@savedlistc=\count222
-\c@listd=\count223
-\c@savedlistd=\count224
-\c@liste=\count225
-\c@savedliste=\count226
-\c@listf=\count227
-\c@savedlistf=\count228
-\c@location=\count229
-\c@savedlocation=\count230
-\c@organization=\count231
-\c@savedorganization=\count232
-\c@origlocation=\count233
+\blx@auxin=\read1
+\blx@auxout=\write3
+\c@mincomprange=\count171
+\c@maxcomprange=\count172
+\c@mincompwidth=\count173
+\c@labelname=\count174
+\c@savedlabelname=\count175
+\c@author=\count176
+\c@savedauthor=\count177
+\c@shortauthor=\count178
+\c@savedshortauthor=\count179
+\c@editor=\count180
+\c@savededitor=\count181
+\c@editora=\count182
+\c@savededitora=\count183
+\c@editorb=\count184
+\c@savededitorb=\count185
+\c@editorc=\count186
+\c@savededitorc=\count187
+\c@shorteditor=\count188
+\c@savedshorteditor=\count189
+\c@bookauthor=\count190
+\c@savedbookauthor=\count191
+\c@translator=\count192
+\c@savedtranslator=\count193
+\c@annotator=\count194
+\c@savedannotator=\count195
+\c@commentator=\count196
+\c@savedcommentator=\count197
+\c@introduction=\count198
+\c@savedintroduction=\count199
+\c@foreword=\count200
+\c@savedforeword=\count201
+\c@afterword=\count202
+\c@savedafterword=\count203
+\c@holder=\count204
+\c@savedholder=\count205
+\c@namea=\count206
+\c@savednamea=\count207
+\c@nameb=\count208
+\c@savednameb=\count209
+\c@namec=\count210
+\c@savednamec=\count211
+\c@institution=\count212
+\c@savedinstitution=\count213
+\c@language=\count214
+\c@savedlanguage=\count215
+\c@location=\count216
+\c@savedlocation=\count217
+\c@organization=\count218
+\c@savedorganization=\count219
+\c@origlocation=\count220
+\c@savedoriglocation=\count221
+\c@origpublisher=\count222
+\c@savedorigpublisher=\count223
+\c@pageref=\count224
+\c@savedpageref=\count225
+\c@publisher=\count226
+\c@savedpublisher=\count227
+\c@lista=\count228
+\c@savedlista=\count229
+\c@listb=\count230
+\c@savedlistb=\count231
+\c@listc=\count232
+\c@savedlistc=\count233
 Normal \count register pool exhausted, switching to extended pool.
-\c@savedoriglocation=\count277
-\c@origpublisher=\count278
-\c@savedorigpublisher=\count279
-\c@publisher=\count280
-\c@savedpublisher=\count281
-\c@language=\count282
-\c@savedlanguage=\count283
-\c@pageref=\count284
-\c@savedpageref=\count285
+\c@listd=\count277
+\c@savedlistd=\count278
+\c@liste=\count279
+\c@savedliste=\count280
+\c@listf=\count281
+\c@savedlistf=\count282
 Package biblatex Info: Trying to load compatibility code...
 Package biblatex Info: ... file 'blx-compat.def' found.
 
@@ -701,13 +692,13 @@ Package biblatex Info: ... file 'biblatex.def' found.
 
 (/usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex.def
 File: biblatex.def 
-\c@textcitecount=\count286
-\c@textcitetotal=\count287
-\c@textcitemaxnames=\count288
-\c@biburlnumpenalty=\count289
-\c@biburlucpenalty=\count290
-\c@biburllcpenalty=\count291
-\c@smartand=\count292
+\c@textcitecount=\count283
+\c@textcitetotal=\count284
+\c@textcitemaxnames=\count285
+\c@biburlnumpenalty=\count286
+\c@biburlucpenalty=\count287
+\c@biburllcpenalty=\count288
+\c@smartand=\count289
 )
 Package biblatex Info: Trying to load bibliography style 'numeric'...
 Package biblatex Info: ... file 'numeric.bbx' found.
@@ -719,8 +710,8 @@ Package biblatex Info: ... file 'standard.bbx' found.
 
 (/usr/share/texlive/texmf-dist/tex/latex/biblatex/bbx/standard.bbx
 File: standard.bbx 2013/11/25 v2.8a biblatex bibliography style (PK/JW/AB)
-\c@bbx:relatedcount=\count293
-\c@bbx:relatedtotal=\count294
+\c@bbx:relatedcount=\count290
+\c@bbx:relatedtotal=\count291
 ))
 Package biblatex Info: Trying to load citation style 'numeric'...
 Package biblatex Info: ... file 'numeric.cbx' found.
@@ -761,7 +752,7 @@ Package graphics Info: Driver file: pdftex.def on input line 91.
 
 (/usr/share/texlive/texmf-dist/tex/latex/pdftex-def/pdftex.def
 File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
-\Gread@gobject=\count295
+\Gread@gobject=\count292
 ))
 \Gin@req@height=\dimen129
 \Gin@req@width=\dimen130
@@ -771,9 +762,9 @@ Package: placeins 2005/04/18  v 2.2
 )
 (/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
 Package: geometry 2010/09/12 v5.6 Page Geometry
-\Gm@cnth=\count296
-\Gm@cntv=\count297
-\c@Gm@tempcnt=\count298
+\Gm@cnth=\count293
+\Gm@cntv=\count294
+\c@Gm@tempcnt=\count295
 \Gm@bindingoffset=\dimen131
 \Gm@wd@mp=\dimen132
 \Gm@odd@mp=\dimen133
@@ -801,20 +792,20 @@ Package caption3 Info: TeX engine: e-TeX on input line 57.
 \caption@parindent=\dimen144
 \caption@hangindent=\dimen145
 )
-\c@ContinuedFloat=\count299
+\c@ContinuedFloat=\count296
 Package caption Info: hyperref package is loaded.
 Package caption Info: listings package is loaded.
 )
-\c@subfigure=\count300
-\c@subtable=\count301
+\c@subfigure=\count297
+\c@subtable=\count298
 )
 (/usr/share/texlive/texmf-dist/tex/latex/preprint/authblk.sty
 Package: authblk 2001/02/27 1.3 (PWD)
 \affilsep=\skip58
 \@affilsep=\skip59
-\c@Maxaffil=\count302
-\c@authors=\count303
-\c@affil=\count304
+\c@Maxaffil=\count299
+\c@authors=\count300
+\c@affil=\count301
 )
 (/usr/share/texlive/texmf-dist/tex/latex/graphics/color.sty
 Package: color 2005/11/14 v1.0j Standard LaTeX Color (DPC)
@@ -849,7 +840,7 @@ Package subfloat Warning: Numbers of floats not counted:
 
 ) (/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count305
+\c@float@type=\count302
 \float@exts=\toks25
 \float@box=\box56
 \@float@everytoks=\toks26
@@ -872,34 +863,34 @@ LaTeX Warning: Label `sec:dfm' multiply defined.
 )
 \openout1 = `report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-\c@lstlisting=\count306
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+\c@lstlisting=\count303
 \AtBeginShipoutBox=\box58
-Package hyperref Info: Link coloring OFF on input line 23.
+Package hyperref Info: Link coloring OFF on input line 26.
  (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
 
 (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
-\c@section@level=\count307
+\c@section@level=\count304
 )
-LaTeX Info: Redefining \ref on input line 23.
-LaTeX Info: Redefining \pageref on input line 23.
-LaTeX Info: Redefining \nameref on input line 23.
+LaTeX Info: Redefining \ref on input line 26.
+LaTeX Info: Redefining \pageref on input line 26.
+LaTeX Info: Redefining \nameref on input line 26.
 
 (./report.out) (./report.out)
 \@outlinefile=\write4
@@ -908,26 +899,30 @@ LaTeX Info: Redefining \nameref on input line 23.
 Package biblatex Info: Input encoding 'utf8' detected.
 Package biblatex Info: Automatic encoding selection.
 (biblatex)             Assuming data encoding 'utf8'.
-\openout3 = `report.bcf'.
+
+
+Package biblatex Warning: Data encoding is 'utf8'.
+(biblatex)                Use backend=biber.
+
+\openout3 = `report-blx.bib'.
 
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'report.bbl' found.
- (./report.bbl)
-Package biblatex Info: Reference section=0 on input line 23.
-Package biblatex Info: Reference segment=0 on input line 23.
-
-(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
+(./report.bbl)
+Package biblatex Info: Reference section=0 on input line 26.
+Package biblatex Info: Reference segment=0 on input line 26.
+ (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count308
+\scratchcounter=\count305
 \scratchdimen=\dimen146
 \scratchbox=\box59
-\nofMPsegments=\count309
-\nofMParguments=\count310
+\nofMPsegments=\count306
+\nofMParguments=\count307
 \everyMPshowfont=\toks27
-\MPscratchCnt=\count311
+\MPscratchCnt=\count308
 \MPscratchDim=\dimen147
-\MPnumerator=\count312
-\makeMPintoPDFobject=\count313
+\MPnumerator=\count309
+\makeMPintoPDFobject=\count310
 \everyMPtoPDFconversion=\toks28
 ) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
@@ -984,14 +979,14 @@ Package caption Info: End \AtBeginDocument code.
 <gtx.jpg, id=90, 642.4pt x 523.9575pt>
 File: gtx.jpg Graphic file (type jpg)
  <use gtx.jpg>
-Package pdftex.def Info: gtx.jpg used on input line 37.
+Package pdftex.def Info: gtx.jpg used on input line 40.
 (pdftex.def)             Requested size: 318.66948pt x 259.9234pt.
-LaTeX Font Info:    Try loading font information for U+msa on input line 45.
+LaTeX Font Info:    Try loading font information for U+msa on input line 48.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 45.
+LaTeX Font Info:    Try loading font information for U+msb on input line 48.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -999,7 +994,7 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 <rgb.png, id=92, 2372.865pt x 512.91624pt>
 File: rgb.png Graphic file (type png)
  <use rgb.png>
-Package pdftex.def Info: rgb.png used on input line 75.
+Package pdftex.def Info: rgb.png used on input line 78.
 (pdftex.def)             Requested size: 318.66948pt x 68.88068pt.
  [1
 
@@ -1007,22 +1002,22 @@ Package pdftex.def Info: rgb.png used on input line 75.
 <flow.PNG, id=110, 602.25pt x 582.175pt>
 File: flow.PNG Graphic file (type png)
  <use flow.PNG>
-Package pdftex.def Info: flow.PNG used on input line 87.
+Package pdftex.def Info: flow.PNG used on input line 90.
 (pdftex.def)             Requested size: 227.62206pt x 220.03844pt.
  [2 <./rgb.png>]
 <res/M1.png, id=121, 507.8975pt x 293.095pt>
 File: res/M1.png Graphic file (type png)
  <use res/M1.png>
-Package pdftex.def Info: res/M1.png used on input line 104.
+Package pdftex.def Info: res/M1.png used on input line 107.
 (pdftex.def)             Requested size: 227.62206pt x 131.35484pt.
 
 <res/M2.png, id=122, 507.8975pt x 293.095pt>
 File: res/M2.png Graphic file (type png)
  <use res/M2.png>
-Package pdftex.def Info: res/M2.png used on input line 110.
+Package pdftex.def Info: res/M2.png used on input line 113.
 (pdftex.def)             Requested size: 227.62206pt x 131.35484pt.
 
-Overfull \hbox (2.22168pt too wide) in paragraph at lines 102--114
+Overfull \hbox (2.22168pt too wide) in paragraph at lines 105--117
 []$[]$ $[]$ 
  []
 
@@ -1030,21 +1025,21 @@ Overfull \hbox (2.22168pt too wide) in paragraph at lines 102--114
 File: res/M3.png Graphic file (type png)
 
 <use res/M3.png>
-Package pdftex.def Info: res/M3.png used on input line 123.
+Package pdftex.def Info: res/M3.png used on input line 126.
 (pdftex.def)             Requested size: 227.62206pt x 182.63722pt.
  <res/M4.png, id=130, 507.8975pt x 407.5225pt>
 File: res/M4.png Graphic file (type png)
 
 <use res/M4.png>
-Package pdftex.def Info: res/M4.png used on input line 130.
+Package pdftex.def Info: res/M4.png used on input line 133.
 (pdftex.def)             Requested size: 227.62206pt x 182.63722pt.
 
-Overfull \hbox (2.22168pt too wide) in paragraph at lines 121--134
+Overfull \hbox (2.22168pt too wide) in paragraph at lines 124--137
 []$[]$ $[]$ 
  []
 
 [4 <./res/M1.png> <./res/M2.png> <./res/M3.png> <./res/M4.png>]
-LaTeX Font Info:    Try loading font information for T1+cmtt on input line 148.
+LaTeX Font Info:    Try loading font information for T1+cmtt on input line 151.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
@@ -1053,43 +1048,43 @@ File: t1cmtt.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 <dark.png, id=142, 7237.32428pt x 2632.69286pt>
 File: dark.png Graphic file (type png)
  <use dark.png>
-Package pdftex.def Info: dark.png used on input line 152.
+Package pdftex.def Info: dark.png used on input line 155.
 (pdftex.def)             Requested size: 318.66948pt x 115.89508pt.
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 163.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 166.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 163.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 166.
 
 <res/new/darker_confronto.png, id=146, 631.35875pt x 380.42125pt>
 File: res/new/darker_confronto.png Graphic file (type png)
 
 <use res/new/darker_confronto.png>
-Package pdftex.def Info: res/new/darker_confronto.png used on input line 181.
+Package pdftex.def Info: res/new/darker_confronto.png used on input line 184.
 (pdftex.def)             Requested size: 409.71692pt x 246.87614pt.
  [5 <./dark.png>] [6 <./res/new/darker_confronto.png (PNG copy)>]
 <res/new/darker_try_histo.png, id=206, 627.34375pt x 382.42876pt>
 File: res/new/darker_try_histo.png Graphic file (type png)
 
 <use res/new/darker_try_histo.png>
-Package pdftex.def Info: res/new/darker_try_histo.png used on input line 217.
+Package pdftex.def Info: res/new/darker_try_histo.png used on input line 220.
 (pdftex.def)             Requested size: 364.19667pt x 222.02473pt.
 
 <res/new/darker_fixed.png, id=207, 628.3475pt x 380.42125pt>
 File: res/new/darker_fixed.png Graphic file (type png)
 
 <use res/new/darker_fixed.png>
-Package pdftex.def Info: res/new/darker_fixed.png used on input line 225.
+Package pdftex.def Info: res/new/darker_fixed.png used on input line 228.
 (pdftex.def)             Requested size: 364.19667pt x 220.49355pt.
 
 <res/new/darker_best_compare.png, id=208, 624.3325pt x 379.4175pt>
 File: res/new/darker_best_compare.png Graphic file (type png)
 
 <use res/new/darker_best_compare.png>
-Package pdftex.def Info: res/new/darker_best_compare.png used on input line 233
+Package pdftex.def Info: res/new/darker_best_compare.png used on input line 236
 .
 (pdftex.def)             Requested size: 318.66948pt x 193.66246pt.
  [7 <./res/new/darker_try_histo.png (PNG copy)> <./res/new/darker_fixed.png (PN
@@ -1099,37 +1094,37 @@ File: res/new/darker_single_more_comparison.png Graphic file (type png)
 
 <use res/new/darker_single_more_comparison.png>
 Package pdftex.def Info: res/new/darker_single_more_comparison.png used on inpu
-t line 241.
+t line 244.
 (pdftex.def)             Requested size: 318.66948pt x 193.9507pt.
  [8 <./res/new/darker_best_compare.png (PNG copy)> <./res/new/darker_single_mor
 e_comparison.png>]
-Overfull \hbox (18.55067pt too wide) in paragraph at lines 307--318
+Overfull \hbox (18.55067pt too wide) in paragraph at lines 310--321
  [][] 
  []
 
 [9] <histo.png, id=231, 15455.45572pt x 3128.25858pt>
 File: histo.png Graphic file (type png)
  <use histo.png>
-Package pdftex.def Info: histo.png used on input line 359.
+Package pdftex.def Info: histo.png used on input line 362.
 (pdftex.def)             Requested size: 318.66948pt x 64.48772pt.
  [10 <./histo.png>] <global_histo.png, id=255, 1016.79875pt x 427.5975pt>
 File: global_histo.png Graphic file (type png)
 
 <use global_histo.png>
-Package pdftex.def Info: global_histo.png used on input line 374.
+Package pdftex.def Info: global_histo.png used on input line 377.
 (pdftex.def)             Requested size: 318.66948pt x 134.00883pt.
  <shared_histo.png, id=256, 1009.7725pt x 618.31pt>
 File: shared_histo.png Graphic file (type png)
 
 <use shared_histo.png>
-Package pdftex.def Info: shared_histo.png used on input line 382.
+Package pdftex.def Info: shared_histo.png used on input line 385.
 (pdftex.def)             Requested size: 318.66948pt x 195.1272pt.
 
 <res/new/histogram_confronto.png, id=257, 631.35875pt x 379.4175pt>
 File: res/new/histogram_confronto.png Graphic file (type png)
 
 <use res/new/histogram_confronto.png>
-Package pdftex.def Info: res/new/histogram_confronto.png used on input line 390
+Package pdftex.def Info: res/new/histogram_confronto.png used on input line 393
 .
 (pdftex.def)             Requested size: 318.66948pt x 191.50879pt.
  [11 <./global_histo.png (PNG copy)> <./shared_histo.png (PNG copy)>] <histo_wa
@@ -1137,14 +1132,14 @@ rp.png, id=267, 978.65625pt x 610.28pt>
 File: histo_warp.png Graphic file (type png)
 
 <use histo_warp.png>
-Package pdftex.def Info: histo_warp.png used on input line 400.
+Package pdftex.def Info: histo_warp.png used on input line 403.
 (pdftex.def)             Requested size: 409.71692pt x 255.49638pt.
 
 <res/new/histogram_warp.png, id=268, 629.35126pt x 380.42125pt>
 File: res/new/histogram_warp.png Graphic file (type png)
 
 <use res/new/histogram_warp.png>
-Package pdftex.def Info: res/new/histogram_warp.png used on input line 408.
+Package pdftex.def Info: res/new/histogram_warp.png used on input line 411.
 (pdftex.def)             Requested size: 318.66948pt x 192.62492pt.
  [12 <./res/new/histogram_confronto.png (PNG copy)> <./histo_warp.png (PNG copy
 )>]
@@ -1153,7 +1148,7 @@ File: res/new/histogram_confronto_real.png Graphic file (type png)
 
 <use res/new/histogram_confronto_real.png>
 Package pdftex.def Info: res/new/histogram_confronto_real.png used on input lin
-e 418.
+e 421.
 (pdftex.def)             Requested size: 318.66948pt x 197.88565pt.
  [13 <./res/new/histogram_warp.png (PNG copy)> <./res/new/histogram_confronto_r
 eal.png (PNG copy)>]
@@ -1161,7 +1156,7 @@ eal.png (PNG copy)>]
 File: res/new/histogram_uni_more.png Graphic file (type png)
 
 <use res/new/histogram_uni_more.png>
-Package pdftex.def Info: res/new/histogram_uni_more.png used on input line 432.
+Package pdftex.def Info: res/new/histogram_uni_more.png used on input line 435.
 
 (pdftex.def)             Requested size: 295.90588pt x 179.16219pt.
 
@@ -1169,7 +1164,7 @@ Package pdftex.def Info: res/new/histogram_uni_more.png used on input line 432.
 File: res/new/histogram_uni_fixed.png Graphic file (type png)
 
 <use res/new/histogram_uni_fixed.png>
-Package pdftex.def Info: res/new/histogram_uni_fixed.png used on input line 440
+Package pdftex.def Info: res/new/histogram_uni_fixed.png used on input line 443
 .
 (pdftex.def)             Requested size: 295.90588pt x 179.8315pt.
 
@@ -1177,7 +1172,7 @@ Package pdftex.def Info: res/new/histogram_uni_fixed.png used on input line 440
 File: res/new/histogram_warp_more.png Graphic file (type png)
 
 <use res/new/histogram_warp_more.png>
-Package pdftex.def Info: res/new/histogram_warp_more.png used on input line 448
+Package pdftex.def Info: res/new/histogram_warp_more.png used on input line 451
 .
 (pdftex.def)             Requested size: 295.90588pt x 176.60156pt.
  [14 <./res/new/histogram_uni_more.png (PNG copy)> <./res/new/histogram_uni_fix
@@ -1187,7 +1182,7 @@ File: res/new/histogram_warp_fixed.png Graphic file (type png)
 
 <use res/new/histogram_warp_fixed.png>
 Package pdftex.def Info: res/new/histogram_warp_fixed.png used on input line 45
-6.
+9.
 (pdftex.def)             Requested size: 318.66948pt x 192.33258pt.
 
 <res/new/histogram_more_confronto.png, id=314, 621.32124pt x 379.4175pt>
@@ -1195,21 +1190,21 @@ File: res/new/histogram_more_confronto.png Graphic file (type png)
 
 <use res/new/histogram_more_confronto.png>
 Package pdftex.def Info: res/new/histogram_more_confronto.png used on input lin
-e 464.
+e 467.
 (pdftex.def)             Requested size: 318.66948pt x 194.60034pt.
  [15 <./res/new/histogram_warp_more.png (PNG copy)> <./res/new/histogram_warp_f
 ixed.png (PNG copy)> <./res/new/histogram_more_confronto.png (PNG copy)>]
-Overfull \hbox (22.44696pt too wide) in paragraph at lines 526--537
+Overfull \hbox (22.44696pt too wide) in paragraph at lines 529--540
  [][] 
  []
 
 [16] <smooth.png, id=324, 7216.67572pt x 2632.69286pt>
 File: smooth.png Graphic file (type png)
  <use smooth.png>
-Package pdftex.def Info: smooth.png used on input line 573.
+Package pdftex.def Info: smooth.png used on input line 576.
 (pdftex.def)             Requested size: 227.62206pt x 83.0347pt.
 
-Overfull \hbox (20.52443pt too wide) in paragraph at lines 584--586
+Overfull \hbox (20.52443pt too wide) in paragraph at lines 587--589
 \T1/cmr/m/n/10 After copy-ing the in-put im-age into the GPU global mem-ory (\T
 1/cmr/m/it/10 3 * im-age_width * im-age_height * sizeof(unsigned
  []
@@ -1218,66 +1213,83 @@ Overfull \hbox (20.52443pt too wide) in paragraph at lines 584--586
 File: grid_smooth_colored.png Graphic file (type png)
 
 <use grid_smooth_colored.png>
-Package pdftex.def Info: grid_smooth_colored.png used on input line 590.
+Package pdftex.def Info: grid_smooth_colored.png used on input line 593.
 (pdftex.def)             Requested size: 227.62206pt x 122.83577pt.
  [17 <./smooth.png>]
 <res/new/smooth_shared_no.png, id=336, 624.3325pt x 381.425pt>
 File: res/new/smooth_shared_no.png Graphic file (type png)
 
 <use res/new/smooth_shared_no.png>
-Package pdftex.def Info: res/new/smooth_shared_no.png used on input line 598.
+Package pdftex.def Info: res/new/smooth_shared_no.png used on input line 601.
 (pdftex.def)             Requested size: 318.66948pt x 194.68713pt.
 
 <res/new/smooth_more.png, id=345, 628.3475pt x 376.40625pt>
 File: res/new/smooth_more.png Graphic file (type png)
 
 <use res/new/smooth_more.png>
-Package pdftex.def Info: res/new/smooth_more.png used on input line 611.
+Package pdftex.def Info: res/new/smooth_more.png used on input line 614.
 (pdftex.def)             Requested size: 318.66948pt x 190.89635pt.
  [18 <./grid_smooth_colored.png> <./res/new/smooth_shared_no.png (PNG copy)>]
 <res/new/smooth_fixed_more.png, id=359, 628.3475pt x 374.39874pt>
 File: res/new/smooth_fixed_more.png Graphic file (type png)
 
 <use res/new/smooth_fixed_more.png>
-Package pdftex.def Info: res/new/smooth_fixed_more.png used on input line 619.
+Package pdftex.def Info: res/new/smooth_fixed_more.png used on input line 622.
 (pdftex.def)             Requested size: 318.66948pt x 189.87823pt.
 
 <res/new/smooth_compare.png, id=360, 626.34pt x 376.40625pt>
 File: res/new/smooth_compare.png Graphic file (type png)
 
 <use res/new/smooth_compare.png>
-Package pdftex.def Info: res/new/smooth_compare.png used on input line 627.
+Package pdftex.def Info: res/new/smooth_compare.png used on input line 630.
 (pdftex.def)             Requested size: 318.66948pt x 191.5109pt.
  [19 <./res/new/smooth_more.png (PNG copy)> <./res/new/smooth_fixed_more.png (P
 NG copy)> <./res/new/smooth_compare.png (PNG copy)>]
-Overfull \hbox (22.44695pt too wide) in paragraph at lines 691--702
+Overfull \hbox (22.44695pt too wide) in paragraph at lines 694--705
  [][] 
  []
 
-[20] <caching.png, id=373, 538.01pt x 83.31125pt>
+[20] <caching.png, id=376, 538.01pt x 83.31125pt>
 File: caching.png Graphic file (type png)
  <use caching.png>
-Package pdftex.def Info: caching.png used on input line 752.
+Package pdftex.def Info: caching.png used on input line 755.
 (pdftex.def)             Requested size: 227.62206pt x 35.24727pt.
 
-<caching2.png, id=374, 894.34125pt x 173.64874pt>
+<caching2.png, id=377, 894.34125pt x 173.64874pt>
 File: caching2.png Graphic file (type png)
  <use caching2.png>
-Package pdftex.def Info: caching2.png used on input line 759.
+Package pdftex.def Info: caching2.png used on input line 762.
 (pdftex.def)             Requested size: 227.62206pt x 44.19637pt.
 
-Overfull \hbox (2.22168pt too wide) in paragraph at lines 750--763
-[]$[]$ $[]$ 
+<non_caching.png, id=378, 539.01375pt x 107.40125pt>
+File: non_caching.png Graphic file (type png)
+ <use non_caching.png>
+Package pdftex.def Info: non_caching.png used on input line 769.
+(pdftex.def)             Requested size: 227.62206pt x 45.35567pt.
+
+<non_caching2.png, id=379, 890.32625pt x 164.615pt>
+File: non_caching2.png Graphic file (type png)
+ <use non_caching2.png>
+Package pdftex.def Info: non_caching2.png used on input line 776.
+(pdftex.def)             Requested size: 227.62206pt x 42.08553pt.
+
+Overfull \hbox (2.22168pt too wide) in paragraph at lines 753--780
+[]$[]$ $[]$
  []
 
-[21 <./caching.png (PNG copy)> <./caching2.png (PNG copy)>] [22]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 835.
- [23]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 835.
 
-(./report.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 835.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 835.
+Overfull \hbox (2.22168pt too wide) in paragraph at lines 753--780
+[]$ $[]$ 
+ []
+
+[21] [22 <./caching.png (PNG copy)> <./caching2.png (PNG copy)> <./non_caching.
+png (PNG copy)> <./non_caching2.png (PNG copy)>]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 855.
+ [23]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 855.
+ (./report.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 855.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 855.
 Package rerunfilecheck Info: File `report.out' has not changed.
 (rerunfilecheck)             Checksum: 1FF2BFBE39246B636A40949BF1C10861;1387.
 
@@ -1289,27 +1301,27 @@ Package logreq Info: Writing requests to 'report.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 16254 strings out of 493304
- 250676 string characters out of 6139872
- 695049 words of memory out of 5000000
- 19322 multiletter control sequences out of 15000+600000
- 13177 words of font info for 33 fonts, out of 8000000 for 9000
+ 16153 strings out of 493304
+ 246942 string characters out of 6139872
+ 466146 words of memory out of 5000000
+ 19215 multiletter control sequences out of 15000+600000
+ 13850 words of font info for 34 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
- 42i,14n,49p,2236b,1862s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 42i,14n,49p,2530b,1459s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf/fonts/
 type1/public/cm-super/sfbx1000.pfb></usr/share/texmf/fonts/type1/public/cm-supe
 r/sfbx1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr
-/share/texmf/fonts/type1/public/cm-super/sfrm0900.pfb></usr/share/texmf/fonts/t
-ype1/public/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/type1/public/cm-super
-/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1728.pfb></usr/
-share/texmf/fonts/type1/public/cm-super/sfti1000.pfb></usr/share/texmf/fonts/ty
-pe1/public/cm-super/sfti1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/
-sftt1000.pfb>
-Output written on report.pdf (23 pages, 3623707 bytes).
+/share/texmf/fonts/type1/public/cm-super/sfcc1000.pfb></usr/share/texmf/fonts/t
+ype1/public/cm-super/sfrm0900.pfb></usr/share/texmf/fonts/type1/public/cm-super
+/sfrm1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1200.pfb></usr/
+share/texmf/fonts/type1/public/cm-super/sfrm1728.pfb></usr/share/texmf/fonts/ty
+pe1/public/cm-super/sfti1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/
+sfti1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1000.pfb>
+Output written on report.pdf (23 pages, 3696237 bytes).
 PDF statistics:
- 478 PDF objects out of 1000 (max. 8388607)
- 395 compressed objects within 4 object streams
- 148 named destinations out of 1000 (max. 500000)
- 334 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 500 PDF objects out of 1000 (max. 8388607)
+ 413 compressed objects within 5 object streams
+ 154 named destinations out of 1000 (max. 500000)
+ 344 words of extra memory for PDF output out of 10000 (max. 10000000)
 

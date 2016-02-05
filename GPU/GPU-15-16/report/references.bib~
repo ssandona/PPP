@@ -23,7 +23,7 @@ year = "2016",
 url = "https://developer.nvidia.com/"
 }
 
-@misc{website:ndoc,
+@misc{website:nd,
 title = "NVIDIA Documentation",
 year = "2016",
 url = "http://docs.nvidia.com/"
