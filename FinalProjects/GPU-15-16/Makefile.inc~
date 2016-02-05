@@ -1,6 +1,6 @@
 
 
-PROJ_BASE	:= $(HOME)/project/GPU/GPU-15-16
+PROJ_BASE	:= $(HOME)/project/FinalProjects/GPU-15-16
 
 INCLUDES	:= -I"$(PROJ_BASE)/include"
 CUDA_LIBS	:= -L"$(CUDA_INSTALL_PATH)/lib64/"
