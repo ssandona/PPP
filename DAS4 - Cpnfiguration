@@ -67,3 +67,16 @@ $ module load prun
 $ prun -v -np 2 -sge-script $PRUN_ETC/prun-openmpi `pwd`/cpi		-> 2 nodes, by default 1 process per node
 prun -v -4 -np 2 -sge-script $PRUN_ETC/prun-openmpi `pwd`/cpi		-> 2 nodes, 4 processes per node
 
+prun -v -np 8 -sge-script $PRUN_ETC/prun-openmpi nbody/nbody-par 10000 0 nbody.ppm 100
+
+
+
+
+--------------------GPU----------------------
+
+> module load cuda55/toolkit
+> make
+
+> prun -v -np 1 -native '-l gpu=GTX480' /home/[user]/2013-2014/bin/[executable] /home/[user]/images/image[XX].[ext]
+
+
